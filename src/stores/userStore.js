@@ -10,7 +10,9 @@ export const useUserStore = defineStore('userStore', {
   
   getters: {
     userIsLoggedIn: (state) => state.isLoggedIn,
-    userIsAdmin: (state) => state.isAdmin
+    userIsAdmin: (state) => state.isAdmin,
+    getUsers: (state) => state.users,
+    getUserById: (state) => (id) => state.users.find(u => u.id === id),
   },
   
   actions: {
@@ -26,6 +28,16 @@ export const useUserStore = defineStore('userStore', {
       this.user = null
       this.isLoggedIn = false
       this.isAdmin = false
+    },
+    deleteUser(id) {
+        if(this.user.id == id){
+            this.logout()
+        }
+        this.users = this.users.filter(u => u.id != id)
+    },
+    getPoints(amount) {
+        this.user.points+=amount
+        this.users.map(u => u.id==this.user.id ? this.user : u);
     }
   }
 })
