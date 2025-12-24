@@ -16,8 +16,8 @@
       <div class="absolute left-[186px] top-[372px] flex gap-12 items-start">
         <!-- Auth Links -->
         <div class="flex flex-col gap-6 text-body-base text-white w-[74px]">
-          <a href="/login" class="hover:text-(--system-ring) transition-colors">Login</a>
-          <a href="/register" class="hover:text-(--system-ring) transition-colors">Registar</a>
+          <a @click.prevent="$router.push({name:'login'})" class="hover:text-(--system-ring) transition-colors">Login</a>
+          <a @click.prevent="$router.push({name:'register'})" class="hover:text-(--system-ring) transition-colors">Registar</a>
         </div>
 
         <!-- Funcionalidades -->
@@ -31,15 +31,15 @@
         <!-- Ajuda -->
         <div class="flex flex-col gap-6 text-body-base text-white w-[85px]">
           <h3 class="font-bold">Ajuda</h3>
-          <a href="/faq" class="hover:text-(--system-ring) transition-colors">FAQ</a>
-          <a href="/about" class="hover:text-(--system-ring) transition-colors">Sobre nós</a>
-          <a href="/contacts" class="hover:text-(--system-ring) transition-colors">Contactos</a>
+          <a href="#faqs" class="hover:text-(--system-ring) transition-colors">FAQ</a>
+          <a @click.prevent="$router.push({name:'about'})" class="hover:text-(--system-ring) transition-colors">Sobre nós</a>
+          <a @click.prevent="$router.push({name:'contacts'})" class="hover:text-(--system-ring) transition-colors">Contactos</a>
         </div>
 
         <!-- Legal -->
         <div class="flex flex-col gap-6 text-body-base text-white w-[169px]">
-          <a href="/terms" class="hover:text-(--system-ring) transition-colors">Termos e condições</a>
-          <a href="/privacy" class="hover:text-(--system-ring) transition-colors">Política de privacidade</a>
+          <a @click.prevent="$router.push({name:'terms'})" class="hover:text-(--system-ring) transition-colors">Termos e condições</a>
+          <a @click.prevent="$router.push({name:'privacy'})" class="hover:text-(--system-ring) transition-colors">Política de privacidade</a>
           <a href="/cookies" class="hover:text-(--system-ring) transition-colors">Política de cookies</a>
           <a href="/complaints" class="hover:text-(--system-ring) transition-colors">Livro de reclamações</a>
           <a href="/payments" class="hover:text-(--system-ring) transition-colors">Meios de pagamento</a>

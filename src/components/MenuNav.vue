@@ -7,8 +7,8 @@
                     <MenuButton :landing="true">Funcionalidades</MenuButton>
                     <MenuButton :landing="true">Impacto</MenuButton>
                     <MenuButton :landing="true">Testemunhos</MenuButton>
-                    <MenuButton :landing="true">Entrar</MenuButton>
-                    <ActionButton>Registar</ActionButton>
+                    <MenuButton @click="$router.push({name:'login'})" :landing="true">Entrar</MenuButton>
+                    <ActionButton @click="$router.push({name:'register'})">Registar</ActionButton>
                 </template>
                 <template v-else>
                     <MenuButton :landing="false">Estatisticas</MenuButton>
@@ -18,7 +18,7 @@
                     <div class="flex gap-4 text-(--text-body-titles)">
                         <span @click="isDark = !isDark" class="material-symbols-outlined">{{isDark ? 'dark_mode' : 'light_mode'}}</span>
                         <span class="material-symbols-outlined">grid_on</span>
-                        <span class="material-symbols-outlined">account_circle</span>
+                        <span @click="$router.push({name:'profile'})" class="material-symbols-outlined">account_circle</span>
                     </div>
                 </template>
             </div>

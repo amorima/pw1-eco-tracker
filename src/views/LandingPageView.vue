@@ -18,7 +18,7 @@
             <p class="text-body-base text-[#d9d9d9] max-w-lg">Monitorize o consumo energético da sua família, descubra onde pode poupar e contribua para um futuro mais sustentável. Transforme pequenos hábitos em grandes impactos.</p>
             
             <div class="flex flex-col sm:flex-row gap-(--spacing-md) items-start">
-              <ActionButton variant="primary">Começar agora<span class="material-symbols-outlined">keyboard_arrow_right</span></ActionButton>
+              <ActionButton @click="$router.push({name:'register'})" variant="primary">Começar agora<span class="material-symbols-outlined">keyboard_arrow_right</span></ActionButton>
               <ActionButton variant="secondary">Ver demo </ActionButton>
             </div>
             
@@ -52,7 +52,7 @@
         
         <!-- Center Button -->
         <div class="absolute bottom-20 left-1/2 transform -translate-x-1/2 z-20">
-          <a class="bg-(--system-ring) border-[0.5px] py-1.5 border-(--system-popover-foreground) rounded-full w-[35px] h-[59px] flex items-start hover:items-end justify-center pb-2 hover:bg-(--system-popover-foreground) transition-colors">
+          <a href="#carrosel" class="bg-(--system-ring) border-[0.5px] py-1.5 border-(--system-popover-foreground) rounded-full w-[35px] h-[59px] flex items-start hover:items-end justify-center pb-2 hover:bg-(--system-popover-foreground) transition-colors">
             <span class="material-symbols-outlined">keyboard_double_arrow_down</span>
           </a>
         </div>
@@ -60,13 +60,13 @@
       </div>
     </section>
 
-    <section class="min-h-screen bg-white py-20 flex items-center">
+    <section id="carrosel" class="min-h-screen bg-white py-20 flex items-center">
       <div class="max-w-[910px] mx-auto px-6 h-full flex items-center">
         <FeatureCarousel />
       </div>
     </section>
 
-    <section class="min-h-screen bg-white py-20 flex items-center">
+    <section id="como-funciona" class="min-h-screen bg-white py-20 flex items-center">
       <div class="max-w-[910px] mx-auto px-6">
         <div class="flex flex-col gap-[73px] items-center">
           <!-- Header -->
@@ -126,7 +126,7 @@
       </div>
     </section>
 
-    <section class="min-h-screen bg-(--system-foreground) py-20 flex items-center relative" style="clip-path: polygon(0 10%, 100% 0, 100% 90%, 0 100%)">
+    <section id="cta" class="min-h-screen bg-(--system-foreground) py-20 flex items-center relative" style="clip-path: polygon(0 10%, 100% 0, 100% 90%, 0 100%)">
       <div class="max-w-[910px] mx-auto px-6 w-full">
         <div class="flex flex-col items-center text-center space-y-8">
           <!-- Main Title -->
@@ -142,7 +142,7 @@
           
           <!-- Action Buttons -->
           <div class="flex gap-4 items-center">
-            <ActionButton variant="primary">
+            <ActionButton @click="$router.push({name:'register'})" variant="primary">
               Começar agora
               <span class="material-symbols-outlined text-base ml-2">keyboard_arrow_right</span>
             </ActionButton>
@@ -152,7 +152,7 @@
       </div>
     </section>
 
-    <section class="min-h-screen flex items-center bg-white py-20">
+    <section id="impacto" class="min-h-screen flex items-center bg-white py-20">
       <div class="max-w-[910px] mx-auto px-6 w-full">
         <div class="flex flex-col gap-[73px] items-center">
           <!-- Header -->
@@ -272,7 +272,7 @@
       </div>
     </section>
 
-    <section class="min-h-screen flex items-center bg-(--system-ring) py-20">
+    <section id="testemunhos" class="min-h-screen flex items-center bg-(--system-ring) py-20">
       <div class="max-w-[910px] mx-auto px-6 w-full">
         <div class="flex flex-col gap-[73px] items-center">
           <!-- Header -->
@@ -350,7 +350,7 @@
     </section>
 
     <!-- FAQ Section -->
-    <section class="min-h-screen flex flex-col items-center justify-center px-6 py-20">
+    <section id="faqs" class="min-h-screen flex flex-col items-center justify-center px-6 py-20">
       <div class="w-full max-w-[912px] flex flex-col gap-[73px]">
         <!-- Header -->
         <div class="flex flex-col gap-[29px] items-center text-center">
