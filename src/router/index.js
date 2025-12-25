@@ -1,34 +1,40 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useUserStore } from '@/stores/userStore'
 
+import LandingPageView from '@/views/LandingPageView.vue'
+import LoginView from '../views/LoginView.vue'
+import RegisterView from '@/views/RegisterView.vue'
+import ProfileSelectionView from '@/views/ProfileSelectionView.vue'
+import HomeScreenView from '@/views/HomeScreenView.vue'
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
       name: 'landing',
-      component: () => import('@/views/LandingPageView.vue')
+      component: LandingPageView
     },
     {
       path: '/login',
       name: 'login',
-      component: () => import('../views/LoginView.vue')
+      component: LoginView
     },
     {
       path: '/register',
       name: 'register',
-      component: () => import('../views/RegisterView.vue')
+      component: RegisterView
     },
     {
       path: '/profile-selection',
       name: 'profile-selection',
-      component: () => import('../views/ProfileSelectionView.vue'),
+      component: ProfileSelectionView,
       meta: { requiresLogin: true }
     },
     {
       path: '/home',
       name: 'home',
-      component: () => import('../views/HomeScreenView.vue'),
+      component: HomeScreenView,
       meta: { requiresLogin: true }
     },
     {
@@ -37,7 +43,7 @@ const router = createRouter({
       component: () => import('../views/ProfileView.vue'),
       meta: { requiresLogin: true }
     },
-    {
+   /*  {
       path: '/activities',
       name: 'activities',
       component: () => import('../views/ActivitiesView.vue'),
@@ -54,7 +60,7 @@ const router = createRouter({
       name: 'statistics',
       component: () => import('../views/StatisticsView.vue'),
       meta: { requiresLogin: true }
-    },
+    }, */
     {
       path: '/leaderboard',
       name: 'leaderboard',
@@ -76,11 +82,6 @@ const router = createRouter({
       path: '/contacts',
       name: 'contacts',
       component: () => import('../views/ContactsView.vue')
-    },
-    {
-      path: '/faq',
-      name: 'faq',
-      component: () => import('../views/FAQView.vue')
     },
     {
       path: '/privacy',

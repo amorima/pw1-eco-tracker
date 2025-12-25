@@ -1,130 +1,143 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-linear-to-br from-green-50 to-emerald-100 px-4">
-    <div class="max-w-md w-full bg-white rounded-2xl shadow-2xl p-8">
-      <div class="text-center mb-8">
-        <div class="flex items-center justify-center gap-2 mb-4">
-          <span class="material-symbols-outlined text-green-600 text-5xl">eco</span>
-        </div>
-        <h1 class="text-3xl font-bold text-gray-800 mb-2">Welcome Back</h1>
-        <p class="text-gray-600">Sign in to your household</p>
-      </div>
+  <MenuNav />
+  <div class="pt-24 pb-24 flex flex-col items-center justify-center bg-white">
+    <div class="flex gap-4 items-center justify-center w-full max-w-[1200px]">
+      <!-- Left Form Section -->
+      <div class="flex items-center justify-center flex-1">
+        <div class="flex flex-col gap-8 items-start justify-center w-fit">
+          <!-- Form Container -->
+          <div class="flex flex-col gap-4 items-start justify-center w-full">
+            <!-- Title and Fields -->
+            <div class="flex flex-col gap-2 items-start w-full">
+              <h1 class="text-[48px] font-bold leading-tight text-(--text-body-titles) text-center w-full" style="font-family: 'Clash Grotesk', sans-serif;">
+                Login
+              </h1>
+              
+              <FormInput
+                v-model="formData.email"
+                placeholder="Email"
+                type="email"
+              />
+              
+              <FormInput
+                v-model="formData.password"
+                placeholder="Password"
+                type="password"
+              />
+            </div>
 
-      <form @submit.prevent="handleLogin" class="space-y-6">
-        <div v-if="error" class="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg flex items-center gap-2">
-          <span class="material-symbols-outlined">error</span>
-          <span>{{ error }}</span>
-        </div>
+            <!-- Terms Checkbox -->
+            <div class="flex items-center gap-1.5">
+              <CheckboxInput v-model="formData.acceptTerms" />
+              <div class="flex gap-1 items-center text-[10px] font-medium text-[#78716c]">
+                <span>Aceito</span>
+                <a href="/terms" class="underline hover:text-(--system-ring)">termos e condições</a>
+              </div>
+            </div>
 
-        <div>
-          <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
-            Email Address
-          </label>
-          <div class="relative">
-            <span class="material-symbols-outlined absolute left-3 top-3 text-gray-400">mail</span>
-            <input
-              id="email"
-              v-model="email"
-              type="email"
-              required
-              class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-              placeholder="your@email.com"
-            />
+            <!-- Action Buttons -->
+            <div class="flex gap-4 items-center w-full">
+              <ActionButton 
+                @click="goToRegister"
+                :variant="'secondary'"
+              >
+                Não tem conta?
+            </ActionButton>
+              <ActionButton 
+                @click="handleLogin"
+              >
+                Começar agora
+          </ActionButton>
+            </div>
+          </div>
+
+          <!-- Social Sign In -->
+          <div class="flex flex-col gap-4 items-start w-full">
+            <!-- Divider -->
+            <div class="flex gap-3 items-center justify-center px-0 py-1.5 w-full">
+              <div class="flex-1 h-px bg-[#cfdfe2]"></div>
+              <span class="text-[11px] text-[#294957]">ou</span>
+              <div class="flex-1 h-px bg-[#cfdfe2]"></div>
+            </div>
+
+            <!-- Google Button -->
+            <button class="bg-white border border-(--system-border) rounded-lg flex gap-3 items-center justify-center px-1.5 py-2 w-full hover:bg-gray-50 transition-colors">
+              <span class="material-symbols-outlined text-[19px]">account_circle</span>
+              <span class="text-[11px] text-(--system-foreground)">Entrar com Google</span>
+            </button>
+
+            <!-- Facebook Button -->
+            <button class="bg-white border border-(--system-border) rounded-lg flex gap-3 items-center justify-center px-1.5 py-2 w-full hover:bg-gray-50 transition-colors">
+              <span class="material-symbols-outlined text-[19px] text-[#1877f2]">group</span>
+              <span class="text-[11px] text-(--system-foreground)">Entrar com Facebook</span>
+            </button>
           </div>
         </div>
-
-        <div>
-          <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
-            Password
-          </label>
-          <div class="relative">
-            <span class="material-symbols-outlined absolute left-3 top-3 text-gray-400">lock</span>
-            <input
-              id="password"
-              v-model="password"
-              type="password"
-              required
-              class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-              placeholder="••••••••"
-            />
-          </div>
-        </div>
-
-        <button
-          type="submit"
-          :disabled="loading"
-          class="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-        >
-          <span class="material-symbols-outlined">login</span>
-          {{ loading ? 'Signing in...' : 'Sign In' }}
-        </button>
-      </form>
-
-      <div class="mt-6 text-center">
-        <p class="text-gray-600">
-          Don't have a household account?
-          <router-link to="/register" class="text-green-600 font-semibold hover:underline">
-            Register here
-          </router-link>
-        </p>
       </div>
 
-      <div class="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
-        <p class="text-sm text-gray-700 font-semibold mb-2 flex items-center gap-2">
-          <span class="material-symbols-outlined text-blue-600">info</span>
-          Test Account:
-        </p>
-        <p class="text-xs text-gray-600">Email: demo@eco.com</p>
-        <p class="text-xs text-gray-600">Password: demo123</p>
+      <!-- Right Image Section -->
+      <div class="flex-1 flex items-start justify-center">
+        <div class="relative w-[430px] h-[567px]">
+          <img 
+            src="../assets/login-art.jpg" 
+            alt="Aurora background" 
+            class="absolute inset-0 w-full h-full object-cover rounded-[13px]"
+          />
+          <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col justify-center text-center">
+            <p class="text-[48px] font-bold leading-tight text-white m-0" style="font-family: 'Clash Grotesk', sans-serif; text-shadow: 0px 0px 25px rgba(0,0,0,0.51);">
+              BE THE CHANGE,
+            </p>
+            <p class="text-[48px] font-bold leading-tight text-white m-0" style="font-family: 'Clash Grotesk', sans-serif; text-shadow: 0px 0px 25px rgba(0,0,0,0.51);">
+              BE AWARE,
+            </p>
+            <img class="" src="../assets/Logo.svg">
+          </div>
+        </div>
       </div>
     </div>
+
+    
   </div>
+  <FooterSection />
 </template>
 
 <script>
-import { useUserStore } from '@/stores/userStore'
+import MenuNav from '@/components/MenuNav.vue'
+import FooterSection from '@/components/FooterSection.vue'
+import FormInput from '@/components/FormInput.vue'
+import ActionButton from '@/components/ActionButton.vue'
+import CheckboxInput from '@/components/CheckboxInput.vue'
 
 export default {
   name: 'LoginView',
-  
+  components: {
+    MenuNav,
+    FooterSection,
+    FormInput,
+    ActionButton,
+    CheckboxInput,
+  },
   data() {
     return {
-      email: '',
-      password: '',
-      error: '',
-      loading: false
-    }
-  },
-  
-  computed: {
-    userStore() {
-      return useUserStore()
-    }
-  },
-  
-  mounted() {
-    this.userStore.seedData()
-  },
-  
-  methods: {
-    async handleLogin() {
-      this.error = ''
-      this.loading = true
-      
-      try {
-        const result = this.userStore.login(this.email, this.password)
-        
-        if (result.success) {
-          this.$router.push('/profile-selection')
-        } else {
-          this.error = result.message
-        }
-      } catch (err) {
-        console.error('Login error:', err)
-        this.error = 'An error occurred. Please try again.'
-      } finally {
-        this.loading = false
+      formData: {
+        email: '',
+        password: '',
+        acceptTerms: false
       }
+    }
+  },
+  methods: {
+    goToRegister() {
+      this.$router.push({ name: 'register' })
+    },
+    handleLogin() {
+      // Handle login logic
+      console.log('Login:', this.formData)
     }
   }
 }
 </script>
+
+<style scoped>
+/* Additional custom styles if needed */
+</style>

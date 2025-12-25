@@ -1,0 +1,228 @@
+@layer base {
+  :root {
+    /* System Colors */
+    --system-foreground: #234736;
+    --system-background: white;
+    --system-ring: #8cb161;
+    --system-border: #e7e5e4;
+    --system-input-background: #f5f5f4;
+    --system-popover-foreground: #c2f25c;
+    
+    /* Text Colors */
+    --text-headings: #1c1917;
+    --text-body-titles: #253f1d;
+    --text-body-sub-titles: #426934;
+    
+    /* Accent Colors */
+    --accent-muted-foreground: #78716c;
+    
+    /* Primary Colors */
+    --primary-secondary: #e5eda0;
+    
+    /* Semantic Colors */
+    --semantic-success-light: #8cb161;
+    --semantic-error-default: #dc2626;
+    --semantic-error-light: #fecaca;
+    --semantic-info-default: #0284c7;
+    --semantic-info-light: #bae6fd;
+    
+    /* Border Radius */
+    --border-radius-full: 999px;
+    --border-radius-xl: 14px;
+    --border-radius-md: 8px;
+    --border-radius-sm: 6px;
+    
+    /* Spacing */
+    --spacing-xs: 4px;
+    --spacing-md: 16px;
+    
+    /* Typography - Font Families */
+    --font-family-base: 'Noto Sans', sans-serif;
+    --font-family-clash: 'Clash Grotesk', sans-serif;
+    
+    /* Typography - Font Sizes */
+    --font-size-hero: 72px;
+    --font-size-heading-h4: 20px;
+    --font-size-body-base: 16px;
+    --font-size-body-small: 14px;
+    --font-size-button: 16px;
+    --font-size-label: 10px;
+    --font-size-icon-subtitle: 10px;
+    --font-size-small: 12px;
+    
+    /* Typography - Font Weights */
+    --font-weight-regular: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    
+    /* Typography - Line Heights */
+    --line-height-base: 1.5;
+    --line-height-tight: 1.25;
+    --line-height-relaxed: 1.75;
+    
+    /* Typography - Letter Spacing */
+    --letter-spacing-normal: 0;
+    --letter-spacing-wide: 0.025em;
+  }
+  
+  .dark {
+    /* System Colors - Dark Mode */
+    --system-foreground: #c2f25c;
+    --system-background: #1c1917;
+    --system-ring: #8cb161;
+    --system-border: #44403c;
+    --system-input-background: #292524;
+    --system-popover-foreground: #8cb161;
+    
+    /* Text Colors - Dark Mode */
+    --text-headings: #fafaf9;
+    --text-body-titles: #e7e5e4;
+    --text-body-sub-titles: #a8a29e;
+    
+    /* Accent Colors - Dark Mode */
+    --accent-muted-foreground: #a8a29e;
+  }
+}
+
+/* Typography Utility Classes */
+@layer Display {
+   /* Hero - Clash Grotesk Bold, 72px */
+  .text-hero {
+    font-family: var(--font-family-clash);
+    font-size: var(--font-size-hero);
+    font-weight: var(--font-weight-bold);
+    line-height: 1.25;
+    letter-spacing: var(--letter-spacing-normal);
+  }
+  
+  /* Heading/H4 - Noto Sans SemiBold, 20px */
+  .text-heading-h4 {
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-heading-h4);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-base);
+    letter-spacing: var(--letter-spacing-normal);
+    font-variation-settings: 'CTGR' 0, 'wdth' 100;
+  }
+  
+  /* Body/Base - Noto Sans Regular, 16px */
+  .text-body-base {
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-body-base);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--line-height-base);
+    letter-spacing: var(--letter-spacing-normal);
+    font-variation-settings: 'CTGR' 0, 'wdth' 100;
+  }
+  .text-display-xl {
+    font-family: var(--font-family-clash);
+    font-size: 60px;
+    font-weight: var(--font-weight-bold);
+    line-height: 1.2;
+    letter-spacing: var(--letter-spacing-normal);
+  }
+  
+  /* Heading H2 - Noto Sans SemiBold, 30px */
+  .text-heading-h2 {
+    font-family: var(--font-family-base);
+    font-size: 30px;
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-base);
+    letter-spacing: var(--letter-spacing-normal);
+    font-variation-settings: 'CTGR' 0, 'wdth' 100;
+  }
+  
+  /* Heading H3 - Noto Sans SemiBold, 24px */
+  .text-heading-h3 {
+    font-family: var(--font-family-base);
+    font-size: 24px;
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-base);
+    letter-spacing: var(--letter-spacing-normal);
+    font-variation-settings: 'CTGR' 0, 'wdth' 100;
+  }
+  
+  /* Body/Small - Noto Sans Regular, 14px */
+  .text-body-small {
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-body-small);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--line-height-base);
+    letter-spacing: var(--letter-spacing-normal);
+    font-variation-settings: 'CTGR' 0, 'wdth' 100;
+  } 
+  /*Noto Sans Bold, 16px, variation 'CTGR' 0 */
+  .text-button {
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-button);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-base);
+    letter-spacing: var(--letter-spacing-normal);
+    font-variation-settings: 'CTGR' 0, 'wdth' 100;
+  }
+  
+  /* UI/Label - Noto Sans Medium, 10px */
+  .text-label {
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-base);
+    letter-spacing: var(--letter-spacing-normal);
+    font-variation-settings: 'CTGR' 0, 'wdth' 100;
+  }
+  
+  /* UI/Icon Subtitle - Noto Sans Display Bold, 10px, variation 'CTGR' 100 */
+  .text-icon-subtitle {
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-icon-subtitle);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-base);
+    letter-spacing: var(--letter-spacing-normal);
+    font-variation-settings: 'CTGR' 100, 'wdth' 100;
+  }
+  
+  /* Text/Headings - for main headings */
+  .text-heading {
+    font-family: var(--font-family-base);
+    font-weight: var(--font-weight-bold);
+    color: var(--text-headings);
+  }
+  
+  /* Text/Body Titles */
+  .text-body-title {
+    font-family: var(--font-family-base);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-body-titles);
+  }
+  
+  /* Text/Body Subtitles */
+  .text-body-subtitle {
+    font-family: var(--font-family-base);
+    font-weight: var(--font-weight-medium);
+    color: var(--text-body-sub-titles);
+  }
+  
+  /* Body text - regular weight */
+  .text-body {
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-body);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--line-height-relaxed);
+    letter-spacing: var(--letter-spacing-normal);
+  }
+  
+  /* Small text */
+  .text-small {
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-small);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--line-height-base);
+    letter-spacing: var(--letter-spacing-normal);
+  }
+  
+  /* Muted text */
+  .text-muted {
+    color: var(--accent-muted-foreground);
+  }
+}
