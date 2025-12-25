@@ -43,14 +43,14 @@
               <CheckboxInput v-model="formData.acceptTerms" />
               <div class="flex gap-1 items-center text-[10px] font-medium text-[#78716c]">
                 <span>Aceito</span>
-                <a href="/terms" class="underline hover:text-(--system-ring)">termos e condições</a>
+                <a @click.prevent="$router.push({name:'terms'})" class="underline hover:text-(--system-ring)">termos e condições</a>
               </div>
             </div>
 
             <!-- Action Buttons -->
             <div class="flex gap-4 items-center w-full">
               <ActionButton 
-                @click="goToLogin"
+                @click="$router.push({ name: 'login' })"
                 :variant="'secondary'"
               >
                 Já tem conta?
@@ -142,9 +142,6 @@ export default {
     }
   },
   methods: {
-    goToLogin() {
-      this.$router.push({ name: 'login' })
-    },
     handleRegister() {
       // Handle registration logic
       console.log('Register:', this.formData)
@@ -152,7 +149,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-/* Additional custom styles if needed */
-</style>
