@@ -1,7 +1,7 @@
 <template>
     <nav :class="[ landing ? 'bg-(--system-foreground)' : '', 'h-20 flex justify-center' ]">
         <div class="flex w-full max-w-7xl items-center justify-between px-6 lg:px-[184px]">
-            <img src="./../assets/Logo.svg" class="h-10">
+            <img @click="$router.push({name:'landing'})" src="./../assets/Logo.svg" class="h-10">
             <div class="flex gap-(--spacing-md) items-center">
                 <template v-if="landing">
                     <MenuButton :landing="true">Funcionalidades</MenuButton>
