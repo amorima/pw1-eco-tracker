@@ -31,14 +31,14 @@
               <CheckboxInput v-model="formData.acceptTerms" />
               <div class="flex gap-1 items-center text-[10px] font-medium text-[#78716c]">
                 <span>Aceito</span>
-                <a href="/terms" class="underline hover:text-(--system-ring)">termos e condições</a>
+                <a @click.prevent="$router.push({name:'terms'})" class="underline hover:text-(--system-ring)">termos e condições</a>
               </div>
             </div>
 
             <!-- Action Buttons -->
             <div class="flex gap-4 items-center w-full">
               <ActionButton 
-                @click="goToRegister"
+                @click="$router.push({name:'register'})"
                 :variant="'secondary'"
               >
                 Não tem conta?
@@ -90,7 +90,7 @@
             <p class="text-[48px] font-bold leading-tight text-white m-0" style="font-family: 'Clash Grotesk', sans-serif; text-shadow: 0px 0px 25px rgba(0,0,0,0.51);">
               BE AWARE,
             </p>
-            <img class="" src="../assets/Logo.svg">
+            <img src="../assets/W_Logo.svg"/>
           </div>
         </div>
       </div>
@@ -107,6 +107,7 @@ import FooterSection from '@/components/FooterSection.vue'
 import FormInput from '@/components/FormInput.vue'
 import ActionButton from '@/components/ActionButton.vue'
 import CheckboxInput from '@/components/CheckboxInput.vue'
+import { useUserStore } from '@/stores/userStore'
 
 export default {
   name: 'LoginView',
@@ -123,21 +124,19 @@ export default {
         email: '',
         password: '',
         acceptTerms: false
-      }
+      },
+      error: '',
+      store: useUserStore(),
     }
   },
   methods: {
-    goToRegister() {
-      this.$router.push({ name: 'register' })
-    },
     handleLogin() {
-      // Handle login logic
-      console.log('Login:', this.formData)
+      if(this.store.logIn(this.formData)){
+        this.$router.push({name:'profile-selection'})
+      } else {
+        this.error = 'Invalid Login' 
+      }
     }
   }
 }
 </script>
-
-<style scoped>
-/* Additional custom styles if needed */
-</style>

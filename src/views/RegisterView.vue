@@ -43,14 +43,14 @@
               <CheckboxInput v-model="formData.acceptTerms" />
               <div class="flex gap-1 items-center text-[10px] font-medium text-[#78716c]">
                 <span>Aceito</span>
-                <a href="/terms" class="underline hover:text-(--system-ring)">termos e condições</a>
+                <a @click.prevent="$router.push({name:'terms'})" class="underline hover:text-(--system-ring)">termos e condições</a>
               </div>
             </div>
 
             <!-- Action Buttons -->
             <div class="flex gap-4 items-center w-full">
               <ActionButton 
-                @click="goToLogin"
+                @click="$router.push({ name: 'login' })"
                 :variant="'secondary'"
               >
                 Já tem conta?
@@ -120,6 +120,7 @@ import FooterSection from '@/components/FooterSection.vue'
 import FormInput from '@/components/FormInput.vue'
 import CheckboxInput from '@/components/CheckboxInput.vue'
 import ActionButton from '@/components/ActionButton.vue';
+import { useUserStore } from '@/stores/userStore';
 
 export default {
   name: 'RegisterView',
@@ -138,21 +139,23 @@ export default {
         password: '',
         confirmPassword: '',
         acceptTerms: false
-      }
+      },
+      store:useUserStore(),
     }
   },
   methods: {
-    goToLogin() {
-      this.$router.push({ name: 'login' })
-    },
     handleRegister() {
-      // Handle registration logic
-      console.log('Register:', this.formData)
+      if(this.formData.acceptTerms){
+        if(this.store.createUser(this.formData)){
+          this.$router.push({name:'login'})
+        }else{
+          this.error = 'Invalid Register'
+        }
+      }else{
+        this.error = 'Please acept terms'
+      }
+      
     }
   }
 }
 </script>
-
-<style scoped>
-/* Additional custom styles if needed */
-</style>

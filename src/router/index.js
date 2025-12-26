@@ -98,12 +98,12 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const userStore = useUserStore()
-  if (to.meta.requiresLogin && !userStore.userIsLoggedIn) {
+  if (to.meta.requiresLogin && !userStore.loggedIn) {
     next('/login')
     return
   }
   
-  if (to.meta.requiresAdmin && !userStore.userIsAdmin) {
+  if (to.meta.requiresAdmin && !userStore.isAdmin) {
     next('/home') // Redirect non-admin users to home
     return
   }
