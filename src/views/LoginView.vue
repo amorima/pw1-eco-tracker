@@ -107,6 +107,7 @@ import FooterSection from '@/components/FooterSection.vue'
 import FormInput from '@/components/FormInput.vue'
 import ActionButton from '@/components/ActionButton.vue'
 import CheckboxInput from '@/components/CheckboxInput.vue'
+import { useUserStore } from '@/stores/userStore'
 
 export default {
   name: 'LoginView',
@@ -123,13 +124,18 @@ export default {
         email: '',
         password: '',
         acceptTerms: false
-      }
+      },
+      error: '',
+      store: useUserStore(),
     }
   },
   methods: {
     handleLogin() {
-      // Handle login logic
-      console.log('Login:', this.formData)
+      if(this.store.logIn(this.formData)){
+        this.$router.push({name:'profile-selection'})
+      } else {
+        this.error = 'Invalid Login' 
+      }
     }
   }
 }

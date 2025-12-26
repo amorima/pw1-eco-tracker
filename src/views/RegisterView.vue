@@ -120,6 +120,7 @@ import FooterSection from '@/components/FooterSection.vue'
 import FormInput from '@/components/FormInput.vue'
 import CheckboxInput from '@/components/CheckboxInput.vue'
 import ActionButton from '@/components/ActionButton.vue';
+import { useUserStore } from '@/stores/userStore';
 
 export default {
   name: 'RegisterView',
@@ -138,13 +139,22 @@ export default {
         password: '',
         confirmPassword: '',
         acceptTerms: false
-      }
+      },
+      store:useUserStore(),
     }
   },
   methods: {
     handleRegister() {
-      // Handle registration logic
-      console.log('Register:', this.formData)
+      if(this.formData.acceptTerms){
+        if(this.store.createUser(this.formData)){
+          this.$router.push({name:'login'})
+        }else{
+          this.error = 'Invalid Register'
+        }
+      }else{
+        this.error = 'Please acept terms'
+      }
+      
     }
   }
 }
