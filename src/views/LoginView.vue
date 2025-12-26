@@ -132,7 +132,8 @@ export default {
   methods: {
     handleLogin() {
       if(this.store.logIn(this.formData)){
-        this.$router.push({name:'profile-selection'})
+        // ! Change The first route to admin creation when view ready
+        this.store.firstUse ? this.$router.push({name:'profile-selection'}) : this.$router.push({name:'profile-selection'})
       } else {
         this.error = 'Invalid Login' 
       }

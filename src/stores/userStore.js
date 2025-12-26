@@ -9,6 +9,7 @@ export const useUserStore = defineStore('userStore', {
   getters: {
     loggedIn:(state) => state.currentUser != null,
     isAdmin:(state) => state.currentUser.isAdmin,
+    firstUse:(state) => !state.currentUser.profiles,
     getProfiles:(state) => state.currentProfile.profiles
   },
   actions: {
