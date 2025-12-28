@@ -1,14 +1,13 @@
 <template>
   <div class="min-h-screen bg-(--system-background) relative">
     <!-- Back Arrow -->
-    <button 
-      @click="$router.back()"
-      class="absolute left-[73px] top-[70px] w-12 h-12 flex items-center justify-center hover:scale-110 transition-transform"
-    >
-      <span class="material-symbols-outlined text-[48px] text-(--system-ring)">
-        arrow_circle_left
-      </span>
-    </button>
+    <div class="absolute left-[73px] top-[70px] w-12 h-12 flex items-center justify-center transition-transform">
+      <button
+        @click="$router.go(-1)"
+        class="pointer-events-auto -ml-10 w-12 h-12 rounded-full border-2 border-(--system-ring) bg-white flex items-center justify-center text-(--system-ring) hover:bg-(--system-ring) hover:text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+        <span class="material-symbols-outlined text-xl">arrow_back</span>
+      </button>
+    </div>
 
     <!-- Main Content -->
     <div class="flex flex-col items-center justify-center min-h-screen py-20">
