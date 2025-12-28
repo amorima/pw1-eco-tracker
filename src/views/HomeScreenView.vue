@@ -1,237 +1,257 @@
 <template>
-  <div class="min-h-screen bg-gray-50">
-    <!-- Header -->
-    <header class="bg-white shadow-sm sticky top-0 z-10">
-      <div class="max-w-7xl mx-auto px-4 py-4">
-        <div class="flex justify-between items-center">
-          <div class="flex items-center gap-3">
-            <div 
-              class="w-12 h-12 rounded-full flex items-center justify-center"
-              :style="{ backgroundColor: currentProfile?.color }"
-            >
-              <span class="material-symbols-outlined text-white text-2xl">
-                {{ currentProfile?.avatar }}
+  <MenuNav :landing="false" />
+  <div class="min-h-screen py-8 flex justify-center">
+    <div class="w-[930px] space-y-4">
+      
+      <!-- Statistics Section -->
+      <CollapsibleCard title="ESTATÍSTICAS">
+        <div class="w-full h-[260px] flex items-center justify-center text-(--text-body-sub-titles)">
+          <div class="text-center">
+            <span class="material-symbols-outlined text-6xl mb-4 text-(--system-border)">
+              show_chart
+            </span>
+            <p>Gráfico de estatísticas em breve</p>
+          </div>
+        </div>
+      </CollapsibleCard>
+
+      <!-- Consumptions Section -->
+      <CollapsibleCard title="CONSUMOS">
+        <div class="space-y-2.5">
+          <!-- First Row -->
+          <div class="flex gap-2.5 flex-wrap">
+            <ConsumptionCard
+              label="Forno"
+              image="https://images.unsplash.com/photo-1585515320310-259814833e62?w=300&h=200&fit=crop"
+              unit="hr"
+              @submit="handleConsumptionSubmit"
+            />
+            <ConsumptionCard
+              label="Máquina de Lavar Roupa"
+              image="https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?w=300&h=200&fit=crop"
+              unit="hr"
+              @submit="handleConsumptionSubmit"
+            />
+            <ConsumptionCard
+              label="Televisão"
+              image="https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=300&h=200&fit=crop"
+              unit="hr"
+              @submit="handleConsumptionSubmit"
+            />
+          </div>
+
+          <!-- Second Row -->
+          <div class="flex gap-2.5 flex-wrap">
+            <ConsumptionCard
+              label="Aquecedor"
+              image="https://images.unsplash.com/photo-1585338107529-13afc5F0b198?w=300&h=200&fit=crop"
+              unit="hr"
+              @submit="handleConsumptionSubmit"
+            />
+            <ConsumptionCard
+              label="Viagem carro"
+              image="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=300&h=200&fit=crop"
+              unit="km"
+              @submit="handleConsumptionSubmit"
+            />
+            <AddCard @click="openAddConsumptionModal" />
+          </div>
+        </div>
+      </CollapsibleCard>
+
+      <!-- Tasks Section -->
+      <CollapsibleCard title="TAREFAS">
+        <div class="space-y-2.5">
+          <!-- First Row -->
+          <div class="flex gap-2.5 flex-wrap">
+            <TaskCard
+              label="Limpezas"
+              image="https://images.unsplash.com/photo-1628177142898-93e36e4e3a50?w=300&h=250&fit=crop"
+              @click="handleTaskClick('Limpezas')"
+            />
+            <TaskCard
+              label="Separar resíduos"
+              image="https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=300&h=250&fit=crop"
+              @click="handleTaskClick('Separar resíduos')"
+            />
+            <TaskCard
+              label="Usar transportes públicos"
+              image="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=300&h=250&fit=crop"
+              @click="handleTaskClick('Transportes públicos')"
+            />
+          </div>
+
+          <!-- Second Row -->
+          <div class="flex gap-2.5 flex-wrap">
+            <TaskCard
+              label="Desligar Dispositivos"
+              image="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&h=250&fit=crop"
+              @click="handleTaskClick('Desligar dispositivos')"
+            />
+            <TaskCard
+              label="Compostagem"
+              image="https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=300&h=250&fit=crop"
+              @click="handleTaskClick('Compostagem')"
+            />
+            <AddCard @click="openAddTaskModal" />
+          </div>
+        </div>
+      </CollapsibleCard>
+
+      <!-- Tools Section -->
+      <CollapsibleCard title="FERRAMENTAS">
+        <div class="flex gap-2.5">
+          <!-- Emission Calculator Tool -->
+          <div class="bg-(--system-background) border-2 border-(--system-border) rounded-[14px] w-[280px] p-6 flex flex-col gap-6">
+            <h3 class="font-bold text-base text-(--text-body-titles) text-center">
+              Estimativa de emissão
+            </h3>
+
+            <div class="space-y-6">
+              <!-- Distance Input -->
+              <div class="space-y-2">
+                <label class="block text-[10px] font-medium text-(--text-disabled)">
+                  Distância percorrida (Km)
+                </label>
+                <FormInput
+                  v-model="calculator.distance"
+                  placeholder="50km"
+                  type="number"
+                />
+              </div>
+
+              <!-- Fuel Consumption Slider -->
+              <div class="space-y-2">
+                <label class="block text-[10px] font-medium text-(--text-disabled)">
+                  Consumo médio (L/100Km) :
+                </label>
+                <div class="flex items-center gap-2">
+                  <span class="text-[10px] text-(--text-disabled)">0</span>
+                  <input
+                    v-model="calculator.consumption"
+                    type="range"
+                    min="0"
+                    max="10"
+                    step="0.1"
+                    class="flex-1 h-2 bg-[#e3e3e3] rounded-full appearance-none cursor-pointer accent-(--system-ring)"
+                  />
+                  <span class="text-[10px] text-(--text-disabled)">10</span>
+                </div>
+              </div>
+
+              <!-- Fuel Type Checkboxes -->
+              <div class="space-y-2">
+                <label class="block text-[10px] font-medium text-(--text-disabled)">
+                  Tipo de Combustível
+                </label>
+                <div class="grid grid-cols-2 gap-4">
+                  <CheckboxInput v-model="calculator.fuelTypes.gasoline" label="Gasolina" />
+                  <CheckboxInput v-model="calculator.fuelTypes.diesel" label="Gasóleo" />
+                  <CheckboxInput v-model="calculator.fuelTypes.electric" label="Elétrico" />
+                  <CheckboxInput v-model="calculator.fuelTypes.gas" label="Gás" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Calculate Button -->
+            <ActionButton @click="calculateEmissions">
+              Calcular
+            </ActionButton>
+
+            <!-- Result -->
+            <div class="flex items-center gap-2 justify-center font-semibold text-[20px]">
+              <span :class="calculator.result > 0 ? 'text-(--system-ring)' : 'text-(--text-disabled)'">
+                {{ calculator.result }}
+              </span>
+              <span :class="calculator.result > 0 ? 'text-(--system-ring)' : 'text-(--text-disabled)'">
+                Kg CO2
               </span>
             </div>
-            <div>
-              <h2 class="font-bold text-gray-800">{{ currentProfile?.name }}</h2>
-              <p class="text-sm text-gray-600">{{ currentProfile?.points }} pts · Lvl {{ currentProfile?.level }}</p>
-            </div>
           </div>
-          
-          <div class="flex items-center gap-2">
-            <router-link 
-              to="/leaderboard"
-              class="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition"
-            >
-              <span class="material-symbols-outlined">leaderboard</span>
-            </router-link>
-            <router-link 
-              to="/profile-selection"
-              class="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition"
-            >
-              <span class="material-symbols-outlined">swap_horiz</span>
-            </router-link>
+
+          <!-- Placeholder Cards -->
+          <div class="border-2 border-(--system-border) rounded-[14px] w-[280px] h-[431px] flex items-center justify-center">
+            <AddCard variant="primary" @click="openToolModal" />
+          </div>
+          <div class="border-2 border-(--system-border) rounded-[14px] w-[280px] h-[431px] flex items-center justify-center">
+            <AddCard variant="primary" @click="openToolModal" />
           </div>
         </div>
-      </div>
-    </header>
+      </CollapsibleCard>
 
-    <!-- Main Content -->
-    <div class="max-w-7xl mx-auto px-4 py-8">
-      <!-- Welcome Section -->
-      <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-800 mb-2">Welcome back, {{ currentProfile?.name }}!</h1>
-        <p class="text-gray-600">What eco-friendly action will you take today?</p>
-      </div>
-
-      <!-- Quick Stats -->
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-        <div class="bg-white rounded-xl shadow p-4">
-          <div class="flex items-center gap-2 mb-2">
-            <span class="material-symbols-outlined text-green-600">star</span>
-            <span class="text-2xl font-bold text-gray-800">{{ currentProfile?.points || 0 }}</span>
-          </div>
-          <p class="text-sm text-gray-600">Total Points</p>
-        </div>
-
-        <div class="bg-white rounded-xl shadow p-4">
-          <div class="flex items-center gap-2 mb-2">
-            <span class="material-symbols-outlined text-blue-600">trending_up</span>
-            <span class="text-2xl font-bold text-gray-800">{{ currentProfile?.level || 1 }}</span>
-          </div>
-          <p class="text-sm text-gray-600">Level</p>
-        </div>
-
-        <div class="bg-white rounded-xl shadow p-4">
-          <div class="flex items-center gap-2 mb-2">
-            <span class="material-symbols-outlined text-emerald-600">co2</span>
-            <span class="text-2xl font-bold text-gray-800">{{ (currentProfile?.co2Saved || 0).toFixed(1) }}</span>
-          </div>
-          <p class="text-sm text-gray-600">kg CO₂ Saved</p>
-        </div>
-
-        <div class="bg-white rounded-xl shadow p-4">
-          <div class="flex items-center gap-2 mb-2">
-            <span class="material-symbols-outlined text-orange-600">check_circle</span>
-            <span class="text-2xl font-bold text-gray-800">{{ recentActivities.length }}</span>
-          </div>
-          <p class="text-sm text-gray-600">Activities</p>
-        </div>
-      </div>
-
-      <!-- Log Activity Section -->
-      <div class="bg-white rounded-2xl shadow-lg p-6 mb-8">
-        <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-          <span class="material-symbols-outlined text-green-600">add_circle</span>
-          Log Activity
-        </h2>
-
-        <div v-if="successMessage" class="mb-6 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg flex items-center gap-2">
-          <span class="material-symbols-outlined">check_circle</span>
-          <span>{{ successMessage }}</span>
-        </div>
-
-        <!-- Activity Grid -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <button
-            v-for="activity in activityTypes"
-            :key="activity.id"
-            @click="logActivity(activity)"
-            class="group p-6 border-2 border-gray-200 rounded-xl hover:border-green-500 hover:bg-green-50 transition text-center"
-          >
-            <div class="w-16 h-16 mx-auto mb-3 bg-gray-100 group-hover:bg-green-100 rounded-full flex items-center justify-center transition">
-              <span class="material-symbols-outlined text-gray-600 group-hover:text-green-600 text-3xl transition">
-                {{ activity.icon }}
-              </span>
-            </div>
-            <h3 class="font-semibold text-gray-800 mb-1 text-sm">{{ activity.name }}</h3>
-            <div class="flex items-center justify-center gap-1 text-green-600 text-xs">
-              <span class="material-symbols-outlined text-sm">star</span>
-              <span>+{{ activity.points }} pts</span>
-            </div>
-            <p class="text-xs text-gray-500 mt-1">{{ activity.co2Saved }}kg CO₂</p>
-          </button>
-        </div>
-      </div>
-
-      <!-- Recent Activities -->
-      <div class="bg-white rounded-2xl shadow-lg p-6">
-        <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-          <span class="material-symbols-outlined text-blue-600">history</span>
-          Recent Activities
-        </h2>
-
-        <div v-if="recentActivities.length === 0" class="text-center py-12 text-gray-500">
-          <span class="material-symbols-outlined text-6xl mb-4 text-gray-300">eco</span>
-          <p>No activities yet. Start logging to earn points!</p>
-        </div>
-
-        <div v-else class="space-y-3">
-          <div 
-            v-for="activity in recentActivities"
-            :key="activity.id"
-            class="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition"
-          >
-            <div class="flex items-center gap-4">
-              <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                <span class="material-symbols-outlined text-green-600 text-2xl">
-                  {{ activity.icon }}
-                </span>
-              </div>
-              <div>
-                <p class="font-semibold text-gray-800">{{ activity.typeName }}</p>
-                <p class="text-sm text-gray-500">{{ formatDate(activity.date) }}</p>
-              </div>
-            </div>
-            <div class="text-right">
-              <p class="font-semibold text-green-600">+{{ activity.points }} pts</p>
-              <p class="text-xs text-gray-500">{{ activity.co2Saved }}kg CO₂</p>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
+  <FooterSection />
 </template>
 
 <script>
-import { useUserStore } from '@/stores/userStore'
-import { useActivitiesStore } from '@/stores/activitiesStore'
+import MenuNav from '@/components/MenuNav.vue'
+import FooterSection from '@/components/FooterSection.vue'
+import CollapsibleCard from '@/components/CollapsibleCard.vue'
+import ConsumptionCard from '@/components/ConsumptionCard.vue'
+import TaskCard from '@/components/TaskCard.vue'
+import AddCard from '@/components/AddCard.vue'
+import FormInput from '@/components/FormInput.vue'
+import CheckboxInput from '@/components/CheckboxInput.vue'
+import ActionButton from '@/components/ActionButton.vue'
 
 export default {
   name: 'HomeScreenView',
-  
+  components: {
+    MenuNav,
+    FooterSection,
+    CollapsibleCard,
+    ConsumptionCard,
+    TaskCard,
+    AddCard,
+    FormInput,
+    CheckboxInput,
+    ActionButton
+  },
   data() {
     return {
-      successMessage: '',
-      recentActivities: []
+      calculator: {
+        distance: '',
+        consumption: 5,
+        fuelTypes: {
+          gasoline: false,
+          diesel: false,
+          electric: false,
+          gas: false
+        },
+        result: 0
+      }
     }
   },
-  
-  computed: {
-    userStore() {
-      return useUserStore()
-    },
-    
-    activitiesStore() {
-      return useActivitiesStore()
-    },
-    
-    currentProfile() {
-      return this.userStore.getCurrentProfile
-    },
-    
-    activityTypes() {
-      return this.activitiesStore.getActivityTypes
-    }
-  },
-  
-  mounted() {
-    this.loadRecentActivities()
-  },
-  
   methods: {
-    logActivity(activityType) {
-      if (!this.currentProfile) return
-
-      const result = this.activitiesStore.logActivity({
-        profileId: this.currentProfile.id,
-        typeId: activityType.id,
-        date: new Date().toISOString()
-      })
-
-      if (result.success) {
-        this.successMessage = `Great! You earned ${activityType.points} points!`
-        this.loadRecentActivities()
-
-        setTimeout(() => {
-          this.successMessage = ''
-        }, 3000)
-      }
+    handleConsumptionSubmit(data) {
+      console.log('Consumption submitted:', data)
+      // TODO: Add consumption logging logic
     },
-
-    loadRecentActivities() {
-      if (this.currentProfile) {
-        this.recentActivities = this.activitiesStore.getRecentActivities(this.currentProfile.id, 5)
-      }
+    handleTaskClick(taskName) {
+      console.log('Task clicked:', taskName)
+      // TODO: Add task completion logic
     },
-
-    formatDate(dateString) {
-      const date = new Date(dateString)
-      const now = new Date()
-      const diffTime = Math.abs(now - date)
-      const diffMinutes = Math.floor(diffTime / (1000 * 60))
-      const diffHours = Math.floor(diffTime / (1000 * 60 * 60))
-      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24))
-
-      if (diffMinutes < 1) return 'Just now'
-      if (diffMinutes < 60) return `${diffMinutes}m ago`
-      if (diffHours < 24) return `${diffHours}h ago`
-      if (diffDays === 1) return 'Yesterday'
-      if (diffDays < 7) return `${diffDays} days ago`
-
-      return date.toLocaleDateString()
+    openAddConsumptionModal() {
+      console.log('Add consumption modal')
+      // TODO: Add modal logic
+    },
+    openAddTaskModal() {
+      console.log('Add task modal')
+      // TODO: Add modal logic
+    },
+    openToolModal() {
+      console.log('Add tool modal')
+      // TODO: Add modal logic
+    },
+    calculateEmissions() {
+      const distance = parseFloat(this.calculator.distance) || 0
+      const consumption = parseFloat(this.calculator.consumption) || 0
+      
+      // Simple calculation: (distance * consumption / 100) * 2.3 kg CO2 per liter
+      // This is a simplified calculation
+      const fuelUsed = (distance * consumption) / 100
+      this.calculator.result = (fuelUsed * 2.3).toFixed(2)
     }
   }
 }
