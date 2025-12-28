@@ -132,7 +132,8 @@ export default {
   methods: {
     handleLogin() {
       if(this.store.logIn(this.formData)){
-        this.$router.push({name:'profile-selection'})
+        // Redirect based on first use status
+        this.store.firstUse ? this.$router.push({name:'quick-start'}) : this.$router.push({name:'profile-selection'})
       } else {
         this.error = 'Invalid Login' 
       }

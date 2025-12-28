@@ -26,6 +26,12 @@ const router = createRouter({
       component: RegisterView
     },
     {
+      path: '/quick-start',
+      name: 'quick-start',
+      component: () => import('@/views/QuickStartView.vue'),
+      meta: { requiresLogin: true, requiresFirstUse: true }
+    },
+    {
       path: '/profile-selection',
       name: 'profile-selection',
       component: ProfileSelectionView,
@@ -98,12 +104,27 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const userStore = useUserStore()
+  
+  // Check if user needs to login
   if (to.meta.requiresLogin && !userStore.loggedIn) {
     next('/login')
     return
   }
   
-  if (to.meta.requiresAdmin && !userStore.isAdmin) {
+  // Check if first-time user needs to complete quick start
+  if (userStore.loggedIn && userStore.firstUse && to.name !== 'quick-start') {
+    next('/quick-start')
+    return
+  }
+  
+  // Prevent access to quick-start if not first use
+  if (to.meta.requiresFirstUse && !userStore.firstUse) {
+    next('/home')
+    return
+  }
+  
+  // Check admin access
+  if (to.meta.requiresAdmin && !userStore.isAdmin && !userStore.firstUse) {
     next('/home') // Redirect non-admin users to home
     return
   }
