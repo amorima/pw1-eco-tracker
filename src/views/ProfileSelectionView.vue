@@ -1,221 +1,227 @@
 <template>
-  <div class="min-h-screen bg-gray-900">
-    <!-- Header -->
-    <header class="bg-black bg-opacity-50 py-4">
-      <div class="max-w-7xl mx-auto px-4 flex justify-between items-center">
-        <div class="flex items-center gap-2">
-          <span class="material-symbols-outlined text-green-500 text-3xl">eco</span>
-          <span class="text-xl font-bold text-white">Eco Tracker</span>
-        </div>
-        <button 
-          @click="handleLogout"
-          class="text-white hover:text-gray-300 transition flex items-center gap-2"
-        >
-          <span class="material-symbols-outlined">logout</span>
-          Logout
-        </button>
-      </div>
-    </header>
+  <div class="min-h-screen bg-(--system-background) relative">
+    <!-- Back Arrow -->
+    <button 
+      @click="$router.back()"
+      class="absolute left-[73px] top-[70px] w-12 h-12 flex items-center justify-center hover:scale-110 transition-transform"
+    >
+      <span class="material-symbols-outlined text-[48px] text-(--system-ring)">
+        arrow_circle_left
+      </span>
+    </button>
 
     <!-- Main Content -->
-    <div class="max-w-5xl mx-auto px-4 py-20">
-      <h1 class="text-5xl font-bold text-white text-center mb-12">
-        Who's taking action today?
+    <div class="flex flex-col items-center justify-center min-h-screen py-20">
+      <!-- Title -->
+      <h1 
+        class="text-[48px] font-bold text-(--primary-primary) text-center mb-16"
+        style="font-family: 'Clash Grotesk', sans-serif;"
+      >
+        Selecione o seu perfil
       </h1>
 
       <!-- Profiles Grid -->
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
-        <div 
-          v-for="profile in profiles" 
+      <div class="flex flex-wrap gap-6 items-center justify-center mb-12 max-w-4xl">
+        <!-- Existing Profiles -->
+        <ProfileCard
+          v-for="profile in profiles"
           :key="profile.id"
+          :name="profile.name"
+          :avatar="profile.avatar"
           @click="selectProfile(profile.id)"
-          class="group cursor-pointer"
-        >
-          <div 
-            class="aspect-square rounded-lg overflow-hidden mb-4 border-4 border-transparent group-hover:border-white transition"
-            :style="{ backgroundColor: profile.color }"
-          >
-            <div class="w-full h-full flex items-center justify-center">
-              <span class="material-symbols-outlined text-white" style="font-size: 80px;">
-                {{ profile.avatar }}
-              </span>
-            </div>
-          </div>
-          <p class="text-white text-center font-medium group-hover:text-gray-300 transition">
-            {{ profile.name }}
-          </p>
-          <p class="text-gray-400 text-sm text-center">
-            {{ profile.points }} pts · Level {{ profile.level }}
-          </p>
-        </div>
+        />
 
-        <!-- Add Profile Button -->
-        <div 
-          @click="showAddProfile = true"
-          class="group cursor-pointer"
-        >
-          <div 
-            class="aspect-square rounded-lg overflow-hidden mb-4 border-4 border-transparent group-hover:border-white transition bg-gray-800 flex items-center justify-center"
-          >
-            <span class="material-symbols-outlined text-gray-400 group-hover:text-white transition" style="font-size: 80px;">
-              add_circle
-            </span>
-          </div>
-          <p class="text-gray-400 text-center font-medium group-hover:text-white transition">
-            Add Profile
-          </p>
-        </div>
+        <!-- Add Profile Button (only if under max users) -->
+        <ProfileCard
+          v-if="canAddProfile"
+          :isAddButton="true"
+          @click="showAddProfileModal = true"
+        />
       </div>
 
-      <!-- Household Info -->
-      <div class="text-center text-gray-400">
-        <p class="text-sm">{{ currentHousehold?.householdName }}</p>
-      </div>
+      <!-- Admin Button -->
+      <ActionButton 
+        v-if="isAdmin"
+        @click="goToAdmin"
+        class="mb-8"
+      >
+        Admin
+      </ActionButton>
     </div>
 
+    <!-- Footer -->
+    <div class="absolute bottom-0 left-0 right-0 h-[122px] bg-(--system-card-foreground)"></div>
+
     <!-- Add Profile Modal -->
-    <div 
-      v-if="showAddProfile" 
-      class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-4 z-50"
-      @click.self="showAddProfile = false"
+    <ModalComponent
+      :isOpen="showAddProfileModal"
+      title="Criar Novo Perfil"
+      @close="closeModal"
     >
-      <div class="bg-gray-800 rounded-2xl p-8 max-w-md w-full">
-        <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-2">
-          <span class="material-symbols-outlined">person_add</span>
-          Create Profile
-        </h2>
+      <form @submit.prevent="handleCreateProfile" class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-(--text-body-sub-titles) mb-2">
+            Nome *
+          </label>
+          <FormInput
+            v-model="newProfile.name"
+            placeholder="Nome do perfil"
+            type="text"
+          />
+        </div>
 
-        <form @submit.prevent="handleCreateProfile" class="space-y-6">
-          <div>
-            <label class="block text-sm font-medium text-gray-300 mb-2">
-              Name
-            </label>
+        <div>
+          <label class="block text-sm font-medium text-(--text-body-sub-titles) mb-2">
+            Idade (opcional)
+          </label>
+          <FormInput
+            v-model.number="newProfile.age"
+            placeholder="Idade"
+            type="number"
+          />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-(--text-body-sub-titles) mb-2">
+            Avatar (opcional)
+          </label>
+          <div class="relative">
             <input
-              v-model="newProfile.name"
-              type="text"
-              required
-              class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-green-500 focus:border-transparent"
-              placeholder="Family member name"
+              type="file"
+              @change="handleAvatarUpload"
+              accept="image/*"
+              class="hidden"
+              ref="avatarInput"
             />
-          </div>
-
-          <div>
-            <label class="block text-sm font-medium text-gray-300 mb-2">
-              Avatar Icon
-            </label>
-            <div class="grid grid-cols-4 gap-3">
-              <div 
-                v-for="icon in avatarIcons" 
-                :key="icon"
-                @click="newProfile.avatar = icon"
-                :class="[
-                  'aspect-square rounded-lg flex items-center justify-center cursor-pointer transition',
-                  newProfile.avatar === icon 
-                    ? 'bg-green-600 ring-2 ring-white' 
-                    : 'bg-gray-700 hover:bg-gray-600'
-                ]"
-              >
-                <span class="material-symbols-outlined text-white text-3xl">
-                  {{ icon }}
-                </span>
+            <button
+              type="button"
+              @click="$refs.avatarInput.click()"
+              class="w-full px-4 py-3 bg-(--system-input-background) border-2 border-(--system-border) rounded-lg text-(--system-foreground) hover:border-(--system-ring) transition-colors flex items-center justify-center gap-2"
+            >
+              <span class="material-symbols-outlined">add_photo_alternate</span>
+              <span>{{ newProfile.avatarPreview ? 'Alterar imagem' : 'Escolher imagem' }}</span>
+            </button>
+            
+            <!-- Avatar Preview -->
+            <div v-if="newProfile.avatarPreview" class="mt-4 flex justify-center">
+              <div class="w-32 h-32 rounded-lg border-2 border-(--system-border) overflow-hidden">
+                <img 
+                  :src="newProfile.avatarPreview" 
+                  alt="Avatar preview"
+                  class="w-full h-full object-cover"
+                />
               </div>
             </div>
           </div>
+        </div>
+      </form>
 
-          <div>
-            <label class="block text-sm font-medium text-gray-300 mb-2">
-              Color
-            </label>
-            <div class="grid grid-cols-6 gap-2">
-              <div 
-                v-for="color in colorOptions" 
-                :key="color"
-                @click="newProfile.color = color"
-                :class="[
-                  'aspect-square rounded-lg cursor-pointer transition',
-                  newProfile.color === color ? 'ring-2 ring-white scale-110' : ''
-                ]"
-                :style="{ backgroundColor: color }"
-              ></div>
-            </div>
-          </div>
-
-          <div class="flex gap-3">
-            <button
-              type="button"
-              @click="showAddProfile = false"
-              class="flex-1 px-6 py-3 bg-gray-700 text-white rounded-lg font-semibold hover:bg-gray-600 transition"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              class="flex-1 px-6 py-3 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 transition"
-            >
-              Create
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+      <template #footer>
+        <ActionButton 
+          @click="closeModal"
+          :variant="'secondary'"
+        >
+          Cancelar
+        </ActionButton>
+        <ActionButton 
+          @click="handleCreateProfile"
+          :disabled="!newProfile.name"
+        >
+          Criar Perfil
+        </ActionButton>
+      </template>
+    </ModalComponent>
   </div>
 </template>
 
 <script>
 import { useUserStore } from '@/stores/userStore'
+import ProfileCard from '@/components/ProfileCard.vue'
+import ModalComponent from '@/components/ModalComponent.vue'
+import FormInput from '@/components/FormInput.vue'
+import ActionButton from '@/components/ActionButton.vue'
 
 export default {
   name: 'ProfileSelectionView',
-  
+  components: {
+    ProfileCard,
+    ModalComponent,
+    FormInput,
+    ActionButton
+  },
   data() {
     return {
-      showAddProfile: false,
+      showAddProfileModal: false,
       newProfile: {
         name: '',
-        avatar: 'person',
-        color: '#3b82f6'
-      },
-      avatarIcons: ['person', 'face', 'child_care', 'elderly', 'boy', 'girl', 'family_restroom', 'pets'],
-      colorOptions: ['#3b82f6', '#ec4899', '#f59e0b', '#10b981', '#8b5cf6', '#ef4444', '#06b6d4', '#84cc16']
+        age: null,
+        avatar: null,
+        avatarPreview: null
+      }
     }
   },
-  
   computed: {
     userStore() {
       return useUserStore()
     },
-    
-    currentHousehold() {
-      return this.userStore.getCurrentHousehold
-    },
-    
     profiles() {
-      return this.userStore.getHouseholdProfiles
+      return this.userStore.currentUser?.profiles || []
+    },
+    maxUsers() {
+      return this.userStore.currentUser?.maxUsers || 4
+    },
+    canAddProfile() {
+      return this.profiles.length < this.maxUsers
+    },
+    isAdmin() {
+      return this.userStore.isAdmin
     }
   },
-  
   methods: {
     selectProfile(profileId) {
       this.userStore.selectProfile(profileId)
-      this.$router.push('/leaderboard')
+      this.$router.push({ name: 'home' })
     },
-    
-    handleCreateProfile() {
-      const result = this.userStore.createProfile(this.newProfile)
-      
-      if (result.success) {
-        this.showAddProfile = false
-        this.newProfile = {
-          name: '',
-          avatar: 'person',
-          color: '#3b82f6'
+    handleAvatarUpload(event) {
+      const file = event.target.files[0]
+      if (file) {
+        const reader = new FileReader()
+        reader.onload = (e) => {
+          this.newProfile.avatar = e.target.result
+          this.newProfile.avatarPreview = e.target.result
         }
+        reader.readAsDataURL(file)
       }
     },
-    
-    handleLogout() {
-      this.userStore.logout()
-      this.$router.push('/login')
+    handleCreateProfile() {
+      if (!this.newProfile.name) {
+        alert('Por favor, insira um nome para o perfil.')
+        return
+      }
+
+      const result = this.userStore.createProfile({
+        name: this.newProfile.name,
+        age: this.newProfile.age,
+        avatar: this.newProfile.avatar
+      })
+
+      if (result.success) {
+        this.closeModal()
+      } else {
+        alert(result.message || 'Erro ao criar perfil.')
+      }
+    },
+    closeModal() {
+      this.showAddProfileModal = false
+      this.newProfile = {
+        name: '',
+        age: null,
+        avatar: null,
+        avatarPreview: null
+      }
+    },
+    goToAdmin() {
+      this.$router.push({ name: 'admin' })
     }
   }
 }

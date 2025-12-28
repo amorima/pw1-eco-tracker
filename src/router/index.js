@@ -6,6 +6,7 @@ import LoginView from '../views/LoginView.vue'
 import RegisterView from '@/views/RegisterView.vue'
 import ProfileSelectionView from '@/views/ProfileSelectionView.vue'
 import HomeScreenView from '@/views/HomeScreenView.vue'
+import QuickStartView from '@/views/QuickStartView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -24,6 +25,12 @@ const router = createRouter({
       path: '/register',
       name: 'register',
       component: RegisterView
+    },
+    {
+      path: '/quick-start',
+      name: 'quick-start',
+      component: QuickStartView,
+      meta: { requiresLogin: true, requiresFirstUse: true }
     },
     {
       path: '/profile-selection',
@@ -98,11 +105,26 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const userStore = useUserStore()
+  
+  // Check if user needs to login
   if (to.meta.requiresLogin && !userStore.loggedIn) {
     next('/login')
     return
   }
   
+  // Check if first-time user needs to complete quick start
+  if (userStore.loggedIn && userStore.firstUse && to.name !== 'quick-start') {
+    next('/quick-start')
+    return
+  }
+  
+  // Prevent access to quick-start if not first use
+  if (to.meta.requiresFirstUse && !userStore.firstUse) {
+    next('/home')
+    return
+  }
+  
+  // Check admin access
   if (to.meta.requiresAdmin && !userStore.isAdmin && !userStore.firstUse) {
     next('/home') // Redirect non-admin users to home
     return
