@@ -103,7 +103,7 @@ router.beforeEach((to, from, next) => {
     return
   }
   
-  if (to.meta.requiresAdmin && !userStore.isAdmin) {
+  if (to.meta.requiresAdmin && !userStore.isAdmin && !userStore.firstUse) {
     next('/home') // Redirect non-admin users to home
     return
   }
