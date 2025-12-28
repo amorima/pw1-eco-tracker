@@ -1,6 +1,6 @@
 <template>
   <div 
-    class="flex flex-col gap-[10px] items-center justify-center p-[10px] w-[169px] cursor-pointer group"
+    class="flex flex-col gap-2.5 items-center justify-center p-2.5 w-[169px] cursor-pointer group"
     @click="handleClick"
   >
     <!-- Profile Image Card -->

@@ -6,7 +6,6 @@ import LoginView from '../views/LoginView.vue'
 import RegisterView from '@/views/RegisterView.vue'
 import ProfileSelectionView from '@/views/ProfileSelectionView.vue'
 import HomeScreenView from '@/views/HomeScreenView.vue'
-import QuickStartView from '@/views/QuickStartView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -29,7 +28,7 @@ const router = createRouter({
     {
       path: '/quick-start',
       name: 'quick-start',
-      component: QuickStartView,
+      component: () => import('@/views/QuickStartView.vue'),
       meta: { requiresLogin: true, requiresFirstUse: true }
     },
     {
