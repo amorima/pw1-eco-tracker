@@ -112,7 +112,7 @@
         </div>
       </CollapsibleCard>
 
-      <!-- Step 4: Add Activities -->
+      <!-- Step 4: Add Tasks -->
       <CollapsibleCard title="4. Configure atividades favoritas">
         <div class="space-y-4">
           <p class="text-(--text-body-sub-titles) mb-4">
@@ -121,11 +121,11 @@
 
           <div class="grid grid-cols-2 gap-4">
             <div 
-              v-for="activity in availableActivities" 
+              v-for="activity in availableTasks" 
               :key="activity.id"
               @click="toggleActivity(activity.id)"
               class="border-2 rounded-lg p-4 cursor-pointer transition-all"
-              :class="selectedActivities.includes(activity.id) 
+              :class="selectedTasks.includes(activity.id) 
                 ? 'border-(--system-ring) bg-[#f7fee7]' 
                 : 'border-(--system-border) bg-white hover:border-(--system-ring)'"
             >
@@ -138,7 +138,7 @@
                   <p class="text-xs text-(--text-body-sub-titles)">+{{ activity.points }} pontos</p>
                 </div>
                 <span 
-                  v-if="selectedActivities.includes(activity.id)"
+                  v-if="selectedTasks.includes(activity.id)"
                   class="material-symbols-outlined text-(--system-ring) ml-auto"
                 >
                   check_circle
@@ -174,7 +174,7 @@ import CollapsibleCard from '@/components/CollapsibleCard.vue'
 import FormInput from '@/components/FormInput.vue'
 import ActionButton from '@/components/ActionButton.vue'
 import { useUserStore } from '@/stores/userStore'
-import { useActivitiesStore } from '@/stores/activitiesStore'
+import { useTasksStore } from '@/stores/tasksStore'
 
 export default {
   name: 'QuickStartView',
@@ -199,7 +199,7 @@ export default {
         maxUsers: 4
       },
       selectedAppliances: [],
-      selectedActivities: [],
+      selectedTasks: [],
       availableAppliances: [
         { id: 'fridge', name: 'Frigorífico', icon: 'kitchen', power: '150W' },
         { id: 'washer', name: 'Máquina de Lavar', icon: 'local_laundry_service', power: '500W' },
@@ -210,12 +210,12 @@ export default {
         { id: 'heater', name: 'Aquecedor', icon: 'heat', power: '1500W' },
         { id: 'computer', name: 'Computador', icon: 'computer', power: '300W' }
       ],
-      availableActivities: []
+      availableTasks: []
     }
   },
   mounted() {
-    const activitiesStore = useActivitiesStore()
-    this.availableActivities = activitiesStore.activityTypes
+    const TasksStore = useTasksStore()
+    this.availableTasks = TasksStore.activityTypes
   },
   methods: {
     toggleAppliance(id) {
@@ -227,11 +227,11 @@ export default {
       }
     },
     toggleActivity(id) {
-      const index = this.selectedActivities.indexOf(id)
+      const index = this.selectedTasks.indexOf(id)
       if (index > -1) {
-        this.selectedActivities.splice(index, 1)
+        this.selectedTasks.splice(index, 1)
       } else {
-        this.selectedActivities.push(id)
+        this.selectedTasks.push(id)
       }
     },
     completeSetup() {
@@ -241,7 +241,7 @@ export default {
         adminProfile: this.adminProfile,
         maxUsers: this.accountSettings.maxUsers,
         appliances: this.selectedAppliances,
-        activities: this.selectedActivities
+        Tasks: this.selectedTasks
       })
 
       this.showSuccess = true

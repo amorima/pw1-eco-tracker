@@ -10,7 +10,7 @@
     type="button"
   >
     <div 
-      class="absolute w-5 h-5 bg-white rounded-full top-0.5 transition-all"
+      class="absolute w-5 h-5 bg-(--system-background) rounded-full top-0.5 transition-all"
       :class="[
         isOn 
           ? 'left-[22px]' 

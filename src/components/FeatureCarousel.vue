@@ -1,5 +1,5 @@
 <template>
-  <div class="h-[442px] w-full max-w-[912px] mx-auto relative overflow-visible bg-white">
+  <div class="h-[442px] w-full max-w-[912px] mx-auto relative overflow-visible bg-(--system-background)">
     <!-- Carousel Container: inner wrapper stays clipped so slides don't overflow -->
     <div class="overflow-hidden h-full w-full">
       <div class="flex transition-transform duration-500 ease-in-out h-full" 
@@ -151,14 +151,14 @@
     <div class="absolute inset-0 flex items-center justify-between pointer-events-none">
       <button
         @click="previousSlide"
-        class="pointer-events-auto -ml-10 w-12 h-12 rounded-full border-2 border-(--system-ring) bg-white flex items-center justify-center text-(--system-ring) hover:bg-(--system-ring) hover:text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+        class="pointer-events-auto -ml-10 w-12 h-12 rounded-full border-2 border-(--system-ring) bg-(--system-background) flex items-center justify-center text-(--system-ring) hover:bg-(--system-ring) hover:text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed">
         <span class="material-symbols-outlined text-xl">arrow_back</span>
       </button>
 
       <button
         @click="nextSlide"
 
-        class="pointer-events-auto -mr-10 w-12 h-12 rounded-full border-2 border-(--system-ring) bg-white flex items-center justify-center text-(--system-ring) hover:bg-(--system-ring) hover:text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+        class="pointer-events-auto -mr-10 w-12 h-12 rounded-full border-2 border-(--system-ring) bg-(--system-background) flex items-center justify-center text-(--system-ring) hover:bg-(--system-ring) hover:text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed">
         <span class="material-symbols-outlined text-xl">arrow_forward</span>
       </button>
     </div>
