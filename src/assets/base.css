@@ -99,8 +99,8 @@
     --primary-secondary: #a3b552;
     
     /* Semantic Colors - Dark Mode (adjusted for better visibility) */
-    --semantic-success-light: #9ec76d;
-    --semantic-success-default: #8cb161;
+    --semantic-success-light: #8CB161;
+    --semantic-success-default: #588236;
     --semantic-error-default: #ef4444;
     --semantic-error-light: #7f1d1d;
     --semantic-info-default: #38bdf8;

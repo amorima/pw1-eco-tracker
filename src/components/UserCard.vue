@@ -1,5 +1,5 @@
 <template>
-  <div class="flex gap-2.5 items-start p-2 bg-(--system-background) border-2 border-(--system-border) rounded-(--border-radius-lg) w-full max-w-[400px]">
+  <div class="flex gap-2.5 items-start p-2 bg-(--system-background) border-2 border-(--system-border) rounded-(--border-radius-lg) w-full">
     <div class="w-[100px] h-[100px] border-2 border-(--system-border) rounded-(--border-radius-md) overflow-hidden shrink-0 flex items-center justify-center bg-(--system-input-background)">
       <template v-if="!isEmpty">
         <img 
