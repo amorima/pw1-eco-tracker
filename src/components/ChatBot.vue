@@ -144,8 +144,13 @@ export default {
     userStore() {
       return useUserStore()
     },
-    currentUser() {
-      return this.userStore.selectedProfile || this.userStore.user
+    // Current profile for personalized responses
+    activeProfile() {
+      return this.userStore.currentProfile
+    },
+    // Current user account for context
+    activeUser() {
+      return this.userStore.currentUser
     }
   },
   methods: {
@@ -225,8 +230,18 @@ export default {
       const apiKey = import.meta.env.VITE_CHATBOT_API_KEY
       const channelId = import.meta.env.VITE_CHATBOT_CHANNEL_ID
       
+      // Debug: Log environment variables
+      console.log('🔧 Environment Variables:', {
+        endpoint: endpoint ? '✅ Set' : '❌ Missing',
+        apiKey: apiKey ? '✅ Set' : '❌ Missing',
+        channelId: channelId ? '✅ Set' : '❌ Missing'
+      })
+      
       if (!endpoint || !apiKey || !channelId) {
-        console.error('Missing environment variables for chatbot')
+        console.error('❌ Missing environment variables for chatbot')
+        console.error('Endpoint:', endpoint)
+        console.error('API Key:', apiKey ? 'Set (hidden)' : 'Not set')
+        console.error('Channel ID:', channelId)
         throw new Error('Configuração do chatbot incompleta')
       }
       
@@ -235,12 +250,13 @@ export default {
       
       // Required fields
       formData.append("channel_id", channelId)
-      formData.append("thread_id", `thread_${this.currentUser?.id || 'guest'}_${Date.now()}`)
+      formData.append("thread_id", `thread_${this.activeProfile?.id || 'guest'}_${Date.now()}`)
       
       // User information including context
       const userInfo = {
-        userId: this.currentUser?.id,
-        userName: this.currentUser?.name,
+        userId: this.activeProfile?.id,
+        userName: this.activeProfile?.name,
+        userEmail: this.activeUser?.email,
         context: this.context,
         timestamp: new Date().toISOString()
       }
@@ -250,16 +266,25 @@ export default {
       formData.append("message", message)
       
       // Optional: Add user_id
-      if (this.currentUser?.id) {
-        formData.append("user_id", this.currentUser.id.toString())
+      if (this.activeProfile?.id) {
+        formData.append("user_id", this.activeProfile.id.toString())
       }
       
       // Optional: Add user_context for additional context
       const userContext = {
         contextType: this.context,
-        profileType: this.currentUser?.type || 'user'
+        profileType: this.activeProfile?.isAdmin ? 'admin' : 'user',
+        profileLevel: this.activeProfile?.level || 1,
+        profilePoints: this.activeProfile?.points || 0,
+        householdSize: this.activeUser?.profiles?.length || 1
       }
       formData.append("user_context", JSON.stringify(userContext))
+      
+      // Debug: Log request details
+      console.log('📤 Sending request to:', endpoint)
+      console.log('📝 Message:', message)
+      console.log('👤 Active Profile:', this.activeProfile)
+      console.log('🏠 Active User:', this.activeUser?.email)
       
       try {
         const response = await fetch(endpoint, {
@@ -270,9 +295,13 @@ export default {
           body: formData
         })
         
+        console.log('📥 Response status:', response.status, response.statusText)
+        
         if (!response.ok) {
           const errorText = await response.text()
-          console.error('API Error Response:', errorText)
+          console.error('❌ API Error Response:', errorText)
+          console.error('Status:', response.status)
+          console.error('Headers:', Object.fromEntries(response.headers.entries()))
           throw new Error(`API request failed: ${response.status} ${response.statusText}`)
         }
         
@@ -281,24 +310,34 @@ export default {
         const decoder = new TextDecoder()
         let fullResponse = ''
         
+        console.log('📖 Reading stream...')
+        
         while (true) {
           const { done, value } = await reader.read()
           if (done) break
           
           const chunk = decoder.decode(value, { stream: true })
           fullResponse += chunk
+          console.log('📦 Chunk received:', chunk.substring(0, 100))
         }
+        
+        console.log('✅ Full response received:', fullResponse.substring(0, 200))
         
         // Parse the response (adjust based on actual API response format)
         try {
           const data = JSON.parse(fullResponse)
-          return data.response || data.message || fullResponse
-        } catch {
+          console.log('📊 Parsed JSON:', data)
+          return data.response || data.message || data.content || fullResponse
+        } catch (parseError) {
+          console.log('⚠️ Not JSON, returning as plain text')
           // If not JSON, return as plain text
           return fullResponse
         }
       } catch (error) {
-        console.error('Chatbot API error:', error)
+        console.error('❌ Chatbot API error:', error)
+        console.error('Error type:', error.constructor.name)
+        console.error('Error message:', error.message)
+        console.error('Error stack:', error.stack)
         throw error
       }
     },

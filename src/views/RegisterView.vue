@@ -140,21 +140,32 @@ export default {
         confirmPassword: '',
         acceptTerms: false
       },
-      store:useUserStore(),
+      store: useUserStore(),
+      error: null
     }
   },
   methods: {
     handleRegister() {
-      if(this.formData.acceptTerms){
-        if(this.store.createUser(this.formData)){
-          this.$router.push({name:'login'})
-        }else{
-          this.error = 'Invalid Register'
-        }
-      }else{
-        this.error = 'Please acept terms'
+      // Validate terms acceptance
+      if (!this.formData.acceptTerms) {
+        this.error = 'Deve aceitar os termos e condições'
+        return
       }
+
+      // Validate all fields are filled
+      if (!this.formData.name || !this.formData.email || !this.formData.password || !this.formData.confirmPassword) {
+        this.error = 'Preencha todos os campos'
+        return
+      }
+
+      // Attempt registration
+      const result = this.store.register(this.formData)
       
+      if (result.success) {
+        this.$router.push({ name: 'login' })
+      } else {
+        this.error = result.message || 'Erro ao criar conta'
+      }
     }
   }
 }

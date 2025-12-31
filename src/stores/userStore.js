@@ -1,160 +1,531 @@
 import { defineStore } from 'pinia';
+import { mockUsers } from '@/data/mockUsers';
+import { mockAppliances } from '@/data/mockAppliances';
+import { mockTasks } from '@/data/mockTasks';
 
 export const useUserStore = defineStore('userStore', {
   state: () => ({
+    // Current logged in user account (email/password level)
     currentUser: null,
+    
+    // Current active profile under the user account
     currentProfile: null,
-    users: [],
+    
+    // All users database (mock data)
+    users: [...mockUsers],
+    
+    // Available appliances and tasks for selection
+    availableAppliances: [...mockAppliances],
+    availableTasks: [...mockTasks],
   }),
+  
   getters: {
-    loggedIn:(state) => state.currentUser != null,
-    isAdmin:(state) => state.currentUser?.isAdmin || false,
-    firstUse:(state) => !state.currentUser.profiles,
-    getProfiles:(state) => state.currentProfile?.profiles || []
+    // Check if user is logged in (email/password authenticated)
+    isLoggedIn: (state) => state.currentUser !== null,
+    
+    // Check if current profile has admin privileges
+    isAdmin: (state) => state.currentProfile?.isAdmin || false,
+    
+    // Check if this is first time setup (no profiles created yet)
+    isFirstUse: (state) => !state.currentUser?.profiles || state.currentUser.profiles.length === 0,
+    
+    // Get all profiles for current user
+    profiles: (state) => state.currentUser?.profiles || [],
+    
+    // Get max profiles allowed for current user
+    maxProfiles: (state) => state.currentUser?.maxProfiles || 4,
+    
+    // Get appliances configured for household
+    householdAppliances: (state) => {
+      if (!state.currentUser?.appliances) return []
+      return state.availableAppliances.filter(app => 
+        state.currentUser.appliances.includes(app.id)
+      )
+    },
+    
+    // Get tasks available for household
+    householdTasks: (state) => {
+      if (!state.currentUser?.tasks) return []
+      return state.availableTasks.filter(task => 
+        state.currentUser.tasks.includes(task.id)
+      )
+    },
+    
+    // Get current profile's activity history
+    currentProfileActivities: (state) => {
+      return state.currentProfile?.activityHistory || []
+    },
+    
+    // Get current profile's appliance usage
+    currentProfileApplianceUsage: (state) => {
+      return state.currentProfile?.applianceUsage || []
+    },
+    
+    // Get current profile's redeemed rewards
+    currentProfileRewards: (state) => {
+      return state.currentProfile?.rewardsRedeemed || []
+    },
+    
+    // Get current profile's badges
+    currentProfileBadges: (state) => {
+      return state.currentProfile?.badges || []
+    },
+    
+    // Calculate total household CO2 saved
+    householdTotalCo2Saved: (state) => {
+      if (!state.currentUser?.profiles) return 0
+      return state.currentUser.profiles.reduce((total, profile) => {
+        return total + (profile.co2Saved || 0)
+      }, 0)
+    },
+    
+    // Get leaderboard for household profiles
+    householdLeaderboard: (state) => {
+      if (!state.currentUser?.profiles) return []
+      return [...state.currentUser.profiles]
+        .sort((a, b) => b.points - a.points)
+        .map((profile, index) => ({
+          ...profile,
+          rank: index + 1
+        }))
+    },
+    
+    // Get global leaderboard (all profiles from all users)
+    globalLeaderboard: (state) => {
+      const allProfiles = []
+      state.users.forEach(user => {
+        if (user.profiles) {
+          user.profiles.forEach(profile => {
+            allProfiles.push({
+              ...profile,
+              userEmail: user.email
+            })
+          })
+        }
+      })
+      return allProfiles
+        .sort((a, b) => b.points - a.points)
+        .slice(0, 50) // Top 50
+        .map((profile, index) => ({
+          ...profile,
+          rank: index + 1
+        }))
+    }
   },
+  
   actions: {
-    createUser(user) {
-      if(user.password !== user.confirmPassword) return false
-      if(this.users.find(u => u.email === user.email)) return false
+    /**
+     * Register new user account (email + password)
+     */
+    register(userData) {
+      // Validate email doesn't exist
+      if (this.users.find(u => u.email === userData.email)) {
+        return { 
+          success: false, 
+          message: 'Este email já está registado' 
+        }
+      }
       
+      // Validate password confirmation
+      if (userData.password !== userData.confirmPassword) {
+        return { 
+          success: false, 
+          message: 'As passwords não coincidem' 
+        }
+      }
+      
+      // Create new user account
       const newUser = {
-        ...user,
-        isAdmin: true, // First user is always admin
-        profiles: null,
-        maxUsers: null,
+        id: Date.now(),
+        email: userData.email,
+        password: userData.password, // In production: hash this!
+        createdAt: new Date().toISOString(),
+        maxProfiles: 4, // Default
         appliances: [],
-        activities: []
+        tasks: [],
+        profiles: []
       }
       
       this.users.push(newUser)
-      return true
-    },
-    logIn(user) {
-      const foundUser = this.users.find(u => u.email===user.email && u.password===user.password)
-      if(foundUser) {
-        this.currentUser = foundUser
-        return true
+      this.currentUser = newUser
+      
+      return { 
+        success: true, 
+        message: 'Conta criada com sucesso' 
       }
-      return false
     },
-    logOut() {
+    
+    /**
+     * Login with email and password
+     */
+    login(credentials) {
+      const user = this.users.find(
+        u => u.email === credentials.email && u.password === credentials.password
+      )
+      
+      if (!user) {
+        return { 
+          success: false, 
+          message: 'Email ou password incorretos' 
+        }
+      }
+      
+      this.currentUser = user
+      
+      // If user has no profiles, redirect to quick start
+      if (!user.profiles || user.profiles.length === 0) {
+        return { 
+          success: true, 
+          requiresSetup: true,
+          message: 'Login efetuado. Por favor complete a configuração inicial.' 
+        }
+      }
+      
+      // Check for default profile on this device
+      const defaultProfile = user.profiles.find(p => p.settings?.defaultDevice)
+      if (defaultProfile) {
+        this.currentProfile = defaultProfile
+        return {
+          success: true,
+          requiresSetup: false,
+          autoSelectedProfile: true,
+          message: `Bem-vindo, ${defaultProfile.name}!`
+        }
+      }
+      
+      return { 
+        success: true, 
+        requiresSetup: false,
+        message: 'Login efetuado com sucesso' 
+      }
+    },
+    
+    /**
+     * Logout - clear current user and profile
+     */
+    logout() {
       this.currentUser = null
       this.currentProfile = null
     },
+    
+    /**
+     * Complete quick start setup (first time user setup)
+     */
     completeQuickStart(setupData) {
-      if (!this.currentUser) return false
+      if (!this.currentUser) {
+        return { success: false, message: 'Nenhum utilizador autenticado' }
+      }
       
-      // Update current user with setup data
-      this.currentUser.profiles = [{
-        id: Date.now().toString(),
+      // Update household settings
+      this.currentUser.maxProfiles = setupData.maxProfiles
+      this.currentUser.appliances = setupData.appliances
+      this.currentUser.tasks = setupData.activities
+      
+      // Create admin profile
+      const adminProfile = {
+        id: Date.now(),
         name: setupData.adminProfile.name,
         age: setupData.adminProfile.age || null,
-        avatar: setupData.adminProfile.avatar || null,
+        avatar: setupData.adminProfile.avatar || `https://i.pravatar.cc/150?img=${Math.floor(Math.random() * 70)}`,
         isAdmin: true,
+        createdAt: new Date().toISOString(),
         points: 0,
         co2Saved: 0,
         level: 1,
-        createdAt: new Date().toISOString()
-      }]
-      
-      this.currentUser.maxUsers = setupData.maxUsers
-      this.currentUser.appliances = setupData.appliances
-      this.currentUser.activities = setupData.activities
-      
-      // Set the admin profile as current profile
-      this.currentProfile = this.currentUser.profiles[0]
-      
-      // Update the user in the users array
-      const userIndex = this.users.findIndex(u => u.email === this.currentUser.email)
-      if (userIndex !== -1) {
-        this.users[userIndex] = this.currentUser
+        xp: 0,
+        streak: 0,
+        settings: {
+          pin: null,
+          notifications: true,
+          defaultDevice: true,
+          language: 'pt',
+          theme: 'light'
+        },
+        activityHistory: [],
+        applianceUsage: [],
+        rewardsRedeemed: [],
+        badges: [{
+          id: 'early_adopter',
+          title: 'Early Adopter',
+          icon: 'star',
+          earnedAt: new Date().toISOString(),
+          description: 'Primeiro perfil criado'
+        }]
       }
       
-      return true
+      this.currentUser.profiles = [adminProfile]
+      
+      // Set as current profile
+      this.currentProfile = adminProfile
+      
+      // Update in users array
+      const userIndex = this.users.findIndex(u => u.id === this.currentUser.id)
+      if (userIndex !== -1) {
+        this.users[userIndex] = { ...this.currentUser }
+      }
+      
+      return { success: true, message: 'Configuração concluída!' }
     },
+    
+    /**
+     * Select a profile to use
+     */
+    selectProfile(profileId) {
+      if (!this.currentUser?.profiles) {
+        return { success: false, message: 'Nenhum utilizador autenticado' }
+      }
+      
+      const profile = this.currentUser.profiles.find(p => p.id === profileId)
+      if (!profile) {
+        return { success: false, message: 'Perfil não encontrado' }
+      }
+      
+      this.currentProfile = profile
+      return { success: true, message: `Bem-vindo, ${profile.name}!` }
+    },
+    
+    /**
+     * Create a new profile under current user
+     */
     createProfile(profileData) {
       if (!this.currentUser) {
-        return { success: false, message: 'Nenhum usuário logado' }
+        return { success: false, message: 'Nenhum utilizador autenticado' }
       }
-
+      
       if (!this.currentUser.profiles) {
         this.currentUser.profiles = []
       }
-
-      // Check if max users reached
-      if (this.currentUser.profiles.length >= this.currentUser.maxUsers) {
-        return { success: false, message: 'Número máximo de perfis atingido' }
+      
+      // Check max profiles limit
+      if (this.currentUser.profiles.length >= this.currentUser.maxProfiles) {
+        return { 
+          success: false, 
+          message: `Limite de ${this.currentUser.maxProfiles} perfis atingido` 
+        }
       }
-
-      // Check if name is unique
-      if (this.currentUser.profiles.find(p => p.name === profileData.name)) {
-        return { success: false, message: 'Já existe um perfil com este nome' }
+      
+      // Check for duplicate name
+      if (this.currentUser.profiles.find(p => p.name.toLowerCase() === profileData.name.toLowerCase())) {
+        return { 
+          success: false, 
+          message: 'Já existe um perfil com este nome' 
+        }
       }
-
+      
+      // Create new profile
       const newProfile = {
-        id: Date.now().toString(),
+        id: Date.now(),
         name: profileData.name,
         age: profileData.age || null,
-        avatar: profileData.avatar || null,
-        isAdmin: false,
+        avatar: profileData.avatar || `https://i.pravatar.cc/150?img=${Math.floor(Math.random() * 70)}`,
+        isAdmin: false, // Only first profile is admin
+        createdAt: new Date().toISOString(),
         points: 0,
         co2Saved: 0,
         level: 1,
-        createdAt: new Date().toISOString()
+        xp: 0,
+        streak: 0,
+        settings: {
+          pin: profileData.pin || null,
+          notifications: true,
+          defaultDevice: false,
+          language: 'pt',
+          theme: 'light'
+        },
+        activityHistory: [],
+        applianceUsage: [],
+        rewardsRedeemed: [],
+        badges: []
       }
-
+      
       this.currentUser.profiles.push(newProfile)
-
-      // Update the user in the users array
-      const userIndex = this.users.findIndex(u => u.email === this.currentUser.email)
+      
+      // Update in users array
+      const userIndex = this.users.findIndex(u => u.id === this.currentUser.id)
       if (userIndex !== -1) {
-        this.users[userIndex] = this.currentUser
+        this.users[userIndex] = { ...this.currentUser }
       }
-
-      return { success: true, profile: newProfile }
+      
+      return { 
+        success: true, 
+        profile: newProfile,
+        message: 'Perfil criado com sucesso!' 
+      }
     },
-    selectProfile(profileId) {
-      if (!this.currentUser || !this.currentUser.profiles) {
-        return false
+    
+    /**
+     * Update profile settings
+     */
+    updateProfileSettings(profileId, settings) {
+      if (!this.currentUser?.profiles) {
+        return { success: false, message: 'Nenhum utilizador autenticado' }
       }
-
-      const profile = this.currentUser.profiles.find(p => p.id === profileId)
-      if (profile) {
-        this.currentProfile = profile
-        return true
-      }
-
-      return false
-    },
-    deleteProfile(profileId) {
-      if (!this.currentUser || !this.currentUser.profiles) {
-        return { success: false, message: 'Nenhum usuário logado' }
-      }
-
+      
       const profileIndex = this.currentUser.profiles.findIndex(p => p.id === profileId)
       if (profileIndex === -1) {
         return { success: false, message: 'Perfil não encontrado' }
       }
-
-      // Prevent deleting admin profile if it's the only one
-      if (this.currentUser.profiles[profileIndex].isAdmin && this.currentUser.profiles.length === 1) {
-        return { success: false, message: 'Não é possível excluir o único perfil administrador' }
+      
+      this.currentUser.profiles[profileIndex].settings = {
+        ...this.currentUser.profiles[profileIndex].settings,
+        ...settings
       }
-
-      this.currentUser.profiles.splice(profileIndex, 1)
-
-      // Update the user in the users array
-      const userIndex = this.users.findIndex(u => u.email === this.currentUser.email)
+      
+      // Update current profile if it's the one being edited
+      if (this.currentProfile?.id === profileId) {
+        this.currentProfile = this.currentUser.profiles[profileIndex]
+      }
+      
+      // Update in users array
+      const userIndex = this.users.findIndex(u => u.id === this.currentUser.id)
       if (userIndex !== -1) {
-        this.users[userIndex] = this.currentUser
+        this.users[userIndex] = { ...this.currentUser }
       }
-
-      // If current profile was deleted, reset it
+      
+      return { success: true, message: 'Definições atualizadas!' }
+    },
+    
+    /**
+     * Delete a profile
+     */
+    deleteProfile(profileId) {
+      if (!this.currentUser?.profiles) {
+        return { success: false, message: 'Nenhum utilizador autenticado' }
+      }
+      
+      const profileIndex = this.currentUser.profiles.findIndex(p => p.id === profileId)
+      if (profileIndex === -1) {
+        return { success: false, message: 'Perfil não encontrado' }
+      }
+      
+      const profile = this.currentUser.profiles[profileIndex]
+      
+      // Prevent deleting admin profile if it's the only one
+      if (profile.isAdmin && this.currentUser.profiles.length === 1) {
+        return { 
+          success: false, 
+          message: 'Não é possível eliminar o único perfil administrador' 
+        }
+      }
+      
+      this.currentUser.profiles.splice(profileIndex, 1)
+      
+      // If current profile was deleted, clear it
       if (this.currentProfile?.id === profileId) {
         this.currentProfile = null
       }
-
-      return { success: true }
+      
+      // Update in users array
+      const userIndex = this.users.findIndex(u => u.id === this.currentUser.id)
+      if (userIndex !== -1) {
+        this.users[userIndex] = { ...this.currentUser }
+      }
+      
+      return { success: true, message: 'Perfil eliminado com sucesso!' }
+    },
+    
+    /**
+     * Complete a task and add points/CO2 savings
+     */
+    completeTask(taskId) {
+      if (!this.currentProfile) {
+        return { success: false, message: 'Nenhum perfil selecionado' }
+      }
+      
+      const task = this.householdTasks.find(t => t.id === taskId)
+      if (!task) {
+        return { success: false, message: 'Tarefa não encontrada' }
+      }
+      
+      // Add to activity history
+      const activity = {
+        id: Date.now(),
+        taskId: task.id,
+        completedAt: new Date().toISOString(),
+        pointsEarned: task.points,
+        co2Saved: task.co2Saved
+      }
+      
+      this.currentProfile.activityHistory.push(activity)
+      
+      // Update profile stats
+      this.currentProfile.points += task.points
+      this.currentProfile.co2Saved += task.co2Saved
+      this.currentProfile.xp += task.points
+      
+      // Check for level up (every 100 XP = 1 level)
+      const newLevel = Math.floor(this.currentProfile.xp / 100) + 1
+      if (newLevel > this.currentProfile.level) {
+        this.currentProfile.level = newLevel
+      }
+      
+      // Update in user's profiles
+      const profileIndex = this.currentUser.profiles.findIndex(p => p.id === this.currentProfile.id)
+      if (profileIndex !== -1) {
+        this.currentUser.profiles[profileIndex] = { ...this.currentProfile }
+      }
+      
+      // Update in users array
+      const userIndex = this.users.findIndex(u => u.id === this.currentUser.id)
+      if (userIndex !== -1) {
+        this.users[userIndex] = { ...this.currentUser }
+      }
+      
+      return { 
+        success: true, 
+        pointsEarned: task.points,
+        co2Saved: task.co2Saved,
+        message: `+${task.points} pontos! 🎉` 
+      }
+    },
+    
+    /**
+     * Redeem a reward
+     */
+    redeemReward(reward) {
+      if (!this.currentProfile) {
+        return { success: false, message: 'Nenhum perfil selecionado' }
+      }
+      
+      // Check if profile has enough points
+      if (this.currentProfile.points < reward.points) {
+        return { 
+          success: false, 
+          message: 'Pontos insuficientes' 
+        }
+      }
+      
+      // Add to redeemed rewards
+      const redemption = {
+        id: Date.now(),
+        rewardId: reward.id,
+        title: reward.title,
+        pointsCost: reward.points,
+        redeemedAt: new Date().toISOString(),
+        status: 'pending'
+      }
+      
+      this.currentProfile.rewardsRedeemed.push(redemption)
+      
+      // Deduct points
+      this.currentProfile.points -= reward.points
+      
+      // Update in user's profiles
+      const profileIndex = this.currentUser.profiles.findIndex(p => p.id === this.currentProfile.id)
+      if (profileIndex !== -1) {
+        this.currentUser.profiles[profileIndex] = { ...this.currentProfile }
+      }
+      
+      // Update in users array
+      const userIndex = this.users.findIndex(u => u.id === this.currentUser.id)
+      if (userIndex !== -1) {
+        this.users[userIndex] = { ...this.currentUser }
+      }
+      
+      return { 
+        success: true, 
+        message: 'Recompensa resgatada!' 
+      }
     }
   },
 });

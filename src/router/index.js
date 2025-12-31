@@ -111,25 +111,25 @@ router.beforeEach((to, from, next) => {
   const userStore = useUserStore()
   
   // Check if user needs to login
-  if (to.meta.requiresLogin && !userStore.loggedIn) {
+  if (to.meta.requiresLogin && !userStore.isLoggedIn) {
     next('/login')
     return
   }
   
   // Check if first-time user needs to complete quick start
-  if (userStore.loggedIn && userStore.firstUse && to.name !== 'quick-start') {
+  if (userStore.isLoggedIn && userStore.isFirstUse && to.name !== 'quick-start') {
     next('/quick-start')
     return
   }
   
   // Prevent access to quick-start if not first use
-  if (to.meta.requiresFirstUse && !userStore.firstUse) {
+  if (to.meta.requiresFirstUse && !userStore.isFirstUse) {
     next('/home')
     return
   }
   
   // Check admin access
-  if (to.meta.requiresAdmin && !userStore.isAdmin && !userStore.firstUse) {
+  if (to.meta.requiresAdmin && !userStore.isAdmin && !userStore.isFirstUse) {
     next('/home') // Redirect non-admin users to home
     return
   }
