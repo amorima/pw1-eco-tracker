@@ -229,6 +229,9 @@
     </div>
     
     <FooterSection />
+    
+    <!-- ChatBot -->
+    <ChatBot context="profile" />
   </div>
 </template>
 
@@ -243,6 +246,7 @@ import RankingRow from '@/components/RankingRow.vue'
 import ChallengeCard from '@/components/ChallengeCard.vue'
 import RewardListItem from '@/components/RewardListItem.vue'
 import ToggleSwitch from '@/components/ToggleSwitch.vue'
+import ChatBot from '@/components/ChatBot.vue'
 
 export default {
   name: 'ProfileView',
@@ -256,7 +260,8 @@ export default {
     RankingRow,
     ChallengeCard,
     RewardListItem,
-    ToggleSwitch
+    ToggleSwitch,
+    ChatBot
   },
   data() {
     return {

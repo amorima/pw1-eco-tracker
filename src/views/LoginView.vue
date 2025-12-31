@@ -1,5 +1,16 @@
 <template>
   <MenuNav />
+  
+  <!-- Toast Notification -->
+  <Transition name="slide-fade">
+    <div v-if="showToast" class="fixed top-6 left-1/2 transform -translate-x-1/2 z-50">
+      <ToastNotification 
+        :variant="toastVariant"
+        :message="toastMessage"
+      />
+    </div>
+  </Transition>
+  
   <div class="pt-24 pb-24 flex flex-col items-center justify-center bg-(--system-background)">
     <div class="flex gap-4 items-center justify-center w-full max-w-[1200px]">
       <!-- Left Form Section -->
@@ -107,6 +118,7 @@ import FooterSection from '@/components/FooterSection.vue'
 import FormInput from '@/components/FormInput.vue'
 import ActionButton from '@/components/ActionButton.vue'
 import CheckboxInput from '@/components/CheckboxInput.vue'
+import ToastNotification from '@/components/ToastNotification.vue'
 import { useUserStore } from '@/stores/userStore'
 
 export default {
@@ -117,6 +129,7 @@ export default {
     FormInput,
     ActionButton,
     CheckboxInput,
+    ToastNotification
   },
   data() {
     return {
@@ -125,19 +138,82 @@ export default {
         password: '',
         acceptTerms: false
       },
-      error: '',
-      store: useUserStore(),
+      showToast: false,
+      toastMessage: '',
+      toastVariant: 'error',
+      store: useUserStore()
     }
   },
   methods: {
+    showToastMessage(message, variant = 'error') {
+      this.toastMessage = message
+      this.toastVariant = variant
+      this.showToast = true
+      
+      // Auto-dismiss after 3 seconds
+      setTimeout(() => {
+        this.showToast = false
+      }, 3000)
+    },
+    
     handleLogin() {
-      if(this.store.logIn(this.formData)){
-        // Redirect based on first use status
-        this.store.firstUse ? this.$router.push({name:'quick-start'}) : this.$router.push({name:'profile-selection'})
+      // Validate terms acceptance
+      if (!this.formData.acceptTerms) {
+        this.showToastMessage('Deve aceitar os termos e condições', 'error')
+        return
+      }
+
+      // Validate fields
+      if (!this.formData.email || !this.formData.password) {
+        this.showToastMessage('Preencha todos os campos', 'error')
+        return
+      }
+
+      // Attempt login
+      const result = this.store.login({
+        email: this.formData.email,
+        password: this.formData.password
+      })
+
+      if (result.success) {
+        this.showToastMessage(result.message, 'success')
+        
+        // Redirect after short delay to show success message
+        setTimeout(() => {
+          if (result.requiresSetup) {
+            this.$router.push({ name: 'quick-start' })
+          } else if (result.autoSelectedProfile) {
+            // Profile was auto-selected, go to home
+            this.$router.push({ name: 'home' })
+          } else {
+            // User needs to select a profile
+            this.$router.push({ name: 'profile-selection' })
+          }
+        }, 1000)
       } else {
-        this.error = 'Invalid Login' 
+        this.showToastMessage(result.message || 'Email ou password incorretos', 'error')
       }
     }
   }
 }
 </script>
+
+<style scoped>
+.slide-fade-enter-active {
+  transition: all 0.3s ease-out;
+}
+
+.slide-fade-leave-active {
+  transition: all 0.3s ease-in;
+}
+
+.slide-fade-enter-from {
+  transform: translateX(-50%) translateY(-20px);
+  opacity: 0;
+}
+
+.slide-fade-leave-to {
+  transform: translateX(-50%) translateY(-20px);
+  opacity: 0;
+}
+</style>

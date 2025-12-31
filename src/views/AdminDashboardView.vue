@@ -226,6 +226,7 @@
       </CollapsibleCard>
     </div>
   </div>
+  <ChatBot context="general" />
 </template>
 
 <script>
@@ -235,6 +236,7 @@ import UserCard from '@/components/UserCard.vue'
 import RewardCard from '@/components/RewardCard.vue'
 import RewardRedeemedCard from '@/components/RewardRedeemedCard.vue'
 import ItemCard from '@/components/ItemCard.vue'
+import ChatBot from '@/components/ChatBot.vue'
 
 export default {
   name: 'AdminDashboardView',
@@ -244,7 +246,8 @@ export default {
     UserCard,
     RewardCard,
     RewardRedeemedCard,
-    ItemCard
+    ItemCard,
+    ChatBot
   },
   data() {
     return {

@@ -167,7 +167,7 @@ export default {
       return this.userStore.currentUser?.profiles || []
     },
     maxUsers() {
-      return this.userStore.currentUser?.maxUsers || 4
+      return this.userStore.currentUser?.maxProfiles || 4
     },
     canAddProfile() {
       return this.profiles.length < this.maxUsers

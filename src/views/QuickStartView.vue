@@ -239,9 +239,9 @@ export default {
       
       userStore.completeQuickStart({
         adminProfile: this.adminProfile,
-        maxUsers: this.accountSettings.maxUsers,
+        maxProfiles: this.accountSettings.maxUsers,
         appliances: this.selectedAppliances,
-        Tasks: this.selectedTasks
+        activities: this.selectedTasks
       })
 
       this.showSuccess = true

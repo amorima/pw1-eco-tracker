@@ -150,7 +150,7 @@ export default {
         },
         logout() {
             this.dropdownOpen = false;
-            this.userStore.logOut();
+            this.userStore.logout();
             this.$router.push({ name: 'landing' });
         }
     }

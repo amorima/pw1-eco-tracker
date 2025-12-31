@@ -144,15 +144,15 @@ export default {
     },
     
     currentHousehold() {
-      return this.userStore.getCurrentHousehold
+      return this.userStore.currentUser
     },
     
     currentProfile() {
-      return this.userStore.getCurrentProfile
+      return this.userStore.currentProfile
     },
     
     leaderboard() {
-      return this.userStore.getHouseholdLeaderboard
+      return this.userStore.householdLeaderboard
     }
   },
   

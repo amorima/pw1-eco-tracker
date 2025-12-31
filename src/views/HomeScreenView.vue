@@ -133,6 +133,7 @@
     </div>
   </div>
   <FooterSection />
+  <ChatBot context="general" />
 </template>
 
 <script>
@@ -146,6 +147,7 @@ import AddCard from '@/components/AddCard.vue'
 import FormInput from '@/components/FormInput.vue'
 import CheckboxInput from '@/components/CheckboxInput.vue'
 import ActionButton from '@/components/ActionButton.vue'
+import ChatBot from '@/components/ChatBot.vue'
 
 export default {
   name: 'HomeScreenView',
@@ -158,7 +160,8 @@ export default {
     AddCard,
     FormInput,
     CheckboxInput,
-    ActionButton
+    ActionButton,
+    ChatBot
   },
   data() {
     return {
