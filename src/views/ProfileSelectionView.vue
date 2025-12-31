@@ -4,7 +4,7 @@
     <div class="absolute left-[73px] top-[70px] w-12 h-12 flex items-center justify-center transition-transform">
       <button
         @click="$router.go(-1)"
-        class="pointer-events-auto -ml-10 w-12 h-12 rounded-full border-2 border-(--system-ring) bg-white flex items-center justify-center text-(--system-ring) hover:bg-(--system-ring) hover:text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+        class="pointer-events-auto -ml-10 w-12 h-12 rounded-full border-2 border-(--system-ring) bg-(--system-background) flex items-center justify-center text-(--system-ring) hover:bg-(--system-ring) hover:text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed">
         <span class="material-symbols-outlined text-xl">arrow_back</span>
       </button>
     </div>

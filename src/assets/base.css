@@ -20,6 +20,7 @@
     --primary-secondary: #e5eda0;
     
     /* Semantic Colors */
+    --semantic-success-default: #588236;
     --semantic-success-light: #8cb161;
     --semantic-error-default: #dc2626;
     --semantic-error-light: #fecaca;
@@ -66,6 +67,17 @@
     --letter-spacing-wide: 0.025em;
   }
   
+  /* Global body styles */
+  body {
+    background-color: var(--system-background);
+    color: var(--text-headings);
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  #app {
+    background-color: var(--system-background);
+  }
+  
   .dark {
     /* System Colors - Dark Mode */
     --system-foreground: #c2f25c;
@@ -82,6 +94,17 @@
     
     /* Accent Colors - Dark Mode */
     --accent-muted-foreground: #a8a29e;
+    
+    /* Primary Colors - Dark Mode */
+    --primary-secondary: #a3b552;
+    
+    /* Semantic Colors - Dark Mode (adjusted for better visibility) */
+    --semantic-success-light: #9ec76d;
+    --semantic-success-default: #8cb161;
+    --semantic-error-default: #ef4444;
+    --semantic-error-light: #7f1d1d;
+    --semantic-info-default: #38bdf8;
+    --semantic-info-light: #0c4a6e;
   }
 }
 

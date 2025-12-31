@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col gap-0 h-[35px] items-start w-full">
-    <div class="relative bg-white border-2 border-(--system-border) rounded-lg p-3 w-full h-full flex items-center">
+    <div class="relative bg-(--system-background) border-2 border-(--system-border) rounded-lg p-3 w-full h-full flex items-center">
       <input
         :type="type"
         :value="modelValue"

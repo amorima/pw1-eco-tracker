@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen bg-linear-to-br from-purple-50 to-blue-50">
     <!-- Header -->
-    <header class="bg-white shadow-sm">
+    <header class="bg-(--system-background) shadow-sm">
       <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
         <div class="flex items-center gap-2">
           <span class="material-symbols-outlined text-purple-600 text-3xl">leaderboard</span>
@@ -17,7 +17,7 @@
     <!-- Main Content -->
     <div class="max-w-4xl mx-auto px-4 py-8">
       <!-- Current Profile Card -->
-      <div class="bg-white rounded-2xl shadow-lg p-6 mb-8">
+      <div class="bg-(--system-background) rounded-2xl shadow-lg p-6 mb-8">
         <div class="flex items-center gap-4">
           <div 
             class="w-20 h-20 rounded-full flex items-center justify-center"
@@ -50,7 +50,7 @@
       </div>
 
       <!-- Leaderboard -->
-      <div class="bg-white rounded-2xl shadow-lg overflow-hidden mb-8">
+      <div class="bg-(--system-background) rounded-2xl shadow-lg overflow-hidden mb-8">
         <div 
           v-for="(profile, index) in leaderboard" 
           :key="profile.id"

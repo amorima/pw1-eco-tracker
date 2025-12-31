@@ -1,6 +1,6 @@
 <template>
   <div 
-    class="bg-white border-2 border-(--system-border) rounded-[14px] p-6 w-full"
+    class="bg-(--system-background) border-2 border-(--system-border) rounded-[14px] p-6 w-full"
   >
     <!-- Header Button -->
     <button 

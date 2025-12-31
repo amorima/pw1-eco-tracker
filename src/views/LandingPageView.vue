@@ -60,13 +60,13 @@
       </div>
     </section>
 
-    <section id="carrosel" class="min-h-screen bg-white py-20 flex items-center">
+    <section id="carrosel" class="min-h-screen bg-(--system-background) py-20 flex items-center">
       <div class="max-w-[910px] mx-auto px-6 h-full flex items-center">
         <FeatureCarousel />
       </div>
     </section>
 
-    <section id="como-funciona" class="min-h-screen bg-white py-20 flex items-center">
+    <section id="como-funciona" class="min-h-screen bg-(--system-background) py-20 flex items-center">
       <div class="max-w-[910px] mx-auto px-6">
         <div class="flex flex-col gap-[73px] items-center">
           <!-- Header -->
@@ -152,7 +152,7 @@
       </div>
     </section>
 
-    <section id="impacto" class="min-h-screen flex items-center bg-white py-20">
+    <section id="impacto" class="min-h-screen flex items-center bg-(--system-background) py-20">
       <div class="max-w-[910px] mx-auto px-6 w-full">
         <div class="flex flex-col gap-[73px] items-center">
           <!-- Header -->
@@ -286,7 +286,7 @@
           <!-- Testimonial Cards -->
           <div class="flex items-start justify-between w-full gap-6">
             <!-- Card 1: Ana Costa -->
-            <div class="bg-white border-[1.6px] border-(--system-border) rounded-(--border-radius-xl) p-[26px] w-[260px] flex flex-col gap-4">
+            <div class="bg-(--system-background) border-[1.6px] border-(--system-border) rounded-(--border-radius-xl) p-[26px] w-[260px] flex flex-col gap-4">
               <div class="flex gap-3 items-center">
                 <div class="w-12 h-12 rounded-full bg-gray-200 overflow-hidden">
                   <img src="../assets/ana.jpg" alt="Ana Costa" class="w-full h-full object-cover" />
@@ -306,7 +306,7 @@
             </div>
 
             <!-- Card 2: Carlos Silva -->
-            <div class="bg-white border-[1.6px] border-(--system-border) rounded-(--border-radius-xl) p-[26px] w-[260px] flex flex-col gap-4">
+            <div class="bg-(--system-background) border-[1.6px] border-(--system-border) rounded-(--border-radius-xl) p-[26px] w-[260px] flex flex-col gap-4">
               <div class="flex gap-3 items-center">
                 <div class="w-12 h-12 rounded-full bg-gray-200 overflow-hidden">
                   <img src="../assets/carlos.jpg" alt="Carlos Silva" class="w-full h-full object-cover" />
@@ -326,7 +326,7 @@
             </div>
 
             <!-- Card 3: Maria Santos -->
-            <div class="bg-white border-[1.6px] border-(--system-border) rounded-(--border-radius-xl) p-[26px] w-[260px] flex flex-col gap-4">
+            <div class="bg-(--system-background) border-[1.6px] border-(--system-border) rounded-(--border-radius-xl) p-[26px] w-[260px] flex flex-col gap-4">
               <div class="flex gap-3 items-center">
                 <div class="w-12 h-12 rounded-full bg-gray-200 overflow-hidden">
                   <img src="../assets/maria.jpg" alt="Maria Santos" class="w-full h-full object-cover" />

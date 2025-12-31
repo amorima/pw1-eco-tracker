@@ -1,6 +1,6 @@
 <template>
   <MenuNav :landing="false" />
-  <div class="min-h-screen py-8 flex justify-center">
+  <div class="min-h-fit py-8 flex justify-center">
     <div class="w-[930px] space-y-4">
       
       <!-- Statistics Section -->

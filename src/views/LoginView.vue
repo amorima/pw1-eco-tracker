@@ -1,6 +1,6 @@
 <template>
   <MenuNav />
-  <div class="pt-24 pb-24 flex flex-col items-center justify-center bg-white">
+  <div class="pt-24 pb-24 flex flex-col items-center justify-center bg-(--system-background)">
     <div class="flex gap-4 items-center justify-center w-full max-w-[1200px]">
       <!-- Left Form Section -->
       <div class="flex items-center justify-center flex-1">
@@ -61,13 +61,13 @@
             </div>
 
             <!-- Google Button -->
-            <button class="bg-white border border-(--system-border) rounded-lg flex gap-3 items-center justify-center px-1.5 py-2 w-full hover:bg-gray-50 transition-colors">
+            <button class="bg-(--system-background) border border-(--system-border) rounded-lg flex gap-3 items-center justify-center px-1.5 py-2 w-full hover:bg-gray-50 transition-colors">
               <span class="material-symbols-outlined text-[19px]">account_circle</span>
               <span class="text-[11px] text-(--system-foreground)">Entrar com Google</span>
             </button>
 
             <!-- Facebook Button -->
-            <button class="bg-white border border-(--system-border) rounded-lg flex gap-3 items-center justify-center px-1.5 py-2 w-full hover:bg-gray-50 transition-colors">
+            <button class="bg-(--system-background) border border-(--system-border) rounded-lg flex gap-3 items-center justify-center px-1.5 py-2 w-full hover:bg-gray-50 transition-colors">
               <span class="material-symbols-outlined text-[19px] text-[#1877f2]">group</span>
               <span class="text-[11px] text-(--system-foreground)">Entrar com Facebook</span>
             </button>

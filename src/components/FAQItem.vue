@@ -1,6 +1,6 @@
 <template>
   <div 
-    class="bg-white border-[1.6px] border-(--system-foreground) rounded-(--border-radius-xl) w-full overflow-hidden cursor-pointer"
+    class="bg-(--system-background) border-[1.6px] border-(--system-foreground) rounded-(--border-radius-xl) w-full overflow-hidden cursor-pointer"
     @click="toggleOpen"
   >
     <!-- Question Button -->

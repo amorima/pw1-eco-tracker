@@ -30,7 +30,7 @@
       <!-- Placeholder for no avatar -->
       <div 
         v-else
-        class="w-full h-full flex items-center justify-center bg-[#f5f5f4]"
+        class="w-full h-full flex items-center justify-center bg-(--system-input-background)"
       >
         <span class="material-symbols-outlined text-6xl text-(--text-body-sub-titles)">
           person

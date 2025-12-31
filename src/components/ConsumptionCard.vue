@@ -10,11 +10,11 @@
         :alt="label"
         class="w-full h-full object-cover"
       />
-      <div v-else class="w-full h-full bg-[#f5f5f4]"></div>
+      <div v-else class="w-full h-full bg-(--system-input-background)"></div>
       
       <!-- Label Badge -->
       <div 
-        class="absolute top-[12px] left-[7px] bg-(--system-background) border border-(--system-border) rounded-full px-4 py-0 flex items-center justify-center"
+        class="absolute top-3 left-[7px] bg-(--system-background) border border-(--system-border) rounded-full px-4 py-0 flex items-center justify-center"
       >
         <p class="font-medium text-[13px] text-(--text-headings) whitespace-nowrap">
           {{ label }}
@@ -25,7 +25,7 @@
     <!-- Input Section -->
     <div class="flex gap-[11px] items-center">
       <!-- Input with Unit -->
-      <div class="flex-1 bg-(--system-input-background) border border-(--system-border) rounded-[11px] h-[40px] relative">
+      <div class="flex-1 bg-(--system-input-background) border border-(--system-border) rounded-[11px] h-10 relative">
         <input
           v-model="inputValue"
           type="number"
@@ -35,7 +35,7 @@
         />
         
         <!-- Unit Badge -->
-        <div class="absolute right-[3px] top-[3px] w-[32px] h-[32px] bg-(--system-border) rounded-[7px] flex items-center justify-center">
+        <div class="absolute right-[3px] top-[3px] w-8 h-8 bg-(--system-border) rounded-[7px] flex items-center justify-center">
           <span class="text-[13px] font-bold text-(--accent-muted-foreground)">
             {{ unit }}
           </span>
@@ -45,7 +45,7 @@
       <!-- Arrow Button -->
       <button 
         @click="$emit('submit', inputValue)"
-        class="bg-(--system-input-background) border border-(--system-border) rounded-[11px] w-[40px] h-[40px] flex items-center justify-center hover:bg-(--system-ring) hover:border-(--system-ring) transition-colors group"
+        class="bg-(--system-input-background) border border-(--system-border) rounded-[11px] w-10 h-10 flex items-center justify-center hover:bg-(--system-ring) hover:border-(--system-ring) transition-colors group"
         :disabled="!inputValue"
       >
         <span class="material-symbols-outlined text-[21px] text-(--text-body-titles) group-hover:text-white transition-colors">
