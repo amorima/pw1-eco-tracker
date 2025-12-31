@@ -19,39 +19,14 @@
       <CollapsibleCard title="CONSUMOS">
         <div class="space-y-2.5">
           <!-- First Row -->
-          <div class="flex gap-2.5 flex-wrap">
+          <div class="grid grid-cols-3 gap-2.5 flex-wrap">
+            <!-- <ConsumptionCard v-for="recent in userRecent">
+
+            </ConsumptionCard> -->
             <ConsumptionCard
               label="Forno"
               image="https://images.unsplash.com/photo-1585515320310-259814833e62?w=300&h=200&fit=crop"
               unit="hr"
-              @submit="handleConsumptionSubmit"
-            />
-            <ConsumptionCard
-              label="Máquina de Lavar Roupa"
-              image="https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?w=300&h=200&fit=crop"
-              unit="hr"
-              @submit="handleConsumptionSubmit"
-            />
-            <ConsumptionCard
-              label="Televisão"
-              image="https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=300&h=200&fit=crop"
-              unit="hr"
-              @submit="handleConsumptionSubmit"
-            />
-          </div>
-
-          <!-- Second Row -->
-          <div class="flex gap-2.5 flex-wrap">
-            <ConsumptionCard
-              label="Aquecedor"
-              image="https://images.unsplash.com/photo-1585338107529-13afc5F0b198?w=300&h=200&fit=crop"
-              unit="hr"
-              @submit="handleConsumptionSubmit"
-            />
-            <ConsumptionCard
-              label="Viagem carro"
-              image="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=300&h=200&fit=crop"
-              unit="km"
               @submit="handleConsumptionSubmit"
             />
             <AddCard @click="openAddConsumptionModal" />
@@ -63,35 +38,11 @@
       <CollapsibleCard title="TAREFAS">
         <div class="space-y-2.5">
           <!-- First Row -->
-          <div class="flex gap-2.5 flex-wrap">
+          <div class="grid grid-cols-3 gap-2.5 flex-wrap">
             <TaskCard
               label="Limpezas"
               image="https://images.unsplash.com/photo-1628177142898-93e36e4e3a50?w=300&h=250&fit=crop"
               @click="handleTaskClick('Limpezas')"
-            />
-            <TaskCard
-              label="Separar resíduos"
-              image="https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=300&h=250&fit=crop"
-              @click="handleTaskClick('Separar resíduos')"
-            />
-            <TaskCard
-              label="Usar transportes públicos"
-              image="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=300&h=250&fit=crop"
-              @click="handleTaskClick('Transportes públicos')"
-            />
-          </div>
-
-          <!-- Second Row -->
-          <div class="flex gap-2.5 flex-wrap">
-            <TaskCard
-              label="Desligar Dispositivos"
-              image="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&h=250&fit=crop"
-              @click="handleTaskClick('Desligar dispositivos')"
-            />
-            <TaskCard
-              label="Compostagem"
-              image="https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=300&h=250&fit=crop"
-              @click="handleTaskClick('Compostagem')"
             />
             <AddCard @click="openAddTaskModal" />
           </div>
@@ -171,10 +122,10 @@
 
           <!-- Placeholder Cards -->
           <div class="border-2 border-(--system-border) rounded-[14px] w-[280px] h-[431px] flex items-center justify-center">
-            <AddCard variant="primary" @click="openToolModal" />
+            <span class="material-symbols-outlined text-(--system-ring)" style="font-size: 56px;">add</span>
           </div>
           <div class="border-2 border-(--system-border) rounded-[14px] w-[280px] h-[431px] flex items-center justify-center">
-            <AddCard variant="primary" @click="openToolModal" />
+            <!-- <span class="material-symbols-outlined text-(--system-ring)" style="font-size: 56px;">add</span> -->
           </div>
         </div>
       </CollapsibleCard>
@@ -185,6 +136,7 @@
 </template>
 
 <script>
+import { useUserStore } from '@/stores/userStore'
 import MenuNav from '@/components/MenuNav.vue'
 import FooterSection from '@/components/FooterSection.vue'
 import CollapsibleCard from '@/components/CollapsibleCard.vue'
@@ -220,7 +172,8 @@ export default {
           gas: false
         },
         result: 0
-      }
+      },
+      store: useUserStore(),
     }
   },
   methods: {
@@ -253,6 +206,6 @@ export default {
       const fuelUsed = (distance * consumption) / 100
       this.calculator.result = (fuelUsed * 2.3).toFixed(2)
     }
-  }
+  },
 }
 </script>

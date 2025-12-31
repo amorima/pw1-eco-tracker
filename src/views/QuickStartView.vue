@@ -174,7 +174,7 @@ import CollapsibleCard from '@/components/CollapsibleCard.vue'
 import FormInput from '@/components/FormInput.vue'
 import ActionButton from '@/components/ActionButton.vue'
 import { useUserStore } from '@/stores/userStore'
-import { useActivitiesStore } from '@/stores/activitiesStore'
+import { useActivitiesStore } from '@/stores/tasksStore'
 
 export default {
   name: 'QuickStartView',
