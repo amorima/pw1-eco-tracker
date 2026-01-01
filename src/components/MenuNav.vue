@@ -167,4 +167,8 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+nav {
+  font-family: var(--font-family-base);
+}
+</style>
