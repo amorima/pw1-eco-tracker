@@ -1,5 +1,7 @@
 <template>
-  <nav :class="[landing ? 'bg-(--system-foreground)' : '', 'h-20 flex justify-center']">
+  <nav
+    :class="[landing ? 'bg-(--system-foreground)' : '', 'h-20 flex justify-center relative z-50']"
+  >
     <div class="flex w-full max-w-7xl items-center justify-between px-6 lg:px-[184px]">
       <img
         @click="landing ? $router.push({ name: 'landing' }) : $router.push({ name: 'home' })"

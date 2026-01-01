@@ -137,24 +137,8 @@
         All rights reserved © 2026 b.green
       </p>
 
-      <!-- Scroll to Top Button -->
-      <button
-        @click="scrollToTop"
-        :class="[
-          'absolute left-[50px] top-[795px] w-[50px] h-[50px] rounded-(--border-radius-xl) flex items-center justify-center transition-all duration-200',
-          isHovered ? 'bg-(--system-popover-foreground)' : 'bg-(--system-ring)',
-        ]"
-        @mouseenter="isHovered = true"
-        @mouseleave="isHovered = false"
-        aria-label="Scroll to top"
-      >
-        <span class="material-symbols-outlined text-[34px] text-(--system-foreground)"
-          >arrow_upward</span
-        >
-      </button>
-
       <!-- Footer Boy Image -->
-      <div class="absolute -right-[180px] top-[324px] w-[544px] h-[544px]">
+      <div class="absolute -right-[50px] top-[324px] w-[544px] h-[544px]">
         <img
           src="@/assets/img/footer-boy.svg"
           alt="Young man recycling"
@@ -168,18 +152,5 @@
 <script>
 export default {
   name: 'FooterSection',
-  data() {
-    return {
-      isHovered: false,
-    }
-  },
-  methods: {
-    scrollToTop() {
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth',
-      })
-    },
-  },
 }
 </script>

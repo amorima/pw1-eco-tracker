@@ -1,5 +1,5 @@
 <template>
-  <div class="snap-container">
+  <div class="snap-container" ref="scrollContainer" @scroll="handleScroll">
     <!-- Hero Section with Diagonal Cut -->
     <section
       class="snap-section relative pb-20 bg-(--system-foreground)"
@@ -8,12 +8,10 @@
       <!-- Navigation -->
       <MenuNav :landing="true" />
 
-      <div class="max-w-[910px] mx-auto relative px-6">
-        <div
-          class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center min-h-[calc(100vh-200px)] py-2"
-        >
+      <div class="max-w-[910px] mx-auto relative  h-[calc(100vh-80px)] flex items-center">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center w-full py-2">
           <!-- Left Content -->
-          <div class="space-y-8 z-10 lg:pr-8">
+          <div class="space-y-6 lg:space-y-8 z-10 lg:pr-8">
             <div class="space-y-2">
               <h1 class="text-hero text-white leading-none">Gerir energia,</h1>
               <h1 class="text-hero text-(--system-ring) leading-none">poupar o</h1>
@@ -51,8 +49,8 @@
           </div>
 
           <!-- Right Image -->
-          <div class="relative h-[600px] lg:h-[800px] w-full max-w-[900px]">
-            <div class="absolute inset-0 -bottom-50 flex items-center justify-center">
+          <div class="relative h-[600px] lg:h-[800px] w-full max-w-[800px]">
+            <div class="absolute inset-0 -bottom-50 py-20 px-50 flex items-center justify-center">
               <img
                 src="@/assets/img/hero-girl.png"
                 alt="Freelancer working"
@@ -209,11 +207,11 @@
       </div>
     </section>
 
-    <section id="impacto" class="snap-section flex items-center bg-(--system-background) py-20">
+    <section id="impacto" class="snap-section flex items-center bg-(--system-background) py-10">
       <div class="max-w-[910px] mx-auto px-6 w-full">
-        <div class="flex flex-col gap-[73px] items-center">
+        <div class="flex flex-col gap-[53px] items-center">
           <!-- Header -->
-          <div class="flex flex-col gap-[29px] items-center text-center w-full">
+          <div class="flex flex-col gap-[19px] items-center text-center w-full">
             <h2 class="text-hero text-(--text-body-titles) leading-tight">
               O nosso impacto coletivo
             </h2>
@@ -486,7 +484,7 @@
     </section>
 
     <!-- FAQ Section -->
-    <section id="faqs" class="snap-section flex flex-col items-center justify-center px-6 py-20">
+    <section id="faqs" class="snap-section flex flex-col items-center justify-center px-6">
       <div class="w-full max-w-[912px] flex flex-col gap-[73px]">
         <!-- Header -->
         <div class="flex flex-col gap-[29px] items-center text-center">
@@ -558,6 +556,25 @@
     <div class="snap-section">
       <FooterSection />
     </div>
+
+    <!-- Scroll to Top Button -->
+    <transition name="fade">
+      <button
+        v-show="showScrollButton"
+        @click="scrollToTop"
+        :class="[
+          'fixed left-[50px] bottom-[50px] w-[50px] h-[50px] rounded-(--border-radius-xl) flex items-center justify-center transition-colors duration-200 z-50',
+          isHovered ? 'bg-(--system-popover-foreground)' : 'bg-(--system-ring)',
+        ]"
+        @mouseenter="isHovered = true"
+        @mouseleave="isHovered = false"
+        aria-label="Scroll to top"
+      >
+        <span class="material-symbols-outlined text-[34px] text-(--system-foreground)"
+          >arrow_upward</span
+        >
+      </button>
+    </transition>
   </div>
 </template>
 
@@ -577,6 +594,29 @@ export default {
     FAQItem,
     FooterSection,
   },
+  data() {
+    return {
+      showScrollButton: false,
+      isHovered: false,
+    }
+  },
+  methods: {
+    handleScroll() {
+      const container = this.$refs.scrollContainer
+      if (container) {
+        this.showScrollButton = container.scrollTop > window.innerHeight
+      }
+    },
+    scrollToTop() {
+      const container = this.$refs.scrollContainer
+      if (container) {
+        container.scrollTo({
+          top: 0,
+          behavior: 'smooth',
+        })
+      }
+    },
+  },
 }
 </script>
 
@@ -593,5 +633,15 @@ export default {
   min-height: 100vh;
   scroll-snap-align: start;
   scroll-snap-stop: always;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>
