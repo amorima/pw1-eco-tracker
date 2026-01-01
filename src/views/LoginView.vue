@@ -1,16 +1,13 @@
 <template>
   <MenuNav />
-  
+
   <!-- Toast Notification -->
   <Transition name="slide-fade">
     <div v-if="showToast" class="fixed top-6 left-1/2 transform -translate-x-1/2 z-50">
-      <ToastNotification 
-        :variant="toastVariant"
-        :message="toastMessage"
-      />
+      <ToastNotification :variant="toastVariant" :message="toastMessage" />
     </div>
   </Transition>
-  
+
   <div class="pt-24 pb-24 flex flex-col items-center justify-center bg-(--system-background)">
     <div class="flex gap-4 items-center justify-center w-full max-w-[1200px]">
       <!-- Left Form Section -->
@@ -20,21 +17,16 @@
           <div class="flex flex-col gap-4 items-start justify-center w-full">
             <!-- Title and Fields -->
             <div class="flex flex-col gap-2 items-start w-full">
-              <h1 class="text-[48px] font-bold leading-tight text-(--text-body-titles) text-center w-full" style="font-family: 'Clash Grotesk', sans-serif;">
+              <h1
+                class="text-[48px] font-bold leading-tight text-(--text-body-titles) text-center w-full"
+                style="font-family: 'Clash Grotesk', sans-serif"
+              >
                 Login
               </h1>
-              
-              <FormInput
-                v-model="formData.email"
-                placeholder="Email"
-                type="email"
-              />
-              
-              <FormInput
-                v-model="formData.password"
-                placeholder="Password"
-                type="password"
-              />
+
+              <FormInput v-model="formData.email" placeholder="Email" type="email" />
+
+              <FormInput v-model="formData.password" placeholder="Password" type="password" />
             </div>
 
             <!-- Terms Checkbox -->
@@ -42,23 +34,20 @@
               <CheckboxInput v-model="formData.acceptTerms" />
               <div class="flex gap-1 items-center text-[10px] font-medium text-[#78716c]">
                 <span>Aceito</span>
-                <a @click.prevent="$router.push({name:'terms'})" class="underline hover:text-(--system-ring)">termos e condições</a>
+                <a
+                  @click.prevent="$router.push({ name: 'terms' })"
+                  class="underline hover:text-(--system-ring)"
+                  >termos e condições</a
+                >
               </div>
             </div>
 
             <!-- Action Buttons -->
             <div class="flex gap-4 items-center w-full">
-              <ActionButton 
-                @click="$router.push({name:'register'})"
-                :variant="'secondary'"
-              >
+              <ActionButton @click="$router.push({ name: 'register' })" :variant="'secondary'">
                 Não tem conta?
-            </ActionButton>
-              <ActionButton 
-                @click="handleLogin"
-              >
-                Começar agora
-          </ActionButton>
+              </ActionButton>
+              <ActionButton @click="handleLogin"> Começar agora </ActionButton>
             </div>
           </div>
 
@@ -72,13 +61,17 @@
             </div>
 
             <!-- Google Button -->
-            <button class="bg-(--system-background) border border-(--system-border) rounded-lg flex gap-3 items-center justify-center px-1.5 py-2 w-full hover:bg-gray-50 transition-colors">
+            <button
+              class="bg-(--system-background) border border-(--system-border) rounded-lg flex gap-3 items-center justify-center px-1.5 py-2 w-full hover:bg-gray-50 transition-colors"
+            >
               <span class="material-symbols-outlined text-[19px]">account_circle</span>
               <span class="text-[11px] text-(--system-foreground)">Entrar com Google</span>
             </button>
 
             <!-- Facebook Button -->
-            <button class="bg-(--system-background) border border-(--system-border) rounded-lg flex gap-3 items-center justify-center px-1.5 py-2 w-full hover:bg-gray-50 transition-colors">
+            <button
+              class="bg-(--system-background) border border-(--system-border) rounded-lg flex gap-3 items-center justify-center px-1.5 py-2 w-full hover:bg-gray-50 transition-colors"
+            >
               <span class="material-symbols-outlined text-[19px] text-[#1877f2]">group</span>
               <span class="text-[11px] text-(--system-foreground)">Entrar com Facebook</span>
             </button>
@@ -89,25 +82,37 @@
       <!-- Right Image Section -->
       <div class="flex-1 flex items-start justify-center">
         <div class="relative w-[430px] h-[567px]">
-          <img 
-            src="../assets/login-art.jpg" 
-            alt="Aurora background" 
+          <img
+            src="../assets/img/login-art.jpg"
+            alt="Aurora background"
             class="absolute inset-0 w-full h-full object-cover rounded-[13px]"
           />
-          <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col justify-center text-center">
-            <p class="text-[48px] font-bold leading-tight text-white m-0" style="font-family: 'Clash Grotesk', sans-serif; text-shadow: 0px 0px 25px rgba(0,0,0,0.51);">
+          <div
+            class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col justify-center text-center"
+          >
+            <p
+              class="text-[48px] font-bold leading-tight text-white m-0"
+              style="
+                font-family: 'Clash Grotesk', sans-serif;
+                text-shadow: 0px 0px 25px rgba(0, 0, 0, 0.51);
+              "
+            >
               BE THE CHANGE,
             </p>
-            <p class="text-[48px] font-bold leading-tight text-white m-0" style="font-family: 'Clash Grotesk', sans-serif; text-shadow: 0px 0px 25px rgba(0,0,0,0.51);">
+            <p
+              class="text-[48px] font-bold leading-tight text-white m-0"
+              style="
+                font-family: 'Clash Grotesk', sans-serif;
+                text-shadow: 0px 0px 25px rgba(0, 0, 0, 0.51);
+              "
+            >
               BE AWARE,
             </p>
-            <img src="../assets/W_Logo.svg"/>
+            <img src="../assets/img/W_Logo.svg" />
           </div>
         </div>
       </div>
     </div>
-
-    
   </div>
   <FooterSection />
 </template>
@@ -129,19 +134,19 @@ export default {
     FormInput,
     ActionButton,
     CheckboxInput,
-    ToastNotification
+    ToastNotification,
   },
   data() {
     return {
       formData: {
         email: '',
         password: '',
-        acceptTerms: false
+        acceptTerms: false,
       },
       showToast: false,
       toastMessage: '',
       toastVariant: 'error',
-      store: useUserStore()
+      store: useUserStore(),
     }
   },
   methods: {
@@ -149,13 +154,13 @@ export default {
       this.toastMessage = message
       this.toastVariant = variant
       this.showToast = true
-      
+
       // Auto-dismiss after 3 seconds
       setTimeout(() => {
         this.showToast = false
       }, 3000)
     },
-    
+
     handleLogin() {
       // Validate terms acceptance
       if (!this.formData.acceptTerms) {
@@ -172,12 +177,12 @@ export default {
       // Attempt login
       const result = this.store.login({
         email: this.formData.email,
-        password: this.formData.password
+        password: this.formData.password,
       })
 
       if (result.success) {
         this.showToastMessage(result.message, 'success')
-        
+
         // Redirect after short delay to show success message
         setTimeout(() => {
           if (result.requiresSetup) {
@@ -193,8 +198,8 @@ export default {
       } else {
         this.showToastMessage(result.message || 'Email ou password incorretos', 'error')
       }
-    }
-  }
+    },
+  },
 }
 </script>
 
