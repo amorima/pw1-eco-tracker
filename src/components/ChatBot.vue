@@ -133,7 +133,7 @@ export default {
       messages: [],
       isLoading: false,
       hasInteracted: false,
-      connectionStatus: 'disconnected',
+      connectionStatus: 'connected',
       quickActions: [
         { id: 1, label: 'Falar com assistente', text: 'Preciso de ajuda' },
         { id: 2, label: 'Ver último consumo', text: 'Qual foi o meu último consumo?' },
@@ -159,7 +159,6 @@ export default {
     async toggleChat() {
       this.isOpen = !this.isOpen
       if (this.isOpen) {
-        await this.checkConnection()
         if (this.messages.length === 0) {
           this.messages.push({
             type: 'bot',
@@ -207,7 +206,6 @@ export default {
       this.scrollToBottom()
 
       this.isLoading = true
-      this.connectionStatus = 'loading'
 
       try {
         const response = await this.callChatbotAPI(userMessage)
@@ -251,7 +249,6 @@ export default {
       const apiKey = import.meta.env.VITE_CHATBOT_API_KEY
       const channelId = import.meta.env.VITE_CHATBOT_CHANNEL_ID
 
-      // Debug: Log environment variables
       console.log('🔧 Environment Variables:', {
         endpoint: endpoint ? '✅ Set' : '❌ Missing',
         apiKey: apiKey ? '✅ Set' : '❌ Missing',
@@ -260,44 +257,38 @@ export default {
 
       if (!endpoint || !apiKey || !channelId) {
         console.error('❌ Missing environment variables for chatbot')
-        console.error('Endpoint:', endpoint)
-        console.error('API Key:', apiKey ? 'Set (hidden)' : 'Not set')
-        console.error('Channel ID:', channelId)
         throw new Error('Configuração do chatbot incompleta')
       }
 
-      // Create FormData with required fields
       const formData = new FormData()
 
-      // Required fields
+      // Required fields per iaedu API
       formData.append('channel_id', channelId)
       formData.append('thread_id', `thread_${this.activeProfile?.id || 'guest'}_${Date.now()}`)
 
-      // User information including context
+      // User information - mandatory field
       const userInfo = {
         userId: this.activeProfile?.id,
         userName: this.activeProfile?.name,
         userEmail: this.activeUser?.email,
         context: this.context,
-        timestamp: new Date().toISOString(),
       }
       formData.append('user_info', JSON.stringify(userInfo))
 
       // The actual message
       formData.append('message', message)
 
-      // Optional: Add user_id
+      // Optional: user_id
       if (this.activeProfile?.id) {
         formData.append('user_id', this.activeProfile.id.toString())
       }
 
-      // Optional: Add user_context for additional context
+      // Optional: user_context with additional context
       const userContext = {
         contextType: this.context,
         profileType: this.activeProfile?.isAdmin ? 'admin' : 'user',
         profileLevel: this.activeProfile?.level || 1,
         profilePoints: this.activeProfile?.points || 0,
-        householdSize: this.activeUser?.profiles?.length || 1,
       }
       formData.append('user_context', JSON.stringify(userContext))
 
@@ -329,7 +320,7 @@ export default {
         // Handle streaming response
         const reader = response.body.getReader()
         const decoder = new TextDecoder()
-        let fullResponse = ''
+        let assembledMessage = ''
 
         console.log('📖 Reading stream...')
 
@@ -338,22 +329,34 @@ export default {
           if (done) break
 
           const chunk = decoder.decode(value, { stream: true })
-          fullResponse += chunk
-          console.log('📦 Chunk received:', chunk.substring(0, 100))
+
+          // Split by newlines to process each JSON object
+          const lines = chunk.split('\n')
+
+          for (const line of lines) {
+            if (!line.trim()) continue
+
+            try {
+              const data = JSON.parse(line)
+              console.log('📦 Chunk parsed:', data)
+
+              // Extract content from token chunks
+              if (data.type === 'token' && data.content) {
+                assembledMessage += data.content
+              } else if (data.type === 'start') {
+                console.log('🚀 Stream started')
+              } else if (data.type === 'done') {
+                console.log('✅ Stream complete')
+              }
+            } catch {
+              console.log('⚠️ Could not parse line:', line)
+            }
+          }
         }
 
-        console.log('✅ Full response received:', fullResponse.substring(0, 200))
+        console.log('✅ Assembled message:', assembledMessage)
 
-        // Parse the response (adjust based on actual API response format)
-        try {
-          const data = JSON.parse(fullResponse)
-          console.log('📊 Parsed JSON:', data)
-          return data.response || data.message || data.content || fullResponse
-        } catch {
-          console.log('⚠️ Not JSON, returning as plain text')
-          // If not JSON, return as plain text
-          return fullResponse
-        }
+        return assembledMessage || 'Desculpe, não consegui processar a resposta.'
       } catch (error) {
         console.error('❌ Chatbot API error:', error)
         console.error('Error type:', error.constructor.name)
