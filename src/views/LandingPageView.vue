@@ -7,7 +7,8 @@
     >
       <!-- Navigation -->
       <MenuNav :landing="true" />
-      <div style="height: 80px;"></div> <!-- Espaço para o header fixo -->
+      <div style="height: 80px"></div>
+      <!-- Espaço para o header fixo -->
 
       <div class="max-w-[910px] mx-auto relative h-[calc(100vh-80px)] flex items-center">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center w-full py-2">
