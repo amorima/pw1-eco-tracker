@@ -8,9 +8,13 @@
       />
       <div class="flex gap-(--spacing-md) items-center">
         <template v-if="landing">
-          <MenuButton :landing="true">Funcionalidades</MenuButton>
-          <MenuButton :landing="true">Impacto</MenuButton>
-          <MenuButton :landing="true">Testemunhos</MenuButton>
+          <MenuButton :landing="true" @click="scrollToSection('carrosel')"
+            >Funcionalidades</MenuButton
+          >
+          <MenuButton :landing="true" @click="scrollToSection('impacto')">Impacto</MenuButton>
+          <MenuButton :landing="true" @click="scrollToSection('testemunhos')"
+            >Testemunhos</MenuButton
+          >
           <MenuButton @click="$router.push({ name: 'login' })" :landing="true">Entrar</MenuButton>
           <ActionButton @click="$router.push({ name: 'register' })">Registar</ActionButton>
         </template>
@@ -162,6 +166,23 @@ export default {
       this.dropdownOpen = false
       this.userStore.logout()
       this.$router.push({ name: 'landing' })
+    },
+    scrollToSection(sectionId) {
+      if (this.$route.name !== 'landing') {
+        this.$router.push({ name: 'landing' }).then(() => {
+          setTimeout(() => {
+            const el = document.getElementById(sectionId)
+            if (el) {
+              el.scrollIntoView({ behavior: 'smooth' })
+            }
+          }, 300)
+        })
+      } else {
+        const el = document.getElementById(sectionId)
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' })
+        }
+      }
     },
   },
 }
