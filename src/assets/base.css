@@ -297,3 +297,34 @@
     transform: translateY(-15px) scale(0.95);
   }
 }
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--system-background);
+  border-left: 1px solid var(--system-border);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--system-ring);
+  border-radius: var(--border-radius-full);
+  border: 2px solid var(--system-background);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--semantic-success-default);
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: var(--text-body-titles);
+}
+
+/* Firefox Scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--system-ring) var(--system-background);
+}
