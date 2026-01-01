@@ -1,6 +1,6 @@
 <template>
   <nav
-    :class="[landing ? 'bg-(--system-foreground)' : '', 'h-20 flex justify-center relative z-50']"
+    :class="[landing ? 'bg-(--system-foreground)' : '', 'h-20 flex justify-center relative z-[var(--z-nav)]']"
   >
     <div class="flex w-full max-w-7xl items-center justify-between px-6 lg:px-[184px]">
       <img
@@ -170,20 +170,23 @@ export default {
       this.$router.push({ name: 'landing' })
     },
     scrollToSection(sectionId) {
-      if (this.$route.name !== 'landing') {
-        this.$router.push({ name: 'landing' }).then(() => {
-          setTimeout(() => {
-            const el = document.getElementById(sectionId)
-            if (el) {
-              el.scrollIntoView({ behavior: 'smooth' })
-            }
-          }, 300)
-        })
-      } else {
+      const scroll = () => {
         const el = document.getElementById(sectionId)
         if (el) {
           el.scrollIntoView({ behavior: 'smooth' })
         }
+      }
+
+      if (this.$route.name !== 'landing') {
+        this.$router.push({ name: 'landing' }).then(() => {
+          this.$nextTick(() => {
+            scroll()
+          })
+        })
+      } else {
+        this.$nextTick(() => {
+          scroll()
+        })
       }
     },
   },
