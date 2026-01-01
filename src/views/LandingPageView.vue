@@ -8,7 +8,7 @@
       <!-- Navigation -->
       <MenuNav :landing="true" />
 
-      <div class="max-w-[910px] mx-auto relative  h-[calc(100vh-80px)] flex items-center">
+      <div class="max-w-[910px] mx-auto relative h-[calc(100vh-80px)] flex items-center">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center w-full py-2">
           <!-- Left Content -->
           <div class="space-y-6 lg:space-y-8 z-10 lg:pr-8">
@@ -64,9 +64,9 @@
         <div class="absolute bottom-20 left-1/2 transform -translate-x-1/2 z-20">
           <a
             href="#carrosel"
-            class="bg-(--system-ring) border-[0.5px] py-1.5 border-(--system-popover-foreground) rounded-full w-[35px] h-[59px] flex items-start hover:items-end justify-center pb-2 hover:bg-(--system-popover-foreground) transition-colors"
+            class="bounce-animation bg-(--system-ring) border-[0.5px] py-1.5 border-(--system-popover-foreground) rounded-full w-[35px] h-[59px] flex items-center justify-center hover:bg-(--system-popover-foreground) hover:scale-110 transition-all duration-300"
           >
-            <span class="material-symbols-outlined">keyboard_double_arrow_down</span>
+            <span class="material-symbols-outlined pulse-icon">keyboard_double_arrow_down</span>
           </a>
         </div>
       </div>
@@ -643,5 +643,43 @@ export default {
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+@keyframes bounce {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(3px);
+  }
+}
+
+.bounce-animation {
+  animation: bounce 2s ease-in-out infinite;
+}
+
+.bounce-animation:hover {
+  animation: none;
+}
+
+.pulse-icon {
+  animation: pulse 1s ease-in-out infinite;
 }
 </style>
