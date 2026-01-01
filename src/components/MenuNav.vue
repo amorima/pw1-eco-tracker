@@ -1,8 +1,9 @@
 <template>
   <nav
     :class="[
-      landing ? 'bg-(--system-foreground)' : '',
-      'h-20 flex justify-center fixed top-0 left-0 w-full z-50',
+      landing
+        ? 'bg-(--system-foreground) h-20 flex justify-center w-full z-30 relative'
+        : 'bg-(--system-background) h-20 flex justify-center w-full z-30 relative',
     ]"
   >
     <div class="flex w-full max-w-7xl items-center justify-between px-6 lg:px-[184px]">

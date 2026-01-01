@@ -29,19 +29,6 @@
               <FormInput v-model="formData.password" placeholder="Password" type="password" />
             </div>
 
-            <!-- Terms Checkbox -->
-            <div class="flex items-center gap-1.5">
-              <CheckboxInput v-model="formData.acceptTerms" />
-              <div class="flex gap-1 items-center text-[10px] font-medium text-[#78716c]">
-                <span>Aceito</span>
-                <a
-                  @click.prevent="$router.push({ name: 'terms' })"
-                  class="underline hover:text-(--system-ring)"
-                  >termos e condições</a
-                >
-              </div>
-            </div>
-
             <!-- Action Buttons -->
             <div class="flex gap-4 items-center w-full">
               <ActionButton @click="$router.push({ name: 'register' })" :variant="'secondary'">
@@ -122,7 +109,6 @@ import MenuNav from '@/components/MenuNav.vue'
 import FooterSection from '@/components/FooterSection.vue'
 import FormInput from '@/components/FormInput.vue'
 import ActionButton from '@/components/ActionButton.vue'
-import CheckboxInput from '@/components/CheckboxInput.vue'
 import ToastNotification from '@/components/ToastNotification.vue'
 import { useUserStore } from '@/stores/userStore'
 
@@ -133,7 +119,6 @@ export default {
     FooterSection,
     FormInput,
     ActionButton,
-    CheckboxInput,
     ToastNotification,
   },
   data() {
@@ -141,7 +126,6 @@ export default {
       formData: {
         email: '',
         password: '',
-        acceptTerms: false,
       },
       showToast: false,
       toastMessage: '',
@@ -162,12 +146,6 @@ export default {
     },
 
     handleLogin() {
-      // Validate terms acceptance
-      if (!this.formData.acceptTerms) {
-        this.showToastMessage('Deve aceitar os termos e condições', 'error')
-        return
-      }
-
       // Validate fields
       if (!this.formData.email || !this.formData.password) {
         this.showToastMessage('Preencha todos os campos', 'error')

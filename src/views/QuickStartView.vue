@@ -4,18 +4,19 @@
     <div class="w-[930px] space-y-6">
       <!-- Header -->
       <div class="text-center space-y-2">
-        <h1 class="text-[48px] font-bold text-(--text-body-titles)" style="font-family: 'Clash Grotesk', sans-serif;">
+        <h1
+          class="text-[48px] font-bold text-(--text-body-titles)"
+          style="font-family: 'Clash Grotesk', sans-serif"
+        >
           Bem-vindo ao b.green!
         </h1>
-        <p class="text-lg text-(--text-body-sub-titles)">
-          Configure sua conta em 4 passos
-        </p>
+        <p class="text-lg text-(--text-body-sub-titles)">Configure sua conta em 4 passos</p>
       </div>
 
       <!-- Progress Indicator -->
       <!-- <div class="flex items-center justify-center gap-2">
-        <div 
-            v-for="step in 4" 
+        <div
+            v-for="step in 4"
             :key="step"
             class="h-2 w-24 rounded-full transition-all"
             :class="currentStep >= step ? 'bg-(--system-ring)' : 'bg-(--system-border)'"
@@ -25,23 +26,15 @@
       <!-- Step 1: Admin Profile Setup -->
       <CollapsibleCard title="1. Configure o seu perfil">
         <div class="space-y-4">
-            <p class="text-(--text-body-sub-titles) mb-4">
-                Como administrador, você precisa criar seu perfil primeiro.
-            </p>
-          
-            <FormInput
-                v-model="adminProfile.name"
-                placeholder="Seu nome *"
-                type="text"
-            />
-          
-            <div class="flex">
-              <FormInput
-                v-model="adminProfile.age"
-                placeholder="Idade (opcional)"
-                type="number"
-              />
-            </div>
+          <p class="text-(--text-body-sub-titles) mb-4">
+            Como administrador, você precisa criar seu perfil primeiro.
+          </p>
+
+          <FormInput v-model="adminProfile.name" placeholder="Seu nome *" type="text" />
+
+          <div class="flex">
+            <FormInput v-model="adminProfile.age" placeholder="Idade (opcional)" type="number" />
+          </div>
         </div>
       </CollapsibleCard>
 
@@ -51,17 +44,16 @@
           <p class="text-(--text-body-sub-titles) mb-4">
             Defina o número máximo de usuários para sua conta.
           </p>
-          
+
           <div>
             <label class="block text-sm font-medium text-(--text-body-sub-titles) mb-2">
               Número máximo de usuários *
             </label>
             <FormInput
-                v-model="accountSettings.maxUsers"
-                placeholder="Numero de Utilizadores"
-                type="number"
-              />
-            
+              v-model="accountSettings.maxUsers"
+              placeholder="Numero de Utilizadores"
+              type="number"
+            />
           </div>
 
           <div class="bg-[#f0f9ff] border-2 border-(--semantic-info-default) rounded-lg p-4 mt-4">
@@ -83,14 +75,16 @@
           </p>
 
           <div class="grid grid-cols-2 gap-4">
-            <div 
-              v-for="appliance in availableAppliances" 
+            <div
+              v-for="appliance in availableAppliances"
               :key="appliance.id"
               @click="toggleAppliance(appliance.id)"
               class="border-2 rounded-lg p-4 cursor-pointer transition-all"
-              :class="selectedAppliances.includes(appliance.id) 
-                ? 'border-(--system-ring) bg-[#f7fee7]' 
-                : 'border-(--system-border) bg-white hover:border-(--system-ring)'"
+              :class="
+                selectedAppliances.includes(appliance.id)
+                  ? 'border-(--system-ring) bg-[#f7fee7]'
+                  : 'border-(--system-border) bg-white hover:border-(--system-ring)'
+              "
             >
               <div class="flex items-center gap-3">
                 <span class="material-symbols-outlined text-2xl text-(--text-body-titles)">
@@ -100,7 +94,7 @@
                   <p class="font-semibold text-(--text-body-titles)">{{ appliance.name }}</p>
                   <p class="text-xs text-(--text-body-sub-titles)">{{ appliance.power }}</p>
                 </div>
-                <span 
+                <span
                   v-if="selectedAppliances.includes(appliance.id)"
                   class="material-symbols-outlined text-(--system-ring) ml-auto"
                 >
@@ -120,14 +114,16 @@
           </p>
 
           <div class="grid grid-cols-2 gap-4">
-            <div 
-              v-for="activity in availableTasks" 
+            <div
+              v-for="activity in availableTasks"
               :key="activity.id"
               @click="toggleActivity(activity.id)"
               class="border-2 rounded-lg p-4 cursor-pointer transition-all"
-              :class="selectedTasks.includes(activity.id) 
-                ? 'border-(--system-ring) bg-[#f7fee7]' 
-                : 'border-(--system-border) bg-white hover:border-(--system-ring)'"
+              :class="
+                selectedTasks.includes(activity.id)
+                  ? 'border-(--system-ring) bg-[#f7fee7]'
+                  : 'border-(--system-border) bg-white hover:border-(--system-ring)'
+              "
             >
               <div class="flex items-center gap-3">
                 <span class="material-symbols-outlined text-2xl text-(--text-body-titles)">
@@ -137,7 +133,7 @@
                   <p class="font-semibold text-(--text-body-titles)">{{ activity.name }}</p>
                   <p class="text-xs text-(--text-body-sub-titles)">+{{ activity.points }} pontos</p>
                 </div>
-                <span 
+                <span
                   v-if="selectedTasks.includes(activity.id)"
                   class="material-symbols-outlined text-(--system-ring) ml-auto"
                 >
@@ -149,13 +145,11 @@
         </div>
       </CollapsibleCard>
       <div class="flex justify-end mt-4">
-        <ActionButton @click="completeSetup">
-            Finalizar configuração
-        </ActionButton>
-        </div>
+        <ActionButton @click="completeSetup"> Finalizar configuração </ActionButton>
+      </div>
       <!-- Success Message -->
-      <div 
-        v-if="showSuccess" 
+      <div
+        v-if="showSuccess"
         class="bg-[#f0fdf4] border-2 border-[#8cb161] rounded-lg p-6 text-center"
       >
         <span class="material-symbols-outlined text-5xl text-[#8cb161] mb-2">check_circle</span>
@@ -183,7 +177,7 @@ export default {
     FooterSection,
     CollapsibleCard,
     FormInput,
-    ActionButton
+    ActionButton,
   },
   data() {
     return {
@@ -193,10 +187,10 @@ export default {
         name: '',
         email: '',
         age: '',
-        avatar: ''
+        avatar: '',
       },
       accountSettings: {
-        maxUsers: 4
+        maxUsers: 4,
       },
       selectedAppliances: [],
       selectedTasks: [],
@@ -208,9 +202,9 @@ export default {
         { id: 'oven', name: 'Forno', icon: 'oven', power: '2000W' },
         { id: 'dishwasher', name: 'Máquina de Lavar Louça', icon: 'countertops', power: '1200W' },
         { id: 'heater', name: 'Aquecedor', icon: 'heat', power: '1500W' },
-        { id: 'computer', name: 'Computador', icon: 'computer', power: '300W' }
+        { id: 'computer', name: 'Computador', icon: 'computer', power: '300W' },
       ],
-      availableTasks: []
+      availableTasks: [],
     }
   },
   mounted() {
@@ -236,22 +230,22 @@ export default {
     },
     completeSetup() {
       const userStore = useUserStore()
-      
+
       userStore.completeQuickStart({
         adminProfile: this.adminProfile,
         maxProfiles: this.accountSettings.maxUsers,
         appliances: this.selectedAppliances,
-        activities: this.selectedTasks
+        activities: this.selectedTasks,
       })
 
       this.showSuccess = true
-      
+
       // Redirect after 2 seconds
       setTimeout(() => {
         this.$router.push({ name: 'admin' })
       }, 2000)
-    }
-  }
+    },
+  },
 }
 </script>
 
