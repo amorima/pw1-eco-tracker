@@ -1,16 +1,16 @@
 <template>
-  <div class="min-h-screen relative overflow-hidden">
-    <!-- Navigation -->
-    <MenuNav :landing="true" />
-
+  <div class="snap-container">
     <!-- Hero Section with Diagonal Cut -->
     <section
-      class="relative pb-20 bg-(--system-foreground)"
+      class="snap-section relative pb-20 bg-(--system-foreground)"
       style="clip-path: polygon(0 0, 100% 0, 100% calc(100% - 80px), 0 100%)"
     >
+      <!-- Navigation -->
+      <MenuNav :landing="true" />
+
       <div class="max-w-[910px] mx-auto relative px-6">
         <div
-          class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center min-h-[calc(100vh-80px)] py-2"
+          class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center min-h-[calc(100vh-200px)] py-2"
         >
           <!-- Left Content -->
           <div class="space-y-8 z-10 lg:pr-8">
@@ -51,7 +51,7 @@
           </div>
 
           <!-- Right Image -->
-          <div class="relative h-[600px] lg:h-[800px] w-[900px]">
+          <div class="relative h-[600px] lg:h-[800px] w-full max-w-[900px]">
             <div class="absolute inset-0 -bottom-50 flex items-center justify-center">
               <img
                 src="@/assets/img/hero-girl.png"
@@ -74,7 +74,7 @@
       </div>
     </section>
 
-    <section id="carrosel" class="min-h-screen bg-(--system-background) py-20 flex items-center">
+    <section id="carrosel" class="snap-section bg-(--system-background) py-20 flex items-center">
       <div class="max-w-[910px] mx-auto px-6 h-full flex items-center">
         <FeatureCarousel />
       </div>
@@ -82,7 +82,7 @@
 
     <section
       id="como-funciona"
-      class="min-h-screen bg-(--system-background) py-20 flex items-center"
+      class="snap-section bg-(--system-background) py-20 flex items-center"
     >
       <div class="max-w-[910px] mx-auto px-6">
         <div class="flex flex-col gap-[73px] items-center">
@@ -181,7 +181,7 @@
 
     <section
       id="cta"
-      class="min-h-screen bg-(--system-foreground) py-20 flex items-center relative"
+      class="snap-section bg-(--system-foreground) py-20 flex items-center relative"
       style="clip-path: polygon(0 10%, 100% 0, 100% 90%, 0 100%)"
     >
       <div class="max-w-[910px] mx-auto px-6 w-full">
@@ -209,7 +209,7 @@
       </div>
     </section>
 
-    <section id="impacto" class="min-h-screen flex items-center bg-(--system-background) py-20">
+    <section id="impacto" class="snap-section flex items-center bg-(--system-background) py-20">
       <div class="max-w-[910px] mx-auto px-6 w-full">
         <div class="flex flex-col gap-[73px] items-center">
           <!-- Header -->
@@ -375,7 +375,7 @@
       </div>
     </section>
 
-    <section id="testemunhos" class="min-h-screen flex items-center bg-(--system-ring) py-20">
+    <section id="testemunhos" class="snap-section flex items-center bg-(--system-ring) py-20">
       <div class="max-w-[910px] mx-auto px-6 w-full">
         <div class="flex flex-col gap-[73px] items-center">
           <!-- Header -->
@@ -486,7 +486,7 @@
     </section>
 
     <!-- FAQ Section -->
-    <section id="faqs" class="min-h-screen flex flex-col items-center justify-center px-6 py-20">
+    <section id="faqs" class="snap-section flex flex-col items-center justify-center px-6 py-20">
       <div class="w-full max-w-[912px] flex flex-col gap-[73px]">
         <!-- Header -->
         <div class="flex flex-col gap-[29px] items-center text-center">
@@ -555,7 +555,9 @@
     </section>
 
     <!-- Footer -->
-    <FooterSection />
+    <div class="snap-section">
+      <FooterSection />
+    </div>
   </div>
 </template>
 
@@ -577,3 +579,19 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.snap-container {
+  height: 100vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+}
+
+.snap-section {
+  min-height: 100vh;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+</style>
