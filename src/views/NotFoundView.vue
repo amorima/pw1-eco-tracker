@@ -1,26 +1,28 @@
 <template>
   <div class="bg-(--system-background) min-h-screen">
     <MenuNav :landing="true" />
-    
+
     <div class="max-w-[1280px] mx-auto px-[186px] py-8">
       <!-- 404 Image -->
       <div class="flex justify-center mt-[48px]">
-        <img 
-          src="@/assets/404.png" 
-          alt="404 Error" 
+        <img
+          src="@/assets/img/404.png"
+          alt="404 Error"
           class="w-[600px] h-[441px] object-contain"
         />
       </div>
-      
+
       <!-- Error Message -->
       <div class="text-center mt-[112px]">
-        <h1 class="font-['Clash_Grotesk'] font-bold text-[48px] leading-[1.25] uppercase text-(--system-ring)">
+        <h1
+          class="font-['Clash_Grotesk'] font-bold text-[48px] leading-[1.25] uppercase text-(--system-ring)"
+        >
           OOPS! ACONTECEU UM PROBLEMA!
         </h1>
-        
+
         <!-- Action Buttons -->
         <div class="flex gap-4 items-center justify-center mt-[40px]">
-          <button 
+          <button
             @click="goBack"
             class="border-2 border-(--system-ring) flex items-center justify-center px-[11px] py-0 h-[50px] w-[110px] rounded-[14px] cursor-pointer hover:opacity-90"
           >
@@ -28,19 +30,21 @@
               Voltar
             </p>
           </button>
-          
-          <button 
+
+          <button
             @click="goHome"
             class="bg-(--system-ring) flex items-center justify-center px-[29px] py-[13px] h-[50px] w-[110px] rounded-[14px] cursor-pointer hover:opacity-90"
           >
-            <p class="font-['Noto_Sans'] font-bold text-[16px] leading-[1.5] text-(--system-foreground)">
+            <p
+              class="font-['Noto_Sans'] font-bold text-[16px] leading-[1.5] text-(--system-foreground)"
+            >
               Home
             </p>
           </button>
         </div>
       </div>
     </div>
-    
+
     <FooterSection />
   </div>
 </template>
@@ -53,7 +57,7 @@ export default {
   name: 'NotFoundView',
   components: {
     MenuNav,
-    FooterSection
+    FooterSection,
   },
   methods: {
     goBack() {
@@ -61,7 +65,7 @@ export default {
     },
     goHome() {
       this.$router.push('/')
-    }
-  }
+    },
+  },
 }
 </script>
