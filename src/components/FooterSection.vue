@@ -93,7 +93,7 @@
             rel="noopener noreferrer"
             class="w-[38px] h-[38px] hover:opacity-80 transition-opacity"
           >
-            facebook
+            <img src="@/assets/img/icons/face.svg" alt="Facebook" class="w-full h-full" />
           </a>
           <a
             href="https://instagram.com"
@@ -101,7 +101,7 @@
             rel="noopener noreferrer"
             class="w-[38px] h-[38px] hover:opacity-80 transition-opacity"
           >
-            instagram
+            <img src="@/assets/img/icons/insta.svg" alt="Instagram" class="w-full h-full" />
           </a>
           <a
             href="https://youtube.com"
@@ -109,7 +109,7 @@
             rel="noopener noreferrer"
             class="w-[38px] h-[38px] hover:opacity-80 transition-opacity"
           >
-            youtube
+            <img src="@/assets/img/icons/youtube.svg" alt="YouTube" class="w-full h-full" />
           </a>
           <a
             href="https://linkedin.com"
@@ -117,7 +117,7 @@
             rel="noopener noreferrer"
             class="w-[38px] h-[38px] hover:opacity-80 transition-opacity"
           >
-            liunkdin
+            <img src="@/assets/img/icons/in.svg" alt="LinkedIn" class="w-full h-full" />
           </a>
         </div>
       </div>
@@ -126,9 +126,9 @@
       <div class="absolute left-[492px] top-[649px] flex flex-col gap-4 w-[140px]">
         <h3 class="text-body-base font-bold text-white">Pagamentos</h3>
         <div class="flex gap-4 items-center">
-          <div class="w-8 h-8">moneyu</div>
-          <div class="w-8 h-8">money</div>
-          <div class="w-8 h-8">money</div>
+          <img src="@/assets/img/icons/mbway.svg" alt="MB Way" class="w-8 h-8" />
+          <img src="@/assets/img/icons/googlepay.svg" alt="Google Pay" class="w-8 h-8" />
+          <img src="@/assets/img/icons/applepay.svg" alt="Apple Pay" class="w-8 h-8" />
         </div>
       </div>
 
