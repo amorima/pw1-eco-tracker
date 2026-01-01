@@ -3,7 +3,7 @@
 
   <!-- Toast Notification -->
   <Transition name="slide-fade">
-    <div v-if="showToast" class="fixed top-6 left-1/2 transform -translate-x-1/2 z-50">
+    <div v-if="showToast" class="fixed top-6 left-1/2 -translate-x-1/2 z-50">
       <ToastNotification :variant="toastVariant" :message="toastMessage" />
     </div>
   </Transition>
@@ -202,23 +202,3 @@ export default {
   },
 }
 </script>
-
-<style scoped>
-.slide-fade-enter-active {
-  transition: all 0.3s ease-out;
-}
-
-.slide-fade-leave-active {
-  transition: all 0.3s ease-in;
-}
-
-.slide-fade-enter-from {
-  transform: translateX(-50%) translateY(-20px);
-  opacity: 0;
-}
-
-.slide-fade-leave-to {
-  transform: translateX(-50%) translateY(-20px);
-  opacity: 0;
-}
-</style>
