@@ -69,7 +69,7 @@
             <button
               class="bg-(--system-background) border border-(--system-border) rounded-lg flex gap-3 items-center justify-center px-1.5 py-2 w-full hover:bg-gray-50 transition-colors"
             >
-              <span class="material-symbols-outlined text-[19px]">account_circle</span>
+              <img src="@/assets/img/icons/google.svg" alt="Google" class="w-[19px] h-[19px]" />
               <span class="text-[11px] text-(--system-foreground)">Entrar com Google</span>
             </button>
 
@@ -77,7 +77,7 @@
             <button
               class="bg-(--system-background) border border-(--system-border) rounded-lg flex gap-3 items-center justify-center px-1.5 py-2 w-full hover:bg-gray-50 transition-colors"
             >
-              <span class="material-symbols-outlined text-[19px] text-[#1877f2]">group</span>
+              <img src="@/assets/img/icons/facebook.svg" alt="Facebook" class="w-[19px] h-[19px]" />
               <span class="text-[11px] text-(--system-foreground)">Entrar com Facebook</span>
             </button>
           </div>
