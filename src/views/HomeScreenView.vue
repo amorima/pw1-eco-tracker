@@ -2,10 +2,11 @@
   <MenuNav :landing="false" />
   <div class="min-h-fit py-8 flex justify-center">
     <div class="w-[930px] space-y-4">
-      
       <!-- Statistics Section -->
       <CollapsibleCard title="ESTATÍSTICAS">
-        <div class="w-full h-[260px] flex items-center justify-center text-(--text-body-sub-titles)">
+        <div
+          class="w-full h-[260px] flex items-center justify-center text-(--text-body-sub-titles)"
+        >
           <div class="text-center">
             <span class="material-symbols-outlined text-6xl mb-4 text-(--system-border)">
               show_chart
@@ -53,7 +54,9 @@
       <CollapsibleCard title="FERRAMENTAS">
         <div class="flex gap-2.5">
           <!-- Emission Calculator Tool -->
-          <div class="bg-(--system-background) border-2 border-(--system-border) rounded-[14px] w-[280px] p-6 flex flex-col gap-6">
+          <div
+            class="bg-(--system-background) border-2 border-(--system-border) rounded-[14px] w-[280px] p-6 flex flex-col gap-6"
+          >
             <h3 class="font-bold text-base text-(--text-body-titles) text-center">
               Estimativa de emissão
             </h3>
@@ -64,11 +67,7 @@
                 <label class="block text-[10px] font-medium text-(--text-disabled)">
                   Distância percorrida (Km)
                 </label>
-                <FormInput
-                  v-model="calculator.distance"
-                  placeholder="50km"
-                  type="number"
-                />
+                <FormInput v-model="calculator.distance" placeholder="50km" type="number" />
               </div>
 
               <!-- Fuel Consumption Slider -->
@@ -105,31 +104,38 @@
             </div>
 
             <!-- Calculate Button -->
-            <ActionButton @click="calculateEmissions">
-              Calcular
-            </ActionButton>
+            <ActionButton @click="calculateEmissions"> Calcular </ActionButton>
 
             <!-- Result -->
             <div class="flex items-center gap-2 justify-center font-semibold text-[20px]">
-              <span :class="calculator.result > 0 ? 'text-(--system-ring)' : 'text-(--text-disabled)'">
+              <span
+                :class="calculator.result > 0 ? 'text-(--system-ring)' : 'text-(--text-disabled)'"
+              >
                 {{ calculator.result }}
               </span>
-              <span :class="calculator.result > 0 ? 'text-(--system-ring)' : 'text-(--text-disabled)'">
+              <span
+                :class="calculator.result > 0 ? 'text-(--system-ring)' : 'text-(--text-disabled)'"
+              >
                 Kg CO2
               </span>
             </div>
           </div>
 
           <!-- Placeholder Cards -->
-          <div class="border-2 border-(--system-border) rounded-[14px] w-[280px] h-[431px] flex items-center justify-center">
-            <span class="material-symbols-outlined text-(--system-ring)" style="font-size: 56px;">add</span>
+          <div
+            class="border-2 border-(--system-border) rounded-[14px] w-[280px] h-[431px] flex items-center justify-center"
+          >
+            <span class="material-symbols-outlined text-(--system-ring)" style="font-size: 56px"
+              >add</span
+            >
           </div>
-          <div class="border-2 border-(--system-border) rounded-[14px] w-[280px] h-[431px] flex items-center justify-center">
+          <div
+            class="border-2 border-(--system-border) rounded-[14px] w-[280px] h-[431px] flex items-center justify-center"
+          >
             <!-- <span class="material-symbols-outlined text-(--system-ring)" style="font-size: 56px;">add</span> -->
           </div>
         </div>
       </CollapsibleCard>
-
     </div>
   </div>
   <FooterSection />
@@ -161,7 +167,7 @@ export default {
     FormInput,
     CheckboxInput,
     ActionButton,
-    ChatBot
+    ChatBot,
   },
   data() {
     return {
@@ -172,9 +178,9 @@ export default {
           gasoline: false,
           diesel: false,
           electric: false,
-          gas: false
+          gas: false,
         },
-        result: 0
+        result: 0,
       },
       store: useUserStore(),
     }
@@ -203,12 +209,12 @@ export default {
     calculateEmissions() {
       const distance = parseFloat(this.calculator.distance) || 0
       const consumption = parseFloat(this.calculator.consumption) || 0
-      
+
       // Simple calculation: (distance * consumption / 100) * 2.3 kg CO2 per liter
       // This is a simplified calculation
       const fuelUsed = (distance * consumption) / 100
       this.calculator.result = (fuelUsed * 2.3).toFixed(2)
-    }
+    },
   },
 }
 </script>

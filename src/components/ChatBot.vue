@@ -1,121 +1,122 @@
 <template>
   <!-- Backdrop overlay -->
-  <div 
-    v-if="isOpen" 
-    @click="toggleChat"
-    class="fixed inset-0 bg-black/50 z-40"
-  ></div>
-  
+  <div v-if="isOpen" @click="toggleChat" class="fixed inset-0 bg-black/50 z-40"></div>
+
+  <!-- Container -->
   <div class="fixed bottom-6 right-6 z-50">
     <!-- Chat Window -->
-    <div 
+    <div
       v-if="isOpen"
-      class="bg-(--system-card) border border-(--system-ring) flex flex-col gap-[10px] items-end justify-end overflow-hidden p-4 rounded-[8px] w-[396px] h-[495px] mb-[90px]"
+      class="fixed inset-0 md:relative md:inset-auto w-screen h-screen md:w-[396px] md:h-[495px] md:rounded-lg bg-white border-2 border-(--system-ring) shadow-2xl flex flex-col overflow-hidden"
     >
       <!-- Header -->
-      <div class="absolute bg-(--system-card-foreground) flex h-[56px] items-center justify-between left-0 top-0 overflow-hidden px-4 py-2 w-full">
-        <div class="flex gap-[10px] items-center">
-          <p class="font-['Noto_Sans'] font-bold text-[16px] leading-[1.5] text-white">
-            Assistente Virtual
-          </p>
-          <div class="w-[7px] h-[7px] bg-green-500 rounded-full"></div>
+      <div
+        class="bg-(--system-ring) h-14 px-4 flex items-center justify-between shrink-0 border-b border-(--system-ring)"
+      >
+        <div class="flex gap-2.5 items-center">
+          <span class="font-bold text-base text-(--text-body-titles)">Assistente Virtual</span>
+          <div
+            class="w-2 h-2 rounded-full transition-colors"
+            :class="{
+              'bg-green-500': connectionStatus === 'connected',
+              'bg-red-500': connectionStatus === 'disconnected',
+              'bg-orange-500': connectionStatus === 'loading',
+            }"
+          ></div>
         </div>
-        <button @click="toggleChat" class="w-[24px] h-[24px] cursor-pointer hover:opacity-80">
-          <span class="material-symbols-outlined text-[24px] text-white">close</span>
+        <button
+          @click="toggleChat"
+          class="w-8 h-8 flex items-center justify-center cursor-pointer hover:opacity-80 transition-opacity"
+        >
+          <span class="material-symbols-outlined text-2xl text-(--text-body-titles)">close</span>
         </button>
       </div>
-      
+
       <!-- Messages Area -->
-      <div class="flex-1 w-full overflow-y-auto mt-[56px] mb-[132px] px-2">
+      <div ref="messagesArea" class="flex-1 overflow-y-auto px-4 py-4 bg-white">
         <div v-if="messages.length === 0" class="flex items-center justify-center h-full">
-          <p class="font-['Noto_Sans'] font-normal text-[14px] text-(--text-disabled) text-center">
-            Olá! Como posso ajudar hoje?
-          </p>
+          <p class="text-sm text-(--text-disabled) text-center">Olá! Como posso ajudar hoje?</p>
         </div>
-        
+
         <div v-for="(message, index) in messages" :key="index" class="mb-4">
           <!-- User Message -->
-          <div v-if="message.type === 'user'" class="flex justify-end mb-2">
-            <div class="bg-(--system-ring) px-4 py-2 rounded-[8px] max-w-[80%]">
-              <p class="font-['Noto_Sans'] font-normal text-[14px] text-white">
-                {{ message.content }}
-              </p>
+          <div v-if="message.type === 'user'" class="flex justify-end">
+            <div class="bg-(--system-ring) px-4 py-2 rounded-lg max-w-[80%]">
+              <p class="text-sm text-white">{{ message.content }}</p>
             </div>
           </div>
-          
+
           <!-- Bot Message -->
-          <div v-if="message.type === 'bot'" class="flex justify-start mb-2">
-            <div class="bg-(--system-background) border border-(--system-border) px-4 py-2 rounded-[8px] max-w-[80%]">
-              <p class="font-['Noto_Sans'] font-normal text-[14px] text-(--text-body)">
-                {{ message.content }}
-              </p>
+          <div v-if="message.type === 'bot'" class="flex justify-start">
+            <div
+              class="bg-(--system-background) border border-(--system-border) px-4 py-2 rounded-lg max-w-[80%]"
+            >
+              <p class="text-sm text-(--text-body)" v-html="formatMarkdown(message.content)"></p>
             </div>
           </div>
         </div>
-        
+
         <!-- Loading indicator -->
-        <div v-if="isLoading" class="flex justify-start mb-2">
-          <div class="bg-(--system-background) border border-(--system-border) px-4 py-2 rounded-[8px]">
-            <p class="font-['Noto_Sans'] font-normal text-[14px] text-(--text-disabled)">
-              A escrever...
-            </p>
+        <div v-if="isLoading" class="flex justify-start">
+          <div
+            class="bg-(--system-background) border border-(--system-border) px-4 py-2 rounded-lg"
+          >
+            <p class="text-sm text-(--text-disabled)">A escrever...</p>
           </div>
         </div>
       </div>
-      
+
       <!-- Quick Actions -->
-      <div class="grid grid-cols-2 gap-[10px] w-full absolute bottom-[72px] left-0 px-4">
-        <button 
-          v-for="action in quickActions" 
-          :key="action.id"
-          @click="sendQuickAction(action.text)"
-          class="bg-(--system-ring) flex items-center justify-center h-[56px] overflow-hidden p-[10px] rounded-[4px] cursor-pointer hover:opacity-90"
-        >
-          <p class="font-['Noto_Sans'] font-normal text-[14px] text-white text-center">
+      <div v-if="!hasInteracted" class="px-4 py-2 bg-white shrink-0">
+        <div class="grid grid-cols-2 gap-2.5">
+          <button
+            v-for="action in quickActions"
+            :key="action.id"
+            @click="sendQuickAction(action.text)"
+            class="bg-(--system-ring) px-2.5 py-3 rounded text-sm text-white text-center hover:opacity-90 transition-opacity"
+          >
             {{ action.label }}
-          </p>
-        </button>
+          </button>
+        </div>
       </div>
-      
+
       <!-- Input Area -->
-      <div class="flex gap-[10px] items-center justify-center w-full absolute bottom-4 left-0 px-4">
-        <div class="flex-1">
-          <div class="bg-(--system-background) border-2 border-(--system-ring) flex items-center overflow-hidden p-[12px] rounded-[8px] h-[56px] w-full">
+      <div class="px-4 py-3 bg-white border-t border-(--system-border) shrink-0">
+        <div class="flex gap-2.5 items-center">
+          <div class="flex-1">
             <input
               v-model="currentMessage"
               @keyup.enter="sendMessage"
               type="text"
               placeholder="Pergunte qualquer coisa"
-              class="font-['Noto_Sans'] font-bold text-[16px] text-(--text-disabled) bg-transparent border-none outline-none w-full"
+              class="w-full h-14 px-3 bg-(--system-background) border-2 border-(--system-ring) rounded-lg text-sm text-(--text-body) placeholder:text-(--text-disabled) outline-none"
             />
           </div>
+          <button
+            @click="sendMessage"
+            class="w-14 h-14 flex items-center justify-center bg-(--system-ring) rounded-lg cursor-pointer hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+            :disabled="!currentMessage.trim() || isLoading"
+          >
+            <span class="material-symbols-outlined text-3xl text-white">send</span>
+          </button>
         </div>
-        <button 
-          @click="sendMessage"
-          class="bg-(--system-ring) overflow-hidden rounded-[6px] w-[56px] h-[56px] flex items-center justify-center cursor-pointer hover:opacity-90"
-          :disabled="!currentMessage.trim() || isLoading"
-        >
-          <span class="material-symbols-outlined text-[34px] text-white transform rotate-90">
-            arrow_upward
-          </span>
-        </button>
       </div>
     </div>
-    
+
     <!-- Floating Button -->
-    <button 
+    <button
+      v-if="!isOpen"
       @click="toggleChat"
-      class="bg-(--system-ring) flex items-center overflow-hidden p-2 rounded-full cursor-pointer hover:opacity-90 shadow-lg"
+      class="w-16 h-16 bg-(--system-ring) rounded-full flex items-center justify-center cursor-pointer hover:opacity-90 shadow-lg transition-opacity"
     >
-      <span class="material-symbols-outlined text-[54px] text-white">
-        support_agent
-      </span>
+      <span class="material-symbols-outlined text-5xl text-white">support_agent</span>
     </button>
   </div>
 </template>
 
 <script>
 import { useUserStore } from '@/stores/userStore'
+import { projectInfo } from '@/data/projectInfo.js'
 
 export default {
   name: 'ChatBot',
@@ -123,8 +124,8 @@ export default {
     context: {
       type: String,
       default: 'general',
-      validator: (value) => ['general', 'admin', 'profile'].includes(value)
-    }
+      validator: (value) => ['general', 'admin', 'profile'].includes(value),
+    },
   },
   data() {
     return {
@@ -132,12 +133,14 @@ export default {
       currentMessage: '',
       messages: [],
       isLoading: false,
+      hasInteracted: false,
+      connectionStatus: 'connected',
       quickActions: [
         { id: 1, label: 'Falar com assistente', text: 'Preciso de ajuda' },
         { id: 2, label: 'Ver último consumo', text: 'Qual foi o meu último consumo?' },
         { id: 3, label: 'Ver ranking', text: 'Qual é a minha posição no ranking?' },
-        { id: 4, label: 'Troubleshooting', text: 'Tenho um problema técnico' }
-      ]
+        { id: 4, label: 'Troubleshooting', text: 'Tenho um problema técnico' },
+      ],
     }
   },
   computed: {
@@ -151,152 +154,190 @@ export default {
     // Current user account for context
     activeUser() {
       return this.userStore.currentUser
-    }
+    },
   },
   methods: {
-    toggleChat() {
+    async toggleChat() {
       this.isOpen = !this.isOpen
-      if (this.isOpen && this.messages.length === 0) {
-        // Add welcome message
-        this.messages.push({
-          type: 'bot',
-          content: 'Olá! Sou o assistente virtual da B.green. Como posso ajudar?',
-          timestamp: new Date()
-        })
+      if (this.isOpen) {
+        if (this.messages.length === 0) {
+          this.messages.push({
+            type: 'bot',
+            content: 'Olá! Sou o assistente virtual da B.green. Como posso ajudar?',
+            timestamp: new Date(),
+          })
+        }
       }
     },
-    
+
+    async checkConnection() {
+      this.connectionStatus = 'loading'
+      const endpoint = import.meta.env.VITE_CHATBOT_API_ENDPOINT
+      const apiKey = import.meta.env.VITE_CHATBOT_API_KEY
+
+      if (!endpoint || !apiKey) {
+        this.connectionStatus = 'disconnected'
+        return
+      }
+
+      try {
+        const response = await fetch(endpoint, {
+          method: 'HEAD',
+          headers: { 'x-api-key': apiKey },
+        })
+        this.connectionStatus = response.ok ? 'connected' : 'disconnected'
+      } catch {
+        this.connectionStatus = 'disconnected'
+      }
+    },
+
     async sendMessage() {
       if (!this.currentMessage.trim() || this.isLoading) return
-      
+
+      this.hasInteracted = true
       const userMessage = this.currentMessage.trim()
       this.currentMessage = ''
-      
-      // Add user message
+
       this.messages.push({
         type: 'user',
         content: userMessage,
-        timestamp: new Date()
+        timestamp: new Date(),
       })
-      
-      // Scroll to bottom
-      this.$nextTick(() => {
-        const messagesArea = this.$el.querySelector('.overflow-y-auto')
-        if (messagesArea) {
-          messagesArea.scrollTop = messagesArea.scrollHeight
-        }
-      })
-      
-      // Show loading
+
+      this.scrollToBottom()
+
       this.isLoading = true
-      
+      this.connectionStatus = 'loading'
+
       try {
-        // Call API with user context
         const response = await this.callChatbotAPI(userMessage)
-        
-        // Add bot response
+
         this.messages.push({
           type: 'bot',
           content: response,
-          timestamp: new Date()
+          timestamp: new Date(),
         })
+        this.connectionStatus = 'connected'
       } catch (error) {
         console.error('Chatbot API error:', error)
         this.messages.push({
           type: 'bot',
           content: 'Desculpe, ocorreu um erro. Por favor, tente novamente.',
-          timestamp: new Date()
+          timestamp: new Date(),
         })
+        this.connectionStatus = 'disconnected'
       } finally {
         this.isLoading = false
-        
-        // Scroll to bottom
-        this.$nextTick(() => {
-          const messagesArea = this.$el.querySelector('.overflow-y-auto')
-          if (messagesArea) {
-            messagesArea.scrollTop = messagesArea.scrollHeight
-          }
-        })
+        this.scrollToBottom()
       }
     },
-    
+
+    scrollToBottom() {
+      this.$nextTick(() => {
+        if (this.$refs.messagesArea) {
+          this.$refs.messagesArea.scrollTop = this.$refs.messagesArea.scrollHeight
+        }
+      })
+    },
+
     sendQuickAction(text) {
+      this.hasInteracted = true
       this.currentMessage = text
       this.sendMessage()
     },
-    
+
+    formatMarkdown(text) {
+      if (!text) return ''
+
+      return text
+        .replace(/###\s+/g, '')
+        .replace(/##\s+/g, '')
+        .replace(/#\s+/g, '')
+        .replace(/^\d+\.\s+/gm, '')
+        .replace(/^[-*]\s+/gm, '')
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\n/g, '<br>')
+    },
+
     async callChatbotAPI(message) {
       const endpoint = import.meta.env.VITE_CHATBOT_API_ENDPOINT
       const apiKey = import.meta.env.VITE_CHATBOT_API_KEY
       const channelId = import.meta.env.VITE_CHATBOT_CHANNEL_ID
-      
-      // Debug: Log environment variables
+
       console.log('🔧 Environment Variables:', {
         endpoint: endpoint ? '✅ Set' : '❌ Missing',
         apiKey: apiKey ? '✅ Set' : '❌ Missing',
-        channelId: channelId ? '✅ Set' : '❌ Missing'
+        channelId: channelId ? '✅ Set' : '❌ Missing',
       })
-      
+
       if (!endpoint || !apiKey || !channelId) {
         console.error('❌ Missing environment variables for chatbot')
-        console.error('Endpoint:', endpoint)
-        console.error('API Key:', apiKey ? 'Set (hidden)' : 'Not set')
-        console.error('Channel ID:', channelId)
         throw new Error('Configuração do chatbot incompleta')
       }
-      
-      // Create FormData with required fields
+
       const formData = new FormData()
-      
-      // Required fields
-      formData.append("channel_id", channelId)
-      formData.append("thread_id", `thread_${this.activeProfile?.id || 'guest'}_${Date.now()}`)
-      
-      // User information including context
+
+      // Required fields per iaedu API
+      formData.append('channel_id', channelId)
+      formData.append('thread_id', `thread_${this.activeProfile?.id || 'guest'}_${Date.now()}`)
+
+      // User information - mandatory field
       const userInfo = {
         userId: this.activeProfile?.id,
         userName: this.activeProfile?.name,
         userEmail: this.activeUser?.email,
         context: this.context,
-        timestamp: new Date().toISOString()
       }
-      formData.append("user_info", JSON.stringify(userInfo))
-      
-      // The actual message
-      formData.append("message", message)
-      
-      // Optional: Add user_id
+      formData.append('user_info', JSON.stringify(userInfo))
+
+      // Contexto embutido na mensagem para forçar reconhecimento
+      const contextPrefix = `[CONTEXTO: Sou o assistente da aplicação web "${projectInfo.project.name}" - ${projectInfo.project.description}. Esta aplicação web permite aos utilizadores ${projectInfo.project.mainProblem.toLowerCase()}. Funcionalidades: ${Object.values(
+        projectInfo.features,
+      )
+        .slice(0, 3)
+        .map((f) => f.title)
+        .join(
+          ', ',
+        )}. Perfil atual: ${this.activeProfile?.name} (Nível ${this.activeProfile?.level}, ${this.activeProfile?.points} pontos). Responde sempre sobre ESTA APLICAÇÃO WEB, não sobre empresas reais.]\n\n`
+
+      formData.append('message', contextPrefix + message)
+
+      // Optional: user_id
       if (this.activeProfile?.id) {
-        formData.append("user_id", this.activeProfile.id.toString())
+        formData.append('user_id', this.activeProfile.id.toString())
       }
-      
-      // Optional: Add user_context for additional context
+
+      // Optional: user_context with additional context
       const userContext = {
         contextType: this.context,
         profileType: this.activeProfile?.isAdmin ? 'admin' : 'user',
         profileLevel: this.activeProfile?.level || 1,
         profilePoints: this.activeProfile?.points || 0,
-        householdSize: this.activeUser?.profiles?.length || 1
+        co2Saved: this.activeProfile?.co2Saved || 0,
+        householdCo2Total: this.userStore.householdTotalCo2Saved || 0,
+        householdRank:
+          this.userStore.householdLeaderboard?.find((p) => p.id === this.activeProfile?.id)?.rank ||
+          0,
       }
-      formData.append("user_context", JSON.stringify(userContext))
-      
+      formData.append('user_context', JSON.stringify(userContext))
+
       // Debug: Log request details
       console.log('📤 Sending request to:', endpoint)
       console.log('📝 Message:', message)
       console.log('👤 Active Profile:', this.activeProfile)
       console.log('🏠 Active User:', this.activeUser?.email)
-      
+
       try {
         const response = await fetch(endpoint, {
-          method: "POST",
+          method: 'POST',
           headers: {
-            'x-api-key': apiKey
+            'x-api-key': apiKey,
           },
-          body: formData
+          body: formData,
         })
-        
+
         console.log('📥 Response status:', response.status, response.statusText)
-        
+
         if (!response.ok) {
           const errorText = await response.text()
           console.error('❌ API Error Response:', errorText)
@@ -304,35 +345,47 @@ export default {
           console.error('Headers:', Object.fromEntries(response.headers.entries()))
           throw new Error(`API request failed: ${response.status} ${response.statusText}`)
         }
-        
+
         // Handle streaming response
         const reader = response.body.getReader()
         const decoder = new TextDecoder()
-        let fullResponse = ''
-        
+        let assembledMessage = ''
+
         console.log('📖 Reading stream...')
-        
+
         while (true) {
           const { done, value } = await reader.read()
           if (done) break
-          
+
           const chunk = decoder.decode(value, { stream: true })
-          fullResponse += chunk
-          console.log('📦 Chunk received:', chunk.substring(0, 100))
+
+          // Split by newlines to process each JSON object
+          const lines = chunk.split('\n')
+
+          for (const line of lines) {
+            if (!line.trim()) continue
+
+            try {
+              const data = JSON.parse(line)
+              console.log('📦 Chunk parsed:', data)
+
+              // Extract content from token chunks
+              if (data.type === 'token' && data.content) {
+                assembledMessage += data.content
+              } else if (data.type === 'start') {
+                console.log('🚀 Stream started')
+              } else if (data.type === 'done') {
+                console.log('✅ Stream complete')
+              }
+            } catch {
+              console.log('⚠️ Could not parse line:', line)
+            }
+          }
         }
-        
-        console.log('✅ Full response received:', fullResponse.substring(0, 200))
-        
-        // Parse the response (adjust based on actual API response format)
-        try {
-          const data = JSON.parse(fullResponse)
-          console.log('📊 Parsed JSON:', data)
-          return data.response || data.message || data.content || fullResponse
-        } catch (parseError) {
-          console.log('⚠️ Not JSON, returning as plain text')
-          // If not JSON, return as plain text
-          return fullResponse
-        }
+
+        console.log('✅ Assembled message:', assembledMessage)
+
+        return assembledMessage || 'Desculpe, não consegui processar a resposta.'
       } catch (error) {
         console.error('❌ Chatbot API error:', error)
         console.error('Error type:', error.constructor.name)
@@ -341,12 +394,12 @@ export default {
         throw error
       }
     },
-    
+
     clearChat() {
       this.messages = []
       this.currentMessage = ''
-    }
-  }
+    },
+  },
 }
 </script>
 
@@ -363,6 +416,7 @@ export default {
   white-space: nowrap;
   word-wrap: normal;
   direction: ltr;
+  font-feature-settings: 'liga';
   -webkit-font-feature-settings: 'liga';
   -webkit-font-smoothing: antialiased;
 }
