@@ -51,7 +51,7 @@
             <div
               class="bg-(--system-background) border border-(--system-border) px-4 py-2 rounded-lg max-w-[80%]"
             >
-              <p class="text-sm text-(--text-body)">{{ message.content }}</p>
+              <p class="text-sm text-(--text-body)" v-html="formatMarkdown(message.content)"></p>
             </div>
           </div>
         </div>
@@ -116,6 +116,7 @@
 
 <script>
 import { useUserStore } from '@/stores/userStore'
+import { projectInfo } from '@/data/projectInfo.js'
 
 export default {
   name: 'ChatBot',
@@ -206,6 +207,7 @@ export default {
       this.scrollToBottom()
 
       this.isLoading = true
+      this.connectionStatus = 'loading'
 
       try {
         const response = await this.callChatbotAPI(userMessage)
@@ -244,6 +246,19 @@ export default {
       this.sendMessage()
     },
 
+    formatMarkdown(text) {
+      if (!text) return ''
+
+      return text
+        .replace(/###\s+/g, '')
+        .replace(/##\s+/g, '')
+        .replace(/#\s+/g, '')
+        .replace(/^\d+\.\s+/gm, '')
+        .replace(/^[-*]\s+/gm, '')
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\n/g, '<br>')
+    },
+
     async callChatbotAPI(message) {
       const endpoint = import.meta.env.VITE_CHATBOT_API_ENDPOINT
       const apiKey = import.meta.env.VITE_CHATBOT_API_KEY
@@ -275,8 +290,17 @@ export default {
       }
       formData.append('user_info', JSON.stringify(userInfo))
 
-      // The actual message
-      formData.append('message', message)
+      // Contexto embutido na mensagem para forçar reconhecimento
+      const contextPrefix = `[CONTEXTO: Sou o assistente da aplicação web "${projectInfo.project.name}" - ${projectInfo.project.description}. Esta aplicação web permite aos utilizadores ${projectInfo.project.mainProblem.toLowerCase()}. Funcionalidades: ${Object.values(
+        projectInfo.features,
+      )
+        .slice(0, 3)
+        .map((f) => f.title)
+        .join(
+          ', ',
+        )}. Perfil atual: ${this.activeProfile?.name} (Nível ${this.activeProfile?.level}, ${this.activeProfile?.points} pontos). Responde sempre sobre ESTA APLICAÇÃO WEB, não sobre empresas reais.]\n\n`
+
+      formData.append('message', contextPrefix + message)
 
       // Optional: user_id
       if (this.activeProfile?.id) {
@@ -289,6 +313,11 @@ export default {
         profileType: this.activeProfile?.isAdmin ? 'admin' : 'user',
         profileLevel: this.activeProfile?.level || 1,
         profilePoints: this.activeProfile?.points || 0,
+        co2Saved: this.activeProfile?.co2Saved || 0,
+        householdCo2Total: this.userStore.householdTotalCo2Saved || 0,
+        householdRank:
+          this.userStore.householdLeaderboard?.find((p) => p.id === this.activeProfile?.id)?.rank ||
+          0,
       }
       formData.append('user_context', JSON.stringify(userContext))
 
