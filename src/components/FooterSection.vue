@@ -1,9 +1,8 @@
 <template>
-  <footer class="relative h-[895px] w-full overflow-hidden">
+  <footer class="relative h-[800px] w-full overflow-hidden">
     <!-- Background with diagonal cut -->
     <div
       class="absolute inset-0 rotate-180"
-      style="clip-path: polygon(0 0, 100% 0, 100% calc(100% - 80px), 0 100%)"
     >
       <div class="w-full h-full bg-(--system-foreground)"></div>
     </div>
@@ -11,12 +10,12 @@
     <!-- Content Container -->
     <div class="relative max-w-7xl mx-auto h-full px-6">
       <!-- Logo -->
-      <div class="absolute left-[184px] top-[190px]">
+      <div class="absolute left-[184px] top-[90px]">
         <img src="@/assets/img/Logo.svg" alt="b.green logo" class="h-[71px] w-[216px]" />
       </div>
 
       <!-- Navigation Links -->
-      <div class="absolute left-[186px] top-[372px] flex gap-12 items-start">
+      <div class="absolute left-[186px] top-[272px] flex gap-12 items-start">
         <!-- Auth Links -->
         <div class="flex flex-col gap-6 text-body-base text-white w-[74px]">
           <a
@@ -84,7 +83,7 @@
       </div>
 
       <!-- Social Media -->
-      <div class="absolute left-[186px] top-[650px] flex flex-col gap-4">
+      <div class="absolute left-[186px] top-[550px] flex flex-col gap-4">
         <h3 class="text-body-base font-bold text-white">Redes Sociais</h3>
         <div class="flex gap-4 items-center">
           <a
@@ -123,7 +122,7 @@
       </div>
 
       <!-- Payment Methods -->
-      <div class="absolute left-[492px] top-[649px] flex flex-col gap-4 w-[140px]">
+      <div class="absolute left-[492px] top-[549px] flex flex-col gap-4 w-[140px]">
         <h3 class="text-body-base font-bold text-white">Pagamentos</h3>
         <div class="flex gap-4 items-center">
           <img src="@/assets/img/icons/mbway.svg" alt="MB Way" class="w-8 h-8" />
@@ -133,12 +132,12 @@
       </div>
 
       <!-- Copyright -->
-      <p class="absolute left-[186px] top-[818px] text-body-small text-(--system-ring)">
+      <p class="absolute left-[186px] top-[718px] text-body-small text-(--system-ring)">
         All rights reserved © 2026 b.green
       </p>
 
       <!-- Footer Boy Image -->
-      <div class="absolute -right-[50px] top-[324px] w-[544px] h-[544px]">
+      <div class="absolute -right-[50px] top-[224px] w-[544px] h-[544px]">
         <img
           src="@/assets/img/footer-boy.svg"
           alt="Young man recycling"
