@@ -621,7 +621,6 @@ export default {
   },
 }
 </script>
-
 <style scoped>
 .snap-container {
   height: 100vh;
