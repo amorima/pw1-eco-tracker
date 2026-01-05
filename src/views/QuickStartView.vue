@@ -1,5 +1,13 @@
 <template>
   <MenuNav :landing="false" />
+
+  <!-- Toast Notification -->
+  <Transition name="slide-fade">
+    <div v-if="showToast" class="fixed top-6 left-1/2 -translate-x-1/2 z-50">
+      <ToastNotification :variant="toastVariant" :message="toastMessage" />
+    </div>
+  </Transition>
+
   <div class="min-h-screen py-8 flex justify-center">
     <div class="w-[930px] space-y-6">
       <!-- Header -->
@@ -167,6 +175,7 @@ import FooterSection from '@/components/FooterSection.vue'
 import CollapsibleCard from '@/components/CollapsibleCard.vue'
 import FormInput from '@/components/FormInput.vue'
 import ActionButton from '@/components/ActionButton.vue'
+import ToastNotification from '@/components/ToastNotification.vue'
 import { useUserStore } from '@/stores/userStore'
 import { useTasksStore } from '@/stores/tasksStore'
 
@@ -178,6 +187,7 @@ export default {
     CollapsibleCard,
     FormInput,
     ActionButton,
+    ToastNotification
   },
   data() {
     return {
@@ -205,6 +215,11 @@ export default {
         { id: 'computer', name: 'Computador', icon: 'computer', power: '300W' },
       ],
       availableTasks: [],
+      // Toast State
+      showToast: false,
+      toastMessage: '',
+      toastVariant: 'success',
+      isLoading: false
     }
   },
   mounted() {
@@ -212,6 +227,14 @@ export default {
     this.availableTasks = TasksStore.activityTypes
   },
   methods: {
+    showNotification(message, variant = 'success') {
+      this.toastMessage = message
+      this.toastVariant = variant
+      this.showToast = true
+      setTimeout(() => {
+        this.showToast = false
+      }, 3000)
+    },
     toggleAppliance(id) {
       const index = this.selectedAppliances.indexOf(id)
       if (index > -1) {
@@ -228,22 +251,37 @@ export default {
         this.selectedTasks.push(id)
       }
     },
-    completeSetup() {
+    async completeSetup() {
+      if (!this.adminProfile.name) {
+        this.showNotification('Por favor, defina o nome do administrador.', 'error')
+        return
+      }
+      
+      this.isLoading = true
       const userStore = useUserStore()
 
-      userStore.completeQuickStart({
-        adminProfile: this.adminProfile,
-        maxProfiles: this.accountSettings.maxUsers,
-        appliances: this.selectedAppliances,
-        activities: this.selectedTasks,
-      })
+      try {
+        const result = await userStore.completeQuickStart({
+          adminProfile: this.adminProfile,
+          maxProfiles: this.accountSettings.maxUsers,
+          appliances: this.selectedAppliances,
+          activities: this.selectedTasks,
+        })
 
-      this.showSuccess = true
-
-      // Redirect after 2 seconds
-      setTimeout(() => {
-        this.$router.push({ name: 'admin' })
-      }, 2000)
+        if (result.success) {
+          this.showSuccess = true
+          // Redirect after 2 seconds
+          setTimeout(() => {
+            this.$router.push({ name: 'admin' })
+          }, 2000)
+        } else {
+          this.showNotification(result.message || 'Erro ao guardar configurações.', 'error')
+        }
+      } catch (error) {
+        this.showNotification('Erro inesperado.', 'error')
+      } finally {
+        this.isLoading = false
+      }
     },
   },
 }

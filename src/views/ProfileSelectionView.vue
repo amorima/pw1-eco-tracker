@@ -12,6 +12,13 @@
       </button>
     </div>
 
+    <!-- Toast Notification -->
+    <Transition name="slide-fade">
+      <div v-if="showToast" class="fixed top-6 left-1/2 -translate-x-1/2 z-50">
+        <ToastNotification :variant="toastVariant" :message="toastMessage" />
+      </div>
+    </Transition>
+
     <!-- Main Content -->
     <div class="flex flex-col items-center justify-center min-h-screen py-20">
       <!-- Title -->
@@ -112,6 +119,7 @@ import ProfileCard from '@/components/ProfileCard.vue'
 import ModalComponent from '@/components/ModalComponent.vue'
 import FormInput from '@/components/FormInput.vue'
 import ActionButton from '@/components/ActionButton.vue'
+import ToastNotification from '@/components/ToastNotification.vue'
 import { uploadImage } from '@/services/cloudinaryService'
 
 export default {
@@ -121,6 +129,7 @@ export default {
     ModalComponent,
     FormInput,
     ActionButton,
+    ToastNotification
   },
   data() {
     return {
@@ -132,6 +141,11 @@ export default {
         avatar: null,
         avatarPreview: null,
       },
+      // Toast State
+      showToast: false,
+      toastMessage: '',
+      toastVariant: 'success',
+      isLoading: false
     }
   },
   computed: {
@@ -152,21 +166,32 @@ export default {
     },
   },
   methods: {
+    showNotification(message,variant = 'success') {
+      this.toastMessage = message
+      this.toastVariant = variant
+      this.showToast = true
+      setTimeout(() => {
+        this.showToast = false
+      }, 3000)
+    },
     selectProfile(profileId) {
-      this.userStore.selectProfile(profileId)
-      this.$router.push({ name: 'home' })
+      if(this.userStore.selectProfile(profileId)){
+        this.$router.push({ name: 'home' })
+      } else {
+        this.showNotification('Erro ao selecionar perfil', 'error')
+      }
     },
     async handleAvatarUpload(event) {
       const file = event.target.files[0]
       if (!file) return
 
       if (!file.type.startsWith('image/')) {
-        alert('Por favor, selecione apenas ficheiros de imagem.')
+        this.showNotification('Por favor, selecione apenas ficheiros de imagem.', 'error')
         return
       }
 
       if (file.size > 5 * 1024 * 1024) {
-        alert('A imagem não pode exceder 5MB.')
+        this.showNotification('A imagem não pode exceder 5MB.', 'error')
         return
       }
 
@@ -184,7 +209,7 @@ export default {
           if (result.success) {
             this.newProfile.avatar = result.url
           } else {
-            alert(result.error || 'Erro ao fazer upload da imagem.')
+            this.showNotification(result.error || 'Erro ao fazer upload da imagem.', 'error')
             this.newProfile.avatarPreview = null
           }
 
@@ -193,26 +218,35 @@ export default {
         reader.readAsDataURL(file)
       } catch (error) {
         console.error('Erro ao processar imagem:', error)
-        alert('Erro ao processar imagem.')
+        this.showNotification('Erro ao processar imagem.', 'error')
         this.isUploading = false
       }
     },
-    handleCreateProfile() {
+    async handleCreateProfile() {
       if (!this.newProfile.name) {
-        alert('Por favor, insira um nome para o perfil.')
+        this.showNotification('Por favor, insira um nome para o perfil.', 'error')
         return
       }
+      
+      this.isLoading = true
+      
+      try {
+        const result = await this.userStore.createProfile({
+          name: this.newProfile.name,
+          age: this.newProfile.age,
+          avatar: this.newProfile.avatar,
+        })
 
-      const result = this.userStore.createProfile({
-        name: this.newProfile.name,
-        age: this.newProfile.age,
-        avatar: this.newProfile.avatar,
-      })
-
-      if (result.success) {
-        this.closeModal()
-      } else {
-        alert(result.message || 'Erro ao criar perfil.')
+        if (result.success) {
+          this.showNotification('Perfil criado com sucesso!', 'success')
+          this.closeModal()
+        } else {
+          this.showNotification(result.message || 'Erro ao criar perfil.', 'error')
+        }
+      } catch (error) {
+         this.showNotification('Ocorreu um erro inesperado.', 'error')
+      } finally {
+        this.isLoading = false
       }
     },
     closeModal() {

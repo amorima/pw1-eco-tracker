@@ -6,8 +6,27 @@
       "password": "123456",
       "createdAt": "2024-01-15T10:00:00Z",
       "maxProfiles": 4,
-      "appliances": [1, 2, 3, 6, 11, 13, 14, 15],
-      "tasks": [1, 2, 3, 4, 5, 6, 7, 8, 9],
+      "appliances": [
+        1,
+        2,
+        3,
+        6,
+        11,
+        13,
+        14,
+        15
+      ],
+      "tasks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
       "profiles": [
         {
           "id": 101,
@@ -166,8 +185,19 @@
       "password": "123456",
       "createdAt": "2024-02-01T09:00:00Z",
       "maxProfiles": 3,
-      "appliances": [1, 2, 6, 11],
-      "tasks": [1, 2, 3, 4, 5],
+      "appliances": [
+        1,
+        2,
+        6,
+        11
+      ],
+      "tasks": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
       "profiles": [
         {
           "id": 201,
@@ -218,8 +248,25 @@
       "password": "123456",
       "createdAt": "2024-03-10T11:30:00Z",
       "maxProfiles": 5,
-      "appliances": [1, 2, 3, 4, 6, 7, 11],
-      "tasks": [1, 2, 3, 4, 5, 6, 7, 8],
+      "appliances": [
+        1,
+        2,
+        3,
+        4,
+        6,
+        7,
+        11
+      ],
+      "tasks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
       "profiles": [
         {
           "id": 301,
@@ -255,6 +302,16 @@
           "badges": []
         }
       ]
+    },
+    {
+      "id": "36e4",
+      "email": "antonioamorim@live.com",
+      "password": "Antonio1",
+      "createdAt": "2026-01-05T19:22:20.249Z",
+      "maxProfiles": 4,
+      "appliances": [],
+      "tasks": [],
+      "profiles": []
     }
   ],
   "appliances": [
@@ -489,7 +546,7 @@
       "description": "Usar bicicleta para deslocações curtas",
       "category": "Mobilidade",
       "points": 20,
-      "co2Saved": 3.0,
+      "co2Saved": 3,
       "frequency": "weekly",
       "icon": "pedal_bike",
       "difficulty": "hard"
@@ -500,7 +557,7 @@
       "description": "Fazer compostagem com restos de comida",
       "category": "Reciclagem",
       "points": 15,
-      "co2Saved": 1.0,
+      "co2Saved": 1,
       "frequency": "weekly",
       "icon": "compost",
       "difficulty": "medium"
@@ -533,7 +590,7 @@
       "description": "Plantar uma árvore ou planta",
       "category": "Ambiente",
       "points": 50,
-      "co2Saved": 21.0,
+      "co2Saved": 21,
       "frequency": "once",
       "icon": "park",
       "difficulty": "hard"
@@ -544,7 +601,7 @@
       "description": "Reparar um objeto em vez de comprar novo",
       "category": "Consumo",
       "points": 25,
-      "co2Saved": 5.0,
+      "co2Saved": 5,
       "frequency": "monthly",
       "icon": "build",
       "difficulty": "medium"
@@ -555,7 +612,7 @@
       "description": "Participar numa ação de limpeza local",
       "category": "Ambiente",
       "points": 30,
-      "co2Saved": 2.0,
+      "co2Saved": 2,
       "frequency": "monthly",
       "icon": "volunteer_activism",
       "difficulty": "hard"

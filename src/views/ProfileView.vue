@@ -2,6 +2,13 @@
   <div class="bg-(--system-background) min-h-screen">
     <MenuNav :landing="false" />
 
+    <!-- Toast Notification -->
+    <Transition name="slide-fade">
+      <div v-if="showToast" class="fixed top-6 left-1/2 -translate-x-1/2 z-50">
+        <ToastNotification :variant="toastVariant" :message="toastMessage" />
+      </div>
+    </Transition>
+
     <div class="max-w-[912px] mx-auto px-4 py-8 flex flex-col gap-8">
       <!-- Profile Header -->
       <div
@@ -322,6 +329,8 @@ import ChallengeCard from '@/components/ChallengeCard.vue'
 import RewardListItem from '@/components/RewardListItem.vue'
 import ToggleSwitch from '@/components/ToggleSwitch.vue'
 import ChatBot from '@/components/ChatBot.vue'
+import ToastNotification from '@/components/ToastNotification.vue'
+import { useUserStore } from '@/stores/userStore'
 
 export default {
   name: 'ProfileView',
@@ -337,9 +346,15 @@ export default {
     RewardListItem,
     ToggleSwitch,
     ChatBot,
+    ToastNotification
   },
   data() {
     return {
+      // Toast State
+      showToast: false,
+      toastMessage: '',
+      toastVariant: 'success',
+      
       userInfo: {
         name: 'José Maria',
         age: 12,
@@ -531,6 +546,12 @@ export default {
     }
   },
   computed: {
+    userStore() {
+      return useUserStore()
+    },
+    currentProfile() {
+      return this.userStore.currentProfile
+    },
     xpPercentage() {
       return (this.xp / this.maxXp) * 100
     },
@@ -541,14 +562,62 @@ export default {
       )
     },
   },
+  watch: {
+    settings: {
+        handler(newSettings) {
+             this.saveSettings(newSettings);
+        },
+        deep: true
+    }
+  },
+  created() {
+    if (this.currentProfile) {
+        this.userInfo = {
+            name: this.currentProfile.name,
+            age: this.currentProfile.age,
+            country: 'Portugal', // Mock
+            contact: this.userStore.currentUser?.email
+        }
+        this.totalPoints = this.currentProfile.points || 0
+        if (this.currentProfile.settings) {
+            this.settings = { ...this.currentProfile.settings }
+        }
+        // Sync other data if available
+    }
+  },
   methods: {
-    redeemReward(reward) {
-      console.log('Redeeming reward:', reward)
-      // Handle reward redemption
+    showNotification(message, variant = 'success') {
+      this.toastMessage = message
+      this.toastVariant = variant
+      this.showToast = true
+      setTimeout(() => {
+        this.showToast = false
+      }, 3000)
+    },
+    async saveSettings(settings) {
+        const result = await this.userStore.updateProfileSettings(settings);
+        if (!result.success) {
+            this.showNotification('Erro ao guardar configurações', 'error');
+        }
+    },
+    async redeemReward(reward) {
+      if (this.totalPoints < reward.points) {
+        this.showNotification('Pontos insuficientes!', 'error')
+        return
+      }
+      
+      const result = await this.userStore.redeemReward(reward)
+      if (result.success) {
+        this.showNotification(`Recompensa "${reward.title}" resgatada!`, 'success')
+        this.totalPoints = this.currentProfile.points // Update local points
+        // In a real app, we would move the reward to redeemedRewards list locally or refetch
+      } else {
+        this.showNotification(result.message || 'Erro ao resgatar recompensa', 'error')
+      }
     },
     cancelReward(reward) {
       console.log('Canceling reward:', reward)
-      // Handle reward cancellation
+      this.showNotification('Funcionalidade não implementada', 'info')
     },
   },
 }
