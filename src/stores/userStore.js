@@ -1,7 +1,5 @@
 // User Store for managing authentication and profile data
 import { defineStore } from 'pinia'
-import { mockAppliances } from '@/data/mockAppliances'
-import { mockTasks } from '@/data/mockTasks'
 
 export const useUserStore = defineStore('userStore', {
   state: () => ({
@@ -15,8 +13,8 @@ export const useUserStore = defineStore('userStore', {
     users: [],
 
     // Available appliances and tasks for selection
-    availableAppliances: [...mockAppliances],
-    availableTasks: [...mockTasks],
+    availableAppliances: [],
+    availableTasks: [],
   }),
 
   getters: {
@@ -113,6 +111,22 @@ export const useUserStore = defineStore('userStore', {
 
   actions: {
     /**
+     * Fetch system resources (appliances and tasks) from API
+     */
+    async fetchResources() {
+      try {
+        const [appliancesRes, tasksRes] = await Promise.all([
+          fetch('http://localhost:3000/appliances'),
+          fetch('http://localhost:3000/tasks'),
+        ])
+
+        if (appliancesRes.ok) this.availableAppliances = await appliancesRes.json()
+        if (tasksRes.ok) this.availableTasks = await tasksRes.json()
+      } catch (error) {
+        console.error('Error fetching resources:', error)
+      }
+    },
+    /**
      * Register new user account (email + password)
      */
     async register(userData) {
@@ -147,6 +161,7 @@ export const useUserStore = defineStore('userStore', {
 
         // Create new user account
         const newUser = {
+          name: userData.name,
           email: userData.email,
           password: userData.password, // In production: hash this!
           createdAt: new Date().toISOString(),

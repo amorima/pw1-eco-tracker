@@ -100,7 +100,9 @@
                 </span>
                 <div>
                   <p class="font-semibold text-(--text-body-titles)">{{ appliance.name }}</p>
-                  <p class="text-xs text-(--text-body-sub-titles)">{{ appliance.power }}</p>
+                  <p class="text-xs text-(--text-body-sub-titles)">
+                    {{ appliance.avgPowerConsumption }}W
+                  </p>
                 </div>
                 <span
                   v-if="selectedAppliances.includes(appliance.id)"
@@ -138,7 +140,7 @@
                   {{ activity.icon }}
                 </span>
                 <div>
-                  <p class="font-semibold text-(--text-body-titles)">{{ activity.name }}</p>
+                  <p class="font-semibold text-(--text-body-titles)">{{ activity.title }}</p>
                   <p class="text-xs text-(--text-body-sub-titles)">+{{ activity.points }} pontos</p>
                 </div>
                 <span
@@ -166,24 +168,21 @@
       </div>
     </div>
   </div>
-  <FooterSection />
 </template>
 
 <script>
 import MenuNav from '@/components/MenuNav.vue'
-import FooterSection from '@/components/FooterSection.vue'
 import CollapsibleCard from '@/components/CollapsibleCard.vue'
 import FormInput from '@/components/FormInput.vue'
 import ActionButton from '@/components/ActionButton.vue'
 import ToastNotification from '@/components/ToastNotification.vue'
 import { useUserStore } from '@/stores/userStore'
-import { useTasksStore } from '@/stores/tasksStore'
+import { mapState } from 'pinia'
 
 export default {
   name: 'QuickStartView',
   components: {
     MenuNav,
-    FooterSection,
     CollapsibleCard,
     FormInput,
     ActionButton,
@@ -204,17 +203,6 @@ export default {
       },
       selectedAppliances: [],
       selectedTasks: [],
-      availableAppliances: [
-        { id: 'fridge', name: 'Frigorífico', icon: 'kitchen', power: '150W' },
-        { id: 'washer', name: 'Máquina de Lavar', icon: 'local_laundry_service', power: '500W' },
-        { id: 'tv', name: 'Televisão', icon: 'tv', power: '100W' },
-        { id: 'ac', name: 'Ar Condicionado', icon: 'ac_unit', power: '1000W' },
-        { id: 'oven', name: 'Forno', icon: 'oven', power: '2000W' },
-        { id: 'dishwasher', name: 'Máquina de Lavar Louça', icon: 'countertops', power: '1200W' },
-        { id: 'heater', name: 'Aquecedor', icon: 'heat', power: '1500W' },
-        { id: 'computer', name: 'Computador', icon: 'computer', power: '300W' },
-      ],
-      availableTasks: [],
       // Toast State
       showToast: false,
       toastMessage: '',
@@ -222,9 +210,18 @@ export default {
       isLoading: false,
     }
   },
-  mounted() {
-    const TasksStore = useTasksStore()
-    this.availableTasks = TasksStore.activityTypes
+  computed: {
+    ...mapState(useUserStore, ['availableAppliances', 'availableTasks']),
+  },
+  async mounted() {
+    const userStore = useUserStore()
+
+    // Fetch real data from API
+    await userStore.fetchResources()
+
+    if (userStore.currentUser && userStore.currentUser.name) {
+      this.adminProfile.name = userStore.currentUser.name
+    }
   },
   methods: {
     showNotification(message, variant = 'success') {
