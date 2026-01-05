@@ -480,9 +480,9 @@ export const useUserStore = defineStore('userStore', {
       this.currentUser.profiles.splice(profileIndex, 1)
 
       // If current profile was deleted, clear it
-      let wasActiveProfile = false;
+      let wasActiveProfile = false
       if (this.currentProfile?.id === profileId) {
-        wasActiveProfile = true;
+        wasActiveProfile = true
         this.currentProfile = null
       }
 
@@ -498,7 +498,7 @@ export const useUserStore = defineStore('userStore', {
         // Rollback
         this.currentUser.profiles.splice(profileIndex, 0, profileBackup)
         if (wasActiveProfile) {
-          this.currentProfile = profileBackup;
+          this.currentProfile = profileBackup
         }
         return { success: false, message: 'Erro ao eliminar perfil.' }
       }
@@ -518,8 +518,8 @@ export const useUserStore = defineStore('userStore', {
       }
 
       // Keep backup of profile state
-      const profileBackup = JSON.parse(JSON.stringify(this.currentProfile));
-      const profilesBackup = JSON.parse(JSON.stringify(this.currentUser.profiles));
+      const profileBackup = JSON.parse(JSON.stringify(this.currentProfile))
+      const profilesBackup = JSON.parse(JSON.stringify(this.currentUser.profiles))
 
       // Add to activity history
       const activity = {
@@ -567,8 +567,8 @@ export const useUserStore = defineStore('userStore', {
         }
       } catch (error) {
         // Rollback
-        this.currentProfile = profileBackup;
-        this.currentUser.profiles = profilesBackup;
+        this.currentProfile = profileBackup
+        this.currentUser.profiles = profilesBackup
         return { success: false, message: 'Erro ao completar tarefa.' }
       }
     },
@@ -587,8 +587,8 @@ export const useUserStore = defineStore('userStore', {
       }
 
       // Keep backup in case of error
-      const profileBackup = JSON.parse(JSON.stringify(this.currentProfile));
-      const profilesBackup = JSON.parse(JSON.stringify(this.currentUser.profiles));
+      const profileBackup = JSON.parse(JSON.stringify(this.currentProfile))
+      const profilesBackup = JSON.parse(JSON.stringify(this.currentUser.profiles))
 
       // Add to redeemed rewards
       const redemption = {
@@ -627,8 +627,8 @@ export const useUserStore = defineStore('userStore', {
         }
       } catch (error) {
         // Rollback
-        this.currentProfile = profileBackup;
-        this.currentUser.profiles = profilesBackup;
+        this.currentProfile = profileBackup
+        this.currentUser.profiles = profilesBackup
         return { success: false, message: 'Erro ao resgatar recompensa.' }
       }
     },

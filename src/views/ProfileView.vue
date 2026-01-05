@@ -346,7 +346,7 @@ export default {
     RewardListItem,
     ToggleSwitch,
     ChatBot,
-    ToastNotification
+    ToastNotification,
   },
   data() {
     return {
@@ -354,7 +354,7 @@ export default {
       showToast: false,
       toastMessage: '',
       toastVariant: 'success',
-      
+
       userInfo: {
         name: 'José Maria',
         age: 12,
@@ -564,25 +564,25 @@ export default {
   },
   watch: {
     settings: {
-        handler(newSettings) {
-             this.saveSettings(newSettings);
-        },
-        deep: true
-    }
+      handler(newSettings) {
+        this.saveSettings(newSettings)
+      },
+      deep: true,
+    },
   },
   created() {
     if (this.currentProfile) {
-        this.userInfo = {
-            name: this.currentProfile.name,
-            age: this.currentProfile.age,
-            country: 'Portugal', // Mock
-            contact: this.userStore.currentUser?.email
-        }
-        this.totalPoints = this.currentProfile.points || 0
-        if (this.currentProfile.settings) {
-            this.settings = { ...this.currentProfile.settings }
-        }
-        // Sync other data if available
+      this.userInfo = {
+        name: this.currentProfile.name,
+        age: this.currentProfile.age,
+        country: 'Portugal', // Mock
+        contact: this.userStore.currentUser?.email,
+      }
+      this.totalPoints = this.currentProfile.points || 0
+      if (this.currentProfile.settings) {
+        this.settings = { ...this.currentProfile.settings }
+      }
+      // Sync other data if available
     }
   },
   methods: {
@@ -595,17 +595,17 @@ export default {
       }, 3000)
     },
     async saveSettings(settings) {
-        const result = await this.userStore.updateProfileSettings(settings);
-        if (!result.success) {
-            this.showNotification('Erro ao guardar configurações', 'error');
-        }
+      const result = await this.userStore.updateProfileSettings(settings)
+      if (!result.success) {
+        this.showNotification('Erro ao guardar configurações', 'error')
+      }
     },
     async redeemReward(reward) {
       if (this.totalPoints < reward.points) {
         this.showNotification('Pontos insuficientes!', 'error')
         return
       }
-      
+
       const result = await this.userStore.redeemReward(reward)
       if (result.success) {
         this.showNotification(`Recompensa "${reward.title}" resgatada!`, 'success')

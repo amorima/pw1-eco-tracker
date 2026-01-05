@@ -156,7 +156,7 @@ export default {
     FormInput,
     CheckboxInput,
     ActionButton,
-    ToastNotification
+    ToastNotification,
   },
   data() {
     return {
@@ -212,7 +212,7 @@ export default {
       if (result.success) {
         this.showNotification('Conta criada com sucesso!', 'success')
         setTimeout(() => {
-            this.$router.push({ name: 'login' })
+          this.$router.push({ name: 'login' })
         }, 1500)
       } else {
         this.showNotification(result.message || 'Erro ao criar conta', 'error')

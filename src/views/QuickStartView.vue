@@ -187,7 +187,7 @@ export default {
     CollapsibleCard,
     FormInput,
     ActionButton,
-    ToastNotification
+    ToastNotification,
   },
   data() {
     return {
@@ -219,7 +219,7 @@ export default {
       showToast: false,
       toastMessage: '',
       toastVariant: 'success',
-      isLoading: false
+      isLoading: false,
     }
   },
   mounted() {
@@ -256,7 +256,7 @@ export default {
         this.showNotification('Por favor, defina o nome do administrador.', 'error')
         return
       }
-      
+
       this.isLoading = true
       const userStore = useUserStore()
 

@@ -129,7 +129,7 @@ export default {
     ModalComponent,
     FormInput,
     ActionButton,
-    ToastNotification
+    ToastNotification,
   },
   data() {
     return {
@@ -145,7 +145,7 @@ export default {
       showToast: false,
       toastMessage: '',
       toastVariant: 'success',
-      isLoading: false
+      isLoading: false,
     }
   },
   computed: {
@@ -166,7 +166,7 @@ export default {
     },
   },
   methods: {
-    showNotification(message,variant = 'success') {
+    showNotification(message, variant = 'success') {
       this.toastMessage = message
       this.toastVariant = variant
       this.showToast = true
@@ -175,7 +175,7 @@ export default {
       }, 3000)
     },
     selectProfile(profileId) {
-      if(this.userStore.selectProfile(profileId)){
+      if (this.userStore.selectProfile(profileId)) {
         this.$router.push({ name: 'home' })
       } else {
         this.showNotification('Erro ao selecionar perfil', 'error')
@@ -227,9 +227,9 @@ export default {
         this.showNotification('Por favor, insira um nome para o perfil.', 'error')
         return
       }
-      
+
       this.isLoading = true
-      
+
       try {
         const result = await this.userStore.createProfile({
           name: this.newProfile.name,
@@ -244,7 +244,7 @@ export default {
           this.showNotification(result.message || 'Erro ao criar perfil.', 'error')
         }
       } catch (error) {
-         this.showNotification('Ocorreu um erro inesperado.', 'error')
+        this.showNotification('Ocorreu um erro inesperado.', 'error')
       } finally {
         this.isLoading = false
       }
