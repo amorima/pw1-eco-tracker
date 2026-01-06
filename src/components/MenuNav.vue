@@ -7,7 +7,7 @@
       'transition-all duration-300',
     ]"
   >
-    <div class="flex w-full max-w-7xl items-center px-3 sm:px-4 md:px-6 lg:px-[184px]">
+    <div class="flex w-full max-w-8xl items-center px-3 sm:px-4 md:px-6 lg:px-[184px]">
       <!-- Logo -->
       <img
         @click="landing ? $router.push({ name: 'landing' }) : $router.push({ name: 'home' })"
@@ -22,7 +22,7 @@
       <!-- Desktop Menu -->
       <div
         :class="[
-          'hidden lg:flex',
+          'hidden min-[1136px]:flex',
           'gap-2 xl:gap-3 2xl:gap-4',
           'items-center',
           'mr-2 xl:mr-3 2xl:mr-4',
@@ -144,7 +144,7 @@
         <button
           @click="mobileMenuOpen = !mobileMenuOpen"
           :class="[
-            'lg:hidden',
+            'min-[1136px]:hidden',
             'p-1.5 sm:p-2 rounded-lg',
             'text-(--text-body-titles)',
             'hover:bg-opacity-10 hover:bg-gray-500',
@@ -154,7 +154,7 @@
           ]"
         >
           <span class="material-symbols-outlined text-xl sm:text-2xl md:text-3xl">
-            {{ mobileMenuOpen ? 'close' : 'drag_handle' }}
+            {{ mobileMenuOpen ? 'close' : 'menu' }}
           </span>
         </button>
       </div>
@@ -199,7 +199,7 @@
             </button>
             <button
               @click="handleMobileClick(() => scrollToSection('testemunhos'))"
-              :class="[mobileMenuItemClasses, 'text-white']"
+              :class="[mobileMenuItemClasses, 'text-black']"
             >
               Testemunhos
             </button>

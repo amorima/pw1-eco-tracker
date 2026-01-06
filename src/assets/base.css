@@ -43,6 +43,10 @@
 
     /* Typography - Font Sizes */
     --font-size-hero: 72px;
+    --font-size-hero-m: 63px;
+    --font-size-hero-s: 57px;
+    --font-size-hero-xs: 43px;
+    --font-size-hero-mobile: 22px;
     --font-size-heading-h4: 20px;
     --font-size-body-base: 16px;
     --font-size-body-small: 14px;
@@ -119,6 +123,37 @@
     font-weight: var(--font-weight-bold);
     line-height: 1.25;
     letter-spacing: var(--letter-spacing-normal);
+  }
+
+  .text-hero-responsive {
+    font-family: var(--font-family-clash);
+    font-weight: var(--font-weight-bold);
+    line-height: 1.25;
+    font-size: var(--font-size-hero-mobile); /* mobile 22px */
+  }
+
+  @media (min-width: 768px) {
+    .text-hero-responsive {
+      font-size: var(--font-size-hero-xs); /* 768 43px */
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .text-hero-responsive {
+      font-size: var(--font-size-hero-s); /* 1024 57px */
+    }
+  }
+
+  @media (min-width: 1136px) {
+    .text-hero-responsive {
+      font-size: var(--font-size-hero-m); /* 1136 63px */
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .text-hero-responsive {
+      font-size: var(--font-size-hero); /* xl 72px */
+    }
   }
 
   /* Heading/H4 - Noto Sans SemiBold, 20px */

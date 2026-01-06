@@ -3,9 +3,12 @@
     :class="[
       landing ? 'text-white' : 'text-(--text-body-titles)',
       'border-b-[3px] border-transparent hover:border-(--system-ring) h-fit transition-colors duration-200',
+      'text-9xl',
     ]"
   >
-    <span class="text-button"><slot></slot></span>
+    <span class="text-button">
+      <slot> </slot>
+    </span>
   </button>
 </template>
 

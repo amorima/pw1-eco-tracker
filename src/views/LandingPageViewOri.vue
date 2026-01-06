@@ -7,77 +7,67 @@
     >
       <!-- Navigation -->
       <MenuNav :landing="true" />
-      <div style="height: 80px"></div>
-      <!-- Espaço para o header fixo -->
-      <div class="relative h-[calc(100vh-80px)] flex items-center">
-        <!-- Margem em X -->
-        <div class="w-full px-45">
-          <!-- Limite de largura do conteúdo -->
-          <div class="max-w-[910px]">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center w-full py-2">
-              <!-- Left Content -->
-              <div class="space-y-6 lg:space-y-8 z-10 lg:pr-8">
-                <div class="space-y-2">
-                  <h1 class="text-hero-responsive text-white leading-none">Gerir energia,</h1>
-                  <h1 class="text-hero-responsive text-(--system-ring) leading-none">poupar o</h1>
-                  <h1 class="text-hero-responsive text-(--system-ring) leading-none">planeta!</h1>
-                </div>
 
-                <p class="text-body-base text-[#d9d9d9] max-w-lg">
-                  Monitorize o consumo energético da sua família, descubra onde pode poupar e
-                  contribua para um futuro mais sustentável. Transforme pequenos hábitos em grandes
-                  impactos.
-                </p>
-
-                <div class="flex flex-col sm:flex-row gap-(--spacing-md) items-start">
-                  <ActionButton @click="$router.push({ name: 'register' })" variant="primary"
-                    >Começar agora<span class="material-symbols-outlined"
-                      >keyboard_arrow_right</span
-                    ></ActionButton
-                  >
-                  <ActionButton variant="secondary">Ver demo </ActionButton>
-                </div>
-
-                <div class="grid grid-cols-3 gap-8 pt-4">
-                  <div class="space-y-1">
-                    <span class="text-heading-h4 text-[#d9d9d9] block">15k+</span>
-                    <span class="text-body-small text-(--system-ring)">Famílias Activas</span>
-                  </div>
-                  <div class="space-y-1">
-                    <span class="text-heading-h4 text-[#d9d9d9] block">2.4M€</span>
-                    <span class="text-body-small text-(--system-ring)">Poupados</span>
-                  </div>
-                  <div class="space-y-1">
-                    <span class="text-heading-h4 text-[#d9d9d9] block">890t</span>
-                    <span class="text-body-small text-(--system-ring)">CO₂ Evitado</span>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Right Image -->
-              <div class="relative h-[600px] lg:h-[800px] w-full max-w-[800px]">
-                <div
-                  class="absolute inset-0 -bottom-50 py-20 px-50 flex items-center justify-center"
-                >
-                  <img
-                    src="@/assets/img/hero-girl.png"
-                    alt="Freelancer working"
-                    class="w-auto h-full max-w-none"
-                  />
-                </div>
-              </div>
+      <div class="max-w-[1000px] mx-auto relative h-[calc(100vh-80px)] flex items-center">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center w-full py-2">
+          <!-- Left Content -->
+          <div class="space-y-6 lg:space-y-8 z-10 lg:pr-8">
+            <div class="space-y-2">
+              <h1 class="text-hero text-white leading-none">Gerir energia,</h1>
+              <h1 class="text-hero text-(--system-ring) leading-none">poupar o</h1>
+              <h1 class="text-hero text-(--system-ring) leading-none">planeta!</h1>
             </div>
 
-            <!-- Center Button -->
-            <div class="absolute bottom-20 left-1/2 transform -translate-x-1/2 z-20">
-              <a
-                href="#carrosel"
-                class="bounce-animation bg-(--system-ring) border-[0.5px] py-1.5 border-(--system-popover-foreground) rounded-full w-[35px] h-[59px] flex items-center justify-center hover:bg-(--system-popover-foreground) hover:scale-110 transition-all duration-300"
+            <p class="text-body-base text-[#d9d9d9] max-w-lg">
+              Monitorize o consumo energético da sua família, descubra onde pode poupar e contribua
+              para um futuro mais sustentável. Transforme pequenos hábitos em grandes impactos.
+            </p>
+
+            <div class="flex flex-col sm:flex-row gap-(--spacing-md) items-start">
+              <ActionButton @click="$router.push({ name: 'register' })" variant="primary"
+                >Começar agora<span class="material-symbols-outlined"
+                  >keyboard_arrow_right</span
+                ></ActionButton
               >
-                <span class="material-symbols-outlined pulse-icon">keyboard_double_arrow_down</span>
-              </a>
+              <ActionButton variant="secondary">Ver demo </ActionButton>
+            </div>
+
+            <div class="grid grid-cols-3 gap-8 pt-4">
+              <div class="space-y-1">
+                <span class="text-heading-h4 text-[#d9d9d9] block">15k+</span>
+                <span class="text-body-small text-(--system-ring)">Famílias Activas</span>
+              </div>
+              <div class="space-y-1">
+                <span class="text-heading-h4 text-[#d9d9d9] block">2.4M€</span>
+                <span class="text-body-small text-(--system-ring)">Poupados</span>
+              </div>
+              <div class="space-y-1">
+                <span class="text-heading-h4 text-[#d9d9d9] block">890t</span>
+                <span class="text-body-small text-(--system-ring)">CO₂ Evitado</span>
+              </div>
             </div>
           </div>
+
+          <!-- Right Image -->
+          <div class="relative h-[600px] lg:h-[800px] w-full max-w-[800px]">
+            <div class="absolute inset-0 -bottom-50 py-20 px-50 flex items-center justify-center">
+              <img
+                src="@/assets/img/hero-girl.png"
+                alt="Freelancer working"
+                class="w-auto h-full max-w-none"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Center Button -->
+        <div class="absolute bottom-20 left-1/2 transform -translate-x-1/2 z-20">
+          <a
+            href="#carrosel"
+            class="bounce-animation bg-(--system-ring) border-[0.5px] py-1.5 border-(--system-popover-foreground) rounded-full w-[35px] h-[59px] flex items-center justify-center hover:bg-(--system-popover-foreground) hover:scale-110 transition-all duration-300"
+          >
+            <span class="material-symbols-outlined pulse-icon">keyboard_double_arrow_down</span>
+          </a>
         </div>
       </div>
     </section>
@@ -397,7 +387,7 @@
           </div>
 
           <!-- Testimonial Cards -->
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-10 items-stretch">
+          <div class="flex items-start justify-between w-full gap-6">
             <!-- Card 1: Ana Costa -->
             <div
               class="bg-(--system-background) border-[1.6px] border-(--system-border) rounded-(--border-radius-xl) p-[26px] w-[260px] flex flex-col gap-4"
@@ -629,6 +619,7 @@ export default {
   },
 }
 </script>
+
 <style scoped>
 .snap-container {
   height: 100vh;
