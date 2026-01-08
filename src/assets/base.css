@@ -261,6 +261,35 @@
       'CTGR' 0,
       'wdth' 100;
   }
+
+  .text-body-small-responsive {
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-body-xxsmall); /* mobile 5px */
+    font-weight: var(--font-weight-regular);
+    line-height: var(--line-height-base);
+    letter-spacing: var(--letter-spacing-normal);
+    font-variation-settings:
+      'CTGR' 0,
+      'wdth' 100;
+  }
+
+  @media (min-width: 1024px) {
+    .text-body-small-responsive {
+      font-size: var(--font-size-body-xsmall); /* 1024 12px */
+    }
+  }
+
+  @media (min-width: 1136px) {
+    .text-body-small-responsive {
+      font-size: var(--font-size-body-small); /* 1136 14px */
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .text-body-small-responsive {
+      font-size: var(--font-size-body-small); /* xl 14px */
+    }
+  }
   /*Noto Sans Bold, 16px, variation 'CTGR' 0 */
   .text-button {
     font-family: var(--font-family-base);
