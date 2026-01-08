@@ -50,6 +50,9 @@
     --font-size-heading-h4: 20px;
     --font-size-body-base: 16px;
     --font-size-body-small: 14px;
+    --font-size-body-xsmall: 12px;
+    --font-size-body-xxsmall: 10px;
+    --font-size-body-mobile: 5px;
     --font-size-button: 16px;
     --font-size-label: 10px;
     --font-size-icon-subtitle: 10px;
@@ -130,6 +133,7 @@
     font-weight: var(--font-weight-bold);
     line-height: 1.25;
     font-size: var(--font-size-hero-mobile); /* mobile 22px */
+    letter-spacing: var(--letter-spacing-normal);
   }
 
   @media (min-width: 768px) {
@@ -178,6 +182,41 @@
     font-variation-settings:
       'CTGR' 0,
       'wdth' 100;
+  }
+
+  .text-body-base-responsive {
+    font-family: var(--font-family-base);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--line-height-base);
+    letter-spacing: var(--letter-spacing-normal);
+    font-size: var(--font-size-body-mobile); /* mobile 5px */
+    font-variation-settings:
+      'CTGR' 0,
+      'wdth' 100;
+  }
+
+  @media (min-width: 768px) {
+    .text-body-base-responsive {
+      font-size: var(--font-size-body-xxsmall); /* 768 10px */
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .text-body-base-responsive {
+      font-size: var(--font-size-body-xsmall); /* 1024 12px */
+    }
+  }
+
+  @media (min-width: 1136px) {
+    .text-body-base-responsive {
+      font-size: var(--font-size-body-small); /* 1136 14px */
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .text-body-base-responsive {
+      font-size: var(--font-size-body-base); /* xl 16px */
+    }
   }
   .text-display-xl {
     font-family: var(--font-family-clash);

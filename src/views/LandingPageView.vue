@@ -23,7 +23,7 @@
                   <h1 class="text-hero-responsive text-(--system-ring) leading-none">planeta!</h1>
                 </div>
 
-                <p class="text-body-base text-[#d9d9d9] max-w-lg">
+                <p class="text-body-base-responsive text-[#d9d9d9] max-w-lg">
                   Monitorize o consumo energético da sua família, descubra onde pode poupar e
                   contribua para um futuro mais sustentável. Transforme pequenos hábitos em grandes
                   impactos.
