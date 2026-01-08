@@ -3,22 +3,26 @@
 
   <!-- Toast Notification -->
   <Transition name="slide-fade">
-    <div v-if="showToast" class="fixed top-6 left-1/2 -translate-x-1/2 z-50">
+    <div v-if="showToast" class="fixed top-6 left-1/2 -translate-x-1/2 z-50 px-4 w-full max-w-md">
       <ToastNotification :variant="toastVariant" :message="toastMessage" />
     </div>
   </Transition>
 
-  <div class="pt-24 pb-24 flex flex-col items-center justify-center bg-(--system-background)">
-    <div class="flex gap-4 items-center justify-center w-full max-w-[1200px]">
+  <div
+    class="pt-24 pb-12 md:pb-24 px-4 md:px-6 lg:px-8 flex flex-col items-center justify-center bg-(--system-background)"
+  >
+    <div
+      class="flex flex-col lg:flex-row gap-8 lg:gap-4 items-center justify-center w-full max-w-[1200px]"
+    >
       <!-- Left Form Section -->
-      <div class="flex items-center justify-center flex-1">
-        <div class="flex flex-col gap-8 items-start justify-center w-fit">
+      <div class="flex items-center justify-center w-full lg:flex-1">
+        <div class="flex flex-col gap-6 md:gap-8 items-start justify-center w-fit">
           <!-- Form Container -->
           <div class="flex flex-col gap-4 items-start justify-center w-full">
             <!-- Title and Fields -->
             <div class="flex flex-col gap-2 items-start w-full">
               <h1
-                class="text-[48px] font-bold leading-tight text-(--text-body-titles) text-center w-full"
+                class="text-[32px] sm:text-[40px] md:text-[48px] font-bold leading-tight text-(--text-body-titles) text-center w-full"
                 style="font-family: 'Clash Grotesk', sans-serif"
               >
                 Login
@@ -32,22 +36,30 @@
             <!-- Terms Checkbox -->
             <div class="flex items-center gap-1.5">
               <CheckboxInput v-model="formData.acceptTerms" />
-              <div class="flex gap-1 items-center text-[10px] font-medium text-[#78716c]">
+              <div
+                class="flex gap-1 items-center text-[10px] sm:text-[11px] font-me text-[#78716c]"
+              >
                 <span>Aceito</span>
                 <a
                   @click.prevent="$router.push({ name: 'terms' })"
-                  class="underline hover:text-(--system-ring)"
+                  class="underline hover:text-(--system-ring) cursor-pointer"
                   >termos e condições</a
                 >
               </div>
             </div>
 
             <!-- Action Buttons -->
-            <div class="flex gap-4 items-center w-full">
-              <ActionButton @click="$router.push({ name: 'register' })" :variant="'secondary'">
+            <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 items-center w-full">
+              <ActionButton
+                @click="$router.push({ name: 'register' })"
+                :variant="'secondary'"
+                class="w-full sm:w-auto"
+              >
                 Não tem conta?
               </ActionButton>
-              <ActionButton @click="handleLogin"> Começar agora </ActionButton>
+              <ActionButton @click="handleLogin" class="w-full sm:w-auto">
+                Começar agora
+              </ActionButton>
             </div>
           </div>
 
@@ -65,7 +77,9 @@
               class="bg-(--system-background) border border-(--system-border) rounded-lg flex gap-3 items-center justify-center px-1.5 py-2 w-full hover:bg-gray-50 transition-colors"
             >
               <img src="@/assets/img/icons/google.svg" alt="Google" class="w-[19px] h-[19px]" />
-              <span class="text-[11px] text-(--system-foreground)">Entrar com Google</span>
+              <span class="text-[11px] sm:text-xs text-(--system-foreground)"
+                >Entrar com Google</span
+              >
             </button>
 
             <!-- Facebook Button -->
@@ -73,14 +87,16 @@
               class="bg-(--system-background) border border-(--system-border) rounded-lg flex gap-3 items-center justify-center px-1.5 py-2 w-full hover:bg-gray-50 transition-colors"
             >
               <img src="@/assets/img/icons/facebook.svg" alt="Facebook" class="w-[19px] h-[19px]" />
-              <span class="text-[11px] text-(--system-foreground)">Entrar com Facebook</span>
+              <span class="text-[11px] sm:text-xs text-(--system-foreground)"
+                >Entrar com Facebook</span
+              >
             </button>
           </div>
         </div>
       </div>
 
       <!-- Right Image Section -->
-      <div class="flex-1 flex items-start justify-center">
+      <div class="hidden lg:flex flex-1 items-start justify-center">
         <div class="relative w-[430px] h-[567px]">
           <img
             src="../assets/img/login-art.jpg"
@@ -88,10 +104,10 @@
             class="absolute inset-0 w-full h-full object-cover rounded-[13px]"
           />
           <div
-            class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col justify-center text-center"
+            class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col justify-center text-center px-4"
           >
             <p
-              class="text-[48px] font-bold leading-tight text-white m-0"
+              class="text-[28px] sm:text-[36px] md:text-[48px] font-bold leading-tight text-white m-0"
               style="
                 font-family: 'Clash Grotesk', sans-serif;
                 text-shadow: 0px 0px 25px rgba(0, 0, 0, 0.51);
@@ -100,7 +116,7 @@
               BE THE CHANGE,
             </p>
             <p
-              class="text-[48px] font-bold leading-tight text-white m-0"
+              class="text-[28px] sm:text-[36px] md:text-[48px] font-bold leading-tight text-white m-0"
               style="
                 font-family: 'Clash Grotesk', sans-serif;
                 text-shadow: 0px 0px 25px rgba(0, 0, 0, 0.51);
@@ -108,7 +124,7 @@
             >
               BE AWARE,
             </p>
-            <img src="../assets/img/W_Logo.svg" />
+            <img src="../assets/img/W_Logo.svg" alt="Logo" class="mt-2" />
           </div>
         </div>
       </div>

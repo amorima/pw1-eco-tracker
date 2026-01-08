@@ -1,16 +1,20 @@
 <template>
   <MenuNav />
-  <div class="flex flex-col pt-24 pb-24 items-center justify-center bg-(--system-background)">
-    <div class="flex gap-4 items-center justify-center w-full max-w-[1200px]">
+  <div
+    class="flex flex-col pt-24 pb-12 md:pb-24 px-4 md:px-6 lg:px-8 items-center justify-center bg-(--system-background)"
+  >
+    <div
+      class="flex flex-col lg:flex-row gap-8 lg:gap-4 items-center justify-center w-full max-w-[1200px]"
+    >
       <!-- Left Form Section -->
-      <div class="flex items-center justify-center flex-1">
-        <div class="flex flex-col gap-8 items-start justify-center w-fit">
+      <div class="flex items-center justify-center w-full lg:flex-1">
+        <div class="flex flex-col gap-6 md:gap-8 items-start justify-center w-fit">
           <!-- Form Container -->
           <div class="flex flex-col gap-4 items-start justify-center w-full">
             <!-- Title and Fields -->
             <div class="flex flex-col gap-2 items-start w-full">
               <h1
-                class="text-[48px] font-bold leading-tight text-(--text-body-titles) text-center w-full"
+                class="text-[32px] sm:text-[40px] md:text-[48px] font-bold leading-tight text-(--text-body-titles) text-center w-full"
                 style="font-family: 'Clash Grotesk', sans-serif"
               >
                 Registo
@@ -32,24 +36,30 @@
             <!-- Terms Checkbox -->
             <div class="flex items-center gap-1.5">
               <CheckboxInput v-model="formData.acceptTerms" />
-              <div class="flex gap-1 items-center text-[10px] font-medium text-[#78716c]">
+              <div
+                class="flex gap-1 items-center text-[10px] sm:text-[11px] font-medium text-[#78716c]"
+              >
                 <span>Aceito</span>
                 <a
                   @click.prevent="$router.push({ name: 'terms' })"
-                  class="underline hover:text-(--system-ring)"
+                  class="underline hover:text-(--system-ring) cursor-pointer"
                   >termos e condições</a
                 >
               </div>
             </div>
 
             <!-- Action Buttons -->
-            <div class="flex gap-4 items-center w-full">
-              <ActionButton @click="$router.push({ name: 'login' })" :variant="'secondary'">
+            <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 items-center w-full">
+              <ActionButton
+                @click="$router.push({ name: 'login' })"
+                :variant="'secondary'"
+                class="w-full sm:w-auto"
+              >
                 Já tem conta?
               </ActionButton>
               <ActionButton
                 @click="handleRegister"
-                class="bg-(--system-ring) rounded-lg px-6 py-2.5 text-[10px] font-bold text-(--text-body-titles) hover:bg-(--system-popover-foreground) transition-colors"
+                class="bg-(--system-ring) rounded-lg px-6 py-2.5 text-[10px] font-bold text-(--text-body-titles) hover:bg-(--system-popover-foreground) transition-colors w-full sm:w-auto"
               >
                 Criar Conta
               </ActionButton>
@@ -70,7 +80,9 @@
               class="bg-(--system-background) border border-(--system-border) rounded-lg flex gap-3 items-center justify-center px-1.5 py-2 w-full hover:bg-gray-50 transition-colors"
             >
               <img src="@/assets/img/icons/google.svg" alt="Google" class="w-[19px] h-[19px]" />
-              <span class="text-[11px] text-(--system-foreground)">Entrar com Google</span>
+              <span class="text-[11px] sm:text-xs text-(--system-foreground)"
+                >Entrar com Google</span
+              >
             </button>
 
             <!-- Facebook Button -->
@@ -78,14 +90,16 @@
               class="bg-(--system-background) border border-(--system-border) rounded-lg flex gap-3 items-center justify-center px-1.5 py-2 w-full hover:bg-gray-50 transition-colors"
             >
               <img src="@/assets/img/icons/facebook.svg" alt="Facebook" class="w-[19px] h-[19px]" />
-              <span class="text-[11px] text-(--system-foreground)">Entrar com Facebook</span>
+              <span class="text-[11px] sm:text-xs text-(--system-foreground)"
+                >Entrar com Facebook</span
+              >
             </button>
           </div>
         </div>
       </div>
 
       <!-- Right Image Section -->
-      <div class="flex-1 flex items-start justify-center">
+      <div class="hidden lg:flex flex-1 items-start justify-center">
         <div class="relative w-[430px] h-[567px]">
           <img
             src="@/assets/img/register-art.jpg"
