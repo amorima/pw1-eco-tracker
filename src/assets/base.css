@@ -48,11 +48,14 @@
     --font-size-hero-xs: 43px;
     --font-size-hero-mobile: 22px;
     --font-size-heading-h4: 20px;
+    --font-size-heading-h4-tablet: 18px;
+    --font-size-heading-h4-mobile: 16px;
     --font-size-body-base: 16px;
+    --font-size-body-base-tablet: 15px;
+    --font-size-body-base-mobile: 14px;
     --font-size-body-small: 14px;
-    --font-size-body-xsmall: 12px;
-    --font-size-body-xxsmall: 10px;
-    --font-size-body-mobile: 5px;
+    --font-size-body-small-tablet: 13px;
+    --font-size-body-small-mobile: 12px;
     --font-size-button: 16px;
     --font-size-label: 10px;
     --font-size-icon-subtitle: 10px;
@@ -172,6 +175,28 @@
       'wdth' 100;
   }
 
+  .text-heading-h4-responsive {
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-heading-h4-mobile);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-base);
+    letter-spacing: var(--letter-spacing-normal);
+    font-variation-settings:
+      'CTGR' 0,
+      'wdth' 100;
+  }
+  @media (min-width: 768px) {
+    .text-heading-h4-responsive {
+      font-size: var(--font-size-heading-h4-tablet); /* 768 18px */
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .text-heading-h4-responsive {
+      font-size: var(--font-size-heading-h4); /* xl 20px */
+    }
+  }
+
   /* Body/Base - Noto Sans Regular, 16px */
   .text-body-base {
     font-family: var(--font-family-base);
@@ -189,7 +214,7 @@
     font-weight: var(--font-weight-regular);
     line-height: var(--line-height-base);
     letter-spacing: var(--letter-spacing-normal);
-    font-size: var(--font-size-body-mobile); /* mobile 5px */
+    font-size: var(--font-size-body-base-mobile); /* mobile 5px */
     font-variation-settings:
       'CTGR' 0,
       'wdth' 100;
@@ -197,19 +222,7 @@
 
   @media (min-width: 768px) {
     .text-body-base-responsive {
-      font-size: var(--font-size-body-xxsmall); /* 768 10px */
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .text-body-base-responsive {
-      font-size: var(--font-size-body-xsmall); /* 1024 12px */
-    }
-  }
-
-  @media (min-width: 1136px) {
-    .text-body-base-responsive {
-      font-size: var(--font-size-body-small); /* 1136 14px */
+      font-size: var(--font-size-body-base-tablet); /* 768 10px */
     }
   }
 
@@ -264,7 +277,7 @@
 
   .text-body-small-responsive {
     font-family: var(--font-family-base);
-    font-size: var(--font-size-body-xxsmall); /* mobile 5px */
+    font-size: var(--font-size-body-small-mobile); /* mobile 10px */
     font-weight: var(--font-weight-regular);
     line-height: var(--line-height-base);
     letter-spacing: var(--letter-spacing-normal);
@@ -275,19 +288,13 @@
 
   @media (min-width: 1024px) {
     .text-body-small-responsive {
-      font-size: var(--font-size-body-xsmall); /* 1024 12px */
-    }
-  }
-
-  @media (min-width: 1136px) {
-    .text-body-small-responsive {
-      font-size: var(--font-size-body-small); /* 1136 14px */
+      font-size: var(--font-size-body-small-tablet); /* 1024 12px */
     }
   }
 
   @media (min-width: 1280px) {
     .text-body-small-responsive {
-      font-size: var(--font-size-body-small); /* xl 14px */
+      font-size: var(--font-size-body-small); /* Body/Small - Noto Sans Regular, xl, 14px */
     }
   }
   /*Noto Sans Bold, 16px, variation 'CTGR' 0 */

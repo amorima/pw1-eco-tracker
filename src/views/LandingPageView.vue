@@ -40,18 +40,18 @@
 
                 <div class="grid grid-cols-3 gap-8 pt-4">
                   <div class="space-y-1">
-                    <span class="text-heading-h4 text-[#d9d9d9] block">15k+</span>
+                    <span class="text-heading-h4-responsive text-[#d9d9d9] block">15k+</span>
                     <span class="text-body-small-responsive text-(--system-ring)"
                       >Famílias Activas</span
                     >
                   </div>
                   <div class="space-y-1">
-                    <span class="text-heading-h4 text-[#d9d9d9] block">2.4M€</span>
-                    <span class="text-body-small text-(--system-ring)">Poupados</span>
+                    <span class="text-heading-h4-responsive text-[#d9d9d9] block">2.4M€</span>
+                    <span class="text-body-small-responsive text-(--system-ring)">Poupados</span>
                   </div>
                   <div class="space-y-1">
-                    <span class="text-heading-h4 text-[#d9d9d9] block">890t</span>
-                    <span class="text-body-small text-(--system-ring)">CO₂ Evitado</span>
+                    <span class="text-heading-h4-responsive text-[#d9d9d9] block">890t</span>
+                    <span class="text-body-small-responsive text-(--system-ring)">CO₂ Evitado</span>
                   </div>
                 </div>
               </div>
