@@ -59,7 +59,7 @@
               </ActionButton>
               <ActionButton
                 @click="handleRegister"
-                class="bg-(--system-ring) rounded-lg px-6 py-2.5 text-[10px] font-bold text-(--text-body-titles) hover:bg-(--system-popover-foreground) transition-colors w-full sm:w-auto"
+                class="bg-(--system-ring) px-6 py-2.5 text-[10px] font-bold text-(--text-body-titles) hover:bg-(--system-popover-foreground) transition-colors w-full sm:w-auto"
               >
                 Criar Conta
               </ActionButton>
