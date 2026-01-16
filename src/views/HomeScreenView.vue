@@ -115,8 +115,25 @@
       <!-- Consumptions Section -->
       <CollapsibleCard title="CONSUMOS">
         <div class="space-y-2.5">
-          <div class="grid grid-cols-3 gap-2.5 flex-wrap">
-            <!-- Recent Consumption Cards -->
+          <!-- Empty State -->
+          <div
+            v-if="recentApplianceUsages.length === 0"
+            class="w-full h-[200px] flex flex-col items-center justify-center text-(--text-body-sub-titles)"
+          >
+            <span class="material-symbols-outlined text-6xl mb-4 text-(--system-border)">
+              electrical_services
+            </span>
+            <p class="text-center mb-4">Nenhum consumo registado</p>
+            <button
+              @click="openAddConsumptionModal"
+              class="px-4 py-2 bg-(--system-ring) text-white rounded-lg font-semibold hover:opacity-90 transition-opacity"
+            >
+              Adicionar Consumo
+            </button>
+          </div>
+          
+          <!-- With Data -->
+          <div v-else class="grid grid-cols-3 gap-2.5 flex-wrap">
             <ConsumptionCard
               v-for="usage in recentApplianceUsages"
               :key="usage.id"
@@ -125,8 +142,6 @@
               unit="hr"
               @submit="(value) => submitApplianceUsage(usage.appliance, value)"
             />
-            
-            <!-- Add Card -->
             <AddCard @click="openAddConsumptionModal" />
           </div>
         </div>
@@ -135,8 +150,25 @@
       <!-- Tasks Section -->
       <CollapsibleCard title="TAREFAS">
         <div class="space-y-2.5">
-          <div class="grid grid-cols-3 gap-2.5 flex-wrap">
-            <!-- Recent Task Cards -->
+          <!-- Empty State -->
+          <div
+            v-if="recentTaskCompletions.length === 0"
+            class="w-full h-[200px] flex flex-col items-center justify-center text-(--text-body-sub-titles)"
+          >
+            <span class="material-symbols-outlined text-6xl mb-4 text-(--system-border)">
+              task_alt
+            </span>
+            <p class="text-center mb-4">Nenhuma tarefa completada</p>
+            <button
+              @click="openAddTaskModal"
+              class="px-4 py-2 bg-(--system-ring) text-white rounded-lg font-semibold hover:opacity-90 transition-opacity"
+            >
+              Completar Tarefa
+            </button>
+          </div>
+          
+          <!-- With Data -->
+          <div v-else class="grid grid-cols-3 gap-2.5 flex-wrap">
             <TaskCard
               v-for="activity in recentTaskCompletions"
               :key="activity.id"
@@ -144,8 +176,6 @@
               :image="getTaskImage(activity.task)"
               @click="completeTask(activity.task)"
             />
-            
-            <!-- Add Card -->
             <AddCard @click="openAddTaskModal" />
           </div>
         </div>
@@ -365,28 +395,10 @@ export default {
       return this.userStore.householdTasks || []
     },
     recentApplianceUsages() {
-      const usages = this.userStore.recentApplianceUsages(4)
-      if (usages.length === 0 && this.householdAppliances.length > 0) {
-        // Return first few appliances as suggestions
-        return this.householdAppliances.slice(0, 2).map((appliance, index) => ({
-          id: `suggestion-${index}`,
-          appliance,
-          applianceId: appliance.id,
-        }))
-      }
-      return usages
+      return this.userStore.recentApplianceUsages(4) || []
     },
     recentTaskCompletions() {
-      const completions = this.userStore.recentTaskCompletions(4)
-      if (completions.length === 0 && this.householdTasks.length > 0) {
-        // Return first few tasks as suggestions
-        return this.householdTasks.slice(0, 2).map((task, index) => ({
-          id: `suggestion-${index}`,
-          task,
-          taskId: task.id,
-        }))
-      }
-      return completions
+      return this.userStore.recentTaskCompletions(4) || []
     },
     quickTasks() {
       // Return first 5 household tasks for quick access

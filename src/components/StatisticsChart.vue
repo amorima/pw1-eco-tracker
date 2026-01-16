@@ -137,7 +137,7 @@
         <p class="text-xs text-(--text-body-sub-titles)">Tarefas</p>
       </div>
       <div class="bg-(--system-card) border border-(--system-border) rounded-lg p-3 text-center">
-        <p class="text-2xl font-bold text-(--primary-primary)">{{ streak }} 🔥</p>
+        <p class="text-2xl font-bold text-(--primary-primary)">{{ streak }}</p>
         <p class="text-xs text-(--text-body-sub-titles)">Streak</p>
       </div>
     </div>

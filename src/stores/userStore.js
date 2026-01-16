@@ -1285,5 +1285,322 @@ export const useUserStore = defineStore('userStore', {
         totalUsages: usages.length,
       }
     },
+    
+    /**
+     * CRUD Operations for Admin Dashboard
+     */
+    
+    // Profile Management
+    async updateProfile(profileId, updates) {
+      try {
+        const profileIndex = this.currentUser.profiles.findIndex(p => p.id === profileId)
+        if (profileIndex === -1) throw new Error('Profile not found')
+        
+        this.currentUser.profiles[profileIndex] = {
+          ...this.currentUser.profiles[profileIndex],
+          ...updates,
+        }
+        
+        // Update on server
+        await fetch(`http://localhost:3000/users/${this.currentUser.id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(this.currentUser),
+        })
+        
+        // Update current profile if it's the one being edited
+        if (this.currentProfile?.id === profileId) {
+          this.currentProfile = this.currentUser.profiles[profileIndex]
+        }
+        
+        return { success: true }
+      } catch (error) {
+        console.error('Error updating profile:', error)
+        throw error
+      }
+    },
+    
+    async deleteProfile(profileId) {
+      try {
+        this.currentUser.profiles = this.currentUser.profiles.filter(p => p.id !== profileId)
+        
+        await fetch(`http://localhost:3000/users/${this.currentUser.id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(this.currentUser),
+        })
+        
+        // If deleted profile was current, clear it
+        if (this.currentProfile?.id === profileId) {
+          this.currentProfile = null
+        }
+        
+        return { success: true }
+      } catch (error) {
+        console.error('Error deleting profile:', error)
+        throw error
+      }
+    },
+    
+    async updateMaxProfiles(newMax) {
+      try {
+        this.currentUser.maxProfiles = newMax
+        
+        await fetch(`http://localhost:3000/users/${this.currentUser.id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(this.currentUser),
+        })
+        
+        return { success: true }
+      } catch (error) {
+        console.error('Error updating max profiles:', error)
+        throw error
+      }
+    },
+    
+    // Rewards Management
+    async createReward(rewardData) {
+      try {
+        const newReward = {
+          ...rewardData,
+          createdAt: new Date().toISOString(),
+        }
+        
+        const response = await fetch('http://localhost:3000/rewards', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newReward),
+        })
+        
+        const created = await response.json()
+        this.householdRewards.push(created)
+        
+        return { success: true }
+      } catch (error) {
+        console.error('Error creating reward:', error)
+        throw error
+      }
+    },
+    
+    async updateReward(rewardId, updates) {
+      try {
+        const rewardIndex = this.householdRewards.findIndex(r => r.id === rewardId)
+        if (rewardIndex === -1) throw new Error('Reward not found')
+        
+        const updated = {
+          ...this.householdRewards[rewardIndex],
+          ...updates,
+        }
+        
+        await fetch(`http://localhost:3000/rewards/${rewardId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(updated),
+        })
+        
+        this.householdRewards[rewardIndex] = updated
+        
+        return { success: true }
+      } catch (error) {
+        console.error('Error updating reward:', error)
+        throw error
+      }
+    },
+    
+    async deleteReward(rewardId) {
+      try {
+        await fetch(`http://localhost:3000/rewards/${rewardId}`, {
+          method: 'DELETE',
+        })
+        
+        this.householdRewards = this.householdRewards.filter(r => r.id !== rewardId)
+        
+        return { success: true }
+      } catch (error) {
+        console.error('Error deleting reward:', error)
+        throw error
+      }
+    },
+    
+    // Appliances Management
+    async createAppliance(applianceData) {
+      try {
+        const newAppliance = {
+          name: applianceData.title,
+          category: applianceData.category,
+          icon: applianceData.icon,
+          description: applianceData.description,
+          avgPowerConsumption: 100, // Default watts
+          co2PerKwh: 0.233, // Portugal grid factor
+        }
+        
+        const response = await fetch('http://localhost:3000/appliances', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newAppliance),
+        })
+        
+        const created = await response.json()
+        this.availableAppliances.push(created)
+        
+        // Add to user's appliances
+        if (!this.currentUser.appliances.includes(created.id)) {
+          this.currentUser.appliances.push(created.id)
+          await fetch(`http://localhost:3000/users/${this.currentUser.id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(this.currentUser),
+          })
+        }
+        
+        return { success: true }
+      } catch (error) {
+        console.error('Error creating appliance:', error)
+        throw error
+      }
+    },
+    
+    async updateAppliance(applianceId, updates) {
+      try {
+        const applianceIndex = this.availableAppliances.findIndex(a => a.id === applianceId)
+        if (applianceIndex === -1) throw new Error('Appliance not found')
+        
+        const updated = {
+          ...this.availableAppliances[applianceIndex],
+          name: updates.title,
+          category: updates.category,
+          icon: updates.icon,
+          description: updates.description,
+        }
+        
+        await fetch(`http://localhost:3000/appliances/${applianceId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(updated),
+        })
+        
+        this.availableAppliances[applianceIndex] = updated
+        
+        return { success: true }
+      } catch (error) {
+        console.error('Error updating appliance:', error)
+        throw error
+      }
+    },
+    
+    async deleteAppliance(applianceId) {
+      try {
+        await fetch(`http://localhost:3000/appliances/${applianceId}`, {
+          method: 'DELETE',
+        })
+        
+        this.availableAppliances = this.availableAppliances.filter(a => a.id !== applianceId)
+        
+        // Remove from user's appliances
+        this.currentUser.appliances = this.currentUser.appliances.filter(id => id !== applianceId)
+        await fetch(`http://localhost:3000/users/${this.currentUser.id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(this.currentUser),
+        })
+        
+        return { success: true }
+      } catch (error) {
+        console.error('Error deleting appliance:', error)
+        throw error
+      }
+    },
+    
+    // Tasks Management
+    async createTask(taskData) {
+      try {
+        const newTask = {
+          title: taskData.title,
+          category: taskData.category,
+          points: taskData.points,
+          icon: taskData.icon,
+          description: taskData.description,
+          co2Saved: taskData.points * 0.5, // Estimate
+        }
+        
+        const response = await fetch('http://localhost:3000/tasks', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newTask),
+        })
+        
+        const created = await response.json()
+        this.availableTasks.push(created)
+        
+        // Add to user's tasks
+        if (!this.currentUser.tasks.includes(created.id)) {
+          this.currentUser.tasks.push(created.id)
+          await fetch(`http://localhost:3000/users/${this.currentUser.id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(this.currentUser),
+          })
+        }
+        
+        return { success: true }
+      } catch (error) {
+        console.error('Error creating task:', error)
+        throw error
+      }
+    },
+    
+    async updateTask(taskId, updates) {
+      try {
+        const taskIndex = this.availableTasks.findIndex(t => t.id === taskId)
+        if (taskIndex === -1) throw new Error('Task not found')
+        
+        const updated = {
+          ...this.availableTasks[taskIndex],
+          title: updates.title,
+          category: updates.category,
+          points: updates.points,
+          icon: updates.icon,
+          description: updates.description,
+          co2Saved: updates.points * 0.5,
+        }
+        
+        await fetch(`http://localhost:3000/tasks/${taskId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(updated),
+        })
+        
+        this.availableTasks[taskIndex] = updated
+        
+        return { success: true }
+      } catch (error) {
+        console.error('Error updating task:', error)
+        throw error
+      }
+    },
+    
+    async deleteTask(taskId) {
+      try {
+        await fetch(`http://localhost:3000/tasks/${taskId}`, {
+          method: 'DELETE',
+        })
+        
+        this.availableTasks = this.availableTasks.filter(t => t.id !== taskId)
+        
+        // Remove from user's tasks
+        this.currentUser.tasks = this.currentUser.tasks.filter(id => id !== taskId)
+        await fetch(`http://localhost:3000/users/${this.currentUser.id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(this.currentUser),
+        })
+        
+        return { success: true }
+      } catch (error) {
+        console.error('Error deleting task:', error)
+        throw error
+      }
+    },
   },
 })

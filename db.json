@@ -5,7 +5,7 @@
       "email": "mario@example.com",
       "password": "123456",
       "createdAt": "2024-01-15T10:00:00Z",
-      "maxProfiles": 4,
+      "maxProfiles": 7,
       "appliances": [
         1,
         2,
@@ -167,7 +167,8 @@
               "title": "Escolher a música no carro",
               "pointsCost": 20,
               "redeemedAt": "2026-01-16T22:30:46.015Z",
-              "status": "pending"
+              "status": "completo",
+              "completedAt": "2026-01-16T22:54:54.622Z"
             }
           ],
           "badges": [
@@ -215,7 +216,7 @@
           "avatar": "https://i.pravatar.cc/150?img=5",
           "isAdmin": false,
           "createdAt": "2024-01-16T14:20:00Z",
-          "points": 189,
+          "points": 149,
           "co2Saved": 12.3,
           "level": 4,
           "xp": 320,
@@ -244,15 +245,34 @@
             }
           ],
           "applianceUsage": [],
-          "rewardsRedeemed": [],
+          "rewardsRedeemed": [
+            {
+              "id": 1768604076099,
+              "rewardId": "4",
+              "title": "Escolher a música no carro",
+              "pointsCost": 20,
+              "redeemedAt": "2026-01-16T22:54:36.099Z",
+              "status": "completo",
+              "completedAt": "2026-01-16T22:54:53.742Z"
+            },
+            {
+              "id": 1768604076104,
+              "rewardId": "4",
+              "title": "Escolher a música no carro",
+              "pointsCost": 20,
+              "redeemedAt": "2026-01-16T22:54:36.104Z",
+              "status": "completo",
+              "completedAt": "2026-01-16T22:54:52.638Z"
+            }
+          ],
           "badges": []
         },
         {
           "id": 103,
-          "name": "Pedro",
+          "name": "Pedra",
           "age": 8,
           "avatar": "https://i.pravatar.cc/150?img=15",
-          "isAdmin": false,
+          "isAdmin": true,
           "createdAt": "2024-01-16T14:25:00Z",
           "points": 156,
           "co2Saved": 8.9,
@@ -470,6 +490,158 @@
               "description": "Primeiro perfil criado"
             }
           ]
+        }
+      ]
+    },
+    {
+      "id": "39a7",
+      "name": "1",
+      "email": "1@1.1",
+      "password": "1",
+      "createdAt": "2026-01-16T22:36:46.686Z",
+      "maxProfiles": "611",
+      "appliances": [
+        "2",
+        "3",
+        "6",
+        "7",
+        "10",
+        "11",
+        "14"
+      ],
+      "tasks": [
+        "1",
+        "4",
+        "5",
+        "8",
+        "9",
+        "12",
+        "13"
+      ],
+      "profiles": [
+        {
+          "id": 1768603034023,
+          "name": "112",
+          "age": 1,
+          "avatar": "https://i.pravatar.cc/150?img=45",
+          "isAdmin": true,
+          "createdAt": "2026-01-16T22:37:14.023Z",
+          "points": 3,
+          "co2Saved": 0.05,
+          "level": 1,
+          "xp": 5,
+          "streak": 1,
+          "settings": {
+            "pin": "0000",
+            "notifications": true,
+            "defaultDevice": false,
+            "language": "pt",
+            "theme": "light"
+          },
+          "activityHistory": [
+            {
+              "id": 1768603075767,
+              "taskId": "1",
+              "completedAt": "2026-01-16T22:37:55.767Z",
+              "pointsEarned": 5,
+              "co2Saved": 0.05
+            }
+          ],
+          "applianceUsage": [
+            {
+              "id": 1768603070632,
+              "applianceId": "2",
+              "date": "2026-01-16",
+              "hoursUsed": 20,
+              "energyConsumed": 40,
+              "co2Emitted": 9.32
+            }
+          ],
+          "rewardsRedeemed": [
+            {
+              "id": 1768604619543,
+              "rewardId": null,
+              "title": "Comer hoke",
+              "pointsCost": 1,
+              "redeemedAt": "2026-01-16T23:03:39.543Z",
+              "status": "pending"
+            },
+            {
+              "id": 1768604619546,
+              "rewardId": null,
+              "title": "Comer hoke",
+              "pointsCost": 1,
+              "redeemedAt": "2026-01-16T23:03:39.546Z",
+              "status": "pending"
+            }
+          ],
+          "badges": [
+            {
+              "id": "early_adopter",
+              "title": "Early Adopter",
+              "icon": "star",
+              "earnedAt": "2026-01-16T22:37:14.023Z",
+              "description": "Primeiro perfil criado"
+            }
+          ],
+          "lastActivityDate": "2026-01-16"
+        },
+        {
+          "id": 1768603900852,
+          "name": "2",
+          "age": null,
+          "avatar": "https://i.pravatar.cc/150?img=8",
+          "isAdmin": false,
+          "createdAt": "2026-01-16T22:51:40.852Z",
+          "points": 43,
+          "co2Saved": 0.8999999999999999,
+          "level": 1,
+          "xp": 68,
+          "streak": 1,
+          "settings": {
+            "pin": null,
+            "notifications": true,
+            "defaultDevice": false,
+            "language": "pt",
+            "theme": "light"
+          },
+          "activityHistory": [
+            {
+              "id": 1768604688607,
+              "taskId": "8",
+              "completedAt": "2026-01-16T23:04:48.607Z",
+              "pointsEarned": 10,
+              "co2Saved": 0.6
+            },
+            {
+              "id": 1768604693935,
+              "taskId": "4",
+              "completedAt": "2026-01-16T23:04:53.935Z",
+              "pointsEarned": 8,
+              "co2Saved": 0.3
+            }
+          ],
+          "applianceUsage": [
+            {
+              "id": 1768604700713,
+              "applianceId": "7",
+              "date": "2026-01-16",
+              "hoursUsed": 2,
+              "energyConsumed": 7,
+              "co2Emitted": 1.631
+            }
+          ],
+          "rewardsRedeemed": [],
+          "badges": [
+            {
+              "id": "early_adopter",
+              "title": "Early Adopter",
+              "icon": "star",
+              "earnedAt": "2026-01-16T23:04:48.612Z",
+              "description": "Primeiro perfil criado"
+            }
+          ],
+          "lastActivityDate": "2026-01-16"
         }
       ]
     }
@@ -953,6 +1125,13 @@
       "points": 10,
       "image": "https://images.unsplash.com/photo-1587241321921-91a834d6d191?w=400",
       "isDefault": true
+    },
+    {
+      "id": null,
+      "title": "Comer hoke",
+      "points": 1,
+      "image": "123",
+      "createdAt": "2026-01-16T23:03:30.984Z"
     }
   ],
   "transactions": [],
