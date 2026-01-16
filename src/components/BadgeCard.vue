@@ -1,7 +1,8 @@
 <template>
-  <div 
+  <button 
+    @click="$emit('click')"
     :class="[
-      'flex flex-col gap-[16px] items-center overflow-hidden px-[16px] py-[24px] relative rounded-[10px] w-full',
+      'flex flex-col gap-[16px] items-center overflow-hidden px-[16px] py-[24px] relative rounded-[10px] w-full cursor-pointer transition-transform hover:scale-105',
       locked ? 'bg-(--system-card) border border-(--system-border)' : 'bg-(--system-ring)'
     ]"
   >
@@ -23,7 +24,7 @@
     >
       {{ title }}
     </p>
-  </div>
+  </button>
 </template>
 
 <script>
@@ -42,6 +43,7 @@ export default {
       type: Boolean,
       default: false
     }
-  }
+  },
+  emits: ['click']
 }
 </script>
