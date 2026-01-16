@@ -110,9 +110,7 @@
             <RewardCard
               v-for="reward in availableRewards.slice(0, 2)"
               :key="reward.id"
-              :title="reward.title"
-              :points="reward.points"
-              :image="reward.image"
+              :reward="reward"
               @edit="editReward(reward.id)"
               @delete="deleteReward(reward.id)"
             />
@@ -121,9 +119,7 @@
             <RewardCard
               v-for="reward in availableRewards.slice(2, 4)"
               :key="reward.id"
-              :title="reward.title"
-              :points="reward.points"
-              :image="reward.image"
+              :reward="reward"
               @edit="editReward(reward.id)"
               @delete="deleteReward(reward.id)"
             />
@@ -132,9 +128,7 @@
             <RewardCard
               v-for="reward in availableRewards.slice(4, 6)"
               :key="reward.id"
-              :title="reward.title"
-              :points="reward.points"
-              :image="reward.image"
+              :reward="reward"
               @edit="editReward(reward.id)"
               @delete="deleteReward(reward.id)"
             />
@@ -152,11 +146,7 @@
           <RewardRedeemedCard
             v-for="redeemed in redeemedRewards"
             :key="redeemed.id"
-            :userName="redeemed.userName"
-            :title="redeemed.title"
-            :points="redeemed.points"
-            :status="redeemed.status"
-            :image="redeemed.image"
+            :reward="redeemed"
             @confirm="confirmReward(redeemed.id)"
             @delete="deleteRedeemedReward(redeemed.id)"
           />
@@ -191,10 +181,7 @@
           <ItemCard
             v-for="consumption in consumptions"
             :key="consumption.id"
-            :title="consumption.title"
-            :subtitle="consumption.subtitle"
-            :image="consumption.image"
-            :type="consumption.type"
+            :item="consumption"
             @edit="editConsumption(consumption.id)"
             @delete="deleteConsumption(consumption.id)"
           />
@@ -234,10 +221,7 @@
           <ItemCard
             v-for="task in tasks"
             :key="task.id"
-            :title="task.title"
-            :subtitle="task.subtitle"
-            :image="task.image"
-            :type="task.type"
+            :item="task"
             @edit="editTask(task.id)"
             @delete="deleteTask(task.id)"
           />

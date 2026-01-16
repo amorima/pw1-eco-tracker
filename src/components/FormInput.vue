@@ -19,7 +19,7 @@ export default {
   name: 'FormInput',
   props: {
     modelValue: {
-      type: String,
+      type: [String, Number],
       default: '',
     },
     type: {

@@ -24,9 +24,19 @@
                 Login
               </h1>
 
-              <FormInput v-model="formData.email" placeholder="Email" type="email" />
+              <FormInput
+                v-model="formData.email"
+                placeholder="Email"
+                type="email"
+                @keyup.enter="handleLogin"
+              />
 
-              <FormInput v-model="formData.password" placeholder="Password" type="password" />
+              <FormInput
+                v-model="formData.password"
+                placeholder="Password"
+                type="password"
+                @keyup.enter="handleLogin"
+              />
             </div>
 
             <!-- Action Buttons -->
@@ -34,7 +44,9 @@
               <ActionButton @click="$router.push({ name: 'register' })" :variant="'secondary'">
                 Não tem conta?
               </ActionButton>
-              <ActionButton @click="handleLogin"> Começar agora </ActionButton>
+              <ActionButton @click="handleLogin" :disabled="isLoading">
+                {{ isLoading ? 'A entrar...' : 'Começar agora' }}
+              </ActionButton>
             </div>
           </div>
 
@@ -131,6 +143,7 @@ export default {
       toastMessage: '',
       toastVariant: 'error',
       store: useUserStore(),
+      isLoading: false,
     }
   },
   methods: {
@@ -145,18 +158,22 @@ export default {
       }, 3000)
     },
 
-    handleLogin() {
+    async handleLogin() {
       // Validate fields
       if (!this.formData.email || !this.formData.password) {
         this.showToastMessage('Preencha todos os campos', 'error')
         return
       }
 
+      this.isLoading = true
+
       // Attempt login
-      const result = this.store.login({
+      const result = await this.store.login({
         email: this.formData.email,
         password: this.formData.password,
       })
+
+      this.isLoading = false
 
       if (result.success) {
         this.showToastMessage(result.message, 'success')
