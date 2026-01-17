@@ -675,14 +675,16 @@
       "email": "1@1.2",
       "password": "1",
       "createdAt": "2026-01-17T15:45:03.144Z",
-      "maxProfiles": 10,
+      "maxProfiles": 4,
       "appliances": [
         "1",
         "2",
         "3",
         "4",
         "5",
-        "6"
+        "6",
+        "abed",
+        "2b09"
       ],
       "tasks": [
         "1",
@@ -690,7 +692,8 @@
         "3",
         "4",
         "5",
-        "6"
+        "6",
+        "0bf1"
       ],
       "profiles": [
         {
@@ -700,7 +703,7 @@
           "avatar": "https://i.pravatar.cc/150?img=38",
           "isAdmin": true,
           "createdAt": "2026-01-17T15:45:27.922Z",
-          "points": 198,
+          "points": 188,
           "co2Saved": 25.350000000000005,
           "level": 3,
           "xp": 270,
@@ -798,7 +801,24 @@
               "co2Saved": 2.3
             }
           ],
-          "applianceUsage": [],
+          "applianceUsage": [
+            {
+              "id": 1768666085379,
+              "applianceId": "abed",
+              "date": "2026-01-17",
+              "hoursUsed": 2,
+              "energyConsumed": 0.2,
+              "co2Emitted": 0.0466
+            },
+            {
+              "id": 1768666695870,
+              "applianceId": "2",
+              "date": "2026-01-17",
+              "hoursUsed": 13,
+              "energyConsumed": 26,
+              "co2Emitted": 6.058000000000001
+            }
+          ],
           "rewardsRedeemed": [
             {
               "id": 1768664873083,
@@ -903,6 +923,14 @@
               "title": "Comer hoke",
               "pointsCost": 1,
               "redeemedAt": "2026-01-17T15:59:01.222Z",
+              "status": "pending"
+            },
+            {
+              "id": 1768666941464,
+              "rewardId": "6",
+              "title": "Doces e salgados",
+              "pointsCost": 10,
+              "redeemedAt": "2026-01-17T16:22:21.464Z",
               "status": "pending"
             }
           ],
@@ -1069,6 +1097,15 @@
       "avgPowerConsumption": 1000,
       "avgUsageHoursPerDay": 0.5,
       "co2PerKwh": 0.233
+    },
+    {
+      "id": "2b09",
+      "name": "1",
+      "category": "Cozinha",
+      "icon": "1",
+      "description": "1",
+      "avgPowerConsumption": 100,
+      "co2PerKwh": 0.233
     }
   ],
   "tasks": [
@@ -1078,7 +1115,7 @@
       "description": "Desligar todas as luzes quando sair de uma divisão",
       "category": "Energia",
       "points": 5,
-      "co2Saved": 0.05,
+      "co2Saved": 2.5,
       "frequency": "daily",
       "icon": "lightbulb",
       "difficulty": "easy"
@@ -1089,7 +1126,7 @@
       "description": "Usar transporte público em vez de carro próprio",
       "category": "Mobilidade",
       "points": 15,
-      "co2Saved": 2.3,
+      "co2Saved": 7.5,
       "frequency": "daily",
       "icon": "directions_bus",
       "difficulty": "medium"
@@ -1236,6 +1273,15 @@
       "frequency": "monthly",
       "icon": "volunteer_activism",
       "difficulty": "hard"
+    },
+    {
+      "id": "0bf1",
+      "title": "1",
+      "category": "Mobilidade",
+      "points": 1,
+      "icon": "1",
+      "description": "1",
+      "co2Saved": 0.5
     }
   ],
   "badges": [
@@ -1420,6 +1466,13 @@
       "points": 1,
       "image": "123",
       "createdAt": "2026-01-16T23:03:30.984Z"
+    },
+    {
+      "id": null,
+      "title": "Comer hoke",
+      "points": 1,
+      "image": "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/0c/bb/a3/97/predator-ride-in-the.jpg?w=1200&h=-1&s=1",
+      "createdAt": "2026-01-17T16:16:58.101Z"
     }
   ],
   "transactions": [],

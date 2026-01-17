@@ -50,24 +50,24 @@
       <CollapsibleCard title="Análise rápida mensal">
         <div class="flex gap-4 items-center w-full">
           <div
-            class="bg-(--system-background) border-2 border-(--system-border) rounded-[10px] p-4 flex flex-col gap-4 text-(--text-body-sub-titles)"
+            class="bg-(--system-card) border-2 border-(--system-border) rounded-[10px] p-4 flex flex-col gap-4 text-(--text-body-sub-titles)"
           >
             <p class="font-normal text-base">CO2 Evitado</p>
             <p class="font-semibold text-4xl">{{ householdStats.totalCo2.toFixed(1) }} kg</p>
           </div>
 
           <div
-            class="bg-(--system-background) border-2 border-(--system-border) rounded-[10px] p-4 flex flex-col gap-4 text-(--text-body-sub-titles)"
+            class="bg-(--system-card) border-2 border-(--system-border) rounded-[10px] p-4 flex flex-col gap-4 text-(--text-body-sub-titles)"
           >
-            <p class="font-normal text-base">Pontos Totais</p>
-            <p class="font-semibold text-4xl">{{ householdStats.totalPoints }}</p>
+            <p class="font-normal text-base">Consumo mensal total</p>
+            <p class="font-semibold text-4xl">{{ householdStats.totalConsumption.toFixed(0) }} kWh</p>
           </div>
 
           <div
-            class="bg-(--system-background) border-2 border-(--system-border) rounded-[10px] p-4 flex flex-col gap-4 flex-1 text-(--text-body-sub-titles)"
+            class="bg-(--system-card) border-2 border-(--system-border) rounded-[10px] p-4 flex flex-col gap-4 flex-1 text-(--text-body-sub-titles)"
           >
-            <p class="font-normal text-base">Perfis Ativos</p>
-            <p class="font-semibold text-4xl">{{ profiles.length }}</p>
+            <p class="font-normal text-base">Consumo médio por membro</p>
+            <p class="font-semibold text-4xl">{{ householdStats.avgConsumptionPerMember.toFixed(2) }} kWh/membro</p>
           </div>
         </div>
       </CollapsibleCard>
@@ -154,22 +154,16 @@
         </div>
 
         <h3 class="text-lg text-(--text-headings) mb-4">Recompensas Disponíveis</h3>
-        <div class="space-y-4 mb-4">
-          <div
-            v-for="(row, index) in paginatedAvailableRewards"
-            :key="`row-${index}`"
-            class="flex gap-2.5"
-          >
-            <RewardCard
-              v-for="reward in row"
-              :key="reward.id"
-              :title="reward.title"
-              :points="reward.points"
-              :image="reward.image"
-              @edit="editReward(reward)"
-              @delete="confirmDeleteReward(reward.id)"
-            />
-          </div>
+        <div class="grid grid-cols-2 gap-[10px] mb-4">
+          <RewardCard
+            v-for="reward in paginatedAvailableRewards"
+            :key="reward.id"
+            :title="reward.title"
+            :points="reward.points"
+            :image="reward.image"
+            @edit="editReward(reward)"
+            @delete="confirmDeleteReward(reward.id)"
+          />
         </div>
 
         <button
@@ -232,8 +226,10 @@
             v-for="appliance in paginatedAppliances"
             :key="appliance.id"
             :title="appliance.name"
+            :subtitle="`${appliance.power || 0} KWh/h`"
             :category="appliance.category"
             :icon="appliance.icon || 'electrical_services'"
+            :image="appliance.image"
             :type="'consumption'"
             @edit="editAppliance(appliance)"
             @delete="confirmDeleteAppliance(appliance.id)"
@@ -276,8 +272,10 @@
             v-for="task in paginatedTasks"
             :key="task.id"
             :title="task.title"
+            :subtitle="`-${task.co2Reduction || 0} Kg de CO2`"
             :category="task.category"
             :icon="task.icon || 'task_alt'"
+            :image="task.image"
             :points="task.points"
             :type="'task'"
             @edit="editTask(task)"
@@ -375,9 +373,26 @@ export default {
       return Math.max(0, this.maxProfiles - this.profiles.length)
     },
     householdStats() {
+      // Calculate total energy consumption from all appliance usage history
+      let totalConsumption = 0
+      this.profiles.forEach(profile => {
+        (profile.applianceUsageHistory || []).forEach(usage => {
+          const appliance = this.userStore.availableAppliances.find(a => String(a.id) === String(usage.applianceId))
+          if (appliance && usage.duration) {
+            // Convert power (W or KW) to kWh: (power in watts * hours) / 1000
+            const powerInWatts = appliance.power || 0
+            const hours = usage.duration / 60 // duration is in minutes
+            totalConsumption += (powerInWatts * hours) / 1000
+          }
+        })
+      })
+      
+      const profileCount = this.profiles.length || 1
       return {
         totalCo2: this.profiles.reduce((sum, p) => sum + (p.co2Saved || 0), 0),
         totalPoints: this.profiles.reduce((sum, p) => sum + (p.points || 0), 0),
+        totalConsumption,
+        avgConsumptionPerMember: totalConsumption / profileCount
       }
     },
     dailyStats() {
@@ -436,12 +451,7 @@ export default {
       return this.availableRewards.filter(r => r.title.toLowerCase().includes(search))
     },
     paginatedAvailableRewards() {
-      const rewards = this.filteredAvailableRewards.slice(0, this.displayedRewardsCount)
-      const rows = []
-      for (let i = 0; i < rewards.length; i += 3) {
-        rows.push(rewards.slice(i, i + 3))
-      }
-      return rows
+      return this.filteredAvailableRewards.slice(0, this.displayedRewardsCount)
     },
     allRedeemedRewards() {
       const redeemed = []
