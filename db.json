@@ -958,6 +958,30 @@
             }
           ],
           "lastActivityDate": "2026-01-17"
+        },
+        {
+          "id": 1768668786705,
+          "name": "1",
+          "age": 1,
+          "avatar": "https://i.pravatar.cc/150?img=36",
+          "isAdmin": false,
+          "createdAt": "2026-01-17T16:53:06.705Z",
+          "points": 0,
+          "co2Saved": 0,
+          "level": 1,
+          "xp": 0,
+          "streak": 0,
+          "settings": {
+            "pin": null,
+            "notifications": true,
+            "defaultDevice": false,
+            "language": "pt",
+            "theme": "light"
+          },
+          "activityHistory": [],
+          "applianceUsage": [],
+          "rewardsRedeemed": [],
+          "badges": []
         }
       ]
     }

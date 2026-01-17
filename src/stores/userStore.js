@@ -47,14 +47,16 @@ export const useUserStore = defineStore('userStore', {
     householdAppliances: (state) => {
       if (!state.currentUser?.appliances) return []
       return state.availableAppliances.filter((app) =>
-        state.currentUser.appliances.includes(app.id),
+        state.currentUser.appliances.some(id => String(id) === String(app.id)),
       )
     },
 
     // Get tasks available for household
     householdTasks: (state) => {
       if (!state.currentUser?.tasks) return []
-      return state.availableTasks.filter((task) => state.currentUser.tasks.includes(task.id))
+      return state.availableTasks.filter((task) => 
+        state.currentUser.tasks.some(id => String(id) === String(task.id))
+      )
     },
 
     // Get current profile's activity history
@@ -263,17 +265,19 @@ export const useUserStore = defineStore('userStore', {
      */
     async fetchResources() {
       try {
-        const [appliancesRes, tasksRes, badgesRes, rewardsRes] = await Promise.all([
+        const [appliancesRes, tasksRes, badgesRes, rewardsRes, challengesRes] = await Promise.all([
           fetch('http://localhost:3000/appliances'),
           fetch('http://localhost:3000/tasks'),
           fetch('http://localhost:3000/badges'),
           fetch('http://localhost:3000/rewards'),
+          fetch('http://localhost:3000/challenges'),
         ])
 
         if (appliancesRes.ok) this.availableAppliances = await appliancesRes.json()
         if (tasksRes.ok) this.availableTasks = await tasksRes.json()
         if (badgesRes.ok) this.availableBadges = await badgesRes.json()
         if (rewardsRes.ok) this.householdRewards = await rewardsRes.json()
+        if (challengesRes.ok) this.householdChallenges = await challengesRes.json()
         
         // Initialize API key if user is logged in
         if (this.currentUser?.email) {
@@ -1599,6 +1603,79 @@ export const useUserStore = defineStore('userStore', {
         return { success: true }
       } catch (error) {
         console.error('Error deleting task:', error)
+        throw error
+      }
+    },
+
+    // Challenge CRUD operations
+    async createChallenge(challengeData) {
+      try {
+        const newChallenge = {
+          id: Date.now().toString(),
+          title: challengeData.title,
+          description: challengeData.description,
+          target: challengeData.target || 1,
+          xp: challengeData.xp || 50,
+          category: challengeData.category,
+          createdAt: new Date().toISOString(),
+        }
+        
+        const response = await fetch('http://localhost:3000/challenges', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newChallenge),
+        })
+        
+        const created = await response.json()
+        this.householdChallenges.push(created)
+        
+        return { success: true }
+      } catch (error) {
+        console.error('Error creating challenge:', error)
+        throw error
+      }
+    },
+    
+    async updateChallenge(challengeId, updates) {
+      try {
+        const challengeIndex = this.householdChallenges.findIndex(c => String(c.id) === String(challengeId))
+        if (challengeIndex === -1) throw new Error('Challenge not found')
+        
+        const updated = {
+          ...this.householdChallenges[challengeIndex],
+          title: updates.title,
+          description: updates.description,
+          target: updates.target,
+          xp: updates.xp,
+          category: updates.category,
+        }
+        
+        await fetch(`http://localhost:3000/challenges/${challengeId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(updated),
+        })
+        
+        this.householdChallenges[challengeIndex] = updated
+        
+        return { success: true }
+      } catch (error) {
+        console.error('Error updating challenge:', error)
+        throw error
+      }
+    },
+    
+    async deleteChallenge(challengeId) {
+      try {
+        await fetch(`http://localhost:3000/challenges/${challengeId}`, {
+          method: 'DELETE',
+        })
+        
+        this.householdChallenges = this.householdChallenges.filter(c => String(c.id) !== String(challengeId))
+        
+        return { success: true }
+      } catch (error) {
+        console.error('Error deleting challenge:', error)
         throw error
       }
     },

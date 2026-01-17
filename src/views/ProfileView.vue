@@ -17,6 +17,68 @@
       @close="showBadgeModal = false"
     />
 
+    <!-- PIN Setup Modal -->
+    <ModalComponent
+      :isOpen="showPinModal"
+      title="Definir PIN"
+      size="sm"
+      @close="cancelPinSetup"
+    >
+      <div class="flex flex-col gap-4">
+        <p class="text-(--text-body-sub-titles) text-sm">
+          Defina um PIN de 4 dígitos para proteger o seu perfil.
+        </p>
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-(--text-body-sub-titles) mb-2">
+              PIN
+            </label>
+            <input
+              v-model="pinInput"
+              type="password"
+              maxlength="4"
+              pattern="[0-9]*"
+              inputmode="numeric"
+              placeholder="****"
+              class="w-full px-4 py-3 bg-(--system-card) border-2 border-(--system-border) rounded-lg text-(--text-body) outline-none focus:border-(--system-ring) text-center text-2xl tracking-widest"
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-(--text-body-sub-titles) mb-2">
+              Confirmar PIN
+            </label>
+            <input
+              v-model="pinConfirmInput"
+              type="password"
+              maxlength="4"
+              pattern="[0-9]*"
+              inputmode="numeric"
+              placeholder="****"
+              class="w-full px-4 py-3 bg-(--system-card) border-2 border-(--system-border) rounded-lg text-(--text-body) outline-none focus:border-(--system-ring) text-center text-2xl tracking-widest"
+            />
+          </div>
+          <p v-if="pinError" class="text-(--semantic-error-default) text-sm text-center">
+            {{ pinError }}
+          </p>
+        </div>
+      </div>
+      <template #footer>
+        <button
+          @click="cancelPinSetup"
+          class="px-4 py-2 bg-(--system-border) text-(--text-body-titles) rounded-lg font-semibold"
+        >
+          Cancelar
+        </button>
+        <button
+          @click="confirmPinSetup"
+          :disabled="!isPinValid"
+          class="px-4 py-2 bg-(--system-ring) text-white rounded-lg font-semibold disabled:opacity-50"
+        >
+          Confirmar
+        </button>
+      </template>
+    </ModalComponent>
+
     <div class="max-w-[912px] mx-auto px-4 py-8 flex flex-col gap-8">
       <!-- Profile Header -->
       <div
@@ -342,6 +404,7 @@ import RewardListItem from '@/components/RewardListItem.vue'
 import ToggleSwitch from '@/components/ToggleSwitch.vue'
 import ChatBot from '@/components/ChatBot.vue'
 import ToastNotification from '@/components/ToastNotification.vue'
+import ModalComponent from '@/components/ModalComponent.vue'
 import { useUserStore } from '@/stores/userStore'
 
 export default {
@@ -358,6 +421,7 @@ export default {
     ChallengeCard,
     RewardListItem,
     ToggleSwitch,
+    ModalComponent,
     ChatBot,
     ToastNotification,
   },
@@ -371,6 +435,12 @@ export default {
       // Badge Modal
       showBadgeModal: false,
       selectedBadge: null,
+
+      // PIN Setup Modal
+      showPinModal: false,
+      pinInput: '',
+      pinConfirmInput: '',
+      pinError: '',
 
       // Rewards
       rewardTab: 'redeem',
@@ -546,6 +616,9 @@ export default {
         }
       })
     },
+    isPinValid() {
+      return this.pinInput.length === 4 && this.pinInput === this.pinConfirmInput
+    },
   },
   watch: {
     currentProfile: {
@@ -596,8 +669,14 @@ export default {
     async saveSettings() {
       if (!this.currentProfile) return
 
+      // If enabling private profile and no PIN is set, open PIN modal
+      if (this.localSettings.privateProfile && !this.currentProfile.settings?.pin) {
+        this.showPinModal = true
+        return
+      }
+
       const settings = {
-        pin: this.localSettings.privateProfile ? this.currentProfile.settings?.pin || '0000' : null,
+        pin: this.localSettings.privateProfile ? this.currentProfile.settings?.pin || null : null,
         notifications: this.localSettings.notifications,
         defaultDevice: this.localSettings.keepSession,
       }
@@ -605,6 +684,41 @@ export default {
       const result = await this.userStore.updateProfileSettings(this.currentProfile.id, settings)
       if (!result.success) {
         this.showNotification('Erro ao guardar configurações', 'error')
+      }
+    },
+    cancelPinSetup() {
+      this.pinInput = ''
+      this.pinConfirmInput = ''
+      this.pinError = ''
+      this.showPinModal = false
+      // Revert the private profile toggle
+      this.localSettings.privateProfile = false
+    },
+    async confirmPinSetup() {
+      if (this.pinInput.length !== 4) {
+        this.pinError = 'O PIN deve ter exatamente 4 dígitos'
+        return
+      }
+      if (this.pinInput !== this.pinConfirmInput) {
+        this.pinError = 'Os PINs não coincidem'
+        return
+      }
+
+      const settings = {
+        pin: this.pinInput,
+        notifications: this.localSettings.notifications,
+        defaultDevice: this.localSettings.keepSession,
+      }
+
+      const result = await this.userStore.updateProfileSettings(this.currentProfile.id, settings)
+      if (result.success) {
+        this.showNotification('PIN definido com sucesso', 'success')
+        this.showPinModal = false
+        this.pinInput = ''
+        this.pinConfirmInput = ''
+        this.pinError = ''
+      } else {
+        this.showNotification('Erro ao definir PIN', 'error')
       }
     },
     async redeemReward(reward) {

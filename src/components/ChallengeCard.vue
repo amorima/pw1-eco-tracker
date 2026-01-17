@@ -5,6 +5,24 @@
       active ? 'bg-(--system-ring)' : 'bg-(--system-card) border border-(--system-border)'
     ]"
   >
+    <!-- Admin buttons -->
+    <div v-if="adminMode" class="absolute top-2 right-2 flex gap-1">
+      <button
+        @click.stop="$emit('edit')"
+        class="p-1 rounded-md bg-(--system-input-background) hover:bg-(--system-border) transition-colors"
+        title="Editar"
+      >
+        <span class="material-symbols-outlined text-[18px] text-(--text-body-sub-titles)">edit</span>
+      </button>
+      <button
+        @click.stop="$emit('delete')"
+        class="p-1 rounded-md bg-(--system-input-background) hover:bg-(--semantic-danger-hover) transition-colors"
+        title="Eliminar"
+      >
+        <span class="material-symbols-outlined text-[18px] text-(--semantic-danger-default)">delete</span>
+      </button>
+    </div>
+
     <div 
       :class="[
         'flex flex-col items-start leading-[0] relative shrink-0 text-nowrap',
@@ -58,7 +76,12 @@ export default {
     active: {
       type: Boolean,
       default: false
+    },
+    adminMode: {
+      type: Boolean,
+      default: false
     }
-  }
+  },
+  emits: ['edit', 'delete']
 }
 </script>

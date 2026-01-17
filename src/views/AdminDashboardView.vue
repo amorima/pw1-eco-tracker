@@ -229,7 +229,7 @@
             :subtitle="`${appliance.power || 0} KWh/h`"
             :category="appliance.category"
             :icon="appliance.icon || 'electrical_services'"
-            :image="appliance.image"
+            :image="getApplianceImage(appliance)"
             :type="'consumption'"
             @edit="editAppliance(appliance)"
             @delete="confirmDeleteAppliance(appliance.id)"
@@ -272,10 +272,10 @@
             v-for="task in paginatedTasks"
             :key="task.id"
             :title="task.title"
-            :subtitle="`-${task.co2Reduction || 0} Kg de CO2`"
+            :subtitle="`-${task.co2Saved || 0} Kg de CO2`"
             :category="task.category"
             :icon="task.icon || 'task_alt'"
-            :image="task.image"
+            :image="getTaskImage(task)"
             :points="task.points"
             :type="'task'"
             @edit="editTask(task)"
@@ -292,8 +292,139 @@
           <span class="material-symbols-outlined">keyboard_arrow_down</span>
         </button>
       </CollapsibleCard>
+
+      <!-- Challenges Section -->
+      <CollapsibleCard title="DESAFIOS">
+        <div class="flex items-center gap-2 mb-4">
+          <div class="flex-1 relative">
+            <input
+              v-model="challengeSearch"
+              type="text"
+              placeholder="Pesquisar desafios..."
+              class="w-full px-4 py-2 pl-10 bg-(--system-input-background) border border-(--system-border) rounded-lg text-(--system-foreground) placeholder:text-(--text-disabled) outline-none focus:border-(--system-ring)"
+            />
+            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-(--text-disabled)">
+              search
+            </span>
+          </div>
+          <button
+            @click="createChallenge"
+            class="flex items-center gap-2 px-4 py-2 bg-(--system-ring) text-white rounded-lg hover:opacity-90 transition-opacity"
+          >
+            <span class="material-symbols-outlined text-[23px]">add</span>
+            <span>Adicionar</span>
+          </button>
+        </div>
+
+        <div class="grid grid-cols-3 gap-3">
+          <ChallengeCard
+            v-for="challenge in paginatedChallenges"
+            :key="challenge.id"
+            :title="challenge.title"
+            :description="challenge.description || ''"
+            :xp="challenge.xp"
+            :progress="0"
+            :admin-mode="true"
+            @edit="editChallenge(challenge)"
+            @delete="confirmDeleteChallenge(challenge.id)"
+          />
+        </div>
+
+        <div v-if="challenges.length === 0" class="text-center py-8 text-(--text-disabled)">
+          <span class="material-symbols-outlined text-4xl mb-2">emoji_events</span>
+          <p>Nenhum desafio definido</p>
+          <p class="text-sm">Clique em "Adicionar" para criar um desafio</p>
+        </div>
+
+        <button
+          v-if="filteredChallenges.length > displayedChallengesCount"
+          @click="loadMoreChallenges"
+          class="flex items-center gap-1 mx-auto text-(--system-ring) text-lg mt-4 hover:opacity-80 transition-opacity"
+        >
+          <span>Ver mais</span>
+          <span class="material-symbols-outlined">keyboard_arrow_down</span>
+        </button>
+      </CollapsibleCard>
     </div>
   </div>
+  
+  <!-- Challenge Edit Modal -->
+  <ModalComponent
+    :show="showChallengeModal"
+    :title="selectedChallenge ? 'Editar Desafio' : 'Novo Desafio'"
+    @close="showChallengeModal = false"
+  >
+    <form @submit.prevent="saveChallenge(challengeFormData)" class="space-y-4">
+      <div>
+        <label class="block text-sm font-medium text-(--text-body-sub-titles) mb-1">Título</label>
+        <input
+          v-model="challengeFormData.title"
+          type="text"
+          required
+          class="w-full px-3 py-2 bg-(--system-input-background) border border-(--system-border) rounded-lg text-(--system-foreground) outline-none focus:border-(--system-ring)"
+        />
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-(--text-body-sub-titles) mb-1">Descrição</label>
+        <textarea
+          v-model="challengeFormData.description"
+          rows="3"
+          class="w-full px-3 py-2 bg-(--system-input-background) border border-(--system-border) rounded-lg text-(--system-foreground) outline-none focus:border-(--system-ring) resize-none"
+        ></textarea>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-(--text-body-sub-titles) mb-1">Meta</label>
+          <input
+            v-model.number="challengeFormData.target"
+            type="number"
+            min="1"
+            required
+            class="w-full px-3 py-2 bg-(--system-input-background) border border-(--system-border) rounded-lg text-(--system-foreground) outline-none focus:border-(--system-ring)"
+          />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-(--text-body-sub-titles) mb-1">XP</label>
+          <input
+            v-model.number="challengeFormData.xp"
+            type="number"
+            min="0"
+            required
+            class="w-full px-3 py-2 bg-(--system-input-background) border border-(--system-border) rounded-lg text-(--system-foreground) outline-none focus:border-(--system-ring)"
+          />
+        </div>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-(--text-body-sub-titles) mb-1">Categoria</label>
+        <select
+          v-model="challengeFormData.category"
+          class="w-full px-3 py-2 bg-(--system-input-background) border border-(--system-border) rounded-lg text-(--system-foreground) outline-none focus:border-(--system-ring)"
+        >
+          <option value="Energia">Energia</option>
+          <option value="Mobilidade">Mobilidade</option>
+          <option value="Reciclagem">Reciclagem</option>
+          <option value="Água">Água</option>
+          <option value="Alimentação">Alimentação</option>
+          <option value="Ambiente">Ambiente</option>
+        </select>
+      </div>
+    </form>
+    <template #footer>
+      <button
+        @click="showChallengeModal = false"
+        class="px-4 py-2 bg-(--system-border) text-(--system-foreground) rounded-lg hover:opacity-80 transition-opacity"
+      >
+        Cancelar
+      </button>
+      <button
+        @click="saveChallenge(challengeFormData)"
+        class="px-4 py-2 bg-(--system-ring) text-white rounded-lg hover:opacity-90 transition-opacity"
+      >
+        {{ selectedChallenge ? 'Guardar' : 'Criar' }}
+      </button>
+    </template>
+  </ModalComponent>
+  
   <ChatBot context="general" />
 </template>
 
@@ -312,6 +443,8 @@ import ProfileEditModal from '@/components/ProfileEditModal.vue'
 import RewardEditModal from '@/components/RewardEditModal.vue'
 import ItemEditModal from '@/components/ItemEditModal.vue'
 import StatisticsChart from '@/components/StatisticsChart.vue'
+import ChallengeCard from '@/components/ChallengeCard.vue'
+import ModalComponent from '@/components/ModalComponent.vue'
 
 export default {
   name: 'AdminDashboardView',
@@ -329,6 +462,8 @@ export default {
     RewardEditModal,
     ItemEditModal,
     StatisticsChart,
+    ChallengeCard,
+    ModalComponent,
   },
   data() {
     return {
@@ -357,6 +492,36 @@ export default {
       displayedRedeemedCount: 5,
       displayedAppliancesCount: 5,
       displayedTasksCount: 5,
+      
+      // Image mappings for appliances and tasks
+      applianceImages: {
+        'Frigorífico': 'https://images.unsplash.com/photo-1571175443880-49e1d25b2bc5?w=300&h=200&fit=crop',
+        'Máquina de lavar roupa': 'https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?w=300&h=200&fit=crop',
+        'Máquina de lavar loiça': 'https://images.unsplash.com/photo-1585515320310-259814833e62?w=300&h=200&fit=crop',
+        'Forno': 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=300&h=200&fit=crop',
+        'Micro-ondas': 'https://images.unsplash.com/photo-1574269909862-7e1d70bb8078?w=300&h=200&fit=crop',
+        'Televisão': 'https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=300&h=200&fit=crop',
+        'Ar condicionado': 'https://images.unsplash.com/photo-1631567091586-3eb8a9c46dc9?w=300&h=200&fit=crop',
+        'Aspirador': 'https://images.unsplash.com/photo-1558317374-067fb5f30001?w=300&h=200&fit=crop',
+        'Computador': 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=300&h=200&fit=crop',
+        'Cafeteira': 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=300&h=200&fit=crop',
+      },
+      taskImages: {
+        'Energia': 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=300&h=250&fit=crop',
+        'Mobilidade': 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=300&h=250&fit=crop',
+        'Reciclagem': 'https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=300&h=250&fit=crop',
+        'Água': 'https://images.unsplash.com/photo-1527100673774-cce25eafaf7f?w=300&h=250&fit=crop',
+        'Alimentação': 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=300&h=250&fit=crop',
+        'Consumo': 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=300&h=250&fit=crop',
+        'Ambiente': 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=300&h=250&fit=crop',
+        'Limpeza': 'https://images.unsplash.com/photo-1628177142898-93e36e4e3a50?w=300&h=250&fit=crop',
+      },
+      
+      // Challenge modal state
+      showChallengeModal: false,
+      selectedChallenge: null,
+      challengeSearch: '',
+      displayedChallengesCount: 5,
     }
   },
   computed: {
@@ -373,23 +538,25 @@ export default {
       return Math.max(0, this.maxProfiles - this.profiles.length)
     },
     householdStats() {
-      // Calculate total energy consumption from all appliance usage history
+      // Calculate total energy consumption from all appliance usage
       let totalConsumption = 0
+      let totalCo2Emitted = 0
+      
       this.profiles.forEach(profile => {
-        (profile.applianceUsageHistory || []).forEach(usage => {
-          const appliance = this.userStore.availableAppliances.find(a => String(a.id) === String(usage.applianceId))
-          if (appliance && usage.duration) {
-            // Convert power (W or KW) to kWh: (power in watts * hours) / 1000
-            const powerInWatts = appliance.power || 0
-            const hours = usage.duration / 60 // duration is in minutes
-            totalConsumption += (powerInWatts * hours) / 1000
-          }
+        // Use applianceUsage array (the correct property name from db.json)
+        (profile.applianceUsage || []).forEach(usage => {
+          // energyConsumed is already in kWh from userStore.trackApplianceUsage
+          totalConsumption += usage.energyConsumed || 0
+          totalCo2Emitted += usage.co2Emitted || 0
         })
       })
       
       const profileCount = this.profiles.length || 1
+      const totalCo2Saved = this.profiles.reduce((sum, p) => sum + (p.co2Saved || 0), 0)
+      
       return {
-        totalCo2: this.profiles.reduce((sum, p) => sum + (p.co2Saved || 0), 0),
+        totalCo2: totalCo2Saved,
+        totalCo2Emitted,
         totalPoints: this.profiles.reduce((sum, p) => sum + (p.points || 0), 0),
         totalConsumption,
         avgConsumptionPerMember: totalConsumption / profileCount
@@ -411,28 +578,39 @@ export default {
         const date = new Date(today)
         date.setDate(date.getDate() - i)
         const dayLabel = days[date.getDay()]
+        const dateString = date.toISOString().split('T')[0]
         
         let dayCo2 = 0
         let dayPoints = 0
         
         this.profiles.forEach(profile => {
+          // Check activityHistory for tasks completed
           const activities = profile.activityHistory || []
           activities.forEach(activity => {
-            const activityDate = new Date(activity.timestamp)
-            if (activityDate.toDateString() === date.toDateString()) {
+            const activityDate = activity.completedAt ? activity.completedAt.split('T')[0] : null
+            if (activityDate === dateString) {
               dayCo2 += activity.co2Saved || 0
               dayPoints += activity.pointsEarned || 0
+            }
+          })
+          
+          // Check applianceUsage for consumption CO2
+          const usages = profile.applianceUsage || []
+          usages.forEach(usage => {
+            if (usage.date === dateString) {
+              // For consumption, we track CO2 emitted (negative impact)
+              dayCo2 -= usage.co2Emitted || 0
             }
           })
         })
         
         stats.last7Days.push({
           label: dayLabel,
-          co2Saved: dayCo2,
+          co2Saved: Math.max(0, dayCo2),
           points: dayPoints,
         })
         
-        stats.totalCo2Saved += dayCo2
+        stats.totalCo2Saved += Math.max(0, dayCo2)
         stats.totalPoints += dayPoints
       }
       
@@ -491,11 +669,44 @@ export default {
     paginatedTasks() {
       return this.filteredTasks.slice(0, this.displayedTasksCount)
     },
+    challenges() {
+      return this.userStore.householdChallenges || []
+    },
+    filteredChallenges() {
+      if (!this.challengeSearch.trim()) return this.challenges
+      const search = this.challengeSearch.toLowerCase()
+      return this.challenges.filter(c =>
+        c.title.toLowerCase().includes(search) || (c.description || '').toLowerCase().includes(search)
+      )
+    },
+    paginatedChallenges() {
+      return this.filteredChallenges.slice(0, this.displayedChallengesCount)
+    },
+    challengeFormData() {
+      if (this.selectedChallenge) {
+        return { ...this.selectedChallenge }
+      }
+      return {
+        title: '',
+        description: '',
+        target: 1,
+        xp: 50,
+        category: 'Energia',
+      }
+    },
   },
   async created() {
     await this.userStore.fetchResources()
   },
   methods: {
+    getApplianceImage(appliance) {
+      if (appliance.image) return appliance.image
+      return this.applianceImages[appliance.name] || 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&h=200&fit=crop'
+    },
+    getTaskImage(task) {
+      if (task.image) return task.image
+      return this.taskImages[task.category] || 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=300&h=250&fit=crop'
+    },
     showNotification(message, variant = 'success') {
       this.toastMessage = message
       this.toastVariant = variant
@@ -728,6 +939,54 @@ export default {
     },
     loadMoreTasks() {
       this.displayedTasksCount += 5
+    },
+    
+    // Challenge CRUD methods
+    createChallenge() {
+      this.selectedChallenge = null
+      this.showChallengeModal = true
+    },
+    editChallenge(challenge) {
+      this.selectedChallenge = { ...challenge }
+      this.showChallengeModal = true
+    },
+    async saveChallenge(challengeData) {
+      try {
+        if (challengeData.id) {
+          await this.userStore.updateChallenge(challengeData.id, challengeData)
+          this.showNotification('Desafio atualizado com sucesso')
+        } else {
+          await this.userStore.createChallenge(challengeData)
+          this.showNotification('Desafio criado com sucesso')
+        }
+        this.showChallengeModal = false
+        this.selectedChallenge = null
+      } catch (error) {
+        console.error('Error saving challenge:', error)
+        this.showNotification('Erro ao guardar desafio', 'error')
+      }
+    },
+    confirmDeleteChallenge(challengeId) {
+      this.confirmData = {
+        title: 'Eliminar Desafio',
+        message: 'Tem a certeza que deseja eliminar este desafio?',
+        variant: 'danger',
+        confirmText: 'Eliminar',
+        onConfirm: () => this.deleteChallenge(challengeId),
+      }
+      this.showConfirmModal = true
+    },
+    async deleteChallenge(challengeId) {
+      try {
+        await this.userStore.deleteChallenge(challengeId)
+        this.showNotification('Desafio eliminado')
+      } catch (error) {
+        console.error('Error deleting challenge:', error)
+        this.showNotification('Erro ao eliminar desafio', 'error')
+      }
+    },
+    loadMoreChallenges() {
+      this.displayedChallengesCount += 5
     },
   },
 }
