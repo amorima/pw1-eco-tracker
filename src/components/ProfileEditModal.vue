@@ -77,7 +77,7 @@ export default {
       return this.profile?.id ? 'Editar Perfil' : 'Criar Perfil'
     },
     isValid() {
-      return this.formData.name.trim() && this.formData.age > 0
+      return this.formData.name.trim()
     },
   },
   watch: {

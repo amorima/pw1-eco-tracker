@@ -675,7 +675,7 @@
       "email": "1@1.2",
       "password": "1",
       "createdAt": "2026-01-17T15:45:03.144Z",
-      "maxProfiles": 4,
+      "maxProfiles": 10,
       "appliances": [
         "1",
         "2",
@@ -695,8 +695,8 @@
       "profiles": [
         {
           "id": 1768664727922,
-          "name": "1",
-          "age": 1,
+          "name": "12",
+          "age": null,
           "avatar": "https://i.pravatar.cc/150?img=38",
           "isAdmin": true,
           "createdAt": "2026-01-17T15:45:27.922Z",
