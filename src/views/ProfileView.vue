@@ -1,3 +1,4 @@
+
 <template>
   <div class="bg-(--system-background) min-h-screen">
     <MenuNav :landing="false" />
@@ -374,6 +375,8 @@ export default {
       // Rewards
       rewardTab: 'redeem',
       rewardSearch: '',
+      // Track rewards currently being redeemed to avoid duplicate requests
+      redeemingRewards: [],
 
       // Local settings (to prevent direct mutation)
       localSettings: {
@@ -605,21 +608,30 @@ export default {
       }
     },
     async redeemReward(reward) {
-      if (!this.currentProfile) {
-        this.showNotification('Perfil não selecionado', 'error')
-        return
-      }
+      // Prevent duplicate submissions for the same reward
+      if (this.redeemingRewards.includes(reward.id)) return
+      this.redeemingRewards.push(reward.id)
 
-      if ((this.currentProfile.points || 0) < reward.points) {
-        this.showNotification('Pontos insuficientes!', 'error')
-        return
-      }
+      try {
+        if (!this.currentProfile) {
+          this.showNotification('Perfil não selecionado', 'error')
+          return
+        }
 
-      const result = await this.userStore.redeemReward(reward)
-      if (result.success) {
-        this.showNotification(`Recompensa "${reward.title}" resgatada! Aguarde aprovação do administrador.`, 'success')
-      } else {
-        this.showNotification(result.message || 'Erro ao resgatar recompensa', 'error')
+        if ((this.currentProfile.points || 0) < reward.points) {
+          this.showNotification('Pontos insuficientes!', 'error')
+          return
+        }
+
+        const result = await this.userStore.redeemReward(reward)
+        if (result.success) {
+          this.showNotification(`Recompensa "${reward.title}" resgatada! Aguarde aprovação do administrador.`, 'success')
+        } else {
+          this.showNotification(result.message || 'Erro ao resgatar recompensa', 'error')
+        }
+      } finally {
+        // Ensure we always remove the id from the in-progress list
+        this.redeemingRewards = this.redeemingRewards.filter(id => id !== reward.id)
       }
     },
     async cancelReward(reward) {

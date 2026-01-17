@@ -642,6 +642,294 @@
             }
           ],
           "lastActivityDate": "2026-01-16"
+        },
+        {
+          "id": 1768664649667,
+          "name": "22",
+          "age": 2,
+          "avatar": "https://i.pravatar.cc/150?img=21",
+          "isAdmin": false,
+          "createdAt": "2026-01-17T15:44:09.667Z",
+          "points": 0,
+          "co2Saved": 0,
+          "level": 1,
+          "xp": 0,
+          "streak": 0,
+          "settings": {
+            "pin": null,
+            "notifications": true,
+            "defaultDevice": false,
+            "language": "pt",
+            "theme": "light"
+          },
+          "activityHistory": [],
+          "applianceUsage": [],
+          "rewardsRedeemed": [],
+          "badges": []
+        }
+      ]
+    },
+    {
+      "id": "1e9c",
+      "name": "1",
+      "email": "1@1.2",
+      "password": "1",
+      "createdAt": "2026-01-17T15:45:03.144Z",
+      "maxProfiles": 4,
+      "appliances": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "tasks": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "profiles": [
+        {
+          "id": 1768664727922,
+          "name": "1",
+          "age": 1,
+          "avatar": "https://i.pravatar.cc/150?img=38",
+          "isAdmin": true,
+          "createdAt": "2026-01-17T15:45:27.922Z",
+          "points": 198,
+          "co2Saved": 25.350000000000005,
+          "level": 3,
+          "xp": 270,
+          "streak": 1,
+          "settings": {
+            "pin": null,
+            "notifications": true,
+            "defaultDevice": true,
+            "language": "pt",
+            "theme": "light"
+          },
+          "activityHistory": [
+            {
+              "id": 1768664860043,
+              "taskId": "1",
+              "completedAt": "2026-01-17T15:47:40.043Z",
+              "pointsEarned": 5,
+              "co2Saved": 0.05
+            },
+            {
+              "id": 1768665271245,
+              "taskId": "2",
+              "completedAt": "2026-01-17T15:54:31.245Z",
+              "pointsEarned": 15,
+              "co2Saved": 2.3
+            },
+            {
+              "id": 1768665272598,
+              "taskId": "2",
+              "completedAt": "2026-01-17T15:54:32.598Z",
+              "pointsEarned": 15,
+              "co2Saved": 2.3
+            },
+            {
+              "id": 1768665272933,
+              "taskId": "2",
+              "completedAt": "2026-01-17T15:54:32.933Z",
+              "pointsEarned": 15,
+              "co2Saved": 2.3
+            },
+            {
+              "id": 1768665273261,
+              "taskId": "2",
+              "completedAt": "2026-01-17T15:54:33.261Z",
+              "pointsEarned": 15,
+              "co2Saved": 2.3
+            },
+            {
+              "id": 1768665273614,
+              "taskId": "2",
+              "completedAt": "2026-01-17T15:54:33.614Z",
+              "pointsEarned": 15,
+              "co2Saved": 2.3
+            },
+            {
+              "id": 1768665273989,
+              "taskId": "2",
+              "completedAt": "2026-01-17T15:54:33.989Z",
+              "pointsEarned": 15,
+              "co2Saved": 2.3
+            },
+            {
+              "id": 1768665274621,
+              "taskId": "2",
+              "completedAt": "2026-01-17T15:54:34.621Z",
+              "pointsEarned": 15,
+              "co2Saved": 2.3
+            },
+            {
+              "id": 1768665275701,
+              "taskId": "2",
+              "completedAt": "2026-01-17T15:54:35.701Z",
+              "pointsEarned": 15,
+              "co2Saved": 2.3
+            },
+            {
+              "id": 1768665276573,
+              "taskId": "2",
+              "completedAt": "2026-01-17T15:54:36.573Z",
+              "pointsEarned": 15,
+              "co2Saved": 2.3
+            },
+            {
+              "id": 1768665277205,
+              "taskId": "2",
+              "completedAt": "2026-01-17T15:54:37.205Z",
+              "pointsEarned": 15,
+              "co2Saved": 2.3
+            },
+            {
+              "id": 1768665277958,
+              "taskId": "2",
+              "completedAt": "2026-01-17T15:54:37.958Z",
+              "pointsEarned": 15,
+              "co2Saved": 2.3
+            }
+          ],
+          "applianceUsage": [],
+          "rewardsRedeemed": [
+            {
+              "id": 1768664873083,
+              "rewardId": null,
+              "title": "Comer hoke",
+              "pointsCost": 1,
+              "redeemedAt": "2026-01-17T15:47:53.083Z",
+              "status": "pending"
+            },
+            {
+              "id": 1768664873086,
+              "rewardId": null,
+              "title": "Comer hoke",
+              "pointsCost": 1,
+              "redeemedAt": "2026-01-17T15:47:53.086Z",
+              "status": "completo",
+              "completedAt": "2026-01-17T15:48:09.749Z"
+            },
+            {
+              "id": 1768665183301,
+              "rewardId": null,
+              "title": "Comer hoke",
+              "pointsCost": 1,
+              "redeemedAt": "2026-01-17T15:53:03.301Z",
+              "status": "pending"
+            },
+            {
+              "id": 1768665183304,
+              "rewardId": null,
+              "title": "Comer hoke",
+              "pointsCost": 1,
+              "redeemedAt": "2026-01-17T15:53:03.304Z",
+              "status": "pending"
+            },
+            {
+              "id": 1768665298582,
+              "rewardId": null,
+              "title": "Comer hoke",
+              "pointsCost": 1,
+              "redeemedAt": "2026-01-17T15:54:58.582Z",
+              "status": "pending"
+            },
+            {
+              "id": 1768665298585,
+              "rewardId": null,
+              "title": "Comer hoke",
+              "pointsCost": 1,
+              "redeemedAt": "2026-01-17T15:54:58.585Z",
+              "status": "pending"
+            },
+            {
+              "id": 1768665534214,
+              "rewardId": null,
+              "title": "Comer hoke",
+              "pointsCost": 1,
+              "redeemedAt": "2026-01-17T15:58:54.214Z",
+              "status": "pending"
+            },
+            {
+              "id": 1768665535383,
+              "rewardId": null,
+              "title": "Comer hoke",
+              "pointsCost": 1,
+              "redeemedAt": "2026-01-17T15:58:55.383Z",
+              "status": "pending"
+            },
+            {
+              "id": 1768665536634,
+              "rewardId": null,
+              "title": "Comer hoke",
+              "pointsCost": 1,
+              "redeemedAt": "2026-01-17T15:58:56.634Z",
+              "status": "pending"
+            },
+            {
+              "id": 1768665536790,
+              "rewardId": null,
+              "title": "Comer hoke",
+              "pointsCost": 1,
+              "redeemedAt": "2026-01-17T15:58:56.790Z",
+              "status": "pending"
+            },
+            {
+              "id": 1768665538311,
+              "rewardId": null,
+              "title": "Comer hoke",
+              "pointsCost": 1,
+              "redeemedAt": "2026-01-17T15:58:58.311Z",
+              "status": "pending"
+            },
+            {
+              "id": 1768665540678,
+              "rewardId": "6",
+              "title": "Doces e salgados",
+              "pointsCost": 10,
+              "redeemedAt": "2026-01-17T15:59:00.678Z",
+              "status": "pending"
+            },
+            {
+              "id": 1768665541222,
+              "rewardId": null,
+              "title": "Comer hoke",
+              "pointsCost": 1,
+              "redeemedAt": "2026-01-17T15:59:01.222Z",
+              "status": "pending"
+            }
+          ],
+          "badges": [
+            {
+              "id": "early_adopter",
+              "title": "Early Adopter",
+              "icon": "star",
+              "earnedAt": "2026-01-17T15:45:27.922Z",
+              "description": "Primeiro perfil criado"
+            },
+            {
+              "id": "first_reward",
+              "title": "Primeira Recompensa",
+              "icon": "card_giftcard",
+              "earnedAt": "2026-01-17T15:54:31.251Z",
+              "description": "Resgatou a primeira recompensa"
+            },
+            {
+              "id": "eco_warrior",
+              "title": "Eco Warrior",
+              "icon": "eco",
+              "earnedAt": "2026-01-17T15:54:33.618Z",
+              "description": "Poupou 10kg de CO2"
+            }
+          ],
+          "lastActivityDate": "2026-01-17"
         }
       ]
     }

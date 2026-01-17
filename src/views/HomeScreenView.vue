@@ -115,25 +115,7 @@
       <!-- Consumptions Section -->
       <CollapsibleCard title="CONSUMOS">
         <div class="space-y-2.5">
-          <!-- Empty State -->
-          <div
-            v-if="recentApplianceUsages.length === 0"
-            class="w-full h-[200px] flex flex-col items-center justify-center text-(--text-body-sub-titles)"
-          >
-            <span class="material-symbols-outlined text-6xl mb-4 text-(--system-border)">
-              electrical_services
-            </span>
-            <p class="text-center mb-4">Nenhum consumo registado</p>
-            <button
-              @click="openAddConsumptionModal"
-              class="px-4 py-2 bg-(--system-ring) text-white rounded-lg font-semibold hover:opacity-90 transition-opacity"
-            >
-              Adicionar Consumo
-            </button>
-          </div>
-          
-          <!-- With Data -->
-          <div v-else class="grid grid-cols-3 gap-2.5 flex-wrap">
+          <div class="grid grid-cols-3 gap-2.5 flex-wrap">
             <ConsumptionCard
               v-for="usage in recentApplianceUsages"
               :key="usage.id"
@@ -150,25 +132,7 @@
       <!-- Tasks Section -->
       <CollapsibleCard title="TAREFAS">
         <div class="space-y-2.5">
-          <!-- Empty State -->
-          <div
-            v-if="recentTaskCompletions.length === 0"
-            class="w-full h-[200px] flex flex-col items-center justify-center text-(--text-body-sub-titles)"
-          >
-            <span class="material-symbols-outlined text-6xl mb-4 text-(--system-border)">
-              task_alt
-            </span>
-            <p class="text-center mb-4">Nenhuma tarefa completada</p>
-            <button
-              @click="openAddTaskModal"
-              class="px-4 py-2 bg-(--system-ring) text-white rounded-lg font-semibold hover:opacity-90 transition-opacity"
-            >
-              Completar Tarefa
-            </button>
-          </div>
-          
-          <!-- With Data -->
-          <div v-else class="grid grid-cols-3 gap-2.5 flex-wrap">
+          <div class="grid grid-cols-3 gap-2.5 flex-wrap">
             <TaskCard
               v-for="activity in recentTaskCompletions"
               :key="activity.id"
