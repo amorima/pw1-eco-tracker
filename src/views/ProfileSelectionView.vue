@@ -51,6 +51,36 @@
     <!-- Footer -->
     <div class="absolute bottom-0 left-0 right-0 h-[122px] bg-(--system-card-foreground)"></div>
 
+    <!-- PIN Entry Modal -->
+    <ModalComponent :isOpen="showPinModal" title="Introduzir PIN" size="sm" @close="closePinModal">
+      <div class="flex flex-col gap-4">
+        <p class="text-(--text-body-sub-titles) text-sm">
+          Este perfil está protegido por PIN. Introduza o PIN para continuar.
+        </p>
+        <div>
+          <label class="block text-sm font-medium text-(--text-body-sub-titles) mb-2">
+            PIN
+          </label>
+          <FormInput
+            v-model="pinInput"
+            type="password"
+            placeholder="****"
+            maxlength="4"
+            @keyup.enter="validateAndSelectProfile"
+          />
+        </div>
+        <p v-if="pinError" class="text-(--semantic-error-default) text-sm text-center">
+          {{ pinError }}
+        </p>
+      </div>
+      <template #footer>
+        <ActionButton @click="closePinModal" :variant="'secondary'"> Cancelar </ActionButton>
+        <ActionButton @click="validateAndSelectProfile" :disabled="pinInput.length !== 4">
+          Confirmar
+        </ActionButton>
+      </template>
+    </ModalComponent>
+
     <!-- Add Profile Modal -->
     <ModalComponent :isOpen="showAddProfileModal" title="Criar Novo Perfil" @close="closeModal">
       <form @submit.prevent="handleCreateProfile" class="space-y-4">
@@ -134,6 +164,10 @@ export default {
   data() {
     return {
       showAddProfileModal: false,
+      showPinModal: false,
+      pinInput: '',
+      pinError: '',
+      selectedProfileId: null,
       isUploading: false,
       newProfile: {
         name: '',
@@ -175,10 +209,48 @@ export default {
       }, 3000)
     },
     selectProfile(profileId) {
-      if (this.userStore.selectProfile(profileId)) {
-        this.$router.push({ name: 'home' })
+      // Check if profile has PIN protection
+      const profile = this.profiles.find(p => p.id === profileId)
+      if (profile?.settings?.pin) {
+        // Show PIN modal
+        this.selectedProfileId = profileId
+        this.pinInput = ''
+        this.pinError = ''
+        this.showPinModal = true
       } else {
-        this.showNotification('Erro ao selecionar perfil', 'error')
+        // No PIN, proceed directly
+        if (this.userStore.selectProfile(profileId)) {
+          this.$router.push({ name: 'home' })
+        } else {
+          this.showNotification('Erro ao selecionar perfil', 'error')
+        }
+      }
+    },
+    closePinModal() {
+      this.showPinModal = false
+      this.pinInput = ''
+      this.pinError = ''
+      this.selectedProfileId = null
+    },
+    validateAndSelectProfile() {
+      if (!this.selectedProfileId) return
+      
+      const profile = this.profiles.find(p => p.id === this.selectedProfileId)
+      if (!profile?.settings?.pin) return
+      
+      // Validate PIN
+      if (this.pinInput === profile.settings.pin) {
+        // PIN correct, select profile
+        if (this.userStore.selectProfile(this.selectedProfileId)) {
+          this.$router.push({ name: 'home' })
+          this.closePinModal()
+        } else {
+          this.showNotification('Erro ao selecionar perfil', 'error')
+        }
+      } else {
+        // PIN incorrect
+        this.pinError = 'PIN incorreto. Tente novamente.'
+        this.pinInput = ''
       }
     },
     async handleAvatarUpload(event) {
@@ -243,7 +315,7 @@ export default {
         } else {
           this.showNotification(result.message || 'Erro ao criar perfil.', 'error')
         }
-      } catch (error) {
+      } catch {
         this.showNotification('Ocorreu um erro inesperado.', 'error')
       } finally {
         this.isLoading = false

@@ -690,7 +690,6 @@
         "2",
         "3",
         "4",
-        "5",
         "6"
       ],
       "profiles": [
@@ -701,10 +700,10 @@
           "avatar": "https://i.pravatar.cc/150?img=38",
           "isAdmin": true,
           "createdAt": "2026-01-17T15:45:27.922Z",
-          "points": 177,
-          "co2Saved": 30.350000000000005,
-          "level": 3,
-          "xp": 280,
+          "points": 226,
+          "co2Saved": 31.75,
+          "level": 4,
+          "xp": 329,
           "streak": 2,
           "settings": {
             "pin": null,
@@ -811,6 +810,55 @@
               "completedAt": "2026-01-18T16:37:48.722Z",
               "pointsEarned": 5,
               "co2Saved": 2.5
+            },
+            {
+              "id": 1768756385630,
+              "taskId": "5",
+              "completedAt": "2026-01-18T17:13:05.630Z",
+              "pointsEarned": 7,
+              "co2Saved": 0.2
+            },
+            {
+              "id": 1768756388133,
+              "taskId": "5",
+              "completedAt": "2026-01-18T17:13:08.133Z",
+              "pointsEarned": 7,
+              "co2Saved": 0.2
+            },
+            {
+              "id": 1768756390437,
+              "taskId": "5",
+              "completedAt": "2026-01-18T17:13:10.437Z",
+              "pointsEarned": 7,
+              "co2Saved": 0.2
+            },
+            {
+              "id": 1768756390605,
+              "taskId": "5",
+              "completedAt": "2026-01-18T17:13:10.605Z",
+              "pointsEarned": 7,
+              "co2Saved": 0.2
+            },
+            {
+              "id": 1768756390781,
+              "taskId": "5",
+              "completedAt": "2026-01-18T17:13:10.781Z",
+              "pointsEarned": 7,
+              "co2Saved": 0.2
+            },
+            {
+              "id": 1768756390973,
+              "taskId": "5",
+              "completedAt": "2026-01-18T17:13:10.973Z",
+              "pointsEarned": 7,
+              "co2Saved": 0.2
+            },
+            {
+              "id": 1768756391157,
+              "taskId": "5",
+              "completedAt": "2026-01-18T17:13:11.157Z",
+              "pointsEarned": 7,
+              "co2Saved": 0.2
             }
           ],
           "applianceUsage": [
@@ -1014,11 +1062,11 @@
           "avatar": "https://i.pravatar.cc/150?img=36",
           "isAdmin": false,
           "createdAt": "2026-01-17T16:53:06.705Z",
-          "points": 0,
-          "co2Saved": 0,
+          "points": 80,
+          "co2Saved": 15,
           "level": 1,
-          "xp": 0,
-          "streak": 0,
+          "xp": 130,
+          "streak": 1,
           "settings": {
             "pin": null,
             "notifications": true,
@@ -1026,10 +1074,41 @@
             "language": "pt",
             "theme": "light"
           },
-          "activityHistory": [],
+          "activityHistory": [
+            {
+              "id": 1768756396501,
+              "taskId": "2",
+              "completedAt": "2026-01-18T17:13:16.501Z",
+              "pointsEarned": 15,
+              "co2Saved": 7.5
+            },
+            {
+              "id": 1768756397157,
+              "taskId": "2",
+              "completedAt": "2026-01-18T17:13:17.157Z",
+              "pointsEarned": 15,
+              "co2Saved": 7.5
+            }
+          ],
           "applianceUsage": [],
           "rewardsRedeemed": [],
-          "badges": []
+          "badges": [
+            {
+              "id": "early_adopter",
+              "title": "Early Adopter",
+              "icon": "star",
+              "earnedAt": "2026-01-18T17:13:16.508Z",
+              "description": "Primeiro perfil criado"
+            },
+            {
+              "id": "eco_warrior",
+              "title": "Eco Warrior",
+              "icon": "eco",
+              "earnedAt": "2026-01-18T17:13:17.164Z",
+              "description": "Poupou 10kg de CO2"
+            }
+          ],
+          "lastActivityDate": "2026-01-18"
         }
       ]
     }
@@ -1047,12 +1126,14 @@
     },
     {
       "id": "2",
-      "name": "Máquina de lavar roupa",
       "icon": "local_laundry_service",
       "category": "Lavandaria",
       "avgPowerConsumption": 2000,
       "avgUsageHoursPerDay": 1,
-      "co2PerKwh": 0.233
+      "co2PerKwh": 0.233,
+      "description": "",
+      "name": "GRIGOBAR",
+      "apiType": "refrigerator"
     },
     {
       "id": "3",
@@ -1216,17 +1297,6 @@
       "frequency": "daily",
       "icon": "shower",
       "difficulty": "medium"
-    },
-    {
-      "id": "5",
-      "title": "Desligar aparelhos em standby",
-      "description": "Desligar completamente aparelhos eletrónicos",
-      "category": "Energia",
-      "points": 7,
-      "co2Saved": 0.2,
-      "frequency": "daily",
-      "icon": "power_settings_new",
-      "difficulty": "easy"
     },
     {
       "id": "6",

@@ -17,6 +17,50 @@
       @close="showBadgeModal = false"
     />
 
+    <!-- PIN Confirmation Modal (for disabling) -->
+    <ModalComponent
+      :isOpen="showPinConfirmModal"
+      title="Confirmar PIN"
+      size="sm"
+      @close="cancelPinDisable"
+    >
+      <div class="flex flex-col gap-4">
+        <p class="text-(--text-body-sub-titles) text-sm">
+          Introduza o seu PIN atual para desativar a proteção do perfil.
+        </p>
+        <div>
+          <label class="block text-sm font-medium text-(--text-body-sub-titles) mb-2">
+            PIN Atual
+          </label>
+          <FormInput
+            v-model="pinConfirmInput"
+            type="password"
+            placeholder="****"
+            maxlength="4"
+            @keyup.enter="confirmPinDisable"
+          />
+        </div>
+        <p v-if="pinError" class="text-(--semantic-error-default) text-sm text-center">
+          {{ pinError }}
+        </p>
+      </div>
+      <template #footer>
+        <button
+          @click="cancelPinDisable"
+          class="px-4 py-2 bg-(--system-border) text-(--text-body-titles) rounded-lg font-semibold"
+        >
+          Cancelar
+        </button>
+        <button
+          @click="confirmPinDisable"
+          :disabled="pinConfirmInput.length !== 4"
+          class="px-4 py-2 bg-(--system-ring) text-white rounded-lg font-semibold disabled:opacity-50"
+        >
+          Confirmar
+        </button>
+      </template>
+    </ModalComponent>
+
     <!-- PIN Setup Modal -->
     <ModalComponent
       :isOpen="showPinModal"
@@ -391,7 +435,6 @@
 
 <script>
 import MenuNav from '@/components/MenuNav.vue'
-import FooterSection from '@/components/FooterSection.vue'
 import CollapsibleCard from '@/components/CollapsibleCard.vue'
 import StreakCard from '@/components/StreakCard.vue'
 import StreakButton from '@/components/StreakButton.vue'
@@ -404,13 +447,13 @@ import ToggleSwitch from '@/components/ToggleSwitch.vue'
 import ChatBot from '@/components/ChatBot.vue'
 import ToastNotification from '@/components/ToastNotification.vue'
 import ModalComponent from '@/components/ModalComponent.vue'
+import FormInput from '@/components/FormInput.vue'
 import { useUserStore } from '@/stores/userStore'
 
 export default {
   name: 'ProfileView',
   components: {
     MenuNav,
-    FooterSection,
     CollapsibleCard,
     StreakCard,
     StreakButton,
@@ -421,6 +464,7 @@ export default {
     RewardListItem,
     ToggleSwitch,
     ModalComponent,
+    FormInput,
     ChatBot,
     ToastNotification,
   },
@@ -437,6 +481,7 @@ export default {
 
       // PIN Setup Modal
       showPinModal: false,
+      showPinConfirmModal: false,
       pinInput: '',
       pinConfirmInput: '',
       pinError: '',
@@ -674,6 +719,12 @@ export default {
         return
       }
 
+      // If disabling private profile and PIN is set, require confirmation
+      if (!this.localSettings.privateProfile && this.currentProfile.settings?.pin) {
+        this.showPinConfirmModal = true
+        return
+      }
+
       const settings = {
         pin: this.localSettings.privateProfile ? this.currentProfile.settings?.pin || null : null,
         notifications: this.localSettings.notifications,
@@ -692,6 +743,39 @@ export default {
       this.showPinModal = false
       // Revert the private profile toggle
       this.localSettings.privateProfile = false
+    },
+    cancelPinDisable() {
+      this.pinConfirmInput = ''
+      this.pinError = ''
+      this.showPinConfirmModal = false
+      // Revert the private profile toggle back to true
+      this.localSettings.privateProfile = true
+    },
+    async confirmPinDisable() {
+      if (!this.currentProfile?.settings?.pin) return
+      
+      if (this.pinConfirmInput !== this.currentProfile.settings.pin) {
+        this.pinError = 'PIN incorreto. Tente novamente.'
+        this.pinConfirmInput = ''
+        return
+      }
+
+      // PIN correct, disable private profile
+      const settings = {
+        pin: null,
+        notifications: this.localSettings.notifications,
+        defaultDevice: this.localSettings.keepSession,
+      }
+
+      const result = await this.userStore.updateProfileSettings(this.currentProfile.id, settings)
+      if (result.success) {
+        this.showNotification('Proteção por PIN desativada com sucesso', 'success')
+        this.showPinConfirmModal = false
+        this.pinConfirmInput = ''
+        this.pinError = ''
+      } else {
+        this.showNotification('Erro ao desativar PIN', 'error')
+      }
     },
     async confirmPinSetup() {
       if (this.pinInput.length !== 4) {

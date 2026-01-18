@@ -516,7 +516,7 @@ export const useUserStore = defineStore('userStore', {
           body: JSON.stringify(this.currentUser),
         })
         return { success: true, message: 'Configuração concluída!' }
-      } catch (error) {
+      } catch {
         return { success: false, message: 'Erro ao guardar configuração.' }
       }
     },
@@ -612,7 +612,7 @@ export const useUserStore = defineStore('userStore', {
           profile: newProfile,
           message: 'Perfil criado com sucesso!',
         }
-      } catch (error) {
+      } catch  {
         // Rollback local change
         this.currentUser.profiles.pop()
         return { success: false, message: 'Erro ao criar perfil.' }
@@ -652,7 +652,7 @@ export const useUserStore = defineStore('userStore', {
           body: JSON.stringify(this.currentUser),
         })
         return { success: true, message: 'Definições atualizadas!' }
-      } catch (error) {
+      } catch  {
         // Rollback
         this.currentUser.profiles[profileIndex].settings = oldSettings
         return { success: false, message: 'Erro ao atualizar definições.' }
@@ -702,7 +702,7 @@ export const useUserStore = defineStore('userStore', {
           body: JSON.stringify(this.currentUser),
         })
         return { success: true, message: 'Perfil eliminado com sucesso!' }
-      } catch (error) {
+      } catch {
         // Rollback
         this.currentUser.profiles.splice(profileIndex, 0, profileBackup)
         if (wasActiveProfile) {
@@ -773,7 +773,7 @@ export const useUserStore = defineStore('userStore', {
           co2Saved: task.co2Saved,
           message: `+${task.points} pontos! 🎉`,
         }
-      } catch (error) {
+      } catch {
         // Rollback
         this.currentProfile = profileBackup
         this.currentUser.profiles = profilesBackup
@@ -833,7 +833,7 @@ export const useUserStore = defineStore('userStore', {
           success: true,
           message: 'Recompensa resgatada!',
         }
-      } catch (error) {
+      } catch {
         // Rollback
         this.currentProfile = profileBackup
         this.currentUser.profiles = profilesBackup
@@ -898,7 +898,7 @@ export const useUserStore = defineStore('userStore', {
           pointsReturned: reward.pointsCost,
           message: 'Recompensa cancelada. Pontos devolvidos!',
         }
-      } catch (error) {
+      } catch {
         // Rollback
         this.currentUser.profiles = profilesBackup
         return { success: false, message: 'Erro ao cancelar recompensa.' }
@@ -958,7 +958,7 @@ export const useUserStore = defineStore('userStore', {
           success: true,
           message: 'Recompensa completada!',
         }
-      } catch (error) {
+      } catch {
         // Rollback
         this.currentUser.profiles = profilesBackup
         if (this.currentProfile?.id === profileId) {
@@ -1026,7 +1026,7 @@ export const useUserStore = defineStore('userStore', {
           streak: this.currentProfile.streak,
           message: `Streak: ${this.currentProfile.streak} dias! 🔥`,
         }
-      } catch (error) {
+      } catch {
         // Rollback
         this.currentProfile = profileBackup
         this.currentUser.profiles = profilesBackup
@@ -1134,7 +1134,24 @@ export const useUserStore = defineStore('userStore', {
       const profilesBackup = JSON.parse(JSON.stringify(this.currentUser.profiles))
       
       const energyConsumed = (appliance.avgPowerConsumption * hoursUsed) / 1000 // kWh
-      const calculatedCo2 = co2Emitted || (energyConsumed * appliance.co2PerKwh)
+      let calculatedCo2 = energyConsumed * (appliance.co2PerKwh || 0.233)
+      
+      // Try to get more accurate CO2 from API if available
+      if (!co2Emitted && appliance.apiType) {
+        try {
+          const { calculateApplianceEmissions } = await import('@/services/carbonApiService')
+          const apiResult = await calculateApplianceEmissions(appliance, hoursUsed)
+          
+          if (apiResult.success && apiResult.data?.co2) {
+            calculatedCo2 = apiResult.data.co2
+          }
+        } catch (error) {
+          console.warn('API calculation failed, using fallback:', error)
+        }
+      }
+      
+      // Use provided co2Emitted if available, otherwise use calculated
+      calculatedCo2 = co2Emitted || calculatedCo2
       
       const usage = {
         id: Date.now(),
@@ -1175,7 +1192,7 @@ export const useUserStore = defineStore('userStore', {
           usage,
           message: `Consumo registado: ${calculatedCo2.toFixed(2)} kg CO2`,
         }
-      } catch (error) {
+      } catch {
         // Rollback
         this.currentProfile = profileBackup
         this.currentUser.profiles = profilesBackup
@@ -1258,7 +1275,7 @@ export const useUserStore = defineStore('userStore', {
           newBadges: badgeResult.newBadges || [],
           message: `+${task.points} pontos! 🎉`,
         }
-      } catch (error) {
+      } catch {
         // Rollback
         this.currentProfile = profileBackup
         this.currentUser.profiles = profilesBackup
@@ -1546,10 +1563,7 @@ export const useUserStore = defineStore('userStore', {
         
         const updated = {
           ...this.availableAppliances[applianceIndex],
-          name: updates.title,
-          category: updates.category,
-          icon: updates.icon,
-          description: updates.description,
+          ...updates, // Spread all updates
           id: applianceId, // Preserve the original ID
         }
         
@@ -1563,7 +1577,14 @@ export const useUserStore = defineStore('userStore', {
           throw new Error('Failed to update appliance on server')
         }
         
-        this.availableAppliances[applianceIndex] = updated
+        const serverUpdated = await response.json()
+        
+        // Use array replacement for reactivity
+        this.availableAppliances = [
+          ...this.availableAppliances.slice(0, applianceIndex),
+          serverUpdated,
+          ...this.availableAppliances.slice(applianceIndex + 1)
+        ]
         
         return { success: true }
       } catch (error) {

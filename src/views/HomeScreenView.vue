@@ -259,7 +259,6 @@
 import { useUserStore } from '@/stores/userStore'
 import { calculateApplianceEmissions } from '@/services/carbonApiService'
 import MenuNav from '@/components/MenuNav.vue'
-import FooterSection from '@/components/FooterSection.vue'
 import CollapsibleCard from '@/components/CollapsibleCard.vue'
 import ConsumptionCard from '@/components/ConsumptionCard.vue'
 import TaskCard from '@/components/TaskCard.vue'
@@ -277,7 +276,6 @@ export default {
   name: 'HomeScreenView',
   components: {
     MenuNav,
-    FooterSection,
     CollapsibleCard,
     ConsumptionCard,
     TaskCard,

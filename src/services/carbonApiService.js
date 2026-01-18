@@ -210,28 +210,44 @@ export const applianceToApiType = {
 
 /**
  * Calculate emissions for an appliance usage
- * @param {string} applianceName - Name of the appliance
+ * @param {object} appliance - Appliance object with apiType and avgPowerConsumption
  * @param {number} hoursUsed - Hours used
  * @returns {Promise<{success: boolean, data?: object, message?: string}>}
  */
-export async function calculateApplianceEmissions(applianceName, hoursUsed) {
-  const mapping = applianceToApiType[applianceName]
-
-  if (!mapping) {
-    // Fallback to generic electricity calculation
-    const kWh = hoursUsed * 0.2 // Average 200W consumption
-    return calculateEmissions('electricity', kWh, false)
-  }
-
-  if (mapping.isDevice) {
+export async function calculateApplianceEmissions(appliance, hoursUsed) {
+  // Use the apiType directly from the appliance if available
+  const apiType = appliance.apiType || appliance.name
+  
+  // Check if it's a device type (calculated by minutes)
+  const deviceTypes = ['refrigerator', 'washing_machine', 'dishwasher', 'television', 
+                       'air_conditioner', 'desktop', 'laptop']
+  
+  if (deviceTypes.includes(apiType)) {
     // For devices, API expects minutes
     const minutes = hoursUsed * 60
-    return calculateEmissions(mapping.type, minutes, true)
-  } else {
-    // For non-device types, calculate kWh
-    const kWh = hoursUsed * mapping.factor
+    return calculateEmissions(apiType, minutes, true)
+  } else if (apiType === 'electricity' || !deviceTypes.includes(apiType)) {
+    // For non-device types or fallback, calculate kWh based on power consumption
+    const powerKW = (appliance.avgPowerConsumption || 200) / 1000 // Convert watts to kW
+    const kWh = hoursUsed * powerKW
     return calculateEmissions('electricity', kWh, false)
   }
+  
+  // Legacy support: try mapping from name if no apiType
+  const mapping = applianceToApiType[appliance.name]
+  if (mapping) {
+    if (mapping.isDevice) {
+      const minutes = hoursUsed * 60
+      return calculateEmissions(mapping.type, minutes, true)
+    } else {
+      const kWh = hoursUsed * mapping.factor
+      return calculateEmissions('electricity', kWh, false)
+    }
+  }
+  
+  // Ultimate fallback
+  const kWh = hoursUsed * 0.2 // Average 200W consumption
+  return calculateEmissions('electricity', kWh, false)
 }
 
 /**
