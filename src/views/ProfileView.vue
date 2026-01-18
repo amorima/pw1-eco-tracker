@@ -237,8 +237,16 @@
         </div>
       </div>
 
-      <!-- Badges Section -->
-      <CollapsibleCard title="Badges" icon="apps">
+      <!-- Draggable Collapsible Cards -->
+      <draggable
+        v-model="cardOrder"
+        @end="saveCardOrder"
+        item-key="id"
+        class="flex flex-col gap-8"
+        handle=".drag-handle"
+      >
+        <template #item="{ element }">
+          <CollapsibleCard v-if="element === 'badges'" title="Badges" icon="apps" class="drag-handle cursor-move">
         <div
           class="grid grid-cols-3 gap-[8px] w-full items-start overflow-hidden px-0 py-[16px] relative shrink-0 w-full"
         >
@@ -251,10 +259,9 @@
             @click="openBadgeModal(badge)"
           />
         </div>
-      </CollapsibleCard>
+          </CollapsibleCard>
 
-      <!-- Ranking Section -->
-      <CollapsibleCard title="Ranking" icon="apps">
+          <CollapsibleCard v-else-if="element === 'ranking'" title="Ranking" icon="apps" class="drag-handle cursor-move">
         <div
           class="flex flex-col gap-[8px] items-start overflow-hidden px-0 py-[8px] relative shrink-0 w-full"
         >
@@ -266,10 +273,9 @@
             :highlight="profile.id === currentProfile?.id"
           />
         </div>
-      </CollapsibleCard>
+          </CollapsibleCard>
 
-      <!-- Challenges Section -->
-      <CollapsibleCard title="Desafios" icon="apps">
+          <CollapsibleCard v-else-if="element === 'challenges'" title="Desafios" icon="apps" class="drag-handle cursor-move">
         <!-- Sort Toggle -->
         <div v-if="profileChallenges.length > 0" class="flex items-center justify-end mb-4">
           <button
@@ -317,10 +323,9 @@
           <span class="material-symbols-outlined">expand_more</span>
           <span>Ver mais</span>
         </button>
-      </CollapsibleCard>
+          </CollapsibleCard>
 
-      <!-- Rewards Section -->
-      <CollapsibleCard title="Recompensas" icon="apps">
+          <CollapsibleCard v-else-if="element === 'rewards'" title="Recompensas" icon="apps" class="drag-handle cursor-move">
         <!-- Tab Navigation -->
         <div class="flex items-center justify-between px-0 py-[8px] relative shrink-0 w-full">
           <button
@@ -425,10 +430,9 @@
         >
           {{ currentProfile?.points || 0 }} pontos
         </p>
-      </CollapsibleCard>
+          </CollapsibleCard>
 
-      <!-- Settings Section -->
-      <CollapsibleCard title="Configurações" icon="apps">
+          <CollapsibleCard v-else-if="element === 'settings'" title="Configurações" icon="apps" class="drag-handle cursor-move">
         <div class="flex flex-col gap-[4px] items-start overflow-hidden relative shrink-0 w-full">
           <div
             v-for="setting in settingsList"
@@ -452,7 +456,9 @@
             <ToggleSwitch v-model="localSettings[setting.key]" @update:modelValue="saveSettings" />
           </div>
         </div>
-      </CollapsibleCard>
+          </CollapsibleCard>
+        </template>
+      </draggable>
     </div>
 
 
@@ -463,6 +469,7 @@
 
 <script>
 import MenuNav from '@/components/MenuNav.vue'
+import draggable from 'vuedraggable'
 import CollapsibleCard from '@/components/CollapsibleCard.vue'
 import StreakCard from '@/components/StreakCard.vue'
 import StreakButton from '@/components/StreakButton.vue'
@@ -481,6 +488,7 @@ import { useUserStore } from '@/stores/userStore'
 export default {
   name: 'ProfileView',
   components: {
+    draggable,
     MenuNav,
     CollapsibleCard,
     StreakCard,
@@ -550,6 +558,9 @@ export default {
         },
       ],
 
+      // Card order
+      cardOrder: ['badges', 'ranking', 'challenges', 'rewards', 'settings'],
+      
       // Default challenges (used when admin hasn't set any)
       defaultChallenges: [
         {
@@ -837,6 +848,15 @@ export default {
     if (!this.userStore.availableBadges.length) {
       await this.userStore.fetchResources()
     }
+    // Load saved card order from localStorage
+    const savedOrder = localStorage.getItem('profileCardOrder')
+    if (savedOrder) {
+      try {
+        this.cardOrder = JSON.parse(savedOrder)
+      } catch (e) {
+        console.error('Error loading card order:', e)
+      }
+    }
   },
   methods: {
     showNotification(message, variant = 'success') {
@@ -846,6 +866,9 @@ export default {
       setTimeout(() => {
         this.showToast = false
       }, 3000)
+    },
+    saveCardOrder() {
+      localStorage.setItem('profileCardOrder', JSON.stringify(this.cardOrder))
     },
     openBadgeModal(badge) {
       this.selectedBadge = badge
