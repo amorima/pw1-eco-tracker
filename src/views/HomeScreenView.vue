@@ -252,7 +252,6 @@
       </CollapsibleCard>
     </div>
   </div>
-  <FooterSection />
   <ChatBot context="general" />
 </template>
 

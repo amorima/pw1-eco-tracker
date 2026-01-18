@@ -229,7 +229,7 @@
             v-for="appliance in paginatedAppliances"
             :key="appliance.id"
             :title="appliance.name"
-            :subtitle="`${appliance.power || 0} KWh/h`"
+            :subtitle="`${appliance.avgPowerConsumption || 0} KWh/h`"
             :category="appliance.category"
             :icon="appliance.icon || 'electrical_services'"
             :image="getApplianceImage(appliance)"

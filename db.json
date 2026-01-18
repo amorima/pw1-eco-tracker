@@ -837,6 +837,14 @@
               "hoursUsed": 20,
               "energyConsumed": 40,
               "co2Emitted": 9.32
+            },
+            {
+              "id": 1768755227880,
+              "applianceId": "2",
+              "date": "2026-01-18",
+              "hoursUsed": 10,
+              "energyConsumed": 20,
+              "co2Emitted": 4.66
             }
           ],
           "rewardsRedeemed": [

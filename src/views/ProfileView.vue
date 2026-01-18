@@ -383,7 +383,6 @@
       </CollapsibleCard>
     </div>
 
-    <FooterSection />
 
     <!-- ChatBot -->
     <ChatBot context="profile" />
