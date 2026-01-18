@@ -91,9 +91,18 @@
   </ModalComponent>
 
   <div class="min-h-fit py-8 flex justify-center">
-    <div class="w-[930px] space-y-4">
-      <!-- Statistics Section -->
-      <CollapsibleCard title="ESTATÍSTICAS">
+    <div class="w-[930px]">
+      <draggable
+        v-model="cardOrder"
+        @end="saveCardOrder"
+        item-key="id"
+        class="space-y-4"
+        handle=".drag-handle"
+        :animation="200"
+        ghost-class="ghost-card"
+      >
+        <template #item="{ element }">
+          <CollapsibleCard v-if="element === 'statistics'" title="ESTATÍSTICAS" v-model="cardOpenStates.statistics">
         <StatisticsChart
           v-if="statistics"
           :data="statistics.last7Days"
@@ -110,10 +119,9 @@
             <p>A carregar estatísticas...</p>
           </div>
         </div>
-      </CollapsibleCard>
+          </CollapsibleCard>
 
-      <!-- Consumptions Section -->
-      <CollapsibleCard title="CONSUMOS">
+          <CollapsibleCard v-else-if="element === 'consumptions'" title="CONSUMOS" v-model="cardOpenStates.consumptions">
         <div class="space-y-2.5">
           <div class="grid grid-cols-3 gap-2.5 flex-wrap">
             <ConsumptionCard
@@ -128,10 +136,9 @@
             <AddCard @click="openAddConsumptionModal" />
           </div>
         </div>
-      </CollapsibleCard>
+          </CollapsibleCard>
 
-      <!-- Tasks Section -->
-      <CollapsibleCard title="TAREFAS">
+          <CollapsibleCard v-else-if="element === 'tasks'" title="TAREFAS" v-model="cardOpenStates.tasks">
         <div class="space-y-2.5">
           <div class="grid grid-cols-3 gap-2.5 flex-wrap">
             <TaskCard
@@ -144,10 +151,9 @@
             <AddCard @click="openAddTaskModal" />
           </div>
         </div>
-      </CollapsibleCard>
+          </CollapsibleCard>
 
-      <!-- Tools Section -->
-      <CollapsibleCard title="FERRAMENTAS">
+          <CollapsibleCard v-else-if="element === 'tools'" title="FERRAMENTAS" v-model="cardOpenStates.tools">
         <div class="flex gap-2.5">
           <!-- Emission Calculator Tool -->
           <div
@@ -249,7 +255,9 @@
             <span class="material-symbols-outlined text-(--system-ring)" style="font-size: 56px">add</span>
           </div>
         </div>
-      </CollapsibleCard>
+          </CollapsibleCard>
+        </template>
+      </draggable>
     </div>
   </div>
   <ChatBot context="general" />
@@ -258,6 +266,7 @@
 <script>
 import { useUserStore } from '@/stores/userStore'
 import { calculateApplianceEmissions } from '@/services/carbonApiService'
+import draggable from 'vuedraggable'
 import MenuNav from '@/components/MenuNav.vue'
 import CollapsibleCard from '@/components/CollapsibleCard.vue'
 import ConsumptionCard from '@/components/ConsumptionCard.vue'
@@ -275,6 +284,7 @@ import StatisticsChart from '@/components/StatisticsChart.vue'
 export default {
   name: 'HomeScreenView',
   components: {
+    draggable,
     MenuNav,
     CollapsibleCard,
     ConsumptionCard,
@@ -344,6 +354,17 @@ export default {
         'Ambiente': 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=300&h=250&fit=crop',
         'Limpeza': 'https://images.unsplash.com/photo-1628177142898-93e36e4e3a50?w=300&h=250&fit=crop',
       },
+      
+      // Card order
+      cardOrder: ['statistics', 'consumptions', 'tasks', 'tools'],
+      
+      // Card open states
+      cardOpenStates: {
+        statistics: true,
+        consumptions: true,
+        tasks: true,
+        tools: true,
+      },
     }
   },
   computed: {
@@ -369,6 +390,15 @@ export default {
     statistics() {
       return this.userStore.getProfileStatistics()
     },
+    orderedCards() {
+      const cards = {
+        statistics: { id: 'statistics', title: 'ESTATÍSTICAS', component: 'statistics' },
+        consumptions: { id: 'consumptions', title: 'CONSUMOS', component: 'consumptions' },
+        tasks: { id: 'tasks', title: 'TAREFAS', component: 'tasks' },
+        tools: { id: 'tools', title: 'FERRAMENTAS', component: 'tools' },
+      }
+      return this.cardOrder.map(id => cards[id])
+    },
   },
   watch: {
     consumptionHours: {
@@ -389,6 +419,15 @@ export default {
   },
   async created() {
     await this.userStore.fetchResources()
+    // Load saved card order from localStorage
+    const savedOrder = localStorage.getItem('homeCardOrder')
+    if (savedOrder) {
+      try {
+        this.cardOrder = JSON.parse(savedOrder)
+      } catch (e) {
+        console.error('Error loading card order:', e)
+      }
+    }
   },
   methods: {
     showNotification(message, variant = 'success') {
@@ -492,6 +531,10 @@ export default {
       }
     },
     
+    saveCardOrder() {
+      localStorage.setItem('homeCardOrder', JSON.stringify(this.cardOrder))
+    },
+    
     async calculateEmissions() {
       const distance = parseFloat(this.calculator.distance) || 0
       const consumption = parseFloat(this.calculator.consumption) || 0
@@ -537,5 +580,9 @@ export default {
 .slide-fade-leave-to {
   transform: translateX(-50%) translateY(-20px);
   opacity: 0;
+}
+
+.ghost-card {
+  opacity: 0.5;
 }
 </style>

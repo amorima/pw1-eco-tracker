@@ -4,8 +4,8 @@
     <button @click="toggleCollapse" class="w-full flex items-center justify-between cursor-pointer">
       <!-- Title Section -->
       <div class="flex items-center gap-2">
-        <!-- Icon Slot -->
-        <div class="w-8 h-8 flex items-center justify-center">
+        <!-- Icon Slot - Drag Handle -->
+        <div class="w-8 h-8 flex items-center justify-center drag-handle cursor-move hover:text-(--system-ring) transition-colors">
           <span class="material-symbols-outlined text-(--text-body-titles)">drag_indicator</span>
         </div>
         <!-- Title -->
@@ -48,11 +48,20 @@ export default {
       type: String,
       required: true,
     },
+    modelValue: {
+      type: Boolean,
+      default: true,
+    },
   },
-  data() {
-    return {
-      isOpen: true,
-    }
+  computed: {
+    isOpen: {
+      get() {
+        return this.modelValue
+      },
+      set(value) {
+        this.$emit('update:modelValue', value)
+      },
+    },
   },
   methods: {
     toggleCollapse() {

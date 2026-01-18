@@ -45,9 +45,17 @@
   />
 
   <div class="p-8 flex justify-center w-full">
-    <div class="space-y-4 w-[930px]">
-      <!-- Analise rápida mensal -->
-      <CollapsibleCard title="Análise rápida mensal">
+    <draggable
+      v-model="cardOrder"
+      @end="saveCardOrder"
+      item-key="id"
+      class="space-y-4 w-[930px]"
+      handle=".drag-handle"
+      :animation="200"
+      ghost-class="ghost-card"
+    >
+      <template #item="{ element }">
+        <CollapsibleCard v-if="element === 'analysis'" title="Análise rápida mensal" v-model="cardOpenStates.analysis">
         <div class="flex gap-4 items-center w-full">
           <div
             class="bg-(--system-card) border-2 border-(--system-border) rounded-[10px] p-4 flex flex-col gap-4 text-(--text-body-sub-titles)"
@@ -70,10 +78,9 @@
             <p class="font-semibold text-4xl">{{ householdStats.avgConsumptionPerMember.toFixed(2) }} kWh/membro</p>
           </div>
         </div>
-      </CollapsibleCard>
+        </CollapsibleCard>
 
-      <!-- Consumos de energia diários -->
-      <CollapsibleCard title="Consumos de energia diários">
+        <CollapsibleCard v-else-if="element === 'consumption'" title="Consumos de energia diários" v-model="cardOpenStates.consumption">
         <StatisticsChart
           v-if="dailyStats"
           :data="dailyStats.last7Days"
@@ -85,10 +92,9 @@
         <div v-else class="h-[259px] w-full flex items-center justify-center bg-(--system-input-background) rounded-lg">
           <p class="text-(--accent-muted-foreground)">Sem dados disponíveis</p>
         </div>
-      </CollapsibleCard>
+        </CollapsibleCard>
 
-      <!-- Gestão de utilizadores -->
-      <CollapsibleCard title="Gestão de utilizadores">
+        <CollapsibleCard v-else-if="element === 'users'" title="Gestão de utilizadores" v-model="cardOpenStates.users">
         <div class="grid grid-cols-2 gap-4 mb-4">
           <UserCard
             v-for="profile in profiles"
@@ -130,10 +136,9 @@
             </button>
           </div>
         </div>
-      </CollapsibleCard>
+        </CollapsibleCard>
 
-      <!-- Gestão de recompensas -->
-      <CollapsibleCard title="Gestão de recompensas">
+        <CollapsibleCard v-else-if="element === 'rewards'" title="Gestão de recompensas" v-model="cardOpenStates.rewards">
         <div class="flex gap-2.5 mb-4">
           <div class="flex-1 relative">
             <input
@@ -201,10 +206,9 @@
           <span>Ver mais</span>
           <span class="material-symbols-outlined">keyboard_arrow_down</span>
         </button>
-      </CollapsibleCard>
+        </CollapsibleCard>
 
-      <!-- Gestão de consumos -->
-      <CollapsibleCard title="Gestão de consumos">
+        <CollapsibleCard v-else-if="element === 'appliances'" title="Gestão de consumos" v-model="cardOpenStates.appliances">
         <div class="flex gap-2.5 mb-4">
           <div class="flex-1 relative">
             <input
@@ -247,10 +251,9 @@
           <span>Ver mais</span>
           <span class="material-symbols-outlined">keyboard_arrow_down</span>
         </button>
-      </CollapsibleCard>
+        </CollapsibleCard>
 
-      <!-- Gestão de tarefas -->
-      <CollapsibleCard title="Gestão de tarefas">
+        <CollapsibleCard v-else-if="element === 'tasks'" title="Gestão de tarefas" v-model="cardOpenStates.tasks">
         <div class="flex gap-2.5 mb-4">
           <div class="flex-1 relative">
             <input
@@ -294,10 +297,9 @@
           <span>Ver mais</span>
           <span class="material-symbols-outlined">keyboard_arrow_down</span>
         </button>
-      </CollapsibleCard>
+        </CollapsibleCard>
 
-      <!-- Challenges Section -->
-      <CollapsibleCard title="DESAFIOS">
+        <CollapsibleCard v-else-if="element === 'challenges'" title="DESAFIOS" v-model="cardOpenStates.challenges">
         <div class="flex items-center gap-2 mb-4">
           <div class="flex-1 relative">
             <input
@@ -348,8 +350,9 @@
           <span>Ver mais</span>
           <span class="material-symbols-outlined">keyboard_arrow_down</span>
         </button>
-      </CollapsibleCard>
-    </div>
+        </CollapsibleCard>
+      </template>
+    </draggable>
   </div>
   
   <!-- Challenge Edit Modal -->
@@ -445,6 +448,7 @@
 
 <script>
 import { useUserStore } from '@/stores/userStore'
+import draggable from 'vuedraggable'
 import CollapsibleCard from '@/components/CollapsibleCard.vue'
 import MenuNav from '@/components/MenuNav.vue'
 import UserCard from '@/components/UserCard.vue'
@@ -464,6 +468,7 @@ import ModalComponent from '@/components/ModalComponent.vue'
 export default {
   name: 'AdminDashboardView',
   components: {
+    draggable,
     CollapsibleCard,
     MenuNav,
     UserCard,
@@ -544,6 +549,20 @@ export default {
         type: 'completion',
         target: 5,
         xp: 50,
+      },
+      
+      // Card order
+      cardOrder: ['analysis', 'consumption', 'users', 'rewards', 'appliances', 'tasks', 'challenges'],
+      
+      // Card open states
+      cardOpenStates: {
+        analysis: true,
+        consumption: true,
+        users: true,
+        rewards: true,
+        appliances: true,
+        tasks: true,
+        challenges: true,
       },
     }
   },
@@ -766,6 +785,15 @@ export default {
   },
   async created() {
     await this.userStore.fetchResources()
+    // Load saved card order from localStorage
+    const savedOrder = localStorage.getItem('adminCardOrder')
+    if (savedOrder) {
+      try {
+        this.cardOrder = JSON.parse(savedOrder)
+      } catch (e) {
+        console.error('Error loading card order:', e)
+      }
+    }
   },
   methods: {
     getApplianceImage(appliance) {
@@ -775,6 +803,9 @@ export default {
     getTaskImage(task) {
       if (task.image) return task.image
       return this.taskImages[task.category] || 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=300&h=250&fit=crop'
+    },
+    saveCardOrder() {
+      localStorage.setItem('adminCardOrder', JSON.stringify(this.cardOrder))
     },
     showNotification(message, variant = 'success') {
       this.toastMessage = message
@@ -1160,5 +1191,9 @@ export default {
 .slide-fade-leave-to {
   transform: translateX(-50%) translateY(-20px);
   opacity: 0;
+}
+
+.ghost-card {
+  opacity: 0.5;
 }
 </style>
