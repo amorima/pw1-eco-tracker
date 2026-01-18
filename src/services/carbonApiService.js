@@ -4,20 +4,27 @@
  * API Base URL: https://www.antonioamorim.pt/api
  */
 
-const API_BASE_URL = 'https://www.antonioamorim.pt/api'
+const API_BASE_URL = import.meta.env.VITE_CARBON_API_BASE_URL || 'https://www.antonioamorim.pt/api'
 
-// Storage key for API key
+// Storage key for API key (fallback)
 const API_KEY_STORAGE = 'bgreen_api_key'
 
 /**
- * Get stored API key from localStorage
+ * Get API key from environment variable or localStorage
  */
 export function getStoredApiKey() {
+  // First try environment variable (preferred)
+  const envKey = import.meta.env.VITE_CARBON_API_KEY
+  if (envKey && envKey !== 'your_api_key_here') {
+    return envKey
+  }
+  
+  // Fallback to localStorage
   return localStorage.getItem(API_KEY_STORAGE)
 }
 
 /**
- * Store API key in localStorage
+ * Store API key in localStorage (for runtime keys)
  */
 export function storeApiKey(key) {
   localStorage.setItem(API_KEY_STORAGE, key)
@@ -70,7 +77,13 @@ export async function requestApiKey(email) {
 export async function ensureApiKey(email) {
   let key = getStoredApiKey()
 
-  if (!key && email) {
+  // If we have an API key from environment, use it
+  if (key) {
+    return key
+  }
+
+  // Otherwise, try to request one (fallback)
+  if (email) {
     const result = await requestApiKey(email)
     if (result.success) {
       key = result.key
@@ -197,28 +210,44 @@ export const applianceToApiType = {
 
 /**
  * Calculate emissions for an appliance usage
- * @param {string} applianceName - Name of the appliance
+ * @param {object} appliance - Appliance object with apiType and avgPowerConsumption
  * @param {number} hoursUsed - Hours used
  * @returns {Promise<{success: boolean, data?: object, message?: string}>}
  */
-export async function calculateApplianceEmissions(applianceName, hoursUsed) {
-  const mapping = applianceToApiType[applianceName]
-
-  if (!mapping) {
-    // Fallback to generic electricity calculation
-    const kWh = hoursUsed * 0.2 // Average 200W consumption
-    return calculateEmissions('electricity', kWh, false)
-  }
-
-  if (mapping.isDevice) {
+export async function calculateApplianceEmissions(appliance, hoursUsed) {
+  // Use the apiType directly from the appliance if available
+  const apiType = appliance.apiType || appliance.name
+  
+  // Check if it's a device type (calculated by minutes)
+  const deviceTypes = ['refrigerator', 'washing_machine', 'dishwasher', 'television', 
+                       'air_conditioner', 'desktop', 'laptop']
+  
+  if (deviceTypes.includes(apiType)) {
     // For devices, API expects minutes
     const minutes = hoursUsed * 60
-    return calculateEmissions(mapping.type, minutes, true)
-  } else {
-    // For non-device types, calculate kWh
-    const kWh = hoursUsed * mapping.factor
+    return calculateEmissions(apiType, minutes, true)
+  } else if (apiType === 'electricity' || !deviceTypes.includes(apiType)) {
+    // For non-device types or fallback, calculate kWh based on power consumption
+    const powerKW = (appliance.avgPowerConsumption || 200) / 1000 // Convert watts to kW
+    const kWh = hoursUsed * powerKW
     return calculateEmissions('electricity', kWh, false)
   }
+  
+  // Legacy support: try mapping from name if no apiType
+  const mapping = applianceToApiType[appliance.name]
+  if (mapping) {
+    if (mapping.isDevice) {
+      const minutes = hoursUsed * 60
+      return calculateEmissions(mapping.type, minutes, true)
+    } else {
+      const kWh = hoursUsed * mapping.factor
+      return calculateEmissions('electricity', kWh, false)
+    }
+  }
+  
+  // Ultimate fallback
+  const kWh = hoursUsed * 0.2 // Average 200W consumption
+  return calculateEmissions('electricity', kWh, false)
 }
 
 /**
