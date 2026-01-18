@@ -683,8 +683,7 @@
         "4",
         "5",
         "6",
-        "abed",
-        "2b09"
+        "abed"
       ],
       "tasks": [
         "1",
@@ -692,8 +691,7 @@
         "3",
         "4",
         "5",
-        "6",
-        "0bf1"
+        "6"
       ],
       "profiles": [
         {
@@ -703,15 +701,15 @@
           "avatar": "https://i.pravatar.cc/150?img=38",
           "isAdmin": true,
           "createdAt": "2026-01-17T15:45:27.922Z",
-          "points": 188,
-          "co2Saved": 25.350000000000005,
+          "points": 177,
+          "co2Saved": 30.350000000000005,
           "level": 3,
-          "xp": 270,
-          "streak": 1,
+          "xp": 280,
+          "streak": 2,
           "settings": {
             "pin": null,
             "notifications": true,
-            "defaultDevice": true,
+            "defaultDevice": false,
             "language": "pt",
             "theme": "light"
           },
@@ -799,6 +797,20 @@
               "completedAt": "2026-01-17T15:54:37.958Z",
               "pointsEarned": 15,
               "co2Saved": 2.3
+            },
+            {
+              "id": 1768754268283,
+              "taskId": "1",
+              "completedAt": "2026-01-18T16:37:48.283Z",
+              "pointsEarned": 5,
+              "co2Saved": 2.5
+            },
+            {
+              "id": 1768754268722,
+              "taskId": "1",
+              "completedAt": "2026-01-18T16:37:48.722Z",
+              "pointsEarned": 5,
+              "co2Saved": 2.5
             }
           ],
           "applianceUsage": [
@@ -817,6 +829,14 @@
               "hoursUsed": 13,
               "energyConsumed": 26,
               "co2Emitted": 6.058000000000001
+            },
+            {
+              "id": 1768754271834,
+              "applianceId": "2",
+              "date": "2026-01-18",
+              "hoursUsed": 20,
+              "energyConsumed": 40,
+              "co2Emitted": 9.32
             }
           ],
           "rewardsRedeemed": [
@@ -907,7 +927,8 @@
               "title": "Comer hoke",
               "pointsCost": 1,
               "redeemedAt": "2026-01-17T15:58:58.311Z",
-              "status": "pending"
+              "status": "completo",
+              "completedAt": "2026-01-18T16:36:55.324Z"
             },
             {
               "id": 1768665540678,
@@ -915,7 +936,8 @@
               "title": "Doces e salgados",
               "pointsCost": 10,
               "redeemedAt": "2026-01-17T15:59:00.678Z",
-              "status": "pending"
+              "status": "completo",
+              "completedAt": "2026-01-18T16:35:45.508Z"
             },
             {
               "id": 1768665541222,
@@ -923,7 +945,8 @@
               "title": "Comer hoke",
               "pointsCost": 1,
               "redeemedAt": "2026-01-17T15:59:01.222Z",
-              "status": "pending"
+              "status": "cancelado",
+              "cancelledAt": "2026-01-18T16:35:33.746Z"
             },
             {
               "id": 1768666941464,
@@ -931,6 +954,23 @@
               "title": "Doces e salgados",
               "pointsCost": 10,
               "redeemedAt": "2026-01-17T16:22:21.464Z",
+              "status": "completo",
+              "completedAt": "2026-01-18T16:35:32.381Z"
+            },
+            {
+              "id": 1768754254372,
+              "rewardId": null,
+              "title": "Comer Fora",
+              "pointsCost": 20,
+              "redeemedAt": "2026-01-18T16:37:34.372Z",
+              "status": "pending"
+            },
+            {
+              "id": 1768754255730,
+              "rewardId": null,
+              "title": "Comer Fora",
+              "pointsCost": 2,
+              "redeemedAt": "2026-01-18T16:37:35.730Z",
               "status": "pending"
             }
           ],
@@ -957,7 +997,7 @@
               "description": "Poupou 10kg de CO2"
             }
           ],
-          "lastActivityDate": "2026-01-17"
+          "lastActivityDate": "2026-01-18"
         },
         {
           "id": 1768668786705,
@@ -989,12 +1029,13 @@
   "appliances": [
     {
       "id": "1",
-      "name": "Frigorífico",
+      "name": "Frigorífico de casa",
       "icon": "kitchen",
       "category": "Cozinha",
       "avgPowerConsumption": 150,
       "avgUsageHoursPerDay": 24,
-      "co2PerKwh": 0.233
+      "co2PerKwh": 0.233,
+      "description": ""
     },
     {
       "id": "2",
@@ -1121,25 +1162,16 @@
       "avgPowerConsumption": 1000,
       "avgUsageHoursPerDay": 0.5,
       "co2PerKwh": 0.233
-    },
-    {
-      "id": "2b09",
-      "name": "1",
-      "category": "Cozinha",
-      "icon": "1",
-      "description": "1",
-      "avgPowerConsumption": 100,
-      "co2PerKwh": 0.233
     }
   ],
   "tasks": [
     {
       "id": "1",
-      "title": "Desligar luzes ao sair",
+      "title": "Desligar luzes ao sair de casa",
       "description": "Desligar todas as luzes quando sair de uma divisão",
       "category": "Energia",
-      "points": 5,
-      "co2Saved": 2.5,
+      "points": 20,
+      "co2Saved": 10,
       "frequency": "daily",
       "icon": "lightbulb",
       "difficulty": "easy"
@@ -1297,15 +1329,6 @@
       "frequency": "monthly",
       "icon": "volunteer_activism",
       "difficulty": "hard"
-    },
-    {
-      "id": "0bf1",
-      "title": "1",
-      "category": "Mobilidade",
-      "points": 1,
-      "icon": "1",
-      "description": "1",
-      "co2Saved": 0.5
     }
   ],
   "badges": [
@@ -1497,6 +1520,62 @@
       "points": 1,
       "image": "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/0c/bb/a3/97/predator-ride-in-the.jpg?w=1200&h=-1&s=1",
       "createdAt": "2026-01-17T16:16:58.101Z"
+    },
+    {
+      "id": null,
+      "title": "Comer Fora",
+      "points": 2,
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHXVw4kVHTNGw6W4xFXMCDXBZMSjbKkY51gg&s",
+      "createdAt": "2026-01-18T16:28:36.871Z"
+    },
+    {
+      "id": null,
+      "title": "Comer Fora",
+      "points": 20,
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHXVw4kVHTNGw6W4xFXMCDXBZMSjbKkY51gg&s",
+      "createdAt": "2026-01-18T16:28:52.575Z"
+    },
+    {
+      "id": null,
+      "title": "Comer hoke",
+      "points": 10,
+      "image": "123",
+      "createdAt": "2026-01-18T16:38:20.234Z"
+    },
+    {
+      "id": null,
+      "title": "Hello",
+      "points": 21,
+      "image": "no",
+      "createdAt": "2026-01-18T16:45:01.965Z"
+    },
+    {
+      "id": null,
+      "title": "Hello2",
+      "points": 21,
+      "image": "no",
+      "createdAt": "2026-01-18T16:45:05.868Z"
+    },
+    {
+      "id": null,
+      "title": "1",
+      "points": 1,
+      "image": "1",
+      "createdAt": "2026-01-18T16:47:07.789Z"
+    },
+    {
+      "id": null,
+      "title": "1",
+      "points": 1,
+      "image": "1",
+      "createdAt": "2026-01-18T16:47:37.062Z"
+    },
+    {
+      "id": null,
+      "title": "1",
+      "points": 1,
+      "image": "1",
+      "createdAt": "2026-01-18T16:48:18.943Z"
     }
   ],
   "transactions": [],

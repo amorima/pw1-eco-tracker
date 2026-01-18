@@ -121,6 +121,7 @@
               :key="usage.id"
               :label="usage.appliance.name"
               :image="getApplianceImage(usage.appliance)"
+              :energyConsumed="usage.energyConsumed"
               unit="hr"
               @submit="(value) => submitApplianceUsage(usage.appliance, value)"
             />

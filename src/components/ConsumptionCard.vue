@@ -20,6 +20,16 @@
           {{ label }}
         </p>
       </div>
+      
+      <!-- Energy Badge (bottom right) -->
+      <div 
+        v-if="energyConsumed"
+        class="absolute bottom-3 right-[7px] bg-(--system-background) border border-(--system-border) rounded-full px-3 py-0.5 flex items-center justify-center"
+      >
+        <p class="font-medium text-[11px] text-(--semantic-success-light) whitespace-nowrap">
+          {{ energyConsumed }} kWh
+        </p>
+      </div>
     </div>
 
     <!-- Input Section -->
@@ -75,6 +85,10 @@ export default {
     placeholder: {
       type: String,
       default: 'Introduza o valor...'
+    },
+    energyConsumed: {
+      type: Number,
+      default: null
     }
   },
   emits: ['input-change', 'submit'],

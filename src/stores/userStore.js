@@ -276,7 +276,39 @@ export const useUserStore = defineStore('userStore', {
         if (appliancesRes.ok) this.availableAppliances = await appliancesRes.json()
         if (tasksRes.ok) this.availableTasks = await tasksRes.json()
         if (badgesRes.ok) this.availableBadges = await badgesRes.json()
-        if (rewardsRes.ok) this.householdRewards = await rewardsRes.json()
+        if (rewardsRes.ok) {
+          const rewards = await rewardsRes.json()
+          // Filter out invalid rewards with null IDs
+          const validRewards = rewards.filter(r => r.id !== null && r.id !== undefined && r.id !== 'null')
+          this.householdRewards = validRewards
+          
+          // Clean up invalid rewards from database (auto-cleanup)
+          const invalidRewards = rewards.filter(r => !r.id || r.id === null || r.id === 'null')
+          if (invalidRewards.length > 0) {
+            console.log(`Found ${invalidRewards.length} invalid rewards, cleaning up...`)
+            // Delete them from the server silently
+            invalidRewards.forEach(async (reward) => {
+              try {
+                // For null IDs, we need to get the actual database entry
+                // JSON Server assigns auto-increment IDs, so these might have actual IDs in the DB
+                const allRewardsWithIndex = await fetch('http://localhost:3000/rewards')
+                const allRewards = await allRewardsWithIndex.json()
+                const matchingIndex = allRewards.findIndex(r => 
+                  r.title === reward.title && 
+                  r.points === reward.points && 
+                  (!r.id || r.id === null || r.id === 'null')
+                )
+                if (matchingIndex !== -1) {
+                  // JSON Server uses array indices for deletion when ID is null
+                  // We need to find the actual DB record
+                  console.warn('Cannot auto-delete reward with null ID:', reward.title)
+                }
+              } catch (err) {
+                console.error('Error cleaning up invalid reward:', err)
+              }
+            })
+          }
+        }
         if (challengesRes.ok) this.householdChallenges = await challengesRes.json()
         
         // Initialize API key if user is logged in
@@ -810,14 +842,23 @@ export const useUserStore = defineStore('userStore', {
     },
     
     /**
-     * Cancel a pending reward and return points
+     * Cancel a pending reward and return points (Admin action)
      */
-    async cancelReward(redemptionId) {
-      if (!this.currentProfile) {
-        return { success: false, message: 'Nenhum perfil selecionado' }
+    async cancelReward(profileId, redemptionId) {
+      if (!this.currentUser?.profiles) {
+        return { success: false, message: 'Nenhum utilizador autenticado' }
+      }
+      
+      if (!this.currentProfile?.isAdmin) {
+        return { success: false, message: 'Apenas administradores podem cancelar recompensas' }
       }
 
-      const rewardIndex = this.currentProfile.rewardsRedeemed.findIndex(
+      const targetProfile = this.currentUser.profiles.find((p) => p.id === profileId)
+      if (!targetProfile) {
+        return { success: false, message: 'Perfil não encontrado' }
+      }
+
+      const rewardIndex = targetProfile.rewardsRedeemed.findIndex(
         (r) => r.id === redemptionId
       )
       
@@ -825,27 +866,23 @@ export const useUserStore = defineStore('userStore', {
         return { success: false, message: 'Recompensa não encontrada' }
       }
       
-      const reward = this.currentProfile.rewardsRedeemed[rewardIndex]
+      const reward = targetProfile.rewardsRedeemed[rewardIndex]
       
       if (reward.status !== 'pendente' && reward.status !== 'pending') {
         return { success: false, message: 'Apenas recompensas pendentes podem ser canceladas' }
       }
 
       // Keep backup in case of error
-      const profileBackup = JSON.parse(JSON.stringify(this.currentProfile))
       const profilesBackup = JSON.parse(JSON.stringify(this.currentUser.profiles))
 
       // Update status and return points
-      this.currentProfile.rewardsRedeemed[rewardIndex].status = 'cancelado'
-      this.currentProfile.rewardsRedeemed[rewardIndex].cancelledAt = new Date().toISOString()
-      this.currentProfile.points += reward.pointsCost
+      targetProfile.rewardsRedeemed[rewardIndex].status = 'cancelado'
+      targetProfile.rewardsRedeemed[rewardIndex].cancelledAt = new Date().toISOString()
+      targetProfile.points += reward.pointsCost
 
-      // Update in user's profiles
-      const profileIndex = this.currentUser.profiles.findIndex(
-        (p) => p.id === this.currentProfile.id,
-      )
-      if (profileIndex !== -1) {
-        this.currentUser.profiles[profileIndex] = { ...this.currentProfile }
+      // Update current profile if it's the target
+      if (this.currentProfile?.id === profileId) {
+        this.currentProfile = targetProfile
       }
 
       // Update in server
@@ -863,7 +900,6 @@ export const useUserStore = defineStore('userStore', {
         }
       } catch (error) {
         // Rollback
-        this.currentProfile = profileBackup
         this.currentUser.profiles = profilesBackup
         return { success: false, message: 'Erro ao cancelar recompensa.' }
       }
@@ -908,11 +944,15 @@ export const useUserStore = defineStore('userStore', {
 
       // Update in server
       try {
-        await fetch(`http://localhost:3000/users/${this.currentUser.id}`, {
+        const response = await fetch(`http://localhost:3000/users/${this.currentUser.id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(this.currentUser),
         })
+        
+        if (!response.ok) {
+          throw new Error('Failed to update reward status on server')
+        }
 
         return {
           success: true,
@@ -921,6 +961,9 @@ export const useUserStore = defineStore('userStore', {
       } catch (error) {
         // Rollback
         this.currentUser.profiles = profilesBackup
+        if (this.currentProfile?.id === profileId) {
+          this.currentProfile = profilesBackup.find(p => p.id === profileId) || this.currentProfile
+        }
         return { success: false, message: 'Erro ao completar recompensa.' }
       }
     },
@@ -1366,7 +1409,9 @@ export const useUserStore = defineStore('userStore', {
     // Rewards Management
     async createReward(rewardData) {
       try {
+        // Generate unique ID
         const newReward = {
+          id: String(Date.now()),
           ...rewardData,
           createdAt: new Date().toISOString(),
         }
@@ -1389,21 +1434,40 @@ export const useUserStore = defineStore('userStore', {
     
     async updateReward(rewardId, updates) {
       try {
-        const rewardIndex = this.householdRewards.findIndex(r => r.id === rewardId)
+        // Validate ID before attempting to update
+        if (!rewardId || rewardId === null || rewardId === 'null' || rewardId === undefined) {
+          throw new Error('Invalid reward ID - cannot update reward without valid ID')
+        }
+        
+        const rewardIndex = this.householdRewards.findIndex(r => String(r.id) === String(rewardId))
         if (rewardIndex === -1) throw new Error('Reward not found')
         
         const updated = {
           ...this.householdRewards[rewardIndex],
-          ...updates,
+          title: updates.title,
+          points: updates.points,
+          image: updates.image,
+          id: rewardId, // Preserve the original ID
         }
         
-        await fetch(`http://localhost:3000/rewards/${rewardId}`, {
+        const response = await fetch(`http://localhost:3000/rewards/${rewardId}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(updated),
         })
         
-        this.householdRewards[rewardIndex] = updated
+        if (!response.ok) {
+          throw new Error('Failed to update reward on server')
+        }
+        
+        const serverUpdated = await response.json()
+        
+        // Replace entire array to trigger reactivity
+        this.householdRewards = [
+          ...this.householdRewards.slice(0, rewardIndex),
+          serverUpdated,
+          ...this.householdRewards.slice(rewardIndex + 1)
+        ]
         
         return { success: true }
       } catch (error) {
@@ -1414,11 +1478,20 @@ export const useUserStore = defineStore('userStore', {
     
     async deleteReward(rewardId) {
       try {
-        await fetch(`http://localhost:3000/rewards/${rewardId}`, {
+        // Validate ID before attempting to delete
+        if (!rewardId || rewardId === null || rewardId === 'null' || rewardId === undefined) {
+          throw new Error('Invalid reward ID')
+        }
+        
+        const response = await fetch(`http://localhost:3000/rewards/${rewardId}`, {
           method: 'DELETE',
         })
         
-        this.householdRewards = this.householdRewards.filter(r => r.id !== rewardId)
+        if (!response.ok) {
+          throw new Error('Failed to delete reward from server')
+        }
+        
+        this.householdRewards = this.householdRewards.filter(r => String(r.id) !== String(rewardId))
         
         return { success: true }
       } catch (error) {
@@ -1431,6 +1504,7 @@ export const useUserStore = defineStore('userStore', {
     async createAppliance(applianceData) {
       try {
         const newAppliance = {
+          id: String(Date.now()),
           name: applianceData.title,
           category: applianceData.category,
           icon: applianceData.icon,
@@ -1449,7 +1523,7 @@ export const useUserStore = defineStore('userStore', {
         this.availableAppliances.push(created)
         
         // Add to user's appliances
-        if (!this.currentUser.appliances.includes(created.id)) {
+        if (!this.currentUser.appliances.some(id => String(id) === String(created.id))) {
           this.currentUser.appliances.push(created.id)
           await fetch(`http://localhost:3000/users/${this.currentUser.id}`, {
             method: 'PUT',
@@ -1467,7 +1541,7 @@ export const useUserStore = defineStore('userStore', {
     
     async updateAppliance(applianceId, updates) {
       try {
-        const applianceIndex = this.availableAppliances.findIndex(a => a.id === applianceId)
+        const applianceIndex = this.availableAppliances.findIndex(a => String(a.id) === String(applianceId))
         if (applianceIndex === -1) throw new Error('Appliance not found')
         
         const updated = {
@@ -1476,13 +1550,18 @@ export const useUserStore = defineStore('userStore', {
           category: updates.category,
           icon: updates.icon,
           description: updates.description,
+          id: applianceId, // Preserve the original ID
         }
         
-        await fetch(`http://localhost:3000/appliances/${applianceId}`, {
+        const response = await fetch(`http://localhost:3000/appliances/${applianceId}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(updated),
         })
+        
+        if (!response.ok) {
+          throw new Error('Failed to update appliance on server')
+        }
         
         this.availableAppliances[applianceIndex] = updated
         
@@ -1495,14 +1574,18 @@ export const useUserStore = defineStore('userStore', {
     
     async deleteAppliance(applianceId) {
       try {
-        await fetch(`http://localhost:3000/appliances/${applianceId}`, {
+        const response = await fetch(`http://localhost:3000/appliances/${applianceId}`, {
           method: 'DELETE',
         })
         
-        this.availableAppliances = this.availableAppliances.filter(a => a.id !== applianceId)
+        if (!response.ok) {
+          throw new Error('Failed to delete appliance from server')
+        }
+        
+        this.availableAppliances = this.availableAppliances.filter(a => String(a.id) !== String(applianceId))
         
         // Remove from user's appliances
-        this.currentUser.appliances = this.currentUser.appliances.filter(id => id !== applianceId)
+        this.currentUser.appliances = this.currentUser.appliances.filter(id => String(id) !== String(applianceId))
         await fetch(`http://localhost:3000/users/${this.currentUser.id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
@@ -1520,6 +1603,7 @@ export const useUserStore = defineStore('userStore', {
     async createTask(taskData) {
       try {
         const newTask = {
+          id: String(Date.now()),
           title: taskData.title,
           category: taskData.category,
           points: taskData.points,
@@ -1538,7 +1622,7 @@ export const useUserStore = defineStore('userStore', {
         this.availableTasks.push(created)
         
         // Add to user's tasks
-        if (!this.currentUser.tasks.includes(created.id)) {
+        if (!this.currentUser.tasks.some(id => String(id) === String(created.id))) {
           this.currentUser.tasks.push(created.id)
           await fetch(`http://localhost:3000/users/${this.currentUser.id}`, {
             method: 'PUT',
@@ -1556,7 +1640,7 @@ export const useUserStore = defineStore('userStore', {
     
     async updateTask(taskId, updates) {
       try {
-        const taskIndex = this.availableTasks.findIndex(t => t.id === taskId)
+        const taskIndex = this.availableTasks.findIndex(t => String(t.id) === String(taskId))
         if (taskIndex === -1) throw new Error('Task not found')
         
         const updated = {
@@ -1567,13 +1651,18 @@ export const useUserStore = defineStore('userStore', {
           icon: updates.icon,
           description: updates.description,
           co2Saved: updates.points * 0.5,
+          id: taskId, // Preserve the original ID
         }
         
-        await fetch(`http://localhost:3000/tasks/${taskId}`, {
+        const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(updated),
         })
+        
+        if (!response.ok) {
+          throw new Error('Failed to update task on server')
+        }
         
         this.availableTasks[taskIndex] = updated
         
@@ -1586,14 +1675,18 @@ export const useUserStore = defineStore('userStore', {
     
     async deleteTask(taskId) {
       try {
-        await fetch(`http://localhost:3000/tasks/${taskId}`, {
+        const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
           method: 'DELETE',
         })
         
-        this.availableTasks = this.availableTasks.filter(t => t.id !== taskId)
+        if (!response.ok) {
+          throw new Error('Failed to delete task from server')
+        }
+        
+        this.availableTasks = this.availableTasks.filter(t => String(t.id) !== String(taskId))
         
         // Remove from user's tasks
-        this.currentUser.tasks = this.currentUser.tasks.filter(id => id !== taskId)
+        this.currentUser.tasks = this.currentUser.tasks.filter(id => String(id) !== String(taskId))
         await fetch(`http://localhost:3000/users/${this.currentUser.id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },

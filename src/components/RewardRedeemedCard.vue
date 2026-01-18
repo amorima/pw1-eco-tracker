@@ -26,9 +26,9 @@
       <p 
         :class="[
           'font-[\'Noto_Sans\'] text-base font-normal leading-normal m-0 whitespace-nowrap',
-          reward.status === 'complete' && 'text-(--semantic-success-light)',
+          (reward.status === 'complete' || reward.status === 'completo') && 'text-(--semantic-success-light)',
           reward.status === 'pending' && 'text-(--semantic-info-default)',
-          reward.status === 'cancelled' && 'text-(--semantic-error-default)'
+          (reward.status === 'cancelled' || reward.status === 'cancelado') && 'text-(--semantic-error-default)'
         ]"
         style="font-variation-settings: 'CTGR' 0, 'wdth' 100"
       >
@@ -36,7 +36,7 @@
       </p>
     </div>
 
-    <div class="flex flex-col gap-2.5 items-center justify-between self-stretch">
+    <div v-if="reward.status === 'pending' || reward.status === 'pendente'" class="flex flex-col gap-2.5 items-center justify-between self-stretch">
       <CardButton 
         variant="confirm" 
         @click="$emit('confirm', reward)"
@@ -74,8 +74,11 @@ export default {
     statusText() {
       const statusMap = {
         complete: 'completo',
+        completo: 'completo',
         pending: 'pendente',
-        cancelled: 'cancelado'
+        pendente: 'pendente',
+        cancelled: 'cancelado',
+        cancelado: 'cancelado'
       };
       return statusMap[this.reward.status] || 'desconhecido';
     }

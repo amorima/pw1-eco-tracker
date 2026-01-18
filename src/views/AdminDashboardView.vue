@@ -180,11 +180,14 @@
           <RewardRedeemedCard
             v-for="redeemed in paginatedRedeemedRewards"
             :key="redeemed.id"
-            :profileName="getProfileName(redeemed.profileId)"
-            :title="getRewardTitle(redeemed.rewardId)"
-            :date="formatDate(redeemed.redeemedAt)"
-            :status="redeemed.status"
-            :image="getRewardImage(redeemed.rewardId)"
+            :reward="{
+              ...redeemed,
+              userName: getProfileName(redeemed.profileId),
+              title: getRewardTitle(redeemed.rewardId),
+              points: redeemed.pointsCost,
+              image: getRewardImage(redeemed.rewardId),
+              status: redeemed.status
+            }"
             @confirm="confirmRedeemedReward(redeemed)"
             @delete="rejectRedeemedReward(redeemed)"
           />
@@ -776,18 +779,30 @@ export default {
       this.showRewardModal = true
     },
     editReward(reward) {
-      this.selectedReward = reward
+      // If reward has null ID, treat it as creating a new reward
+      if (!reward.id || reward.id === null || reward.id === 'null') {
+        this.selectedReward = {
+          title: reward.title,
+          points: reward.points,
+          image: reward.image
+        }
+      } else {
+        this.selectedReward = reward
+      }
       this.showRewardModal = true
     },
     async saveReward(rewardData) {
       try {
-        if (rewardData.id) {
+        // Treat null or undefined IDs as new rewards
+        if (rewardData.id && rewardData.id !== null && rewardData.id !== 'null') {
           await this.userStore.updateReward(rewardData.id, rewardData)
           this.showNotification('Recompensa atualizada')
         } else {
           await this.userStore.createReward(rewardData)
           this.showNotification('Recompensa criada')
         }
+        // Force refresh to update UI
+        await this.userStore.fetchResources()
       } catch (error) {
         console.error('Error saving reward:', error)
         this.showNotification('Erro ao guardar recompensa', 'error')
@@ -805,6 +820,12 @@ export default {
     },
     async deleteReward(rewardId) {
       try {
+        // Prevent deletion of invalid rewards
+        if (!rewardId || rewardId === null || rewardId === 'null') {
+          this.showNotification('Não é possível eliminar recompensa inválida', 'error')
+          return
+        }
+        
         await this.userStore.deleteReward(rewardId)
         this.showNotification('Recompensa eliminada')
       } catch (error) {
@@ -820,11 +841,11 @@ export default {
       return profile?.name || 'Desconhecido'
     },
     getRewardTitle(rewardId) {
-      const reward = this.availableRewards.find(r => r.id === rewardId)
+      const reward = this.availableRewards.find(r => String(r.id) === String(rewardId))
       return reward?.title || 'Recompensa'
     },
     getRewardImage(rewardId) {
-      const reward = this.availableRewards.find(r => r.id === rewardId)
+      const reward = this.availableRewards.find(r => String(r.id) === String(rewardId))
       return reward?.image || ''
     },
     formatDate(dateString) {
