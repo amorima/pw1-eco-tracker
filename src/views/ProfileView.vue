@@ -270,12 +270,30 @@
 
       <!-- Challenges Section -->
       <CollapsibleCard title="Desafios" icon="apps">
+        <!-- Sort Toggle -->
+        <div v-if="profileChallenges.length > 0" class="flex items-center justify-end mb-4">
+          <button
+            @click="sortCompletedFirst = !sortCompletedFirst"
+            :class="[
+              'flex items-center gap-2 px-3 py-2 rounded-lg transition-colors',
+              sortCompletedFirst
+                ? 'bg-(--system-ring) text-white'
+                : 'bg-(--system-card) border-2 border-(--system-border) text-(--text-body-sub-titles)'
+            ]"
+          >
+            <span class="material-symbols-outlined text-[20px]">
+              {{ sortCompletedFirst ? 'check_circle' : 'radio_button_unchecked' }}
+            </span>
+            <span class="text-sm font-medium">Completados primeiro</span>
+          </button>
+        </div>
+
         <div
-          v-if="profileChallenges.length > 0"
-          class="gap-[8px] grid grid-cols-[repeat(2,_minmax(0px,_1fr))] grid-rows-[repeat(3,_fit-content(100%))] relative shrink-0 w-full"
+          v-if="paginatedChallenges.length > 0"
+          class="gap-[8px] grid grid-cols-[repeat(2,_minmax(0px,_1fr))] relative shrink-0 w-full"
         >
           <ChallengeCard
-            v-for="challenge in profileChallenges"
+            v-for="challenge in paginatedChallenges"
             :key="challenge.id"
             :title="challenge.title"
             :description="challenge.description"
@@ -289,6 +307,16 @@
           <p>Nenhum desafio ativo no momento.</p>
           <p class="text-sm">O administrador pode criar desafios para a família.</p>
         </div>
+
+        <!-- Ver Mais Button -->
+        <button
+          v-if="sortedChallenges.length > displayedChallengesCount"
+          @click="displayedChallengesCount += 6"
+          class="flex items-center gap-1 mx-auto text-(--system-ring) text-lg mt-4 hover:opacity-80 transition-opacity"
+        >
+          <span class="material-symbols-outlined">expand_more</span>
+          <span>Ver mais</span>
+        </button>
       </CollapsibleCard>
 
       <!-- Rewards Section -->
@@ -492,6 +520,10 @@ export default {
       // Track rewards currently being redeemed to avoid duplicate requests
       redeemingRewards: [],
 
+      // Challenges
+      displayedChallengesCount: 12,
+      sortCompletedFirst: false,
+
       // Local settings (to prevent direct mutation)
       localSettings: {
         privateProfile: false,
@@ -604,15 +636,117 @@ export default {
       )
     },
     profileChallenges() {
-      const storeChallenges = this.userStore.currentProfileChallenges
-      if (storeChallenges && storeChallenges.length > 0) {
-        return storeChallenges
-      }
-      
-      // Use default challenges with calculated progress
+      const storeChallenges = this.userStore.householdChallenges || []
       const activities = this.currentProfile?.activityHistory || []
+      const allChallenges = []
       
-      return this.defaultChallenges.map(challenge => {
+      // Process household challenges (both old and new format)
+      storeChallenges.forEach(challenge => {
+        let progress = 0
+        let title = challenge.title || ''
+        let description = challenge.description || ''
+        
+        // NEW FORMAT: Task-based challenges
+        if (challenge.taskId) {
+          const task = this.userStore.availableTasks.find(t => String(t.id) === String(challenge.taskId))
+          
+          if (task) {
+            title = task.title
+            description = challenge.type === 'streak' 
+              ? `Complete ${challenge.target} dias consecutivos`
+              : `Complete ${challenge.target} vezes`
+            
+            // Calculate progress based on challenge type
+            if (challenge.type === 'streak') {
+              // Streak-based: count consecutive days with this task completed
+              const taskActivities = activities
+                .filter(a => String(a.taskId) === String(challenge.taskId))
+                .sort((a, b) => new Date(b.completedAt) - new Date(a.completedAt))
+              
+              let currentStreak = 0
+              let lastDate = null
+              
+              for (const activity of taskActivities) {
+                const activityDate = new Date(activity.completedAt).toDateString()
+                
+                if (!lastDate) {
+                  currentStreak = 1
+                  lastDate = new Date(activity.completedAt)
+                } else {
+                  const dayDiff = Math.floor((lastDate - new Date(activity.completedAt)) / (1000 * 60 * 60 * 24))
+                  if (dayDiff === 1) {
+                    currentStreak++
+                    lastDate = new Date(activity.completedAt)
+                  } else {
+                    break
+                  }
+                }
+              }
+              
+              progress = currentStreak
+            } else {
+              // Completion-based: count total completions of this task
+              progress = activities.filter(a => String(a.taskId) === String(challenge.taskId)).length
+            }
+          }
+        } 
+        // OLD FORMAT: Category/Title-based challenges (backward compatibility)
+        else {
+          // Use existing title and description from the challenge
+          title = challenge.title || ''
+          description = challenge.description || ''
+          
+          // Calculate progress based on category if present
+          if (challenge.category) {
+            if (challenge.category === 'Mobilidade') {
+              progress = activities.filter(a => {
+                const task = this.userStore.availableTasks.find(t => String(t.id) === String(a.taskId))
+                return task?.category === 'Mobilidade'
+              }).length
+            } else if (challenge.category === 'Reciclagem') {
+              progress = activities.filter(a => {
+                const task = this.userStore.availableTasks.find(t => String(t.id) === String(a.taskId))
+                return task?.category === 'Reciclagem'
+              }).length
+            } else if (challenge.category === 'Energia') {
+              progress = activities.filter(a => {
+                const task = this.userStore.availableTasks.find(t => String(t.id) === String(a.taskId))
+                return task?.category === 'Energia'
+              }).length
+            } else if (challenge.category === 'Água') {
+              progress = activities.filter(a => {
+                const task = this.userStore.availableTasks.find(t => String(t.id) === String(a.taskId))
+                return task?.category === 'Água'
+              }).length
+            } else if (challenge.category === 'Alimentação') {
+              progress = activities.filter(a => {
+                const task = this.userStore.availableTasks.find(t => String(t.id) === String(a.taskId))
+                return task?.category === 'Alimentação'
+              }).length
+            } else if (challenge.category === 'Ambiente') {
+              progress = activities.filter(a => {
+                const task = this.userStore.availableTasks.find(t => String(t.id) === String(a.taskId))
+                return task?.category === 'Ambiente'
+              }).length
+            }
+          }
+        }
+        
+        // Add to unified array with consistent structure
+        allChallenges.push({
+          id: challenge.id,
+          title,
+          description,
+          currentProgress: progress,
+          progress: Math.min((progress / (challenge.target || 1)) * 100, 100),
+          completed: progress >= (challenge.target || 1),
+          xp: challenge.xp || 0,
+          target: challenge.target || 1,
+        })
+      })
+      
+      // Process and add default challenges to the same array
+      this.defaultChallenges.forEach(challenge => {
         let progress = 0
         
         // Calculate progress based on challenge type
@@ -652,13 +786,33 @@ export default {
             break
         }
         
-        return {
-          ...challenge,
+        // Add to unified array with consistent structure
+        allChallenges.push({
+          id: challenge.id,
+          title: challenge.title,
+          description: challenge.description,
           currentProgress: progress,
           progress: Math.min((progress / challenge.target) * 100, 100),
           completed: progress >= challenge.target,
-        }
+          xp: challenge.xp || 0,
+          target: challenge.target || 1,
+        })
       })
+      
+      return allChallenges
+    },
+    sortedChallenges() {
+      const challenges = [...this.profileChallenges]
+      if (this.sortCompletedFirst) {
+        return challenges.sort((a, b) => {
+          if (a.completed === b.completed) return 0
+          return a.completed ? -1 : 1
+        })
+      }
+      return challenges
+    },
+    paginatedChallenges() {
+      return this.sortedChallenges.slice(0, this.displayedChallengesCount)
     },
     isPinValid() {
       return this.pinInput.length === 4 && this.pinInput === this.pinConfirmInput
@@ -843,6 +997,9 @@ export default {
       } else {
         this.showNotification(result.message || 'Erro ao cancelar recompensa', 'error')
       }
+    },
+    loadMoreChallenges() {
+      this.displayedChallengesCount += 6
     },
   },
 }

@@ -319,15 +319,16 @@
           </button>
         </div>
 
-        <div class="grid grid-cols-3 gap-3">
-          <ChallengeCard
+        <div class="space-y-2">
+          <ItemCard
             v-for="challenge in paginatedChallenges"
             :key="challenge.id"
-            :title="challenge.title"
-            :description="challenge.description || ''"
-            :xp="challenge.xp"
-            :progress="0"
-            :admin-mode="true"
+            :title="getChallengeTitle(challenge)"
+            :subtitle="getChallengeSubtitle(challenge)"
+            :icon="getChallengeIcon(challenge)"
+            type="task"
+            :showEdit="!challenge.isDefault"
+            :showDelete="!challenge.isDefault"
             @edit="editChallenge(challenge)"
             @delete="confirmDeleteChallenge(challenge.id)"
           />
@@ -353,74 +354,85 @@
   
   <!-- Challenge Edit Modal -->
   <ModalComponent
-    :show="showChallengeModal"
+    :isOpen="showChallengeModal"
     :title="selectedChallenge ? 'Editar Desafio' : 'Novo Desafio'"
-    @close="showChallengeModal = false"
+    @close="closeChallengeModal"
   >
-    <form @submit.prevent="saveChallenge(challengeFormData)" class="space-y-4">
+    <form @submit.prevent="saveChallenge" class="space-y-4">
       <div>
-        <label class="block text-sm font-medium text-(--text-body-sub-titles) mb-1">Título</label>
+        <label class="block text-sm font-medium text-(--text-body-sub-titles) mb-1">Título do Desafio</label>
         <input
           v-model="challengeFormData.title"
           type="text"
           required
           class="w-full px-3 py-2 bg-(--system-input-background) border border-(--system-border) rounded-lg text-(--system-foreground) outline-none focus:border-(--system-ring)"
+          placeholder="Ex: Mestre da Energia"
         />
       </div>
       <div>
-        <label class="block text-sm font-medium text-(--text-body-sub-titles) mb-1">Descrição</label>
-        <textarea
-          v-model="challengeFormData.description"
-          rows="3"
-          class="w-full px-3 py-2 bg-(--system-input-background) border border-(--system-border) rounded-lg text-(--system-foreground) outline-none focus:border-(--system-ring) resize-none"
-        ></textarea>
-      </div>
-      <div class="grid grid-cols-2 gap-4">
-        <div>
-          <label class="block text-sm font-medium text-(--text-body-sub-titles) mb-1">Meta</label>
-          <input
-            v-model.number="challengeFormData.target"
-            type="number"
-            min="1"
-            required
-            class="w-full px-3 py-2 bg-(--system-input-background) border border-(--system-border) rounded-lg text-(--system-foreground) outline-none focus:border-(--system-ring)"
-          />
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-(--text-body-sub-titles) mb-1">XP</label>
-          <input
-            v-model.number="challengeFormData.xp"
-            type="number"
-            min="0"
-            required
-            class="w-full px-3 py-2 bg-(--system-input-background) border border-(--system-border) rounded-lg text-(--system-foreground) outline-none focus:border-(--system-ring)"
-          />
-        </div>
-      </div>
-      <div>
-        <label class="block text-sm font-medium text-(--text-body-sub-titles) mb-1">Categoria</label>
+        <label class="block text-sm font-medium text-(--text-body-sub-titles) mb-1">Tarefa</label>
         <select
-          v-model="challengeFormData.category"
+          v-model="challengeFormData.taskId"
+          required
           class="w-full px-3 py-2 bg-(--system-input-background) border border-(--system-border) rounded-lg text-(--system-foreground) outline-none focus:border-(--system-ring)"
         >
-          <option value="Energia">Energia</option>
-          <option value="Mobilidade">Mobilidade</option>
-          <option value="Reciclagem">Reciclagem</option>
-          <option value="Água">Água</option>
-          <option value="Alimentação">Alimentação</option>
-          <option value="Ambiente">Ambiente</option>
+          <option value="" disabled>Selecione uma tarefa</option>
+          <option v-for="task in tasks" :key="task.id" :value="task.id">
+            {{ task.title }} ({{ task.category }})
+          </option>
         </select>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-(--text-body-sub-titles) mb-1">Tipo de Desafio</label>
+        <select
+          v-model="challengeFormData.type"
+          required
+          class="w-full px-3 py-2 bg-(--system-input-background) border border-(--system-border) rounded-lg text-(--system-foreground) outline-none focus:border-(--system-ring)"
+        >
+          <option value="completion">Baseado em Conclusões</option>
+          <option value="streak">Baseado em Sequência de Dias</option>
+        </select>
+        <p class="text-xs text-(--text-disabled) mt-1">
+          <span v-if="challengeFormData.type === 'completion'">
+            O utilizador deve completar a tarefa X vezes
+          </span>
+          <span v-else>
+            O utilizador deve completar a tarefa por X dias consecutivos
+          </span>
+        </p>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-(--text-body-sub-titles) mb-1">
+          {{ challengeFormData.type === 'streak' ? 'Número de Dias' : 'Número de Conclusões' }}
+        </label>
+        <input
+          v-model.number="challengeFormData.target"
+          type="number"
+          min="1"
+          required
+          class="w-full px-3 py-2 bg-(--system-input-background) border border-(--system-border) rounded-lg text-(--system-foreground) outline-none focus:border-(--system-ring)"
+        />
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-(--text-body-sub-titles) mb-1">Recompensa XP</label>
+        <input
+          v-model.number="challengeFormData.xp"
+          type="number"
+          min="0"
+          required
+          class="w-full px-3 py-2 bg-(--system-input-background) border border-(--system-border) rounded-lg text-(--system-foreground) outline-none focus:border-(--system-ring)"
+        />
       </div>
     </form>
     <template #footer>
       <button
-        @click="showChallengeModal = false"
+        @click="closeChallengeModal"
         class="px-4 py-2 bg-(--system-border) text-(--system-foreground) rounded-lg hover:opacity-80 transition-opacity"
       >
         Cancelar
       </button>
       <button
-        @click="saveChallenge(challengeFormData)"
+        @click="saveChallenge"
         class="px-4 py-2 bg-(--system-ring) text-white rounded-lg hover:opacity-90 transition-opacity"
       >
         {{ selectedChallenge ? 'Guardar' : 'Criar' }}
@@ -525,6 +537,14 @@ export default {
       selectedChallenge: null,
       challengeSearch: '',
       displayedChallengesCount: 5,
+      challengeFormData: {
+        title: '',
+        description: '',
+        taskId: '',
+        type: 'completion',
+        target: 5,
+        xp: 50,
+      },
     }
   },
   computed: {
@@ -673,7 +693,65 @@ export default {
       return this.filteredTasks.slice(0, this.displayedTasksCount)
     },
     challenges() {
-      return this.userStore.householdChallenges || []
+      const household = this.userStore.householdChallenges || []
+      // Include default challenges from the profile view
+      const defaults = [
+        {
+          id: 'default-1',
+          title: 'Economizador de Energia',
+          description: 'Complete 5 tarefas de energia',
+          category: 'Energia',
+          target: 5,
+          xp: 50,
+          isDefault: true
+        },
+        {
+          id: 'default-2',
+          title: 'Mobilidade Verde',
+          description: 'Complete 3 tarefas de mobilidade',
+          category: 'Mobilidade',
+          target: 3,
+          xp: 40,
+          isDefault: true
+        },
+        {
+          id: 'default-3',
+          title: 'Mestre da Reciclagem',
+          description: 'Complete 7 tarefas de reciclagem',
+          category: 'Reciclagem',
+          target: 7,
+          xp: 60,
+          isDefault: true
+        },
+        {
+          id: 'default-4',
+          title: 'Guardião da Água',
+          description: 'Complete 4 tarefas de água',
+          category: 'Água',
+          target: 4,
+          xp: 45,
+          isDefault: true
+        },
+        {
+          id: 'default-5',
+          title: 'Alimentação Consciente',
+          description: 'Complete 5 tarefas de alimentação',
+          category: 'Alimentação',
+          target: 5,
+          xp: 50,
+          isDefault: true
+        },
+        {
+          id: 'default-6',
+          title: 'Protetor do Ambiente',
+          description: 'Complete 3 tarefas de ambiente',
+          category: 'Ambiente',
+          target: 3,
+          xp: 55,
+          isDefault: true
+        }
+      ]
+      return [...household, ...defaults]
     },
     filteredChallenges() {
       if (!this.challengeSearch.trim()) return this.challenges
@@ -684,18 +762,6 @@ export default {
     },
     paginatedChallenges() {
       return this.filteredChallenges.slice(0, this.displayedChallengesCount)
-    },
-    challengeFormData() {
-      if (this.selectedChallenge) {
-        return { ...this.selectedChallenge }
-      }
-      return {
-        title: '',
-        description: '',
-        target: 1,
-        xp: 50,
-        category: 'Energia',
-      }
     },
   },
   async created() {
@@ -962,17 +1028,80 @@ export default {
       this.displayedTasksCount += 5
     },
     
+    // Challenge helper methods
+    getTaskById(taskId) {
+      return this.tasks.find(t => String(t.id) === String(taskId))
+    },
+    getChallengeTitle(challenge) {
+      return challenge.title || 'Desafio sem título'
+    },
+    getChallengeSubtitle(challenge) {
+      return challenge.description || 'Sem descrição'
+    },
+    getChallengeIcon(challenge) {
+      // Support old format (category) and new format (taskId)
+      if (challenge.category) {
+        const iconMap = {
+          'Energia': 'bolt',
+          'Mobilidade': 'directions_bike',
+          'Reciclagem': 'recycling',
+          'Água': 'water_drop',
+          'Alimentação': 'restaurant',
+          'Ambiente': 'eco'
+        }
+        return iconMap[challenge.category] || 'emoji_events'
+      }
+      const task = this.getTaskById(challenge.taskId)
+      return task?.icon || 'emoji_events'
+    },
+    
     // Challenge CRUD methods
     createChallenge() {
       this.selectedChallenge = null
+      this.challengeFormData = {
+        title: '',
+        description: '',
+        taskId: '',
+        type: 'completion',
+        target: 5,
+        xp: 50,
+      }
       this.showChallengeModal = true
     },
     editChallenge(challenge) {
+      // Don't allow editing default challenges
+      if (challenge.isDefault) {
+        this.showNotification('Não é possível editar desafios padrão', 'error')
+        return
+      }
       this.selectedChallenge = { ...challenge }
+      this.challengeFormData = { ...challenge }
       this.showChallengeModal = true
     },
-    async saveChallenge(challengeData) {
+    closeChallengeModal() {
+      this.showChallengeModal = false
+      this.selectedChallenge = null
+      this.challengeFormData = {
+        title: '',
+        description: '',
+        taskId: '',
+        type: 'completion',
+        target: 5,
+        xp: 50,
+      }
+    },
+    async saveChallenge() {
       try {
+        // Auto-generate description based on task and type
+        const task = this.getTaskById(this.challengeFormData.taskId)
+        const typeLabel = this.challengeFormData.type === 'streak' ? 'dias consecutivos' : 'vezes'
+        const description = `Complete "${task?.title || 'a tarefa'}" ${this.challengeFormData.target} ${typeLabel}`
+        
+        const challengeData = {
+          ...this.challengeFormData,
+          description
+        }
+        
         if (challengeData.id) {
           await this.userStore.updateChallenge(challengeData.id, challengeData)
           this.showNotification('Desafio atualizado com sucesso')
@@ -980,14 +1109,19 @@ export default {
           await this.userStore.createChallenge(challengeData)
           this.showNotification('Desafio criado com sucesso')
         }
-        this.showChallengeModal = false
-        this.selectedChallenge = null
+        this.closeChallengeModal()
       } catch (error) {
         console.error('Error saving challenge:', error)
         this.showNotification('Erro ao guardar desafio', 'error')
       }
     },
     confirmDeleteChallenge(challengeId) {
+      // Don't allow deleting default challenges
+      const challenge = this.challenges.find(c => c.id === challengeId)
+      if (challenge?.isDefault) {
+        this.showNotification('Não é possível eliminar desafios padrão', 'error')
+        return
+      }
       this.confirmData = {
         title: 'Eliminar Desafio',
         message: 'Tem a certeza que deseja eliminar este desafio?',

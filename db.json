@@ -690,7 +690,8 @@
         "2",
         "3",
         "4",
-        "6"
+        "6",
+        "1768758889340"
       ],
       "profiles": [
         {
@@ -1407,6 +1408,15 @@
       "frequency": "monthly",
       "icon": "volunteer_activism",
       "difficulty": "hard"
+    },
+    {
+      "id": "1768758889340",
+      "title": "AAAAAAAAAAA",
+      "category": "Energia",
+      "points": 20,
+      "icon": "bolt",
+      "description": "AAAAAAAAAA",
+      "co2Saved": 10
     }
   ],
   "badges": [
@@ -1535,7 +1545,16 @@
       }
     }
   ],
-  "challenges": [],
+  "challenges": [
+    {
+      "id": "1768760179072",
+      "target": 5,
+      "xp": 50,
+      "createdAt": "2026-01-18T18:16:19.072Z",
+      "title": "Abaixo as Luzes",
+      "description": "Complete \"Desligar luzes ao sair de casa\" 5 dias consecutivos"
+    }
+  ],
   "rewards": [
     {
       "id": "1",
