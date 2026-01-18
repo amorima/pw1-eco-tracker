@@ -244,9 +244,11 @@
         item-key="id"
         class="flex flex-col gap-8"
         handle=".drag-handle"
+        :animation="200"
+        ghost-class="ghost-card"
       >
         <template #item="{ element }">
-          <CollapsibleCard v-if="element === 'badges'" title="Badges" icon="apps" class="drag-handle cursor-move">
+          <CollapsibleCard v-if="element === 'badges'" title="Badges" icon="apps" v-model="cardOpenStates.badges">
         <div
           class="grid grid-cols-3 gap-[8px] w-full items-start overflow-hidden px-0 py-[16px] relative shrink-0 w-full"
         >
@@ -261,7 +263,7 @@
         </div>
           </CollapsibleCard>
 
-          <CollapsibleCard v-else-if="element === 'ranking'" title="Ranking" icon="apps" class="drag-handle cursor-move">
+          <CollapsibleCard v-else-if="element === 'ranking'" title="Ranking" icon="apps" v-model="cardOpenStates.ranking">
         <div
           class="flex flex-col gap-[8px] items-start overflow-hidden px-0 py-[8px] relative shrink-0 w-full"
         >
@@ -275,7 +277,7 @@
         </div>
           </CollapsibleCard>
 
-          <CollapsibleCard v-else-if="element === 'challenges'" title="Desafios" icon="apps" class="drag-handle cursor-move">
+          <CollapsibleCard v-else-if="element === 'challenges'" title="Desafios" icon="apps" v-model="cardOpenStates.challenges">
         <!-- Sort Toggle -->
         <div v-if="profileChallenges.length > 0" class="flex items-center justify-end mb-4">
           <button
@@ -325,7 +327,7 @@
         </button>
           </CollapsibleCard>
 
-          <CollapsibleCard v-else-if="element === 'rewards'" title="Recompensas" icon="apps" class="drag-handle cursor-move">
+          <CollapsibleCard v-else-if="element === 'rewards'" title="Recompensas" icon="apps" v-model="cardOpenStates.rewards">
         <!-- Tab Navigation -->
         <div class="flex items-center justify-between px-0 py-[8px] relative shrink-0 w-full">
           <button
@@ -432,7 +434,7 @@
         </p>
           </CollapsibleCard>
 
-          <CollapsibleCard v-else-if="element === 'settings'" title="Configurações" icon="apps" class="drag-handle cursor-move">
+          <CollapsibleCard v-else-if="element === 'settings'" title="Configurações" icon="apps" v-model="cardOpenStates.settings">
         <div class="flex flex-col gap-[4px] items-start overflow-hidden relative shrink-0 w-full">
           <div
             v-for="setting in settingsList"
@@ -560,6 +562,15 @@ export default {
 
       // Card order
       cardOrder: ['badges', 'ranking', 'challenges', 'rewards', 'settings'],
+      
+      // Card open states
+      cardOpenStates: {
+        badges: true,
+        ranking: true,
+        challenges: true,
+        rewards: true,
+        settings: true,
+      },
       
       // Default challenges (used when admin hasn't set any)
       defaultChallenges: [
@@ -1041,5 +1052,9 @@ export default {
 .slide-fade-leave-to {
   transform: translateX(-50%) translateY(-20px);
   opacity: 0;
+}
+
+.ghost-card {
+  opacity: 0.5;
 }
 </style>

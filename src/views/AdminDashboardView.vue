@@ -51,10 +51,11 @@
       item-key="id"
       class="space-y-4 w-[930px]"
       handle=".drag-handle"
+      :animation="200"
+      ghost-class="ghost-card"
     >
       <template #item="{ element }">
-        <!-- Analise rápida mensal -->
-        <CollapsibleCard v-if="element === 'analysis'" title="Análise rápida mensal" class="drag-handle cursor-move">
+        <CollapsibleCard v-if="element === 'analysis'" title="Análise rápida mensal" v-model="cardOpenStates.analysis">
         <div class="flex gap-4 items-center w-full">
           <div
             class="bg-(--system-card) border-2 border-(--system-border) rounded-[10px] p-4 flex flex-col gap-4 text-(--text-body-sub-titles)"
@@ -79,7 +80,7 @@
         </div>
         </CollapsibleCard>
 
-        <CollapsibleCard v-else-if="element === 'consumption'" title="Consumos de energia diários" class="drag-handle cursor-move">
+        <CollapsibleCard v-else-if="element === 'consumption'" title="Consumos de energia diários" v-model="cardOpenStates.consumption">
         <StatisticsChart
           v-if="dailyStats"
           :data="dailyStats.last7Days"
@@ -93,7 +94,7 @@
         </div>
         </CollapsibleCard>
 
-        <CollapsibleCard v-else-if="element === 'users'" title="Gestão de utilizadores" class="drag-handle cursor-move">
+        <CollapsibleCard v-else-if="element === 'users'" title="Gestão de utilizadores" v-model="cardOpenStates.users">
         <div class="grid grid-cols-2 gap-4 mb-4">
           <UserCard
             v-for="profile in profiles"
@@ -137,7 +138,7 @@
         </div>
         </CollapsibleCard>
 
-        <CollapsibleCard v-else-if="element === 'rewards'" title="Gestão de recompensas" class="drag-handle cursor-move">
+        <CollapsibleCard v-else-if="element === 'rewards'" title="Gestão de recompensas" v-model="cardOpenStates.rewards">
         <div class="flex gap-2.5 mb-4">
           <div class="flex-1 relative">
             <input
@@ -207,7 +208,7 @@
         </button>
         </CollapsibleCard>
 
-        <CollapsibleCard v-else-if="element === 'appliances'" title="Gestão de consumos" class="drag-handle cursor-move">
+        <CollapsibleCard v-else-if="element === 'appliances'" title="Gestão de consumos" v-model="cardOpenStates.appliances">
         <div class="flex gap-2.5 mb-4">
           <div class="flex-1 relative">
             <input
@@ -252,7 +253,7 @@
         </button>
         </CollapsibleCard>
 
-        <CollapsibleCard v-else-if="element === 'tasks'" title="Gestão de tarefas" class="drag-handle cursor-move">
+        <CollapsibleCard v-else-if="element === 'tasks'" title="Gestão de tarefas" v-model="cardOpenStates.tasks">
         <div class="flex gap-2.5 mb-4">
           <div class="flex-1 relative">
             <input
@@ -298,7 +299,7 @@
         </button>
         </CollapsibleCard>
 
-        <CollapsibleCard v-else-if="element === 'challenges'" title="DESAFIOS" class="drag-handle cursor-move">
+        <CollapsibleCard v-else-if="element === 'challenges'" title="DESAFIOS" v-model="cardOpenStates.challenges">
         <div class="flex items-center gap-2 mb-4">
           <div class="flex-1 relative">
             <input
@@ -552,6 +553,17 @@ export default {
       
       // Card order
       cardOrder: ['analysis', 'consumption', 'users', 'rewards', 'appliances', 'tasks', 'challenges'],
+      
+      // Card open states
+      cardOpenStates: {
+        analysis: true,
+        consumption: true,
+        users: true,
+        rewards: true,
+        appliances: true,
+        tasks: true,
+        challenges: true,
+      },
     }
   },
   computed: {
@@ -1179,5 +1191,9 @@ export default {
 .slide-fade-leave-to {
   transform: translateX(-50%) translateY(-20px);
   opacity: 0;
+}
+
+.ghost-card {
+  opacity: 0.5;
 }
 </style>

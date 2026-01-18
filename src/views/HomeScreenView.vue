@@ -98,9 +98,11 @@
         item-key="id"
         class="space-y-4"
         handle=".drag-handle"
+        :animation="200"
+        ghost-class="ghost-card"
       >
         <template #item="{ element }">
-          <CollapsibleCard v-if="element === 'statistics'" title="ESTATÍSTICAS" class="drag-handle cursor-move">
+          <CollapsibleCard v-if="element === 'statistics'" title="ESTATÍSTICAS" v-model="cardOpenStates.statistics">
         <StatisticsChart
           v-if="statistics"
           :data="statistics.last7Days"
@@ -119,7 +121,7 @@
         </div>
           </CollapsibleCard>
 
-          <CollapsibleCard v-else-if="element === 'consumptions'" title="CONSUMOS" class="drag-handle cursor-move">
+          <CollapsibleCard v-else-if="element === 'consumptions'" title="CONSUMOS" v-model="cardOpenStates.consumptions">
         <div class="space-y-2.5">
           <div class="grid grid-cols-3 gap-2.5 flex-wrap">
             <ConsumptionCard
@@ -136,7 +138,7 @@
         </div>
           </CollapsibleCard>
 
-          <CollapsibleCard v-else-if="element === 'tasks'" title="TAREFAS" class="drag-handle cursor-move">
+          <CollapsibleCard v-else-if="element === 'tasks'" title="TAREFAS" v-model="cardOpenStates.tasks">
         <div class="space-y-2.5">
           <div class="grid grid-cols-3 gap-2.5 flex-wrap">
             <TaskCard
@@ -151,7 +153,7 @@
         </div>
           </CollapsibleCard>
 
-          <CollapsibleCard v-else-if="element === 'tools'" title="FERRAMENTAS" class="drag-handle cursor-move">
+          <CollapsibleCard v-else-if="element === 'tools'" title="FERRAMENTAS" v-model="cardOpenStates.tools">
         <div class="flex gap-2.5">
           <!-- Emission Calculator Tool -->
           <div
@@ -355,6 +357,14 @@ export default {
       
       // Card order
       cardOrder: ['statistics', 'consumptions', 'tasks', 'tools'],
+      
+      // Card open states
+      cardOpenStates: {
+        statistics: true,
+        consumptions: true,
+        tasks: true,
+        tools: true,
+      },
     }
   },
   computed: {
@@ -570,5 +580,9 @@ export default {
 .slide-fade-leave-to {
   transform: translateX(-50%) translateY(-20px);
   opacity: 0;
+}
+
+.ghost-card {
+  opacity: 0.5;
 }
 </style>
