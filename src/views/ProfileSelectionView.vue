@@ -140,6 +140,36 @@
         </ActionButton>
       </template>
     </ModalComponent>
+
+    <!-- Admin PIN Modal -->
+    <ModalComponent :isOpen="showAdminPinModal" title="PIN de Administrador" size="sm" @close="closeAdminPinModal">
+      <div class="flex flex-col gap-4">
+        <p class="text-(--text-body-sub-titles) text-sm">
+          Para aceder ao painel de administração, introduza o PIN do administrador.
+        </p>
+        <div>
+          <label class="block text-sm font-medium text-(--text-body-sub-titles) mb-2">
+            PIN
+          </label>
+          <FormInput
+            v-model="adminPinInput"
+            type="password"
+            placeholder="****"
+            maxlength="4"
+            @keyup.enter="validateAndGoToAdmin"
+          />
+        </div>
+        <p v-if="adminPinError" class="text-(--semantic-error-default) text-sm text-center">
+          {{ adminPinError }}
+        </p>
+      </div>
+      <template #footer>
+        <ActionButton @click="closeAdminPinModal" :variant="'secondary'"> Cancelar </ActionButton>
+        <ActionButton @click="validateAndGoToAdmin" :disabled="adminPinInput.length !== 4">
+          Confirmar
+        </ActionButton>
+      </template>
+    </ModalComponent>
   </div>
 </template>
 
@@ -165,8 +195,11 @@ export default {
     return {
       showAddProfileModal: false,
       showPinModal: false,
+      showAdminPinModal: false,
       pinInput: '',
       pinError: '',
+      adminPinInput: '',
+      adminPinError: '',
       selectedProfileId: null,
       isUploading: false,
       newProfile: {
@@ -331,7 +364,37 @@ export default {
       }
     },
     goToAdmin() {
-      this.$router.push({ name: 'admin' })
+      // Check if admin profile has a PIN
+      const adminProfile = this.profiles.find(p => p.isAdmin)
+      if (adminProfile?.settings?.pin) {
+        // Show PIN modal
+        this.adminPinInput = ''
+        this.adminPinError = ''
+        this.showAdminPinModal = true
+      } else {
+        // No PIN, proceed directly
+        this.$router.push({ name: 'admin' })
+      }
+    },
+    closeAdminPinModal() {
+      this.showAdminPinModal = false
+      this.adminPinInput = ''
+      this.adminPinError = ''
+    },
+    validateAndGoToAdmin() {
+      const adminProfile = this.profiles.find(p => p.isAdmin)
+      if (!adminProfile?.settings?.pin) return
+      
+      // Validate PIN
+      if (this.adminPinInput === adminProfile.settings.pin) {
+        // PIN correct, go to admin
+        this.closeAdminPinModal()
+        this.$router.push({ name: 'admin' })
+      } else {
+        // PIN incorrect
+        this.adminPinError = 'PIN incorreto. Tente novamente.'
+        this.adminPinInput = ''
+      }
     },
   },
 }
