@@ -1,6 +1,6 @@
 <template>
   <div 
-    class="relative h-[210px] rounded-[21px] w-[284px] overflow-hidden cursor-pointer hover:scale-105 transition-transform group"
+    class="relative h-[210px] rounded-[21px] w-[284px] overflow-hidden cursor-pointer transition-transform group"
     @click="$emit('click')"
   >
     <!-- Background Image -->
@@ -13,7 +13,7 @@
     <div v-else class="absolute inset-0 bg-(--system-border)"></div>
 
     <!--Overlay on hover -->
-    <div class="absolute inset-0 bg-black opacity-0 group-hover:opacity-10 transition-opacity"></div>
+    <div class="absolute inset-0 bg-black opacity-0 group-hover:opacity-45 transition-opacity"></div>
 
     <!-- Label Badge -->
     <div 
