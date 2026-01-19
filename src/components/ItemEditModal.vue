@@ -35,9 +35,6 @@
             <option value="desktop">Computador de secretária</option>
             <option value="laptop">Computador portátil</option>
           </optgroup>
-          <optgroup label="Outros">
-            <option value="electricity">Aparelho genérico</option>
-          </optgroup>
         </select>
         <p class="text-xs text-(--text-disabled)">
           Escolha o tipo mais próximo do seu aparelho para cálculos precisos
@@ -171,13 +168,11 @@
 
 <script>
 import ModalComponent from './ModalComponent.vue'
-import FormInput from './FormInput.vue'
 
 export default {
   name: 'ItemEditModal',
   components: {
     ModalComponent,
-    FormInput,
   },
   props: {
     isOpen: {
