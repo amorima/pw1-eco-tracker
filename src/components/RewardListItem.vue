@@ -66,26 +66,39 @@ export default {
     status: {
       type: String,
       default: '',
-      validator: (value) => ['', 'pendente', 'completo', 'cancelado'].includes(value)
+      validator: (value) => ['', 'pending', 'pendente', 'complete', 'completo', 'cancelado', 'cancelled'].includes(value)
     }
   },
   computed: {
     showAction() {
-      return !this.status || this.status === 'pendente'
+      const pendingStatuses = ['pending', 'pendente']
+      return !this.status || pendingStatuses.includes(this.status)
     },
     actionVariant() {
-      return this.status === 'pendente' ? 'delete' : 'confirm'
+      const pendingStatuses = ['pending', 'pendente']
+      return pendingStatuses.includes(this.status) ? 'delete' : 'confirm'
     },
     statusClass() {
       const classes = {
+        'pending': 'text-(--semantic-warning-default)',
         'pendente': 'text-(--semantic-warning-default)',
+        'complete': 'text-(--semantic-success-default)',
         'completo': 'text-(--semantic-success-default)',
-        'cancelado': 'text-(--semantic-error-default)'
+        'cancelado': 'text-(--semantic-error-default)',
+        'cancelled': 'text-(--semantic-error-default)'
       }
       return classes[this.status] || ''
     },
     statusText() {
-      return this.status
+      const texts = {
+        'pending': 'pendente',
+        'pendente': 'pendente',
+        'complete': 'completo',
+        'completo': 'completo',
+        'cancelado': 'cancelado',
+        'cancelled': 'cancelado'
+      }
+      return texts[this.status] || this.status
     }
   }
 }

@@ -1,6 +1,127 @@
+
 <template>
   <div class="bg-(--system-background) min-h-screen">
     <MenuNav :landing="false" />
+
+    <!-- Toast Notification -->
+    <Transition name="slide-fade">
+      <div v-if="showToast" class="fixed top-6 left-1/2 -translate-x-1/2 z-50">
+        <ToastNotification :variant="toastVariant" :message="toastMessage" />
+      </div>
+    </Transition>
+
+    <!-- Badge Modal -->
+    <BadgeModal
+      :isOpen="showBadgeModal"
+      :badge="selectedBadge"
+      @close="showBadgeModal = false"
+    />
+
+    <!-- PIN Confirmation Modal (for disabling) -->
+    <ModalComponent
+      :isOpen="showPinConfirmModal"
+      title="Confirmar PIN"
+      size="sm"
+      @close="cancelPinDisable"
+    >
+      <div class="flex flex-col gap-4">
+        <p class="text-(--text-body-sub-titles) text-sm">
+          Introduza o seu PIN atual para desativar a proteção do perfil.
+        </p>
+        <div>
+          <label class="block text-sm font-medium text-(--text-body-sub-titles) mb-2">
+            PIN Atual
+          </label>
+          <FormInput
+            v-model="pinConfirmInput"
+            type="password"
+            placeholder="****"
+            maxlength="4"
+            @keyup.enter="confirmPinDisable"
+          />
+        </div>
+        <p v-if="pinError" class="text-(--semantic-error-default) text-sm text-center">
+          {{ pinError }}
+        </p>
+      </div>
+      <template #footer>
+        <button
+          @click="cancelPinDisable"
+          class="px-4 py-2 bg-(--system-border) text-(--text-body-titles) rounded-lg font-semibold"
+        >
+          Cancelar
+        </button>
+        <button
+          @click="confirmPinDisable"
+          :disabled="pinConfirmInput.length !== 4"
+          class="px-4 py-2 bg-(--system-ring) text-white rounded-lg font-semibold disabled:opacity-50"
+        >
+          Confirmar
+        </button>
+      </template>
+    </ModalComponent>
+
+    <!-- PIN Setup Modal -->
+    <ModalComponent
+      :isOpen="showPinModal"
+      title="Definir PIN"
+      size="sm"
+      @close="cancelPinSetup"
+    >
+      <div class="flex flex-col gap-4">
+        <p class="text-(--text-body-sub-titles) text-sm">
+          Defina um PIN de 4 dígitos para proteger o seu perfil.
+        </p>
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-(--text-body-sub-titles) mb-2">
+              PIN
+            </label>
+            <input
+              v-model="pinInput"
+              type="password"
+              maxlength="4"
+              pattern="[0-9]*"
+              inputmode="numeric"
+              placeholder="****"
+              class="w-full px-4 py-3 bg-(--system-card) border-2 border-(--system-border) rounded-lg text-(--text-body) outline-none focus:border-(--system-ring) text-center text-2xl tracking-widest"
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-(--text-body-sub-titles) mb-2">
+              Confirmar PIN
+            </label>
+            <input
+              v-model="pinConfirmInput"
+              type="password"
+              maxlength="4"
+              pattern="[0-9]*"
+              inputmode="numeric"
+              placeholder="****"
+              class="w-full px-4 py-3 bg-(--system-card) border-2 border-(--system-border) rounded-lg text-(--text-body) outline-none focus:border-(--system-ring) text-center text-2xl tracking-widest"
+            />
+          </div>
+          <p v-if="pinError" class="text-(--semantic-error-default) text-sm text-center">
+            {{ pinError }}
+          </p>
+        </div>
+      </div>
+      <template #footer>
+        <button
+          @click="cancelPinSetup"
+          class="px-4 py-2 bg-(--system-border) text-(--text-body-titles) rounded-lg font-semibold"
+        >
+          Cancelar
+        </button>
+        <button
+          @click="confirmPinSetup"
+          :disabled="!isPinValid"
+          class="px-4 py-2 bg-(--system-ring) text-white rounded-lg font-semibold disabled:opacity-50"
+        >
+          Confirmar
+        </button>
+      </template>
+    </ModalComponent>
 
     <div class="max-w-[912px] mx-auto px-4 py-8 flex flex-col gap-8">
       <!-- Profile Header -->
@@ -10,13 +131,11 @@
         <div
           class="border-2 border-(--system-border) overflow-hidden relative rounded-[999px] shrink-0 w-[100px] h-[100px]"
         >
-          <div class="absolute h-full left-[-51px] top-[10px] w-[278px]">
-            <img
-              src="https://api.dicebear.com/7.x/avataaars/svg?seed=Jose"
-              alt="User avatar"
-              class="absolute inset-0 max-w-none object-contain pointer-events-none w-full h-full"
-            />
-          </div>
+          <img
+            :src="currentProfile?.avatar || 'https://api.dicebear.com/7.x/avataaars/svg?seed=User'"
+            alt="User avatar"
+            class="absolute inset-0 max-w-none object-cover pointer-events-none w-full h-full"
+          />
         </div>
 
         <div
@@ -29,7 +148,7 @@
               Nome:
             </p>
             <p class="leading-[1.75] relative shrink-0 text-[18px] text-(--text-body)">
-              {{ userInfo.name }}
+              {{ currentProfile?.name || 'Utilizador' }}
             </p>
           </div>
           <div
@@ -39,7 +158,7 @@
               País:
             </p>
             <p class="leading-[1.75] relative shrink-0 text-[18px] text-(--text-body)">
-              {{ userInfo.country }}
+              Portugal
             </p>
           </div>
           <div
@@ -49,7 +168,7 @@
               Contacto:
             </p>
             <p class="leading-[1.75] relative shrink-0 text-[18px] text-(--text-body)">
-              {{ userInfo.contact }}
+              {{ userStore.currentUser?.email || 'email@example.com' }}
             </p>
           </div>
           <div
@@ -59,7 +178,7 @@
               Idade:
             </p>
             <p class="leading-[1.75] relative shrink-0 text-[18px] text-(--text-body)">
-              {{ userInfo.age }}
+              {{ currentProfile?.age || '-' }}
             </p>
           </div>
         </div>
@@ -74,7 +193,7 @@
           <div
             class="[grid-area:1_/_1] flex flex-col font-['Noto_Sans'] font-normal justify-center leading-[0] relative shrink-0 text-[16px] text-(--text-body-sub-titles) text-nowrap"
           >
-            <p class="leading-[1.5]">Nível: {{ level }}</p>
+            <p class="leading-[1.5]">Nível: {{ currentProfile?.level || 1 }}</p>
           </div>
           <div
             class="[grid-area:2_/_1_/_auto_/_span_2] flex flex-col gap-[8px] h-[47px] items-start justify-end justify-self-stretch relative shrink-0"
@@ -82,13 +201,13 @@
             <p
               class="font-['Noto_Sans'] font-normal leading-[1.5] min-w-full relative shrink-0 text-[14px] text-(--text-body) w-[min-content]"
             >
-              {{ xp }}/{{ maxXp }}xp
+              {{ xpInCurrentLevel }}/{{ xpForNextLevel }}xp
             </p>
             <div
               class="bg-(--system-popover) flex h-[8px] items-center overflow-hidden relative rounded-[999px] shrink-0 w-full"
             >
               <div
-                class="bg-(--system-ring) h-full rounded-[999px] shrink-0"
+                class="bg-(--system-ring) h-full rounded-[999px] shrink-0 transition-all duration-500"
                 :style="{ width: `${xpPercentage}%` }"
               ></div>
             </div>
@@ -106,67 +225,109 @@
           </p>
           <div class="[grid-area:2_/_1] flex items-start justify-between relative shrink-0">
             <StreakButton
-              v-for="(day, index) in weekDays"
+              v-for="(day, index) in weekDaysStreak"
               :key="index"
               :day="day.label"
               :completed="day.completed"
             />
           </div>
           <div class="[grid-area:1_/_2_/_span_2] justify-self-end">
-            <StreakCard :days="streak" />
+            <StreakCard :days="currentProfile?.streak || 0" />
           </div>
         </div>
       </div>
 
-      <!-- Badges Section -->
-      <CollapsibleCard title="Badges" icon="apps" :isOpen="sections.badges">
+      <!-- Draggable Collapsible Cards -->
+      <draggable
+        v-model="cardOrder"
+        @end="saveCardOrder"
+        item-key="id"
+        class="flex flex-col gap-8"
+        handle=".drag-handle"
+        :animation="200"
+        ghost-class="ghost-card"
+      >
+        <template #item="{ element }">
+          <CollapsibleCard v-if="element === 'badges'" title="Badges" icon="apps" v-model="cardOpenStates.badges">
         <div
           class="grid grid-cols-3 gap-[8px] w-full items-start overflow-hidden px-0 py-[16px] relative shrink-0 w-full"
         >
           <BadgeCard
-            v-for="badge in badges"
+            v-for="badge in allBadgesWithStatus"
             :key="badge.id"
             :icon="badge.icon"
             :title="badge.title"
-            :locked="badge.locked"
+            :locked="!badge.earned"
+            @click="openBadgeModal(badge)"
           />
         </div>
-      </CollapsibleCard>
+          </CollapsibleCard>
 
-      <!-- Ranking Section -->
-      <CollapsibleCard title="Ranking" icon="apps" :isOpen="sections.ranking">
+          <CollapsibleCard v-else-if="element === 'ranking'" title="Ranking" icon="apps" v-model="cardOpenStates.ranking">
         <div
           class="flex flex-col gap-[8px] items-start overflow-hidden px-0 py-[8px] relative shrink-0 w-full"
         >
           <RankingRow
-            v-for="rank in rankings"
-            :key="rank.position"
-            :position="rank.position"
-            :name="rank.name"
-            :highlight="rank.highlight"
+            v-for="profile in householdLeaderboard"
+            :key="profile.id"
+            :position="profile.rank"
+            :name="profile.name"
+            :highlight="profile.id === currentProfile?.id"
           />
         </div>
-      </CollapsibleCard>
+          </CollapsibleCard>
 
-      <!-- Challenges Section -->
-      <CollapsibleCard title="Desafios" icon="apps" :isOpen="sections.challenges">
+          <CollapsibleCard v-else-if="element === 'challenges'" title="Desafios" icon="apps" v-model="cardOpenStates.challenges">
+        <!-- Sort Toggle -->
+        <div v-if="profileChallenges.length > 0" class="flex items-center justify-end mb-4">
+          <button
+            @click="sortCompletedFirst = !sortCompletedFirst"
+            :class="[
+              'flex items-center gap-2 px-3 py-2 rounded-lg transition-colors',
+              sortCompletedFirst
+                ? 'bg-(--system-ring) text-white'
+                : 'bg-(--system-card) border-2 border-(--system-border) text-(--text-body-sub-titles)'
+            ]"
+          >
+            <span class="material-symbols-outlined text-[20px]">
+              {{ sortCompletedFirst ? 'check_circle' : 'radio_button_unchecked' }}
+            </span>
+            <span class="text-sm font-medium">Completados primeiro</span>
+          </button>
+        </div>
+
         <div
-          class="gap-[8px] grid grid-cols-[repeat(2,_minmax(0px,_1fr))] grid-rows-[repeat(3,_fit-content(100%))] relative shrink-0 w-full"
+          v-if="paginatedChallenges.length > 0"
+          class="gap-[8px] grid grid-cols-[repeat(2,_minmax(0px,_1fr))] relative shrink-0 w-full"
         >
           <ChallengeCard
-            v-for="challenge in challenges"
+            v-for="challenge in paginatedChallenges"
             :key="challenge.id"
             :title="challenge.title"
             :description="challenge.description"
             :progress="challenge.progress"
             :xp="challenge.xp"
-            :active="challenge.active"
+            :active="challenge.completed"
           />
         </div>
-      </CollapsibleCard>
+        <div v-else class="text-center py-8 text-(--text-disabled)">
+          <span class="material-symbols-outlined text-4xl mb-2">emoji_events</span>
+          <p>Nenhum desafio ativo no momento.</p>
+          <p class="text-sm">O administrador pode criar desafios para a família.</p>
+        </div>
 
-      <!-- Rewards Section -->
-      <CollapsibleCard title="Recompensas" icon="apps" :isOpen="sections.rewards">
+        <!-- Ver Mais Button -->
+        <button
+          v-if="sortedChallenges.length > displayedChallengesCount"
+          @click="displayedChallengesCount += 6"
+          class="flex items-center gap-1 mx-auto text-(--system-ring) text-lg mt-4 hover:opacity-80 transition-opacity"
+        >
+          <span class="material-symbols-outlined">expand_more</span>
+          <span>Ver mais</span>
+        </button>
+          </CollapsibleCard>
+
+          <CollapsibleCard v-else-if="element === 'rewards'" title="Recompensas" icon="apps" v-model="cardOpenStates.rewards">
         <!-- Tab Navigation -->
         <div class="flex items-center justify-between px-0 py-[8px] relative shrink-0 w-full">
           <button
@@ -240,10 +401,9 @@
             :points="reward.points"
             @action="redeemReward(reward)"
           />
-          <button class="text-(--system-ring) flex items-center gap-1 mx-auto mt-4">
-            <p class="font-['Noto_Sans'] font-normal leading-[1.75] text-[18px]">Ver mais</p>
-            <span class="material-symbols-outlined text-[24px]">keyboard_arrow_down</span>
-          </button>
+          <p v-if="filteredAvailableRewards.length === 0" class="text-center py-4 text-(--text-disabled)">
+            Nenhuma recompensa disponível
+          </p>
         </div>
 
         <div v-else>
@@ -255,28 +415,26 @@
           <RewardListItem
             v-for="reward in redeemedRewards"
             :key="reward.id"
-            :image="reward.image"
+            :image="getRewardImage(reward.rewardId)"
             :title="reward.title"
-            :points="reward.points"
-            :date="reward.date"
+            :points="reward.pointsCost"
+            :date="formatDate(reward.redeemedAt)"
             :status="reward.status"
             @action="cancelReward(reward)"
           />
-          <button class="text-(--system-ring) flex items-center gap-1 mx-auto mt-4">
-            <p class="font-['Noto_Sans'] font-normal leading-[1.75] text-[18px]">Ver mais</p>
-            <span class="material-symbols-outlined text-[24px]">keyboard_arrow_down</span>
-          </button>
+          <p v-if="redeemedRewards.length === 0" class="text-center py-4 text-(--text-disabled)">
+            Nenhuma recompensa resgatada
+          </p>
         </div>
 
         <p
           class="font-['Noto_Sans'] font-semibold leading-[1.5] relative shrink-0 text-[20px] text-(--text-body-titles) text-right w-full mt-4"
         >
-          {{ totalPoints }} pontos
+          {{ currentProfile?.points || 0 }} pontos
         </p>
-      </CollapsibleCard>
+          </CollapsibleCard>
 
-      <!-- Settings Section -->
-      <CollapsibleCard title="Configurações" icon="apps" :isOpen="sections.settings">
+          <CollapsibleCard v-else-if="element === 'settings'" title="Configurações" icon="apps" v-model="cardOpenStates.settings">
         <div class="flex flex-col gap-[4px] items-start overflow-hidden relative shrink-0 w-full">
           <div
             v-for="setting in settingsList"
@@ -297,13 +455,14 @@
                 <p class="leading-[1.5] text-nowrap">{{ setting.description }}</p>
               </div>
             </div>
-            <ToggleSwitch v-model="settings[setting.key]" />
+            <ToggleSwitch v-model="localSettings[setting.key]" @update:modelValue="saveSettings" />
           </div>
         </div>
-      </CollapsibleCard>
+          </CollapsibleCard>
+        </template>
+      </draggable>
     </div>
 
-    <FooterSection />
 
     <!-- ChatBot -->
     <ChatBot context="profile" />
@@ -312,204 +471,77 @@
 
 <script>
 import MenuNav from '@/components/MenuNav.vue'
-import FooterSection from '@/components/FooterSection.vue'
+import draggable from 'vuedraggable'
 import CollapsibleCard from '@/components/CollapsibleCard.vue'
 import StreakCard from '@/components/StreakCard.vue'
 import StreakButton from '@/components/StreakButton.vue'
 import BadgeCard from '@/components/BadgeCard.vue'
+import BadgeModal from '@/components/BadgeModal.vue'
 import RankingRow from '@/components/RankingRow.vue'
 import ChallengeCard from '@/components/ChallengeCard.vue'
 import RewardListItem from '@/components/RewardListItem.vue'
 import ToggleSwitch from '@/components/ToggleSwitch.vue'
 import ChatBot from '@/components/ChatBot.vue'
+import ToastNotification from '@/components/ToastNotification.vue'
+import ModalComponent from '@/components/ModalComponent.vue'
+import FormInput from '@/components/FormInput.vue'
+import { useUserStore } from '@/stores/userStore'
 
 export default {
   name: 'ProfileView',
   components: {
+    draggable,
     MenuNav,
-    FooterSection,
     CollapsibleCard,
     StreakCard,
     StreakButton,
     BadgeCard,
+    BadgeModal,
     RankingRow,
     ChallengeCard,
     RewardListItem,
     ToggleSwitch,
+    ModalComponent,
+    FormInput,
     ChatBot,
+    ToastNotification,
   },
   data() {
     return {
-      userInfo: {
-        name: 'José Maria',
-        age: 12,
-        country: 'Portugal',
-        contact: 'jose_maria@gmail.com',
-      },
-      level: 15,
-      xp: 750,
-      maxXp: 1000,
-      streak: 5,
-      weekDays: [
-        { label: 'S', completed: true },
-        { label: 'T', completed: true },
-        { label: 'Q', completed: true },
-        { label: 'Q', completed: true },
-        { label: 'S', completed: true },
-        { label: 'S', completed: false },
-        { label: 'D', completed: false },
-      ],
-      sections: {
-        badges: true,
-        ranking: true,
-        challenges: true,
-        rewards: true,
-        settings: true,
-      },
-      badges: [
-        { id: 1, icon: 'emoji_events', title: 'Nível 10', locked: false },
-        { id: 2, icon: 'recycling', title: 'Reciclagem nível 5', locked: false },
-        { id: 3, icon: 'recycling', title: 'Reutilizador nível 2', locked: false },
-        { id: 4, icon: 'bolt', title: 'Luzes apagadas nível 1', locked: true },
-        { id: 5, icon: 'train', title: 'Transportes coletivos 1', locked: true },
-        { id: 6, icon: 'eco', title: 'Sustentável 1', locked: true },
-        { id: 7, icon: 'water_drop', title: 'Abaixo de zero', locked: true },
-        { id: 8, icon: 'recycling', title: 'Separador 1', locked: true },
-      ],
-      rankings: [
-        { position: 1, name: 'Mário Pires', highlight: false },
-        { position: 2, name: 'José Maria', highlight: true },
-        { position: 3, name: 'Manuel Sá', highlight: false },
-      ],
-      challenges: [
-        {
-          id: 1,
-          title: 'Transportes verdes',
-          description: 'Use "transportes públicos" ou "bicicleta" 5 vezes',
-          progress: 0,
-          xp: 50,
-          active: true,
-        },
-        {
-          id: 2,
-          title: 'Reciclar 10 dias seguidos',
-          description: 'Contribua para a tarefa "Reciclar Resíduos"',
-          progress: 25,
-          xp: 50,
-          active: false,
-        },
-        {
-          id: 3,
-          title: 'Casa verde',
-          description: 'Contribua para a tareda "Desligar Equipamentos"',
-          progress: 50,
-          xp: 50,
-          active: false,
-        },
-        {
-          id: 4,
-          title: 'Reduzir 2kg de emissão de CO2',
-          description: 'Contribua para tarefas que reduzam emissões',
-          progress: 0,
-          xp: 50,
-          active: false,
-        },
-        {
-          id: 5,
-          title: 'Contribuir para a Limpeza',
-          description: 'Contribua para a tarefa "Limpezas"',
-          progress: 0,
-          xp: 50,
-          active: false,
-        },
-        {
-          id: 6,
-          title: 'Tomar banhos rápidos',
-          description: 'Duração máxima: 10 minutos',
-          progress: 0,
-          xp: 50,
-          active: false,
-        },
-      ],
-      availableRewards: [
-        {
-          id: 1,
-          image: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=400',
-          title: 'Ida ao parque',
-          points: 400,
-        },
-        {
-          id: 2,
-          image: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400',
-          title: 'Jantar fora',
-          points: 120,
-        },
-        {
-          id: 3,
-          image: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=400',
-          title: 'Ida ao cinema',
-          points: 100,
-        },
-        {
-          id: 4,
-          image: 'https://images.unsplash.com/photo-1511367461989-f85a21fda167?w=400',
-          title: 'Escolher a música no carro',
-          points: 20,
-        },
-        {
-          id: 5,
-          image: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400',
-          title: 'Tempo extra de lazer',
-          points: 60,
-        },
-        {
-          id: 6,
-          image: 'https://images.unsplash.com/photo-1587241321921-91a834d6d191?w=400',
-          title: 'Doces e salgados',
-          points: 10,
-        },
-      ],
-      redeemedRewards: [
-        {
-          id: 1,
-          image: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400',
-          title: 'Jantar fora',
-          points: 120,
-          date: '14/09/2025',
-          status: 'pendente',
-        },
-        {
-          id: 2,
-          image: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400',
-          title: 'Jantar fora',
-          points: 120,
-          date: '08/07/2025',
-          status: 'cancelado',
-        },
-        {
-          id: 3,
-          image: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400',
-          title: 'Tempo extra de lazer',
-          points: 60,
-          date: '08/07/2025',
-          status: 'completo',
-        },
-        {
-          id: 4,
-          image: 'https://images.unsplash.com/photo-1587241321921-91a834d6d191?w=400',
-          title: 'Doces e salgados',
-          points: 10,
-          date: '27/06/2025',
-          status: 'cancelado',
-        },
-      ],
+      // Toast State
+      showToast: false,
+      toastMessage: '',
+      toastVariant: 'success',
+
+      // Badge Modal
+      showBadgeModal: false,
+      selectedBadge: null,
+
+      // PIN Setup Modal
+      showPinModal: false,
+      showPinConfirmModal: false,
+      pinInput: '',
+      pinConfirmInput: '',
+      pinError: '',
+
+      // Rewards
       rewardTab: 'redeem',
       rewardSearch: '',
-      settings: {
+      // Track rewards currently being redeemed to avoid duplicate requests
+      redeemingRewards: [],
+
+      // Challenges
+      displayedChallengesCount: 12,
+      sortCompletedFirst: false,
+
+      // Local settings (to prevent direct mutation)
+      localSettings: {
         privateProfile: false,
-        notifications: false,
+        notifications: true,
         keepSession: false,
       },
+
+      // Settings list
       settingsList: [
         {
           key: 'privateProfile',
@@ -527,12 +559,97 @@ export default {
           description: 'Torna este o perfil padrão do dispositivo',
         },
       ],
-      totalPoints: 278,
+
+      // Card order
+      cardOrder: ['badges', 'ranking', 'challenges', 'rewards', 'settings'],
+      
+      // Card open states
+      cardOpenStates: {
+        badges: true,
+        ranking: true,
+        challenges: true,
+        rewards: true,
+        settings: true,
+      },
+      
+      // Default challenges (used when admin hasn't set any)
+      defaultChallenges: [
+        {
+          id: 1,
+          title: 'Transportes verdes',
+          description: 'Use "transportes públicos" ou "bicicleta" 5 vezes',
+          target: 5,
+          xp: 50,
+        },
+        {
+          id: 2,
+          title: 'Reciclar 10 dias seguidos',
+          description: 'Contribua para a tarefa "Reciclar Resíduos"',
+          target: 10,
+          xp: 50,
+        },
+        {
+          id: 3,
+          title: 'Casa verde',
+          description: 'Contribua para a tarefa "Desligar Equipamentos"',
+          target: 20,
+          xp: 50,
+        },
+        {
+          id: 4,
+          title: 'Reduzir 2kg de emissão de CO2',
+          description: 'Contribua para tarefas que reduzam emissões',
+          target: 2,
+          xp: 50,
+        },
+        {
+          id: 5,
+          title: 'Contribuir para a Limpeza',
+          description: 'Contribua para a tarefa "Limpezas"',
+          target: 5,
+          xp: 50,
+        },
+        {
+          id: 6,
+          title: 'Tomar banhos rápidos',
+          description: 'Complete a tarefa "Duche de 5 minutos" 10 vezes',
+          target: 10,
+          xp: 50,
+        },
+      ],
     }
   },
   computed: {
+    userStore() {
+      return useUserStore()
+    },
+    currentProfile() {
+      return this.userStore.currentProfile
+    },
+    allBadgesWithStatus() {
+      return this.userStore.allBadgesWithStatus
+    },
+    householdLeaderboard() {
+      return this.userStore.householdLeaderboard
+    },
+    weekDaysStreak() {
+      return this.userStore.weekDaysStreak
+    },
+    xpForNextLevel() {
+      return 100 // Each level is 100 XP
+    },
+    xpInCurrentLevel() {
+      const xp = this.currentProfile?.xp || 0
+      return xp % 100
+    },
     xpPercentage() {
-      return (this.xp / this.maxXp) * 100
+      return (this.xpInCurrentLevel / this.xpForNextLevel) * 100
+    },
+    availableRewards() {
+      return this.userStore.householdRewards || []
+    },
+    redeemedRewards() {
+      return this.currentProfile?.rewardsRedeemed || []
     },
     filteredAvailableRewards() {
       if (!this.rewardSearch) return this.availableRewards
@@ -540,16 +657,404 @@ export default {
         r.title.toLowerCase().includes(this.rewardSearch.toLowerCase()),
       )
     },
+    profileChallenges() {
+      const storeChallenges = this.userStore.householdChallenges || []
+      const activities = this.currentProfile?.activityHistory || []
+      const allChallenges = []
+      
+      // Process household challenges (both old and new format)
+      storeChallenges.forEach(challenge => {
+        let progress = 0
+        let title = challenge.title || ''
+        let description = challenge.description || ''
+        
+        // NEW FORMAT: Task-based challenges
+        if (challenge.taskId) {
+          const task = this.userStore.availableTasks.find(t => String(t.id) === String(challenge.taskId))
+          
+          if (task) {
+            title = task.title
+            description = challenge.type === 'streak' 
+              ? `Complete ${challenge.target} dias consecutivos`
+              : `Complete ${challenge.target} vezes`
+            
+            // Calculate progress based on challenge type
+            if (challenge.type === 'streak') {
+              // Streak-based: count consecutive days with this task completed
+              const taskActivities = activities
+                .filter(a => String(a.taskId) === String(challenge.taskId))
+                .sort((a, b) => new Date(b.completedAt) - new Date(a.completedAt))
+              
+              let currentStreak = 0
+              let lastDate = null
+              
+              for (const activity of taskActivities) {
+                const activityDate = new Date(activity.completedAt).toDateString()
+                
+                if (!lastDate) {
+                  currentStreak = 1
+                  lastDate = new Date(activity.completedAt)
+                } else {
+                  const dayDiff = Math.floor((lastDate - new Date(activity.completedAt)) / (1000 * 60 * 60 * 24))
+                  if (dayDiff === 1) {
+                    currentStreak++
+                    lastDate = new Date(activity.completedAt)
+                  } else {
+                    break
+                  }
+                }
+              }
+              
+              progress = currentStreak
+            } else {
+              // Completion-based: count total completions of this task
+              progress = activities.filter(a => String(a.taskId) === String(challenge.taskId)).length
+            }
+          }
+        } 
+        // OLD FORMAT: Category/Title-based challenges (backward compatibility)
+        else {
+          // Use existing title and description from the challenge
+          title = challenge.title || ''
+          description = challenge.description || ''
+          
+          // Calculate progress based on category if present
+          if (challenge.category) {
+            if (challenge.category === 'Mobilidade') {
+              progress = activities.filter(a => {
+                const task = this.userStore.availableTasks.find(t => String(t.id) === String(a.taskId))
+                return task?.category === 'Mobilidade'
+              }).length
+            } else if (challenge.category === 'Reciclagem') {
+              progress = activities.filter(a => {
+                const task = this.userStore.availableTasks.find(t => String(t.id) === String(a.taskId))
+                return task?.category === 'Reciclagem'
+              }).length
+            } else if (challenge.category === 'Energia') {
+              progress = activities.filter(a => {
+                const task = this.userStore.availableTasks.find(t => String(t.id) === String(a.taskId))
+                return task?.category === 'Energia'
+              }).length
+            } else if (challenge.category === 'Água') {
+              progress = activities.filter(a => {
+                const task = this.userStore.availableTasks.find(t => String(t.id) === String(a.taskId))
+                return task?.category === 'Água'
+              }).length
+            } else if (challenge.category === 'Alimentação') {
+              progress = activities.filter(a => {
+                const task = this.userStore.availableTasks.find(t => String(t.id) === String(a.taskId))
+                return task?.category === 'Alimentação'
+              }).length
+            } else if (challenge.category === 'Ambiente') {
+              progress = activities.filter(a => {
+                const task = this.userStore.availableTasks.find(t => String(t.id) === String(a.taskId))
+                return task?.category === 'Ambiente'
+              }).length
+            }
+          }
+        }
+        
+        // Add to unified array with consistent structure
+        allChallenges.push({
+          id: challenge.id,
+          title,
+          description,
+          currentProgress: progress,
+          progress: Math.min((progress / (challenge.target || 1)) * 100, 100),
+          completed: progress >= (challenge.target || 1),
+          xp: challenge.xp || 0,
+          target: challenge.target || 1,
+        })
+      })
+      
+      // Process and add default challenges to the same array
+      this.defaultChallenges.forEach(challenge => {
+        let progress = 0
+        
+        // Calculate progress based on challenge type
+        switch (challenge.id) {
+          case 1: // Transportes verdes
+            progress = activities.filter(a => {
+              const task = this.userStore.availableTasks.find(t => String(t.id) === String(a.taskId))
+              return task?.category === 'Mobilidade'
+            }).length
+            break
+          case 2: // Reciclar
+            progress = activities.filter(a => {
+              const task = this.userStore.availableTasks.find(t => String(t.id) === String(a.taskId))
+              return task?.category === 'Reciclagem'
+            }).length
+            break
+          case 3: // Casa verde (energia)
+            progress = activities.filter(a => {
+              const task = this.userStore.availableTasks.find(t => String(t.id) === String(a.taskId))
+              return task?.category === 'Energia'
+            }).length
+            break
+          case 4: // CO2 saved
+            progress = Math.min(this.currentProfile?.co2Saved || 0, challenge.target)
+            break
+          case 5: // Limpeza
+            progress = activities.filter(a => {
+              const task = this.userStore.availableTasks.find(t => String(t.id) === String(a.taskId))
+              return task?.title?.toLowerCase().includes('limp')
+            }).length
+            break
+          case 6: // Banhos rápidos
+            progress = activities.filter(a => {
+              const task = this.userStore.availableTasks.find(t => String(t.id) === String(a.taskId))
+              return task?.category === 'Água'
+            }).length
+            break
+        }
+        
+        // Add to unified array with consistent structure
+        allChallenges.push({
+          id: challenge.id,
+          title: challenge.title,
+          description: challenge.description,
+          currentProgress: progress,
+          progress: Math.min((progress / challenge.target) * 100, 100),
+          completed: progress >= challenge.target,
+          xp: challenge.xp || 0,
+          target: challenge.target || 1,
+        })
+      })
+      
+      return allChallenges
+    },
+    sortedChallenges() {
+      const challenges = [...this.profileChallenges]
+      if (this.sortCompletedFirst) {
+        return challenges.sort((a, b) => {
+          if (a.completed === b.completed) return 0
+          return a.completed ? -1 : 1
+        })
+      }
+      return challenges
+    },
+    paginatedChallenges() {
+      return this.sortedChallenges.slice(0, this.displayedChallengesCount)
+    },
+    isPinValid() {
+      return this.pinInput.length === 4 && this.pinInput === this.pinConfirmInput
+    },
+  },
+  watch: {
+    currentProfile: {
+      handler(profile) {
+        if (profile?.settings) {
+          this.localSettings = {
+            privateProfile: !!profile.settings.pin,
+            notifications: profile.settings.notifications ?? true,
+            keepSession: profile.settings.defaultDevice ?? false,
+          }
+        }
+      },
+      immediate: true,
+    },
+  },
+  async created() {
+    // Fetch resources if not loaded
+    if (!this.userStore.availableBadges.length) {
+      await this.userStore.fetchResources()
+    }
+    // Load saved card order from localStorage
+    const savedOrder = localStorage.getItem('profileCardOrder')
+    if (savedOrder) {
+      try {
+        this.cardOrder = JSON.parse(savedOrder)
+      } catch (e) {
+        console.error('Error loading card order:', e)
+      }
+    }
   },
   methods: {
-    redeemReward(reward) {
-      console.log('Redeeming reward:', reward)
-      // Handle reward redemption
+    showNotification(message, variant = 'success') {
+      this.toastMessage = message
+      this.toastVariant = variant
+      this.showToast = true
+      setTimeout(() => {
+        this.showToast = false
+      }, 3000)
     },
-    cancelReward(reward) {
-      console.log('Canceling reward:', reward)
-      // Handle reward cancellation
+    saveCardOrder() {
+      localStorage.setItem('profileCardOrder', JSON.stringify(this.cardOrder))
+    },
+    openBadgeModal(badge) {
+      this.selectedBadge = badge
+      this.showBadgeModal = true
+    },
+    formatDate(dateString) {
+      if (!dateString) return ''
+      const date = new Date(dateString)
+      return date.toLocaleDateString('pt-PT', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+      })
+    },
+    getRewardImage(rewardId) {
+      const reward = this.availableRewards.find(r => String(r.id) === String(rewardId))
+      return reward?.image || 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=400'
+    },
+    async saveSettings() {
+      if (!this.currentProfile) return
+
+      // If enabling private profile and no PIN is set, open PIN modal
+      if (this.localSettings.privateProfile && !this.currentProfile.settings?.pin) {
+        this.showPinModal = true
+        return
+      }
+
+      // If disabling private profile and PIN is set, require confirmation
+      if (!this.localSettings.privateProfile && this.currentProfile.settings?.pin) {
+        this.showPinConfirmModal = true
+        return
+      }
+
+      const settings = {
+        pin: this.localSettings.privateProfile ? this.currentProfile.settings?.pin || null : null,
+        notifications: this.localSettings.notifications,
+        defaultDevice: this.localSettings.keepSession,
+      }
+
+      const result = await this.userStore.updateProfileSettings(this.currentProfile.id, settings)
+      if (!result.success) {
+        this.showNotification('Erro ao guardar configurações', 'error')
+      }
+    },
+    cancelPinSetup() {
+      this.pinInput = ''
+      this.pinConfirmInput = ''
+      this.pinError = ''
+      this.showPinModal = false
+      // Revert the private profile toggle
+      this.localSettings.privateProfile = false
+    },
+    cancelPinDisable() {
+      this.pinConfirmInput = ''
+      this.pinError = ''
+      this.showPinConfirmModal = false
+      // Revert the private profile toggle back to true
+      this.localSettings.privateProfile = true
+    },
+    async confirmPinDisable() {
+      if (!this.currentProfile?.settings?.pin) return
+      
+      if (this.pinConfirmInput !== this.currentProfile.settings.pin) {
+        this.pinError = 'PIN incorreto. Tente novamente.'
+        this.pinConfirmInput = ''
+        return
+      }
+
+      // PIN correct, disable private profile
+      const settings = {
+        pin: null,
+        notifications: this.localSettings.notifications,
+        defaultDevice: this.localSettings.keepSession,
+      }
+
+      const result = await this.userStore.updateProfileSettings(this.currentProfile.id, settings)
+      if (result.success) {
+        this.showNotification('Proteção por PIN desativada com sucesso', 'success')
+        this.showPinConfirmModal = false
+        this.pinConfirmInput = ''
+        this.pinError = ''
+      } else {
+        this.showNotification('Erro ao desativar PIN', 'error')
+      }
+    },
+    async confirmPinSetup() {
+      if (this.pinInput.length !== 4) {
+        this.pinError = 'O PIN deve ter exatamente 4 dígitos'
+        return
+      }
+      if (this.pinInput !== this.pinConfirmInput) {
+        this.pinError = 'Os PINs não coincidem'
+        return
+      }
+
+      const settings = {
+        pin: this.pinInput,
+        notifications: this.localSettings.notifications,
+        defaultDevice: this.localSettings.keepSession,
+      }
+
+      const result = await this.userStore.updateProfileSettings(this.currentProfile.id, settings)
+      if (result.success) {
+        this.showNotification('PIN definido com sucesso', 'success')
+        this.showPinModal = false
+        this.pinInput = ''
+        this.pinConfirmInput = ''
+        this.pinError = ''
+      } else {
+        this.showNotification('Erro ao definir PIN', 'error')
+      }
+    },
+    async redeemReward(reward) {
+      // Prevent duplicate submissions for the same reward
+      if (this.redeemingRewards.includes(reward.id)) return
+      this.redeemingRewards.push(reward.id)
+
+      try {
+        if (!this.currentProfile) {
+          this.showNotification('Perfil não selecionado', 'error')
+          return
+        }
+
+        if ((this.currentProfile.points || 0) < reward.points) {
+          this.showNotification('Pontos insuficientes!', 'error')
+          return
+        }
+
+        const result = await this.userStore.redeemReward(reward)
+        if (result.success) {
+          this.showNotification(`Recompensa "${reward.title}" resgatada! Aguarde aprovação do administrador.`, 'success')
+        } else {
+          this.showNotification(result.message || 'Erro ao resgatar recompensa', 'error')
+        }
+      } finally {
+        // Ensure we always remove the id from the in-progress list
+        this.redeemingRewards = this.redeemingRewards.filter(id => id !== reward.id)
+      }
+    },
+    async cancelReward(reward) {
+      if (reward.status !== 'pendente' && reward.status !== 'pending') {
+        this.showNotification('Apenas recompensas pendentes podem ser canceladas', 'error')
+        return
+      }
+
+      const result = await this.userStore.cancelReward(reward.id)
+      if (result.success) {
+        this.showNotification(`Recompensa cancelada. ${result.pointsReturned} pontos devolvidos!`, 'success')
+      } else {
+        this.showNotification(result.message || 'Erro ao cancelar recompensa', 'error')
+      }
+    },
+    loadMoreChallenges() {
+      this.displayedChallengesCount += 6
     },
   },
 }
 </script>
+
+<style scoped>
+.slide-fade-enter-active {
+  transition: all 0.3s ease-out;
+}
+
+.slide-fade-leave-active {
+  transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1);
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  transform: translateX(-50%) translateY(-20px);
+  opacity: 0;
+}
+
+.ghost-card {
+  opacity: 0.5;
+}
+</style>

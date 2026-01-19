@@ -1,7 +1,7 @@
 <template>
   <div 
     :class="[
-      'flex items-center justify-center px-2 py-2 rounded-full w-fit min-w-[209px]',
+      'flex items-center justify-center px-2 py-2 rounded-full w-fit',
       variant === 'success' ? 'bg-(--primary-secondary)' : 'bg-(--semantic-error-light)'
     ]"
   >
@@ -9,7 +9,7 @@
       <span 
         :class="[
           'material-symbols-outlined text-2xl shrink-0',
-          variant === 'success' ? 'text-(--text-body-sub-titles)' : 'text-(--semantic-error-default)'
+          variant === 'success' ? 'text-(--text-body-titles)' : 'text-(--semantic-error-default)'
         ]"
       >
         {{ iconName }}

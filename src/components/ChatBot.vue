@@ -61,7 +61,7 @@
           <div
             class="bg-(--system-background) border border-(--system-border) px-4 py-2 rounded-lg"
           >
-            <p class="text-sm text-(--text-disabled)">A escrever...</p>
+            <p class="text-sm text-(--text-disabled)">A pensar...</p>
           </div>
         </div>
       </div>
@@ -136,7 +136,7 @@ export default {
       hasInteracted: false,
       connectionStatus: 'connected',
       quickActions: [
-        { id: 1, label: 'Falar com assistente', text: 'Preciso de ajuda' },
+        { id: 1, label: 'O que é a b.green?', text: 'Explica o que é a B.green' },
         { id: 2, label: 'Ver último consumo', text: 'Qual foi o meu último consumo?' },
         { id: 3, label: 'Ver ranking', text: 'Qual é a minha posição no ranking?' },
         { id: 4, label: 'Troubleshooting', text: 'Tenho um problema técnico' },
@@ -163,7 +163,7 @@ export default {
         if (this.messages.length === 0) {
           this.messages.push({
             type: 'bot',
-            content: 'Olá! Sou o assistente virtual da B.green. Como posso ajudar?',
+            content: 'Olá! Sou o assistente virtual da b.green. Como posso ajudar?',
             timestamp: new Date(),
           })
         }

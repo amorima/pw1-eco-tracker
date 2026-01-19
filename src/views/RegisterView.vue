@@ -1,5 +1,13 @@
 <template>
   <MenuNav />
+
+  <!-- Toast Notification -->
+  <Transition name="slide-fade">
+    <div v-if="showToast" class="fixed top-6 left-1/2 -translate-x-1/2 z-50">
+      <ToastNotification :variant="toastVariant" :message="toastMessage" />
+    </div>
+  </Transition>
+
   <div class="flex flex-col pt-24 pb-24 items-center justify-center bg-(--system-background)">
     <div class="flex gap-4 items-center justify-center w-full max-w-[1200px]">
       <!-- Left Form Section -->
@@ -49,9 +57,10 @@
               </ActionButton>
               <ActionButton
                 @click="handleRegister"
+                :disabled="isLoading"
                 class="bg-(--system-ring) rounded-lg px-6 py-2.5 text-[10px] font-bold text-(--text-body-titles) hover:bg-(--system-popover-foreground) transition-colors"
               >
-                Criar Conta
+                {{ isLoading ? 'A criar conta...' : 'Criar Conta' }}
               </ActionButton>
             </div>
           </div>
@@ -136,6 +145,7 @@ import FooterSection from '@/components/FooterSection.vue'
 import FormInput from '@/components/FormInput.vue'
 import CheckboxInput from '@/components/CheckboxInput.vue'
 import ActionButton from '@/components/ActionButton.vue'
+import ToastNotification from '@/components/ToastNotification.vue'
 import { useUserStore } from '@/stores/userStore'
 
 export default {
@@ -146,6 +156,7 @@ export default {
     FormInput,
     CheckboxInput,
     ActionButton,
+    ToastNotification,
   },
   data() {
     return {
@@ -157,14 +168,26 @@ export default {
         acceptTerms: false,
       },
       store: useUserStore(),
-      error: null,
+      // Toast State
+      showToast: false,
+      toastMessage: '',
+      toastVariant: 'success',
+      isLoading: false,
     }
   },
   methods: {
-    handleRegister() {
+    showNotification(message, variant = 'error') {
+      this.toastMessage = message
+      this.toastVariant = variant
+      this.showToast = true
+      setTimeout(() => {
+        this.showToast = false
+      }, 3000)
+    },
+    async handleRegister() {
       // Validate terms acceptance
       if (!this.formData.acceptTerms) {
-        this.error = 'Deve aceitar os termos e condições'
+        this.showNotification('Deve aceitar os termos e condições', 'error')
         return
       }
 
@@ -175,17 +198,24 @@ export default {
         !this.formData.password ||
         !this.formData.confirmPassword
       ) {
-        this.error = 'Preencha todos os campos'
+        this.showNotification('Preencha todos os campos', 'error')
         return
       }
 
+      this.isLoading = true
+
       // Attempt registration
-      const result = this.store.register(this.formData)
+      const result = await this.store.register(this.formData)
+
+      this.isLoading = false
 
       if (result.success) {
-        this.$router.push({ name: 'login' })
+        this.showNotification('Conta criada com sucesso!', 'success')
+        setTimeout(() => {
+          this.$router.push({ name: 'login' })
+        }, 1500)
       } else {
-        this.error = result.message || 'Erro ao criar conta'
+        this.showNotification(result.message || 'Erro ao criar conta', 'error')
       }
     },
   },

@@ -1,5 +1,5 @@
 <template>
-  <footer class="relative h-[800px] w-full overflow-hidden">
+  <footer class="relative w-full h-screen">
     <!-- Background with diagonal cut -->
     <div class="absolute inset-0 rotate-180">
       <div class="w-full h-full bg-(--system-foreground)"></div>
