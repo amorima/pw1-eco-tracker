@@ -9,7 +9,7 @@
       <span 
         :class="[
           'material-symbols-outlined text-2xl shrink-0',
-          variant === 'success' ? 'text-(--text-body-sub-titles)' : 'text-(--semantic-error-default)'
+          variant === 'success' ? 'text-(--text-body-titles)' : 'text-(--semantic-error-default)'
         ]"
       >
         {{ iconName }}

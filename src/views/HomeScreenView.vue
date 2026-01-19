@@ -378,10 +378,10 @@ export default {
       return this.userStore.householdTasks || []
     },
     recentApplianceUsages() {
-      return this.userStore.recentApplianceUsages(4) || []
+      return this.userStore.recentApplianceUsages(5) || []
     },
     recentTaskCompletions() {
-      return this.userStore.recentTaskCompletions(4) || []
+      return this.userStore.recentTaskCompletions(5) || []
     },
     quickTasks() {
       // Return first 5 household tasks for quick access
