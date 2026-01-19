@@ -675,7 +675,7 @@
       "email": "1@1.2",
       "password": "1",
       "createdAt": "2026-01-17T15:45:03.144Z",
-      "maxProfiles": 4,
+      "maxProfiles": 6,
       "appliances": [
         "1",
         "2",
@@ -701,15 +701,15 @@
           "avatar": "https://i.pravatar.cc/150?img=38",
           "isAdmin": true,
           "createdAt": "2026-01-17T15:45:27.922Z",
-          "points": 226,
-          "co2Saved": 31.75,
-          "level": 4,
-          "xp": 329,
-          "streak": 2,
+          "points": 472,
+          "co2Saved": 137.25,
+          "level": 7,
+          "xp": 608,
+          "streak": 3,
           "settings": {
-            "pin": null,
+            "pin": "1234",
             "notifications": true,
-            "defaultDevice": false,
+            "defaultDevice": true,
             "language": "pt",
             "theme": "light"
           },
@@ -860,6 +860,97 @@
               "completedAt": "2026-01-18T17:13:11.157Z",
               "pointsEarned": 7,
               "co2Saved": 0.2
+            },
+            {
+              "id": 1768825920941,
+              "taskId": "1",
+              "completedAt": "2026-01-19T12:32:00.941Z",
+              "pointsEarned": 20,
+              "co2Saved": 10
+            },
+            {
+              "id": 1768825925174,
+              "taskId": "2",
+              "completedAt": "2026-01-19T12:32:05.174Z",
+              "pointsEarned": 15,
+              "co2Saved": 7.5
+            },
+            {
+              "id": 1768825956863,
+              "taskId": "1",
+              "completedAt": "2026-01-19T12:32:36.863Z",
+              "pointsEarned": 20,
+              "co2Saved": 10
+            },
+            {
+              "id": 1768825961411,
+              "taskId": "1",
+              "completedAt": "2026-01-19T12:32:41.411Z",
+              "pointsEarned": 20,
+              "co2Saved": 10
+            },
+            {
+              "id": 1768826006124,
+              "taskId": "1768758889340",
+              "completedAt": "2026-01-19T12:33:26.124Z",
+              "pointsEarned": 20,
+              "co2Saved": 10
+            },
+            {
+              "id": 1768826038101,
+              "taskId": "1768758889340",
+              "completedAt": "2026-01-19T12:33:58.101Z",
+              "pointsEarned": 20,
+              "co2Saved": 10
+            },
+            {
+              "id": 1768826041681,
+              "taskId": "1768758889340",
+              "completedAt": "2026-01-19T12:34:01.681Z",
+              "pointsEarned": 20,
+              "co2Saved": 10
+            },
+            {
+              "id": 1768826870059,
+              "taskId": "1768758889340",
+              "completedAt": "2026-01-19T12:47:50.059Z",
+              "pointsEarned": 20,
+              "co2Saved": 10
+            },
+            {
+              "id": 1768827503432,
+              "taskId": "2",
+              "completedAt": "2026-01-19T12:58:23.432Z",
+              "pointsEarned": 15,
+              "co2Saved": 7.5
+            },
+            {
+              "id": 1768827505471,
+              "taskId": "6",
+              "completedAt": "2026-01-19T12:58:25.471Z",
+              "pointsEarned": 12,
+              "co2Saved": 1.5
+            },
+            {
+              "id": 1768827507381,
+              "taskId": "6",
+              "completedAt": "2026-01-19T12:58:27.381Z",
+              "pointsEarned": 12,
+              "co2Saved": 1.5
+            },
+            {
+              "id": 1768827509639,
+              "taskId": "1",
+              "completedAt": "2026-01-19T12:58:29.639Z",
+              "pointsEarned": 20,
+              "co2Saved": 10
+            },
+            {
+              "id": 1768827512733,
+              "taskId": "2",
+              "completedAt": "2026-01-19T12:58:32.733Z",
+              "pointsEarned": 15,
+              "co2Saved": 7.5
             }
           ],
           "applianceUsage": [
@@ -894,6 +985,22 @@
               "hoursUsed": 10,
               "energyConsumed": 20,
               "co2Emitted": 4.66
+            },
+            {
+              "id": 1768827490521,
+              "applianceId": "2",
+              "date": "2026-01-19",
+              "hoursUsed": 2,
+              "energyConsumed": 4,
+              "co2Emitted": 0.932
+            },
+            {
+              "id": 1768827497931,
+              "applianceId": "3",
+              "date": "2026-01-19",
+              "hoursUsed": 5,
+              "energyConsumed": 9,
+              "co2Emitted": 2.097
             }
           ],
           "rewardsRedeemed": [
@@ -1020,7 +1127,8 @@
               "title": "Comer Fora",
               "pointsCost": 20,
               "redeemedAt": "2026-01-18T16:37:34.372Z",
-              "status": "pending"
+              "status": "completo",
+              "completedAt": "2026-01-19T12:59:22.208Z"
             },
             {
               "id": 1768754255730,
@@ -1028,6 +1136,15 @@
               "title": "Comer Fora",
               "pointsCost": 2,
               "redeemedAt": "2026-01-18T16:37:35.730Z",
+              "status": "cancelado",
+              "cancelledAt": "2026-01-19T15:34:22.345Z"
+            },
+            {
+              "id": 1768827821651,
+              "rewardId": "6",
+              "title": "Doces e salgados",
+              "pointsCost": 10,
+              "redeemedAt": "2026-01-19T13:03:41.651Z",
               "status": "pending"
             }
           ],
@@ -1052,9 +1169,16 @@
               "icon": "eco",
               "earnedAt": "2026-01-17T15:54:33.618Z",
               "description": "Poupou 10kg de CO2"
+            },
+            {
+              "id": "level_5",
+              "title": "Nível 5",
+              "icon": "emoji_events",
+              "earnedAt": "2026-01-19T12:32:41.421Z",
+              "description": "Alcançou o nível 5"
             }
           ],
-          "lastActivityDate": "2026-01-18"
+          "lastActivityDate": "2026-01-19"
         },
         {
           "id": 1768668786705,
@@ -1110,6 +1234,180 @@
             }
           ],
           "lastActivityDate": "2026-01-18"
+        },
+        {
+          "id": 1768825501519,
+          "name": "Raeo",
+          "age": null,
+          "avatar": "https://i.pravatar.cc/150?img=55",
+          "isAdmin": false,
+          "createdAt": "2026-01-19T12:25:01.519Z",
+          "points": 244,
+          "co2Saved": 79,
+          "level": 3,
+          "xp": 294,
+          "streak": 1,
+          "settings": {
+            "pin": null,
+            "notifications": true,
+            "defaultDevice": true,
+            "language": "pt",
+            "theme": "light"
+          },
+          "activityHistory": [
+            {
+              "id": 1768825515940,
+              "taskId": "1",
+              "completedAt": "2026-01-19T12:25:15.940Z",
+              "pointsEarned": 20,
+              "co2Saved": 10
+            },
+            {
+              "id": 1768825517628,
+              "taskId": "2",
+              "completedAt": "2026-01-19T12:25:17.628Z",
+              "pointsEarned": 15,
+              "co2Saved": 7.5
+            },
+            {
+              "id": 1768825519835,
+              "taskId": "3",
+              "completedAt": "2026-01-19T12:25:19.835Z",
+              "pointsEarned": 10,
+              "co2Saved": 0.5
+            },
+            {
+              "id": 1768825522284,
+              "taskId": "6",
+              "completedAt": "2026-01-19T12:25:22.284Z",
+              "pointsEarned": 12,
+              "co2Saved": 1.5
+            },
+            {
+              "id": 1768825524862,
+              "taskId": "1768758889340",
+              "completedAt": "2026-01-19T12:25:24.862Z",
+              "pointsEarned": 20,
+              "co2Saved": 10
+            },
+            {
+              "id": 1768825529376,
+              "taskId": "1",
+              "completedAt": "2026-01-19T12:25:29.376Z",
+              "pointsEarned": 20,
+              "co2Saved": 10
+            },
+            {
+              "id": 1768825531253,
+              "taskId": "2",
+              "completedAt": "2026-01-19T12:25:31.253Z",
+              "pointsEarned": 15,
+              "co2Saved": 7.5
+            },
+            {
+              "id": 1768825688169,
+              "taskId": "1",
+              "completedAt": "2026-01-19T12:28:08.169Z",
+              "pointsEarned": 20,
+              "co2Saved": 10
+            },
+            {
+              "id": 1768825689777,
+              "taskId": "3",
+              "completedAt": "2026-01-19T12:28:09.777Z",
+              "pointsEarned": 10,
+              "co2Saved": 0.5
+            },
+            {
+              "id": 1768825692562,
+              "taskId": "6",
+              "completedAt": "2026-01-19T12:28:12.562Z",
+              "pointsEarned": 12,
+              "co2Saved": 1.5
+            },
+            {
+              "id": 1768825698172,
+              "taskId": "1768758889340",
+              "completedAt": "2026-01-19T12:28:18.172Z",
+              "pointsEarned": 20,
+              "co2Saved": 10
+            },
+            {
+              "id": 1768825704070,
+              "taskId": "1",
+              "completedAt": "2026-01-19T12:28:24.070Z",
+              "pointsEarned": 20,
+              "co2Saved": 10
+            }
+          ],
+          "applianceUsage": [
+            {
+              "id": 1768825511654,
+              "applianceId": "1",
+              "date": "2026-01-19",
+              "hoursUsed": 2,
+              "energyConsumed": 0.3,
+              "co2Emitted": 0.0699
+            },
+            {
+              "id": 1768825543023,
+              "applianceId": "2",
+              "date": "2026-01-19",
+              "hoursUsed": 1,
+              "energyConsumed": 2,
+              "co2Emitted": 0.466
+            },
+            {
+              "id": 1768825546464,
+              "applianceId": "3",
+              "date": "2026-01-19",
+              "hoursUsed": 1,
+              "energyConsumed": 1.8,
+              "co2Emitted": 0.41940000000000005
+            },
+            {
+              "id": 1768825550223,
+              "applianceId": "4",
+              "date": "2026-01-19",
+              "hoursUsed": 1,
+              "energyConsumed": 2.4,
+              "co2Emitted": 0.5592
+            },
+            {
+              "id": 1768825553140,
+              "applianceId": "4",
+              "date": "2026-01-19",
+              "hoursUsed": 2,
+              "energyConsumed": 4.8,
+              "co2Emitted": 1.1184
+            },
+            {
+              "id": 1768825557719,
+              "applianceId": "6",
+              "date": "2026-01-19",
+              "hoursUsed": 1,
+              "energyConsumed": 0.1,
+              "co2Emitted": 0.0233
+            }
+          ],
+          "rewardsRedeemed": [],
+          "badges": [
+            {
+              "id": "early_adopter",
+              "title": "Early Adopter",
+              "icon": "star",
+              "earnedAt": "2026-01-19T12:25:11.659Z",
+              "description": "Primeiro perfil criado"
+            },
+            {
+              "id": "eco_warrior",
+              "title": "Eco Warrior",
+              "icon": "eco",
+              "earnedAt": "2026-01-19T12:25:15.949Z",
+              "description": "Poupou 10kg de CO2"
+            }
+          ],
+          "lastActivityDate": "2026-01-19"
         }
       ]
     }
@@ -1553,6 +1851,17 @@
       "createdAt": "2026-01-18T18:16:19.072Z",
       "title": "Abaixo as Luzes",
       "description": "Complete \"Desligar luzes ao sair de casa\" 5 dias consecutivos"
+    },
+    {
+      "id": "1768826859839",
+      "title": "Desespero",
+      "description": "Complete \"AAAAAAAAAAA\" 1 vezes",
+      "type": "completion",
+      "taskId": "1768758889340",
+      "target": 1,
+      "xp": 50,
+      "category": "Energia",
+      "createdAt": "2026-01-19T12:47:39.839Z"
     }
   ],
   "rewards": [
@@ -1673,6 +1982,27 @@
       "points": 1,
       "image": "1",
       "createdAt": "2026-01-18T16:48:18.943Z"
+    },
+    {
+      "id": null,
+      "title": "uiii",
+      "points": 56666666,
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQi7O0rnflBJFMrKti916_CVbY7Uj38l7kjpw&s",
+      "createdAt": "2026-01-19T12:21:57.416Z"
+    },
+    {
+      "id": null,
+      "title": "1",
+      "points": 1,
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQi7O0rnflBJFMrKti916_CVbY7Uj38l7kjpw&s",
+      "createdAt": "2026-01-19T12:22:30.924Z"
+    },
+    {
+      "id": null,
+      "title": "AAAAAAAAAa",
+      "points": 2,
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQi7O0rnflBJFMrKti916_CVbY7Uj38l7kjpw&s",
+      "createdAt": "2026-01-19T12:22:58.307Z"
     }
   ]
 }

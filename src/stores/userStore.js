@@ -420,15 +420,18 @@ export const useUserStore = defineStore('userStore', {
           }
         }
 
-        // Check for default profile on this device
-        const defaultProfile = user.profiles.find((p) => p.settings?.defaultDevice)
-        if (defaultProfile) {
-          this.currentProfile = defaultProfile
-          return {
-            success: true,
-            requiresSetup: false,
-            autoSelectedProfile: true,
-            message: `Bem-vindo, ${defaultProfile.name}!`,
+        // Check for default profile on this device from localStorage
+        const defaultProfileId = localStorage.getItem(`defaultProfile_${user.id}`)
+        if (defaultProfileId) {
+          const defaultProfile = user.profiles.find((p) => String(p.id) === String(defaultProfileId))
+          if (defaultProfile) {
+            this.currentProfile = defaultProfile
+            return {
+              success: true,
+              requiresSetup: false,
+              autoSelectedProfile: true,
+              message: `Bem-vindo, ${defaultProfile.name}!`,
+            }
           }
         }
 
@@ -483,9 +486,8 @@ export const useUserStore = defineStore('userStore', {
         xp: 0,
         streak: 0,
         settings: {
-          pin: null,
+          pin: setupData.adminProfile.pin || null,
           notifications: true,
-          defaultDevice: true,
           language: 'pt',
           theme: 'light',
         },
@@ -508,6 +510,9 @@ export const useUserStore = defineStore('userStore', {
       // Set as current profile
       this.currentProfile = adminProfile
 
+      // Store default profile in localStorage for this device
+      localStorage.setItem(`defaultProfile_${this.currentUser.id}`, adminProfile.id.toString())
+
       // Update in server
       try {
         await fetch(`http://localhost:3000/users/${this.currentUser.id}`, {
@@ -526,16 +531,20 @@ export const useUserStore = defineStore('userStore', {
      */
     selectProfile(profileId) {
       if (!this.currentUser?.profiles) {
-        return { success: false, message: 'Nenhum utilizador autenticado' }
+        return false
       }
 
       const profile = this.currentUser.profiles.find((p) => p.id === profileId)
       if (!profile) {
-        return { success: false, message: 'Perfil não encontrado' }
+        return false
       }
 
       this.currentProfile = profile
-      return { success: true, message: `Bem-vindo, ${profile.name}!` }
+      
+      // Store as default profile for this device in localStorage
+      localStorage.setItem(`defaultProfile_${this.currentUser.id}`, profile.id.toString())
+      
+      return true
     },
 
     /**
@@ -587,7 +596,6 @@ export const useUserStore = defineStore('userStore', {
         settings: {
           pin: profileData.pin || null,
           notifications: true,
-          defaultDevice: false,
           language: 'pt',
           theme: 'light',
         },

@@ -43,6 +43,22 @@
           <div class="flex">
             <FormInput v-model="adminProfile.age" placeholder="Idade (opcional)" type="number" />
           </div>
+
+          <div>
+            <label class="block text-sm font-medium text-(--text-body-sub-titles) mb-2">
+              PIN de Segurança *
+            </label>
+            <FormInput
+              v-model="adminProfile.pin"
+              placeholder="PIN de 4 dígitos"
+              type="password"
+              maxlength="4"
+              pattern="[0-9]{4}"
+            />
+            <p class="text-xs text-(--text-body-sub-titles) mt-1">
+              Este PIN protegerá o seu perfil e o acesso ao painel de administração.
+            </p>
+          </div>
         </div>
       </CollapsibleCard>
 
@@ -197,6 +213,7 @@ export default {
         email: '',
         age: '',
         avatar: '',
+        pin: '',
       },
       accountSettings: {
         maxUsers: 4,
@@ -251,6 +268,16 @@ export default {
     async completeSetup() {
       if (!this.adminProfile.name) {
         this.showNotification('Por favor, defina o nome do administrador.', 'error')
+        return
+      }
+
+      if (!this.adminProfile.pin || this.adminProfile.pin.length !== 4) {
+        this.showNotification('Por favor, defina um PIN de 4 dígitos.', 'error')
+        return
+      }
+
+      if (!/^[0-9]{4}$/.test(this.adminProfile.pin)) {
+        this.showNotification('O PIN deve conter apenas números.', 'error')
         return
       }
 
