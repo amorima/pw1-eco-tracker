@@ -1,7 +1,7 @@
 <template>
   <div 
     :class="[
-      'flex items-center justify-center px-2 py-2 rounded-full w-fit min-w-[209px]',
+      'flex items-center justify-center px-2 py-2 rounded-full w-fit',
       variant === 'success' ? 'bg-(--primary-secondary)' : 'bg-(--semantic-error-light)'
     ]"
   >
