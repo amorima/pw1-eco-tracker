@@ -316,7 +316,7 @@ export default {
           name: this.item.title || this.item.name || '',
           category: this.item.category || '',
           // Appliance fields
-          apiType: this.item.apiType || '',
+          apiType: this.item.apiType || 'electricity', // Default to 'electricity' if not set
           avgPowerConsumption: this.item.avgPowerConsumption || null,
           // Task fields
           points: this.item.points || null,

@@ -999,6 +999,8 @@ export default {
             this.showNotification('Tarefa criada')
           }
         }
+        // Refresh data from server
+        await this.userStore.fetchResources()
       } catch (error) {
         console.error('Error saving item:', error)
         this.showNotification('Erro ao guardar', 'error')

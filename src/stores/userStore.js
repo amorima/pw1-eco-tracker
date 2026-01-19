@@ -1522,7 +1522,7 @@ export const useUserStore = defineStore('userStore', {
       try {
         const newAppliance = {
           id: String(Date.now()),
-          name: applianceData.title,
+          name: applianceData.name,
           category: applianceData.category,
           icon: applianceData.icon,
           description: applianceData.description,
