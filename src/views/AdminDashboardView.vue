@@ -299,7 +299,7 @@
         </button>
         </CollapsibleCard>
 
-        <CollapsibleCard v-else-if="element === 'challenges'" title="DESAFIOS" v-model="cardOpenStates.challenges">
+        <CollapsibleCard v-else-if="element === 'challenges'" title="Gestão de Desafios" v-model="cardOpenStates.challenges">
         <div class="flex items-center gap-2 mb-4">
           <div class="flex-1 relative">
             <input
@@ -1108,7 +1108,14 @@ export default {
         return
       }
       this.selectedChallenge = { ...challenge }
-      this.challengeFormData = { ...challenge }
+      this.challengeFormData = {
+        title: challenge.title,
+        description: challenge.description,
+        taskId: challenge.taskId || '',
+        type: challenge.type || 'completion',
+        target: challenge.target || 5,
+        xp: challenge.xp || 50
+      }
       this.showChallengeModal = true
     },
     closeChallengeModal() {
@@ -1125,23 +1132,35 @@ export default {
     },
     async saveChallenge() {
       try {
-        // Auto-generate description based on task and type
+        // Get task to derive category
         const task = this.getTaskById(this.challengeFormData.taskId)
-        const typeLabel = this.challengeFormData.type === 'streak' ? 'dias consecutivos' : 'vezes'
-        const description = `Complete "${task?.title || 'a tarefa'}" ${this.challengeFormData.target} ${typeLabel}`
-        
-        const challengeData = {
-          ...this.challengeFormData,
-          description
+        if (!task) {
+          this.showNotification('Por favor selecione uma tarefa válida', 'error')
+          return
         }
         
-        if (challengeData.id) {
-          await this.userStore.updateChallenge(challengeData.id, challengeData)
+        // Auto-generate description based on task and type
+        const typeLabel = this.challengeFormData.type === 'streak' ? 'dias consecutivos' : 'vezes'
+        const description = `Complete "${task.title}" ${this.challengeFormData.target} ${typeLabel}`
+        
+        const challengeData = {
+          title: this.challengeFormData.title,
+          description,
+          type: this.challengeFormData.type,
+          taskId: this.challengeFormData.taskId,
+          target: this.challengeFormData.target,
+          xp: this.challengeFormData.xp,
+          category: task.category
+        }
+        
+        if (this.selectedChallenge?.id) {
+          await this.userStore.updateChallenge(this.selectedChallenge.id, challengeData)
           this.showNotification('Desafio atualizado com sucesso')
         } else {
           await this.userStore.createChallenge(challengeData)
           this.showNotification('Desafio criado com sucesso')
         }
+        await this.userStore.fetchResources()
         this.closeChallengeModal()
       } catch (error) {
         console.error('Error saving challenge:', error)
