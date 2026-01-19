@@ -32,7 +32,7 @@
       @after-leave="afterLeave"
     >
       <div v-show="isOpen" class="overflow-hidden">
-        <div class="mt-4">
+        <div class="mt-4 h-fit">
           <slot></slot>
         </div>
       </div>
@@ -84,7 +84,7 @@ export default {
     leave(element, done) {
       element.style.height = element.scrollHeight + 'px'
       // Force reflow to ensure the browser registers the starting height
-      // eslint-disable-next-line no-unused-expressions
+       
       element.offsetHeight
       requestAnimationFrame(() => {
         element.style.transition = 'height 0.3s ease-in-out, opacity 0.3s ease-in-out'

@@ -696,7 +696,7 @@
       "profiles": [
         {
           "id": 1768664727922,
-          "name": "12",
+          "name": "123",
           "age": null,
           "avatar": "https://i.pravatar.cc/150?img=38",
           "isAdmin": true,
@@ -1674,7 +1674,5 @@
       "image": "1",
       "createdAt": "2026-01-18T16:48:18.943Z"
     }
-  ],
-  "transactions": [],
-  "history": []
+  ]
 }
