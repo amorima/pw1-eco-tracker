@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest'
+import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 import LandingPage from '@/views/LandingPageView.vue'
@@ -6,16 +6,21 @@ import ActionButton from '@/components/ActionButton.vue'
 
 describe('LandingPage', () => {
   let wrapper
+  let routerMock
 
   beforeEach(() => {
     // pinia para stores
     setActivePinia(createPinia())
+    routerMock = { push: vi.fn() }
     wrapper = mount(LandingPage, {
       global: {
         stubs: {
           FeatureCarousel: true, // nao carrega MenuNav para mais eficiencia
           FAQItem: true, // nao carrega ChatBot para mais eficiencia
           draggable: true,
+        },
+        mocks: {
+          $router: routerMock,
         },
       },
     })
@@ -37,7 +42,7 @@ describe('LandingPage', () => {
 
       await registerButton.trigger('click') // simular click
 
-      // should send the user to register page
+      expect(routerMock.push).toHaveBeenCalledWith({ name: 'register' })
     })
   })
 })
