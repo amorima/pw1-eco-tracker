@@ -4,7 +4,7 @@ import { createPinia, setActivePinia } from 'pinia'
 import HomeScreenView from '@/views/HomeScreenView.vue'
 import AddCard from '@/components/AddCard.vue'
 
-describe('HomeScreenView - AddCard Modal Interactions', () => {
+describe('HomeScreenView', () => {
   let wrapper
 
   beforeEach(() => {
@@ -15,7 +15,7 @@ describe('HomeScreenView - AddCard Modal Interactions', () => {
         stubs: {
           MenuNav: true, // nao carrega MenuNav para mais eficiencia
           ChatBot: true, // nao carrega ChatBot para mais eficiencia
-          StatisticsChart: true,
+          StatisticsChart: true, // nao carrega StatisticsChart para mais eficiencia
           draggable: true,
         },
       },
