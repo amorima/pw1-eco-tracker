@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach} from 'vitest'
+import { describe, it, expect, beforeEach } from 'vitest'
 import { mount } from '@vue/test-utils'
 import FAQItem from '@/components/FAQItem.vue'
 
@@ -9,27 +9,27 @@ describe('FAQItem', () => {
     wrapper = mount(FAQItem)
   })
 
-  describe('Renderização', () => {
-    it('renderiza o componente', () => {
+  describe('renders', () => {
+    it('renders the component', () => {
       expect(wrapper.exists()).toBe(true) // verifica se o componente existe
     })
 
-    it('renderiza o conteúdo da pergunta', () => {
-      expect(wrapper.text()).toContain('Como funciona o sistema de monitorização?') // verifica se o a pergunta existe
+    it('renders the question', () => {
+      expect(wrapper.text()).toContain('Como funciona o sistema de monitorização?') // verifica se o a pergunta existe TEM DE ESTAR EM PORTUGUES
     })
 
-    it('renderiza conteudo quando aberto o card', async () => {
+    it('renders content when the card is open', async () => {
       await wrapper.vm.toggleOpen() // espera abrir o card
-      expect(wrapper.text()).toContain('Registe manualmente os consumos') // verifica se a resposta existe quando aberto o card
+      expect(wrapper.text()).toContain('Registe manualmente os consumos') // verifica se a resposta existe quando aberto o card TEM DE ESTAR EM PORTUGUES
     })
   })
 
-  describe('estado inicial do card', () => {
-    it('o card começa fechado por padrão', () => {
+  describe('initial state of the card', () => {
+    it('the card starts open by default', () => {
       expect(wrapper.vm.isOpen).toBe(false) // verifica se o card começa fechado
     })
 
-    it('iria iniciar aberto se defaultOpen começasse true', () => {
+    it('would start open if defaultOpen was true', () => {
       const openWrapper = mount(FAQItem, {
         props: {
           defaultOpen: true, // altera a prop para true
@@ -39,16 +39,16 @@ describe('FAQItem', () => {
       expect(openWrapper.vm.isOpen).toBe(true) // verifica se o card inicia aberto
     })
 
-    it('nao mostra a resposta quando card esta fechado', () => {
+    it('doesn´t show the answer when the card is closed', () => {
       // verifica se resposta aparece se card tiver fechado
       const answerDiv = wrapper.find('.overflow-hidden > div') // seleciona o div da resposta
       expect(answerDiv.isVisible()).toBe(false) // verifica se o div nao aparece
     })
   })
 
-  describe('interativo', () => {
+  describe('interactive', () => {
     // testa interatividade card
-    it('altera card ao clicar', async () => {
+    it('changes card state on click', async () => {
       expect(wrapper.vm.isOpen).toBe(false) // espera card ficar fechado por defeito
 
       await wrapper.trigger('click') // clica no card
@@ -58,7 +58,7 @@ describe('FAQItem', () => {
       expect(wrapper.vm.isOpen).toBe(false) // espera-se que o card se feche
     })
 
-    it('roda o ícone quando aberto', async () => {
+    it('rotate the icon when clicked', async () => {
       const icon = wrapper.find('.material-symbols-outlined') // seleciona o ícone
 
       expect(icon.classes()).not.toContain('rotate-180') // espera-se que o icon nao esteja rodado
