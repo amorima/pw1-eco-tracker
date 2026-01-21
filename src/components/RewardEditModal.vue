@@ -9,15 +9,50 @@
         type="number"
         min="1"
       />
-      <FormInput v-model="formData.image" label="Imagem URL" placeholder="URL da imagem" />
       
+      <!-- Image Upload Section -->
       <div class="space-y-2">
         <label class="block text-sm font-medium text-(--text-body-sub-titles)">
-          Pré-visualização
+          Imagem
         </label>
-        <div v-if="formData.image" class="w-full h-32 rounded-lg overflow-hidden bg-(--system-border)">
-          <img :src="formData.image" alt="Preview" class="w-full h-full object-cover" />
+        <div class="flex items-start gap-4">
+          <!-- Preview -->
+          <div class="w-32 h-24 rounded-lg overflow-hidden bg-(--system-border) flex items-center justify-center">
+            <img 
+              v-if="formData.image" 
+              :src="formData.image" 
+              alt="Reward" 
+              class="w-full h-full object-cover"
+            />
+            <span v-else class="material-symbols-outlined text-3xl text-(--text-disabled)">card_giftcard</span>
+          </div>
+          
+          <!-- Upload Button -->
+          <div class="flex-1">
+            <label 
+              class="flex items-center gap-2 px-4 py-2 bg-(--system-border) rounded-lg cursor-pointer hover:bg-(--system-ring) hover:text-white transition-colors"
+              :class="{ 'opacity-50 cursor-not-allowed': isUploading }"
+            >
+              <span class="material-symbols-outlined">{{ isUploading ? 'hourglass_empty' : 'cloud_upload' }}</span>
+              <span>{{ isUploading ? 'A carregar...' : 'Carregar imagem' }}</span>
+              <input 
+                type="file" 
+                accept="image/*" 
+                class="hidden"
+                :disabled="isUploading"
+                @change="handleImageUpload"
+              />
+            </label>
+            <p class="text-xs text-(--text-disabled) mt-1">PNG, JPG até 5MB</p>
+          </div>
         </div>
+        
+        <!-- URL Input as alternative -->
+        <FormInput 
+          v-model="formData.image" 
+          placeholder="ou insira o URL da imagem" 
+          class="mt-2"
+        />
       </div>
     </div>
 
@@ -30,7 +65,7 @@
       </button>
       <button
         @click="handleSave"
-        :disabled="!isValid"
+        :disabled="!isValid || isUploading"
         class="px-4 py-2 bg-(--system-ring) text-white rounded-lg font-semibold hover:opacity-80 transition-opacity disabled:opacity-50"
       >
         {{ reward?.id ? 'Guardar' : 'Criar' }}
@@ -42,6 +77,7 @@
 <script>
 import ModalComponent from './ModalComponent.vue'
 import FormInput from './FormInput.vue'
+import { uploadImage } from '@/services/cloudinaryService'
 
 export default {
   name: 'RewardEditModal',
@@ -62,6 +98,7 @@ export default {
   emits: ['close', 'save'],
   data() {
     return {
+      isUploading: false,
       formData: {
         id: null,
         title: '',
@@ -75,7 +112,7 @@ export default {
       return this.reward?.id ? 'Editar Recompensa' : 'Criar Recompensa'
     },
     isValid() {
-      return this.formData.title.trim() && this.formData.points > 0 && this.formData.image.trim()
+      return this.formData.title.trim() && this.formData.points > 0
     },
   },
   watch: {
@@ -111,11 +148,43 @@ export default {
         }
       }
     },
+    async handleImageUpload(event) {
+      const file = event.target.files[0]
+      if (!file) return
+      
+      if (!file.type.startsWith('image/')) {
+        console.error('Invalid file type. Please select an image.')
+        return
+      }
+      
+      if (file.size > 5 * 1024 * 1024) {
+        console.error('File size too large. Please select an image under 5MB.')
+        return
+      }
+      
+      this.isUploading = true
+      
+      try {
+        const result = await uploadImage(file, { folder: 'bgreen/rewards' })
+        
+        if (result.success) {
+          this.formData.image = result.url
+          console.log('Image uploaded successfully:', result.url)
+        } else {
+          console.error('Upload failed:', result.error)
+        }
+      } catch (error) {
+        console.error('Error uploading image:', error)
+      } finally {
+        this.isUploading = false
+      }
+    },
     handleSave() {
       if (!this.isValid) return
       this.$emit('save', {
         ...this.formData,
         points: parseInt(this.formData.points),
+        image: this.formData.image || null,
       })
       this.$emit('close')
     },

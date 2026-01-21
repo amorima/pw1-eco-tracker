@@ -10,7 +10,51 @@
         min="1"
         max="120"
       />
-      <FormInput v-model="formData.avatar" label="Avatar URL" placeholder="URL da imagem" />
+      
+      <!-- Image Upload Section -->
+      <div class="space-y-2">
+        <label class="block text-sm font-medium text-(--text-body-sub-titles)">
+          Avatar
+        </label>
+        <div class="flex items-center gap-4">
+          <!-- Preview -->
+          <div class="w-20 h-20 rounded-full overflow-hidden bg-(--system-border) flex items-center justify-center">
+            <img 
+              v-if="formData.avatar" 
+              :src="formData.avatar" 
+              alt="Avatar" 
+              class="w-full h-full object-cover"
+            />
+            <span v-else class="material-symbols-outlined text-3xl text-(--text-disabled)">person</span>
+          </div>
+          
+          <!-- Upload Button -->
+          <div class="flex-1">
+            <label 
+              class="flex items-center gap-2 px-4 py-2 bg-(--system-border) rounded-lg cursor-pointer hover:bg-(--system-ring) hover:text-white transition-colors"
+              :class="{ 'opacity-50 cursor-not-allowed': isUploading }"
+            >
+              <span class="material-symbols-outlined">{{ isUploading ? 'hourglass_empty' : 'cloud_upload' }}</span>
+              <span>{{ isUploading ? 'A carregar...' : 'Carregar imagem' }}</span>
+              <input 
+                type="file" 
+                accept="image/*" 
+                class="hidden"
+                :disabled="isUploading"
+                @change="handleImageUpload"
+              />
+            </label>
+            <p class="text-xs text-(--text-disabled) mt-1">PNG, JPG até 5MB</p>
+          </div>
+        </div>
+        
+        <!-- URL Input as alternative -->
+        <FormInput 
+          v-model="formData.avatar" 
+          placeholder="ou insira o URL da imagem" 
+          class="mt-2"
+        />
+      </div>
       
       <div v-if="formData.id" class="space-y-2">
         <label class="block text-sm font-medium text-(--text-body-sub-titles)">
@@ -29,7 +73,7 @@
       </button>
       <button
         @click="handleSave"
-        :disabled="!isValid"
+        :disabled="!isValid || isUploading"
         class="px-4 py-2 bg-(--system-ring) text-white rounded-lg font-semibold hover:opacity-80 transition-opacity disabled:opacity-50"
       >
         {{ profile?.id ? 'Guardar' : 'Criar' }}
@@ -42,6 +86,7 @@
 import ModalComponent from './ModalComponent.vue'
 import FormInput from './FormInput.vue'
 import CheckboxInput from './CheckboxInput.vue'
+import { uploadImage } from '@/services/cloudinaryService'
 
 export default {
   name: 'ProfileEditModal',
@@ -63,6 +108,7 @@ export default {
   emits: ['close', 'save'],
   data() {
     return {
+      isUploading: false,
       formData: {
         id: null,
         name: '',
@@ -102,7 +148,7 @@ export default {
           id: this.profile.id,
           name: this.profile.name || '',
           age: this.profile.age || '',
-          avatar: this.profile.avatar || 'https://i.pravatar.cc/150?img=1',
+          avatar: this.profile.avatar || '',
           isAdmin: this.profile.isAdmin || false,
         }
       } else {
@@ -110,16 +156,43 @@ export default {
           id: null,
           name: '',
           age: '',
-          avatar: 'https://i.pravatar.cc/150?img=1',
+          avatar: '',
           isAdmin: false,
         }
+      }
+    },
+    async handleImageUpload(event) {
+      const file = event.target.files[0]
+      if (!file) return
+      
+      if (!file.type.startsWith('image/')) {
+        return
+      }
+      
+      if (file.size > 5 * 1024 * 1024) {
+        return
+      }
+      
+      this.isUploading = true
+      
+      try {
+        const result = await uploadImage(file, { folder: 'bgreen/profiles' })
+        
+        if (result.success) {
+          this.formData.avatar = result.url
+        }
+      } catch (error) {
+        console.error('Error uploading image:', error)
+      } finally {
+        this.isUploading = false
       }
     },
     handleSave() {
       if (!this.isValid) return
       this.$emit('save', {
         ...this.formData,
-        age: parseInt(this.formData.age),
+        age: parseInt(this.formData.age) || null,
+        avatar: this.formData.avatar || null,
       })
       this.$emit('close')
     },

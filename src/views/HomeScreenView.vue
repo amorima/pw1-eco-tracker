@@ -128,8 +128,9 @@
               v-for="usage in recentApplianceUsages"
               :key="usage.id"
               :label="usage.appliance.name"
-              :image="getApplianceImage(usage.appliance)"
+              :image="usage.appliance.image || getApplianceImage(usage.appliance)"
               :energyConsumed="usage.energyConsumed"
+              :powerWatts="usage.device_power_watts || usage.appliance.avgPowerConsumption"
               unit="hr"
               @submit="(value) => submitApplianceUsage(usage.appliance, value)"
             />
@@ -145,7 +146,7 @@
               v-for="activity in recentTaskCompletions"
               :key="activity.id"
               :label="activity.task.title"
-              :image="getTaskImage(activity.task)"
+              :image="activity.task.image || getTaskImage(activity.task)"
               @click="completeTask(activity.task)"
             />
             <AddCard @click="openAddTaskModal" />
@@ -477,15 +478,15 @@ export default {
         return
       }
       
-      // Calculate emissions using API
+      // Calculate emissions using API first
       try {
-        const apiResult = await calculateApplianceEmissions(appliance.name, hoursValue)
-        const co2Emitted = apiResult.success ? apiResult.data?.carbon_kg_co2 : null
+        const apiResult = await calculateApplianceEmissions(appliance, hoursValue)
         
+        // Pass the API data to the store function
         const result = await this.userStore.trackApplianceUsage(
           appliance.id, 
           hoursValue, 
-          co2Emitted
+          apiResult.success ? apiResult.data : null
         )
         
         if (result.success) {
