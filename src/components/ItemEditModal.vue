@@ -146,6 +146,54 @@
           class="w-full px-4 py-3 bg-(--system-card) border-2 border-(--system-border) rounded-lg text-(--text-body) outline-none focus:border-(--system-ring) resize-none"
         ></textarea>
       </div>
+      
+      <!-- Image Upload Section -->
+      <div class="space-y-2">
+        <label class="block text-sm font-medium text-(--text-body-sub-titles)">
+          Imagem (Opcional)
+        </label>
+        <div class="flex items-start gap-4">
+          <!-- Preview -->
+          <div class="w-24 h-20 rounded-lg overflow-hidden bg-(--system-border) flex items-center justify-center">
+            <img 
+              v-if="formData.image" 
+              :src="formData.image" 
+              alt="Preview" 
+              class="w-full h-full object-cover"
+            />
+            <span v-else class="material-symbols-outlined text-3xl text-(--text-disabled)">
+              {{ isTask ? 'task_alt' : 'electrical_services' }}
+            </span>
+          </div>
+          
+          <!-- Upload Button -->
+          <div class="flex-1">
+            <label 
+              class="flex items-center gap-2 px-4 py-2 bg-(--system-border) rounded-lg cursor-pointer hover:bg-(--system-ring) hover:text-white transition-colors text-sm"
+              :class="{ 'opacity-50 cursor-not-allowed': isUploading }"
+            >
+              <span class="material-symbols-outlined text-lg">{{ isUploading ? 'hourglass_empty' : 'cloud_upload' }}</span>
+              <span>{{ isUploading ? 'A carregar...' : 'Carregar' }}</span>
+              <input 
+                type="file" 
+                accept="image/*" 
+                class="hidden"
+                :disabled="isUploading"
+                @change="handleImageUpload"
+              />
+            </label>
+            <p class="text-xs text-(--text-disabled) mt-1">PNG, JPG até 5MB</p>
+          </div>
+        </div>
+        
+        <!-- URL Input as alternative -->
+        <input
+          v-model="formData.image"
+          type="text"
+          placeholder="ou insira o URL da imagem"
+          class="w-full px-4 py-2 bg-(--system-card) border-2 border-(--system-border) rounded-lg text-(--text-body) outline-none focus:border-(--system-ring) text-sm"
+        />
+      </div>
     </div>
 
     <template #footer>
@@ -157,7 +205,7 @@
       </button>
       <button
         @click="handleSave"
-        :disabled="!isValid"
+        :disabled="!isValid || isUploading"
         class="px-4 py-2 bg-(--system-ring) text-white rounded-lg font-semibold hover:opacity-80 transition-opacity disabled:opacity-50"
       >
         {{ item?.id ? 'Guardar' : 'Criar' }}
@@ -168,6 +216,7 @@
 
 <script>
 import ModalComponent from './ModalComponent.vue'
+import { uploadImage } from '@/services/cloudinaryService'
 
 export default {
   name: 'ItemEditModal',
@@ -192,10 +241,12 @@ export default {
   emits: ['close', 'save'],
   data() {
     return {
+      isUploading: false,
       formData: {
         id: null,
         name: '',
         category: '',
+        image: '',
         // Appliance fields
         apiType: '',
         avgPowerConsumption: null,
@@ -310,6 +361,7 @@ export default {
           id: this.item.id,
           name: this.item.title || this.item.name || '',
           category: this.item.category || '',
+          image: this.item.image || '',
           // Appliance fields
           apiType: this.item.apiType || 'electricity', // Default to 'electricity' if not set
           avgPowerConsumption: this.item.avgPowerConsumption || null,
@@ -327,6 +379,7 @@ export default {
           id: null,
           name: '',
           category: '',
+          image: '',
           // Appliance fields
           apiType: '',
           avgPowerConsumption: null,
@@ -341,6 +394,33 @@ export default {
         }
       }
     },
+    async handleImageUpload(event) {
+      const file = event.target.files[0]
+      if (!file) return
+      
+      if (!file.type.startsWith('image/')) {
+        return
+      }
+      
+      if (file.size > 5 * 1024 * 1024) {
+        return
+      }
+      
+      this.isUploading = true
+      
+      try {
+        const folder = this.isTask ? 'bgreen/tasks' : 'bgreen/appliances'
+        const result = await uploadImage(file, { folder })
+        
+        if (result.success) {
+          this.formData.image = result.url
+        }
+      } catch (error) {
+        console.error('Error uploading image:', error)
+      } finally {
+        this.isUploading = false
+      }
+    },
     handleSave() {
       if (!this.isValid) return
       
@@ -352,6 +432,7 @@ export default {
         category: this.formData.category,
         icon: this.formData.icon || autoIcon,
         description: this.formData.description,
+        image: this.formData.image || null,
       }
       
       if (this.isTask) {

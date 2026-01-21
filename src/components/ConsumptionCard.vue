@@ -10,7 +10,9 @@
         :alt="label"
         class="w-full h-full object-cover"
       />
-      <div v-else class="w-full h-full bg-(--system-input-background)"></div>
+      <div v-else class="w-full h-full bg-(--system-input-background) flex items-center justify-center">
+        <span class="material-symbols-outlined text-4xl text-(--text-disabled)">electrical_services</span>
+      </div>
       
       <!-- Label Badge -->
       <div 
@@ -21,13 +23,23 @@
         </p>
       </div>
       
+      <!-- Power Watts Badge (top right) -->
+      <div 
+        v-if="powerWatts"
+        class="absolute top-3 right-[7px] bg-(--system-background) border border-(--system-border) rounded-full px-3 py-0.5 flex items-center justify-center"
+      >
+        <p class="font-medium text-[11px] text-(--semantic-warning-default) whitespace-nowrap">
+          {{ powerWatts }} W
+        </p>
+      </div>
+      
       <!-- Energy Badge (bottom right) -->
       <div 
         v-if="energyConsumed"
         class="absolute bottom-3 right-[7px] bg-(--system-background) border border-(--system-border) rounded-full px-3 py-0.5 flex items-center justify-center"
       >
         <p class="font-medium text-[11px] text-(--semantic-success-light) whitespace-nowrap">
-          {{ energyConsumed }} kWh
+          {{ typeof energyConsumed === 'number' ? energyConsumed.toFixed(2) : energyConsumed }} kWh
         </p>
       </div>
     </div>
@@ -87,6 +99,10 @@ export default {
       default: 'Introduza o valor...'
     },
     energyConsumed: {
+      type: Number,
+      default: null
+    },
+    powerWatts: {
       type: Number,
       default: null
     }

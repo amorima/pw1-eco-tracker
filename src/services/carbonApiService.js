@@ -210,44 +210,110 @@ export const applianceToApiType = {
 
 /**
  * Calculate emissions for an appliance usage
+ * API expects: type (required), time (defaults to 60min), watts (default depends on type)
+ * API returns: { success, message, data: { type, carbon_kg_co2, unit, factor, minutes, kwh, device_power_watts } }
  * @param {object} appliance - Appliance object with apiType and avgPowerConsumption
  * @param {number} hoursUsed - Hours used
  * @returns {Promise<{success: boolean, data?: object, message?: string}>}
  */
 export async function calculateApplianceEmissions(appliance, hoursUsed) {
+  const apiKey = getStoredApiKey()
+
+  if (!apiKey) {
+    return {
+      success: false,
+      message: 'API key não encontrada. Por favor, configure a API primeiro.',
+    }
+  }
+
   // Use the apiType directly from the appliance if available
   const apiType = appliance.apiType || appliance.name
   
-  // Check if it's a device type (calculated by minutes)
-  const deviceTypes = ['refrigerator', 'washing_machine', 'dishwasher', 'television', 
-                       'air_conditioner', 'desktop', 'laptop']
+  // Valid device types for the API
+  const validTypes = ['refrigerator', 'washing_machine', 'dishwasher', 'television', 
+                      'air_conditioner', 'desktop', 'laptop', 'electricity']
   
-  if (deviceTypes.includes(apiType)) {
-    // For devices, API expects minutes
-    const minutes = hoursUsed * 60
-    return calculateEmissions(apiType, minutes, true)
-  } else if (apiType === 'electricity' || !deviceTypes.includes(apiType)) {
-    // For non-device types or fallback, calculate kWh based on power consumption
-    const powerKW = (appliance.avgPowerConsumption || 200) / 1000 // Convert watts to kW
-    const kWh = hoursUsed * powerKW
-    return calculateEmissions('electricity', kWh, false)
+  // Determine the type to use
+  let type = validTypes.includes(apiType) ? apiType : 'electricity'
+  
+  // Convert hours to minutes for the API
+  const minutes = Math.round(hoursUsed * 60)
+  
+  // Prepare request body - API expects type, time (minutes), and optionally watts
+  const body = {
+    type: type,
+    minutes: minutes,
   }
   
-  // Legacy support: try mapping from name if no apiType
-  const mapping = applianceToApiType[appliance.name]
-  if (mapping) {
-    if (mapping.isDevice) {
-      const minutes = hoursUsed * 60
-      return calculateEmissions(mapping.type, minutes, true)
-    } else {
-      const kWh = hoursUsed * mapping.factor
-      return calculateEmissions('electricity', kWh, false)
+  // If appliance has custom power consumption and it's not a standard device type, include watts
+  if (appliance.avgPowerConsumption && type === 'electricity') {
+    body.watts = appliance.avgPowerConsumption
+  }
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/calculate`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-API-Key': apiKey,
+      },
+      body: JSON.stringify(body),
+    })
+
+    if (response.status === 401) {
+      return { success: false, message: 'API key inválida ou em falta' }
+    }
+
+    if (response.status === 403) {
+      return { success: false, message: 'API key bloqueada' }
+    }
+
+    if (response.status === 429) {
+      return { success: false, message: 'Limite de pedidos excedido. Aguarde alguns minutos.' }
+    }
+
+    const data = await response.json()
+
+    if (data.success) {
+      return {
+        success: true,
+        data: {
+          type: data.data.type,
+          carbon_kg_co2: data.data.carbon_kg_co2,
+          unit: data.data.unit,
+          factor: data.data.factor,
+          minutes: data.data.minutes,
+          kwh: data.data.kwh,
+          device_power_watts: data.data.device_power_watts,
+        },
+      }
+    }
+
+    return {
+      success: false,
+      message: data.message || 'Erro no cálculo',
+    }
+  } catch (error) {
+    console.error('Error calculating appliance emissions:', error)
+    
+    // Fallback calculation if API fails
+    const powerKW = (appliance.avgPowerConsumption || 200) / 1000
+    const kWh = hoursUsed * powerKW
+    const co2 = kWh * 0.188 // Portugal grid factor
+    
+    return {
+      success: true,
+      data: {
+        type: type,
+        carbon_kg_co2: co2,
+        unit: 'kg CO2e',
+        factor: 0.188,
+        minutes: minutes,
+        kwh: kWh,
+        device_power_watts: appliance.avgPowerConsumption || 200,
+      },
     }
   }
-  
-  // Ultimate fallback
-  const kWh = hoursUsed * 0.2 // Average 200W consumption
-  return calculateEmissions('electricity', kWh, false)
 }
 
 /**

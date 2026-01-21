@@ -475,9 +475,7 @@ export const useUserStore = defineStore('userStore', {
         id: Date.now(),
         name: setupData.adminProfile.name,
         age: setupData.adminProfile.age || null,
-        avatar:
-          setupData.adminProfile.avatar ||
-          `https://i.pravatar.cc/150?img=${Math.floor(Math.random() * 70)}`,
+        avatar: setupData.adminProfile.avatar || null,
         isAdmin: true,
         createdAt: new Date().toISOString(),
         points: 0,
@@ -584,8 +582,7 @@ export const useUserStore = defineStore('userStore', {
         id: Date.now(),
         name: profileData.name,
         age: profileData.age || null,
-        avatar:
-          profileData.avatar || `https://i.pravatar.cc/150?img=${Math.floor(Math.random() * 70)}`,
+        avatar: profileData.avatar || null,
         isAdmin: false, // Only first profile is admin
         createdAt: new Date().toISOString(),
         points: 0,
@@ -1122,9 +1119,10 @@ export const useUserStore = defineStore('userStore', {
     },
     
     /**
-     * Track appliance usage
+     * Track appliance usage with full API response data
+     * Stores: type, carbon_kg_co2, minutes, kwh, device_power_watts
      */
-    async trackApplianceUsage(applianceId, hoursUsed, co2Emitted = null) {
+    async trackApplianceUsage(applianceId, hoursUsed, apiData = null) {
       if (!this.currentProfile) {
         return { success: false, message: 'Nenhum perfil selecionado' }
       }
@@ -1141,33 +1139,49 @@ export const useUserStore = defineStore('userStore', {
       const profileBackup = JSON.parse(JSON.stringify(this.currentProfile))
       const profilesBackup = JSON.parse(JSON.stringify(this.currentUser.profiles))
       
-      const energyConsumed = (appliance.avgPowerConsumption * hoursUsed) / 1000 // kWh
-      let calculatedCo2 = energyConsumed * (appliance.co2PerKwh || 0.233)
-      
-      // Try to get more accurate CO2 from API if available
-      if (!co2Emitted && appliance.apiType) {
+      // If no API data provided, try to calculate
+      let usageData = apiData
+      if (!usageData) {
         try {
           const { calculateApplianceEmissions } = await import('@/services/carbonApiService')
           const apiResult = await calculateApplianceEmissions(appliance, hoursUsed)
           
-          if (apiResult.success && apiResult.data?.co2) {
-            calculatedCo2 = apiResult.data.co2
+          if (apiResult.success && apiResult.data) {
+            usageData = apiResult.data
           }
         } catch (error) {
           console.warn('API calculation failed, using fallback:', error)
         }
       }
       
-      // Use provided co2Emitted if available, otherwise use calculated
-      calculatedCo2 = co2Emitted || calculatedCo2
+      // Fallback calculation if API didn't work
+      if (!usageData) {
+        const powerWatts = appliance.avgPowerConsumption || 200
+        const minutes = Math.round(hoursUsed * 60)
+        const kwh = (powerWatts * hoursUsed) / 1000
+        const co2 = kwh * 0.188
+        
+        usageData = {
+          type: appliance.apiType || 'electricity',
+          carbon_kg_co2: co2,
+          minutes: minutes,
+          kwh: kwh,
+          device_power_watts: powerWatts,
+        }
+      }
       
+      // Create usage record with complete API data
       const usage = {
         id: Date.now(),
         applianceId: String(applianceId),
         date: new Date().toISOString().split('T')[0],
         hoursUsed,
-        energyConsumed,
-        co2Emitted: calculatedCo2,
+        // API response data
+        type: usageData.type,
+        energyConsumed: usageData.kwh,
+        co2Emitted: usageData.carbon_kg_co2,
+        minutes: usageData.minutes,
+        device_power_watts: usageData.device_power_watts,
       }
       
       if (!this.currentProfile.applianceUsage) {
@@ -1198,7 +1212,7 @@ export const useUserStore = defineStore('userStore', {
         return {
           success: true,
           usage,
-          message: `Consumo registado: ${calculatedCo2.toFixed(2)} kg CO2`,
+          message: `Consumo registado: ${usageData.carbon_kg_co2.toFixed(2)} kg CO2`,
         }
       } catch {
         // Rollback
@@ -1534,7 +1548,9 @@ export const useUserStore = defineStore('userStore', {
           category: applianceData.category,
           icon: applianceData.icon,
           description: applianceData.description,
-          avgPowerConsumption: 100, // Default watts
+          image: applianceData.image || null,
+          apiType: applianceData.apiType || 'electricity',
+          avgPowerConsumption: applianceData.avgPowerConsumption || 100,
           co2PerKwh: 0.233, // Portugal grid factor
         }
         
@@ -1638,7 +1654,10 @@ export const useUserStore = defineStore('userStore', {
           points: taskData.points,
           icon: taskData.icon,
           description: taskData.description,
-          co2Saved: taskData.points * 0.5, // Estimate
+          image: taskData.image || null,
+          frequency: taskData.frequency || 'daily',
+          difficulty: taskData.difficulty || 'easy',
+          co2Saved: taskData.co2Saved || taskData.points * 0.5,
         }
         
         const response = await fetch('http://localhost:3000/tasks', {
@@ -1674,12 +1693,8 @@ export const useUserStore = defineStore('userStore', {
         
         const updated = {
           ...this.availableTasks[taskIndex],
-          title: updates.title,
-          category: updates.category,
-          points: updates.points,
-          icon: updates.icon,
-          description: updates.description,
-          co2Saved: updates.points * 0.5,
+          ...updates, // Spread all updates
+          co2Saved: updates.co2Saved || updates.points * 0.5,
           id: taskId, // Preserve the original ID
         }
         
@@ -1693,7 +1708,14 @@ export const useUserStore = defineStore('userStore', {
           throw new Error('Failed to update task on server')
         }
         
-        this.availableTasks[taskIndex] = updated
+        const serverUpdated = await response.json()
+        
+        // Use array replacement for reactivity
+        this.availableTasks = [
+          ...this.availableTasks.slice(0, taskIndex),
+          serverUpdated,
+          ...this.availableTasks.slice(taskIndex + 1)
+        ]
         
         return { success: true }
       } catch (error) {
