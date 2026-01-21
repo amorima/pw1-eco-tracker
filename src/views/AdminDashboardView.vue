@@ -876,26 +876,25 @@ export default {
       this.showRewardModal = true
     },
     editReward(reward) {
-      // If reward has null ID, treat it as creating a new reward
-      if (!reward.id || reward.id === null || reward.id === 'null') {
-        this.selectedReward = {
-          title: reward.title,
-          points: reward.points,
-          image: reward.image
-        }
-      } else {
-        this.selectedReward = reward
+      // Deep clone the reward to avoid mutations
+      this.selectedReward = {
+        id: reward.id,
+        title: reward.title,
+        points: reward.points,
+        image: reward.image
       }
       this.showRewardModal = true
     },
     async saveReward(rewardData) {
       try {
-        // Treat null or undefined IDs as new rewards
-        if (rewardData.id && rewardData.id !== null && rewardData.id !== 'null') {
+        // Check if this is an update or create operation
+        if (rewardData.id && rewardData.id !== null && rewardData.id !== 'null' && rewardData.id !== undefined) {
           await this.userStore.updateReward(rewardData.id, rewardData)
           this.showNotification('Recompensa atualizada')
         } else {
-          await this.userStore.createReward(rewardData)
+          // Remove any invalid ID before creating
+          const { id, ...createData } = rewardData
+          await this.userStore.createReward(createData)
           this.showNotification('Recompensa criada')
         }
         // Force refresh to update UI
@@ -982,20 +981,26 @@ export default {
     },
     async saveItem(itemData) {
       try {
+        console.log('AdminDashboard saveItem received:', itemData)
         if (this.itemModalType === 'appliance') {
-          if (itemData.id) {
+          if (itemData.id && itemData.id !== null && itemData.id !== 'null' && itemData.id !== undefined) {
             await this.userStore.updateAppliance(itemData.id, itemData)
             this.showNotification('Consumo atualizado')
           } else {
-            await this.userStore.createAppliance(itemData)
+            // Remove any invalid ID before creating
+            const { id, ...createData } = itemData
+            console.log('Creating appliance with data:', createData)
+            await this.userStore.createAppliance(createData)
             this.showNotification('Consumo criado')
           }
         } else {
-          if (itemData.id) {
+          if (itemData.id && itemData.id !== null && itemData.id !== 'null' && itemData.id !== undefined) {
             await this.userStore.updateTask(itemData.id, itemData)
             this.showNotification('Tarefa atualizada')
           } else {
-            await this.userStore.createTask(itemData)
+            // Remove any invalid ID before creating
+            const { id, ...createData } = itemData
+            await this.userStore.createTask(createData)
             this.showNotification('Tarefa criada')
           }
         }

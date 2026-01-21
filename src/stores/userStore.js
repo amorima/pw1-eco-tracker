@@ -1448,10 +1448,13 @@ export const useUserStore = defineStore('userStore', {
     // Rewards Management
     async createReward(rewardData) {
       try {
-        // Generate unique ID
+        // Generate unique ID and ensure proper data structure
         const newReward = {
           id: String(Date.now()),
-          ...rewardData,
+          title: rewardData.title,
+          points: rewardData.points,
+          image: rewardData.image || null,
+          isDefault: false,
           createdAt: new Date().toISOString(),
         }
         
@@ -1542,17 +1545,20 @@ export const useUserStore = defineStore('userStore', {
     // Appliances Management
     async createAppliance(applianceData) {
       try {
+        console.log('Store createAppliance received:', applianceData)
         const newAppliance = {
           id: String(Date.now()),
           name: applianceData.name,
           category: applianceData.category,
           icon: applianceData.icon,
-          description: applianceData.description,
+          description: applianceData.description || '',
           image: applianceData.image || null,
           apiType: applianceData.apiType || 'electricity',
           avgPowerConsumption: applianceData.avgPowerConsumption || 100,
+          avgUsageHoursPerDay: applianceData.avgUsageHoursPerDay || 1,
           co2PerKwh: 0.233, // Portugal grid factor
         }
+        console.log('Store creating appliance object:', newAppliance)
         
         const response = await fetch('http://localhost:3000/appliances', {
           method: 'POST',
@@ -1647,18 +1653,20 @@ export const useUserStore = defineStore('userStore', {
     // Tasks Management
     async createTask(taskData) {
       try {
+        console.log('Store createTask received:', taskData)
         const newTask = {
           id: String(Date.now()),
           title: taskData.title,
           category: taskData.category,
           points: taskData.points,
           icon: taskData.icon,
-          description: taskData.description,
+          description: taskData.description || '',
           image: taskData.image || null,
           frequency: taskData.frequency || 'daily',
           difficulty: taskData.difficulty || 'easy',
           co2Saved: taskData.co2Saved || taskData.points * 0.5,
         }
+        console.log('Store creating task object:', newTask)
         
         const response = await fetch('http://localhost:3000/tasks', {
           method: 'POST',

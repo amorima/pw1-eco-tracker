@@ -399,10 +399,12 @@ export default {
       if (!file) return
       
       if (!file.type.startsWith('image/')) {
+        console.error('Invalid file type. Please select an image.')
         return
       }
       
       if (file.size > 5 * 1024 * 1024) {
+        console.error('File size too large. Please select an image under 5MB.')
         return
       }
       
@@ -414,6 +416,9 @@ export default {
         
         if (result.success) {
           this.formData.image = result.url
+          console.log('Image uploaded successfully:', result.url)
+        } else {
+          console.error('Upload failed:', result.error)
         }
       } catch (error) {
         console.error('Error uploading image:', error)
@@ -431,7 +436,7 @@ export default {
         id: this.formData.id,
         category: this.formData.category,
         icon: this.formData.icon || autoIcon,
-        description: this.formData.description,
+        description: this.formData.description || '',
         image: this.formData.image || null,
       }
       
@@ -453,8 +458,10 @@ export default {
         data.co2PerKwh = 0.233 // Standard CO2 per kWh for Portugal
       }
       
+      console.log('Saving item data:', data)
       this.$emit('save', data)
       this.$emit('close')
+    },
     },
   },
 }
