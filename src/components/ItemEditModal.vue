@@ -462,7 +462,6 @@ export default {
       this.$emit('save', data)
       this.$emit('close')
     },
-    },
   },
 }
 </script>
