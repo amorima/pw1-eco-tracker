@@ -16,7 +16,6 @@ describe('HomeScreenView', () => {
           MenuNav: true, // nao carrega MenuNav para mais eficiencia
           ChatBot: true, // nao carrega ChatBot para mais eficiencia
           StatisticsChart: true, // nao carrega StatisticsChart para mais eficiencia
-          draggable: true,
         },
       },
     })
@@ -31,6 +30,8 @@ describe('HomeScreenView', () => {
   describe('opens consumption modal', () => {
     // veriricar se modal abre
     it('opens consumption modal when consumption AddCard is clicked', async () => {
+      console.log('Html ', wrapper.html())
+
       expect(wrapper.vm.showApplianceModal).toBe(false) // deve estar fechado como default
 
       const addCards = wrapper.findAllComponents(AddCard) // encontrar e criar array com todas as vezes que o componente é encontrado

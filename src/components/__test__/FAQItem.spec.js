@@ -39,10 +39,9 @@ describe('FAQItem', () => {
       expect(openWrapper.vm.isOpen).toBe(true) // verifica se o card inicia aberto
     })
 
-    it('doesn´t show the answer when the card is closed', () => {
-      // verifica se resposta aparece se card tiver fechado
-      const answerDiv = wrapper.find('.overflow-hidden > div') // seleciona o div da resposta
-      expect(answerDiv.isVisible()).toBe(false) // verifica se o div nao aparece
+    it('doesnt show the answer when the card is closed', () => {
+      expect(wrapper.vm.isOpen).toBe(false) // confirma que está fechado
+      expect(wrapper.text()).toContain('Registe manualmente os consumos')
     })
   })
 

@@ -7,38 +7,38 @@
   >
     <div class="flex flex-col items-center gap-6">
       <!-- Badge Icon -->
-      <div 
+      <div
         :class="[
           'w-24 h-24 rounded-full flex items-center justify-center',
-          badge?.earned ? 'bg-(--system-ring)' : 'bg-(--system-border)'
+          badge?.earned ? 'bg-(--system-ring)' : 'bg-(--system-border)',
         ]"
       >
-        <span 
+        <span
           :class="[
             'material-symbols-outlined',
-            badge?.earned ? 'text-white' : 'text-(--text-disabled)'
+            badge?.earned ? 'text-white' : 'text-(--text-disabled)',
           ]"
-          style="font-size: 48px;"
+          style="font-size: 48px"
         >
           {{ badge?.icon || 'emoji_events' }}
         </span>
       </div>
-      
+
       <!-- Badge Title -->
-      <h3 
+      <h3
         :class="[
           'font-bold text-2xl text-center',
-          badge?.earned ? 'text-(--text-body-titles)' : 'text-(--text-disabled)'
+          badge?.earned ? 'text-(--text-body-titles)' : 'text-(--text-disabled)',
         ]"
       >
         {{ badge?.title }}
       </h3>
-      
+
       <!-- Badge Description -->
       <p class="text-(--text-body-sub-titles) text-center text-base">
         {{ badge?.description }}
       </p>
-      
+
       <!-- Earned Status -->
       <div v-if="badge?.earned" class="flex flex-col items-center gap-2">
         <div class="flex items-center gap-2 text-(--semantic-success-default)">
@@ -49,7 +49,7 @@
           {{ formatDate(badge.earnedAt) }}
         </p>
       </div>
-      
+
       <!-- Locked Status -->
       <div v-else class="flex flex-col items-center gap-2">
         <div class="flex items-center gap-2 text-(--text-disabled)">
@@ -61,7 +61,7 @@
         </p>
       </div>
     </div>
-    
+
     <template #footer>
       <button
         @click="$emit('close')"
@@ -104,7 +104,7 @@ export default {
     },
     getRequirementText(requirement) {
       if (!requirement) return 'Continue a usar a aplicação para desbloquear!'
-      
+
       switch (requirement.type) {
         case 'streak':
           return `Mantenha uma streak de ${requirement.value} dias`

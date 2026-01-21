@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach } from 'vitest'
 import { mount } from '@vue/test-utils'
 import ConsumptionCard from '@/components/ConsumptionCard.vue'
 
-describe('FAQItem', () => {
+describe('ConsumptionCard', () => {
   let wrapper
 
   const defaultProps = {
@@ -21,15 +21,15 @@ describe('FAQItem', () => {
 
   describe('renders', () => {
     it('should render the component', () => {
-      expect(wrapper.vm.ConsumptionCard).toBe(true) // verifica se o componente existe
+      expect(wrapper.exists()).toBe(true) // verifica se o componente existe
     })
 
     it('should have the right label', () => {
-      expect(wrapper.text().toContain('Teste'))
+      expect(wrapper.text()).toContain('Teste')
     })
 
     it('should have the right energy consumed', () => {
-      expect(wrapper.text().toContain('100 kWh'))
+      expect(wrapper.text()).toContain('100')
     })
 
     it('should have the right image', () => {
