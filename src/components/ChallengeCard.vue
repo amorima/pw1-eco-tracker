@@ -1,87 +1,160 @@
 <template>
-  <div 
+  <div
+    @click="openDetails"
     :class="[
-      'flex flex-col gap-[16px] items-start justify-center overflow-hidden px-[16px] py-[8px] relative rounded-[10px]',
-      active ? 'bg-(--system-ring)' : 'bg-(--system-card) border border-(--system-border)'
+      'flex flex-col gap-3 p-4 relative rounded-[14px] transition-all duration-200 cursor-pointer group h-full min-h-[140px]',
+      active
+        ? 'bg-(--system-ring) shadow-md text-white'
+        : 'bg-(--system-card) border-2 border-(--system-border) hover:border-(--system-ring) hover:shadow-sm',
     ]"
   >
     <!-- Admin buttons -->
-    <div v-if="adminMode" class="absolute top-2 right-2 flex gap-1">
+    <div v-if="adminMode" class="absolute top-2 right-2 flex gap-1 z-10">
       <button
         @click.stop="$emit('edit')"
         class="p-1 rounded-md bg-(--system-input-background) hover:bg-(--system-border) transition-colors"
         title="Editar"
       >
-        <span class="material-symbols-outlined text-[18px] text-(--text-body-sub-titles)">edit</span>
+        <span class="material-symbols-outlined text-[18px] text-(--text-body-sub-titles)"
+          >edit</span
+        >
       </button>
       <button
         @click.stop="$emit('delete')"
         class="p-1 rounded-md bg-(--system-input-background) hover:bg-(--semantic-danger-hover) transition-colors"
         title="Eliminar"
       >
-        <span class="material-symbols-outlined text-[18px] text-(--semantic-danger-default)">delete</span>
+        <span class="material-symbols-outlined text-[18px] text-(--semantic-danger-default)"
+          >delete</span
+        >
       </button>
     </div>
 
-    <div 
-      :class="[
-        'flex flex-col items-start leading-[0] relative shrink-0 text-nowrap',
-        active ? 'text-(--system-card)' : 'text-(--text-disabled)'
-      ]"
-    >
-      <div class="flex flex-col font-['Noto_Sans'] font-semibold justify-end relative shrink-0 text-[20px]">
-        <p class="leading-[1.5] text-nowrap">{{ title }}</p>
+    <!-- Content -->
+    <div class="flex flex-col gap-1 w-full flex-grow">
+      <h3
+        :class="[
+          'font-[\'Noto_Sans\'] font-bold text-lg leading-tight line-clamp-1',
+          active ? 'text-white' : 'text-(--text-body-titles)',
+        ]"
+        :title="title"
+      >
+        {{ title }}
+      </h3>
+      <p
+        :class="[
+          'font-[\'Noto_Sans\'] text-sm leading-relaxed line-clamp-2',
+          active ? 'text-white/90' : 'text-(--text-body-sub-titles)',
+        ]"
+      >
+        {{ description }}
+      </p>
+    </div>
+
+    <!-- Footer: Progress & XP -->
+    <div class="mt-auto w-full flex items-center justify-between gap-3 pt-2">
+      <!-- Progress Bar (if not active) -->
+      <div v-if="!active" class="flex-1 h-2 bg-(--system-popover) rounded-full overflow-hidden">
+        <div
+          class="h-full bg-(--system-ring) rounded-full transition-all duration-500"
+          :style="{ width: `${progress}%` }"
+        ></div>
       </div>
-      <div class="flex flex-col font-['Noto_Sans'] font-normal justify-center relative shrink-0 text-[16px]">
-        <p class="leading-[1.5] text-nowrap">{{ description }}</p>
+      <div v-else class="flex-1 flex items-center gap-1 text-white/90 text-xs font-medium">
+        <span class="material-symbols-outlined text-sm">check_circle</span>
+        <span>Concluído</span>
+      </div>
+
+      <!-- XP Badge -->
+      <div
+        :class="[
+          'text-xs font-bold px-2 py-1 rounded-md whitespace-nowrap',
+          active ? 'bg-white/20 text-white' : 'bg-(--system-ring)/10 text-(--system-ring)',
+        ]"
+      >
+        {{ xp }} xp
       </div>
     </div>
-    
-    <div v-if="!active" class="bg-(--system-popover) flex h-[8px] items-center overflow-hidden relative rounded-[999px] shrink-0 w-full">
-      <div 
-        class="bg-(--system-ring) h-full rounded-[999px] shrink-0"
-        :style="{ width: `${progress}%` }"
-      />
-    </div>
-    
-    <div 
-      v-if="!active"
-      class="absolute flex flex-col font-['Noto_Sans'] font-medium justify-center leading-[0] right-[32px] text-[10px] text-(--system-ring) text-nowrap top-[14.5px] translate-x-[100%] -translate-y-1/2"
-    >
-      <p class="leading-[1.5]">{{ xp }}xp</p>
-    </div>
+
+    <!-- Details Modal -->
+    <Teleport to="body">
+      <ModalComponent
+        v-if="showModal"
+        :isOpen="showModal"
+        :title="title"
+        @close="showModal = false"
+      >
+        <div class="flex flex-col gap-6">
+          <div
+            class="p-4 rounded-xl bg-(--system-input-background) border border-(--system-border)"
+          >
+            <p class="text-(--text-body) text-base leading-relaxed">{{ description }}</p>
+          </div>
+
+          <div class="space-y-2">
+            <div
+              class="flex items-center justify-between text-sm font-medium text-(--text-body-sub-titles)"
+            >
+              <span>Progresso</span>
+              <span>{{ Math.round(progress) }}%</span>
+            </div>
+            <div class="w-full h-4 bg-(--system-border) rounded-full overflow-hidden">
+              <div
+                class="h-full bg-(--system-ring) transition-all duration-500"
+                :style="{ width: `${progress}%` }"
+              ></div>
+            </div>
+          </div>
+        </div>
+      </ModalComponent>
+    </Teleport>
   </div>
 </template>
 
 <script>
+import ModalComponent from '@/components/ModalComponent.vue'
+
 export default {
   name: 'ChallengeCard',
+  components: {
+    ModalComponent,
+  },
   props: {
     title: {
       type: String,
-      required: true
+      required: true,
     },
     description: {
       type: String,
-      required: true
+      required: true,
     },
     progress: {
       type: Number,
-      default: 0
+      default: 0,
     },
     xp: {
       type: Number,
-      default: 50
+      default: 50,
     },
     active: {
       type: Boolean,
-      default: false
+      default: false,
     },
     adminMode: {
       type: Boolean,
-      default: false
+      default: false,
+    },
+  },
+  emits: ['edit', 'delete'],
+  data() {
+    return {
+      showModal: false,
     }
   },
-  emits: ['edit', 'delete']
+  methods: {
+    openDetails() {
+      this.showModal = true
+    },
+  },
 }
 </script>
