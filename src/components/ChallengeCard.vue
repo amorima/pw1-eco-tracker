@@ -2,10 +2,10 @@
   <div
     @click="openDetails"
     :class="[
-      'flex flex-col gap-3 p-4 relative rounded-[14px] transition-all duration-200 cursor-pointer group h-full min-h-[140px]',
+      'flex flex-col gap-3 p-4 relative rounded-[14px] transition-all duration-200 cursor-pointer group h-full min-h-[140px] border-2',
       active
-        ? 'bg-(--system-ring) shadow-md text-white'
-        : 'bg-(--system-card) border-2 border-(--system-border) hover:border-(--system-ring) hover:shadow-sm',
+        ? 'bg-(--system-ring) border-(--system-ring) shadow-md text-white'
+        : 'bg-(--system-card) border-(--system-border) hover:border-(--system-ring) hover:shadow-sm',
     ]"
   >
     <!-- Admin buttons -->

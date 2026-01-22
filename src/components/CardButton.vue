@@ -1,8 +1,8 @@
 <template>
   <button
     :class="[
-      'flex items-center justify-center w-11 h-11 border cursor-pointer transition-all duration-200 shrink-0 rounded-xl',
-      'hover:shadow-md hover:scale-105 active:scale-95',
+      'flex items-center justify-center w-11 h-11 border-2 border-solid cursor-pointer transition duration-200 shrink-0 rounded-xl focus:outline-none',
+      'hover:shadow-sm active:opacity-80',
       variant === 'edit' &&
         'bg-(--semantic-info-light) border-(--semantic-info-default) text-(--semantic-info-default) hover:bg-(--semantic-info-default) hover:text-white',
       variant === 'delete' &&
