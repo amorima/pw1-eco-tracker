@@ -8,17 +8,23 @@
     </div>
   </Transition>
 
-  <div class="pt-24 pb-24 flex flex-col items-center justify-center bg-(--system-background)">
-    <div class="flex gap-4 items-center justify-center w-full max-w-[1200px]">
+  <div
+    class="py-12 lg:py-24 flex flex-col items-center justify-center bg-(--system-background) min-h-[calc(100vh-80px)]"
+  >
+    <div
+      class="flex flex-col lg:flex-row gap-4 items-center justify-center w-full max-w-[1200px] px-6 lg:px-0"
+    >
       <!-- Left Form Section -->
-      <div class="flex items-center justify-center flex-1">
-        <div class="flex flex-col gap-8 items-start justify-center w-fit">
+      <div class="flex items-center justify-center w-full lg:flex-1">
+        <div
+          class="flex flex-col gap-8 items-start justify-center w-full max-w-[400px] lg:max-w-none lg:w-fit"
+        >
           <!-- Form Container -->
           <div class="flex flex-col gap-4 items-start justify-center w-full">
             <!-- Title and Fields -->
             <div class="flex flex-col gap-2 items-start w-full">
               <h1
-                class="text-[48px] font-bold leading-tight text-(--text-body-titles) text-center w-full"
+                class="text-4xl lg:text-[48px] font-bold leading-tight text-(--text-body-titles) text-center w-full"
                 style="font-family: 'Clash Grotesk', sans-serif"
               >
                 Login
@@ -79,7 +85,7 @@
       </div>
 
       <!-- Right Image Section -->
-      <div class="flex-1 flex items-start justify-center">
+      <div class="hidden lg:flex flex-1 items-start justify-center">
         <div class="relative w-[430px] h-[567px]">
           <img
             src="../assets/img/login-art.jpg"

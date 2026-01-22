@@ -139,7 +139,7 @@
     <Transition name="mobile-slide">
       <div
         v-if="mobileMenuOpen"
-        class="fixed inset-0 z-50 bg-(--system-background) flex flex-col lg:hidden"
+        class="fixed inset-0 z-[60] bg-(--system-background) flex flex-col lg:hidden"
       >
         <!-- Mobile Header -->
         <div class="flex items-center justify-between px-6 h-20 border-b border-(--system-border)">
@@ -289,6 +289,11 @@ export default {
       return this.userStore.isAdmin
     },
   },
+  watch: {
+    mobileMenuOpen(isOpen) {
+      document.body.style.overflow = isOpen ? 'hidden' : ''
+    },
+  },
   mounted() {
     // Initialize dark mode from localStorage
     const savedDarkMode = localStorage.getItem('darkMode')
@@ -302,6 +307,7 @@ export default {
   },
   beforeUnmount() {
     document.removeEventListener('click', this.handleClickOutside)
+    document.body.style.overflow = ''
   },
   methods: {
     toggleDarkMode() {
