@@ -117,54 +117,119 @@
       <div class="w-full max-w-[930px] space-y-6">
         <!-- Profile Header -->
         <div
-          class="bg-(--system-card) border-2 border-(--system-border) flex flex-col md:flex-row gap-6 items-center p-6 rounded-[14px] w-full shadow-sm"
+          class="relative w-full overflow-hidden bg-(--system-card) border border-(--system-border) rounded-3xl shadow-sm transition-all hover:shadow-md group"
         >
+          <!-- Decorative Background Pattern -->
           <div
-            class="border-2 border-(--system-border) overflow-hidden rounded-full w-24 h-24 md:w-32 md:h-32 shrink-0"
+            class="absolute top-0 left-0 w-full h-32 bg-gradient-to-r from-green-100 to-blue-100 dark:from-green-900/20 dark:to-blue-900/20"
           >
-            <img
-              :src="
-                currentProfile?.avatar || 'https://api.dicebear.com/7.x/avataaars/svg?seed=User'
+            <div
+              class="absolute inset-0 opacity-10"
+              style="
+                background-image: radial-gradient(var(--system-ring) 1px, transparent 1px);
+                background-size: 20px 20px;
               "
-              alt="User avatar"
-              class="w-full h-full object-cover"
-            />
+            ></div>
           </div>
 
-          <div class="w-full grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
-            <div
-              class="flex flex-col sm:flex-row items-center sm:items-baseline gap-2 text-center sm:text-left"
-            >
-              <span class="text-sm text-(--text-body-sub-titles) font-medium"> Nome: </span>
-              <span class="text-base md:text-lg text-(--text-body) font-semibold truncate">
-                {{ currentProfile?.name || 'Utilizador' }}
-              </span>
-            </div>
-            <div
-              class="flex flex-col sm:flex-row items-center sm:items-baseline gap-2 text-center sm:text-left"
-            >
-              <span class="text-sm text-(--text-body-sub-titles) font-medium"> País: </span>
-              <span class="text-base md:text-lg text-(--text-body) font-semibold"> Portugal </span>
-            </div>
-            <div
-              class="flex flex-col sm:flex-row items-center sm:items-baseline gap-2 text-center sm:text-left"
-            >
-              <span class="text-sm text-(--text-body-sub-titles) font-medium"> Contacto: </span>
-              <span
-                class="text-base md:text-lg text-(--text-body) font-semibold truncate max-w-[200px] sm:max-w-none"
+          <div
+            class="relative px-6 pb-8 pt-16 md:px-10 md:pt-20 flex flex-col md:flex-row items-center md:items-end gap-6"
+          >
+            <!-- Avatar Section -->
+            <div class="relative shrink-0">
+              <div
+                class="w-32 h-32 md:w-40 md:h-40 rounded-full border-[6px] border-(--system-card) shadow-xl overflow-hidden bg-(--system-background)"
               >
-                {{ userStore.currentUser?.email || 'email@example.com' }}
-              </span>
+                <img
+                  :src="
+                    currentProfile?.avatar || 'https://api.dicebear.com/7.x/avataaars/svg?seed=User'
+                  "
+                  alt="User avatar"
+                  class="w-full h-full object-cover"
+                />
+              </div>
             </div>
-            <div
-              class="flex flex-col sm:flex-row items-center sm:items-baseline gap-2 text-center sm:text-left"
-            >
-              <span class="text-sm text-(--text-body-sub-titles) font-medium"> Idade: </span>
-              <span class="text-base md:text-lg text-(--text-body) font-semibold">
-                {{ currentProfile?.age || '-' }}
-              </span>
+
+            <!-- User Info Section -->
+            <div class="flex-1 text-center md:text-left pb-2 w-full">
+              <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                  <h2
+                    class="text-3xl md:text-4xl font-bold text-(--text-body-titles) mb-1 tracking-tight"
+                  >
+                    {{ currentProfile?.name || 'Utilizador' }}
+                  </h2>
+                  <p
+                    class="text-(--system-ring) font-medium mb-4 flex items-center justify-center md:justify-start gap-2"
+                  >
+                    <span class="material-symbols-outlined text-xl">verified</span>
+                    {{ getProfileTitle(currentProfile?.level || 1) }}
+                  </p>
+                </div>
+
+                <!-- Gamification Stats (Mini) -->
+                <div class="flex gap-4 justify-center md:justify-end">
+                  <div
+                    class="flex flex-col items-center justify-center bg-(--system-background) border border-(--system-border) rounded-2xl px-5 py-2 shadow-sm min-w-[90px]"
+                  >
+                    <span
+                      class="text-[10px] text-(--text-body-sub-titles) uppercase font-bold tracking-wider"
+                      >Rank</span
+                    >
+                    <div class="flex items-center gap-1 text-(--text-body-titles)">
+                      <span class="material-symbols-outlined text-base text-yellow-500"
+                        >trophy</span
+                      >
+                      <span class="text-xl font-black">#{{ getUserRank(currentProfile?.id) }}</span>
+                    </div>
+                  </div>
+                  <div
+                    class="flex flex-col items-center justify-center bg-(--system-background) border border-(--system-border) rounded-2xl px-5 py-2 shadow-sm min-w-[90px]"
+                  >
+                    <span
+                      class="text-[10px] text-(--text-body-sub-titles) uppercase font-bold tracking-wider"
+                      >Pontos</span
+                    >
+                    <div class="flex items-center gap-1 text-(--text-body-titles)">
+                      <span class="material-symbols-outlined text-base text-orange-500">bolt</span>
+                      <span class="text-xl font-black">{{ currentProfile?.points || 0 }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Details Chips -->
+              <div class="flex flex-wrap justify-center md:justify-start gap-3 mt-4">
+                <div
+                  class="flex items-center gap-2 bg-(--system-background) px-4 py-2 rounded-xl border border-(--system-border) text-sm font-medium text-(--text-body-sub-titles)"
+                >
+                  <span class="material-symbols-outlined text-lg text-blue-500">public</span>
+                  Portugal
+                </div>
+                <div
+                  class="flex items-center gap-2 bg-(--system-background) px-4 py-2 rounded-xl border border-(--system-border) text-sm font-medium text-(--text-body-sub-titles)"
+                >
+                  <span class="material-symbols-outlined text-lg text-orange-500">mail</span>
+                  {{ userStore.currentUser?.email || 'email@example.com' }}
+                </div>
+                <div
+                  class="flex items-center gap-2 bg-(--system-background) px-4 py-2 rounded-xl border border-(--system-border) text-sm font-medium text-(--text-body-sub-titles)"
+                >
+                  <span class="material-symbols-outlined text-lg text-purple-500">cake</span>
+                  {{ currentProfile?.age || '-' }} anos
+                </div>
+              </div>
             </div>
           </div>
+
+          <!-- Settings Button (Absolute) -->
+          <button
+            @click="scrollToSettings"
+            class="absolute top-4 right-4 p-2 text-(--text-body-sub-titles) hover:text-(--system-ring) hover:bg-(--system-background) rounded-full transition-all z-10"
+            title="Configurações"
+          >
+            <span class="material-symbols-outlined">settings</span>
+          </button>
         </div>
 
         <!-- Level & Streak Cards -->
@@ -473,6 +538,7 @@
 
               <CollapsibleCard
                 v-else-if="element === 'settings'"
+                id="card-settings"
                 title="Configurações"
                 icon="apps"
                 v-model="cardOpenStates.settings"
@@ -1132,6 +1198,27 @@ export default {
     },
     loadMoreChallenges() {
       this.displayedChallengesCount += 6
+    },
+
+    getUserRank(profileId) {
+      const profile = this.householdLeaderboard.find((p) => p.id === profileId)
+      return profile ? profile.rank : '-'
+    },
+    getProfileTitle(level) {
+      if (level >= 50) return 'Lenda Ecológica'
+      if (level >= 30) return 'Guardião do Planeta'
+      if (level >= 20) return 'Mestre da Sustentabilidade'
+      if (level >= 10) return 'Eco Warrior'
+      if (level >= 5) return 'Explorador Verde'
+      return 'Iniciado'
+    },
+
+    scrollToSettings() {
+      this.cardOpenStates.settings = true
+      this.$nextTick(() => {
+        const el = document.getElementById('card-settings')
+        if (el) el.scrollIntoView({ behavior: 'smooth' })
+      })
     },
 
     renderLevelChart() {
