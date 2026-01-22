@@ -1,30 +1,32 @@
 <template>
-  <div 
-    class="bg-(--system-background) border border-(--system-border) rounded-[21px] w-[284px] p-[11px] flex flex-col gap-[11px] hover:shadow-lg transition-shadow"
+  <div
+    class="bg-(--system-background) border border-(--system-border) rounded-[21px] w-full p-[11px] flex flex-col gap-[11px] hover:shadow-lg transition-shadow"
   >
     <!-- Image Section with Label -->
-    <div class="relative h-[138px] rounded-[11px] border border-(--system-border) overflow-hidden group">
-      <img 
-        v-if="image"
-        :src="image" 
-        :alt="label"
-        class="w-full h-full object-cover"
-      />
-      <div v-else class="w-full h-full bg-(--system-input-background) flex items-center justify-center">
-        <span class="material-symbols-outlined text-4xl text-(--text-disabled)">electrical_services</span>
+    <div
+      class="relative h-[138px] rounded-[11px] border border-(--system-border) overflow-hidden group"
+    >
+      <img v-if="image" :src="image" :alt="label" class="w-full h-full object-cover" />
+      <div
+        v-else
+        class="w-full h-full bg-(--system-input-background) flex items-center justify-center"
+      >
+        <span class="material-symbols-outlined text-4xl text-(--text-disabled)"
+          >electrical_services</span
+        >
       </div>
-      
+
       <!-- Label Badge -->
-      <div 
+      <div
         class="absolute top-3 left-[7px] bg-(--system-background) border border-(--system-border) rounded-full px-4 py-0 flex items-center justify-center"
       >
         <p class="font-medium text-[13px] text-(--text-headings) whitespace-nowrap">
           {{ label }}
         </p>
       </div>
-      
+
       <!-- Power Watts Badge (top right) -->
-      <div 
+      <div
         v-if="powerWatts"
         class="absolute top-3 right-[7px] bg-(--system-background) border border-(--system-border) rounded-full px-3 py-0.5 flex items-center justify-center"
       >
@@ -32,9 +34,9 @@
           {{ powerWatts }} W
         </p>
       </div>
-      
+
       <!-- Energy Badge (bottom right) -->
-      <div 
+      <div
         v-if="energyConsumed"
         class="absolute bottom-3 right-[7px] bg-(--system-background) border border-(--system-border) rounded-full px-3 py-0.5 flex items-center justify-center"
       >
@@ -47,7 +49,9 @@
     <!-- Input Section -->
     <div class="flex gap-[11px] items-center">
       <!-- Input with Unit -->
-      <div class="flex-1 bg-(--system-input-background) border border-(--system-border) rounded-[11px] h-10 relative">
+      <div
+        class="flex-1 bg-(--system-input-background) border border-(--system-border) rounded-[11px] h-10 relative"
+      >
         <input
           v-model="inputValue"
           type="number"
@@ -55,9 +59,11 @@
           class="w-full h-full px-3 bg-transparent text-[13px] text-(--system-foreground) outline-none placeholder:text-(--text-disabled)"
           @input="$emit('input-change', inputValue)"
         />
-        
+
         <!-- Unit Badge -->
-        <div class="absolute right-[3px] top-[3px] w-8 h-8 bg-(--system-border) rounded-[7px] flex items-center justify-center">
+        <div
+          class="absolute right-[3px] top-[3px] w-8 h-8 bg-(--system-border) rounded-[7px] flex items-center justify-center"
+        >
           <span class="text-[13px] font-bold text-(--accent-muted-foreground)">
             {{ unit }}
           </span>
@@ -65,12 +71,14 @@
       </div>
 
       <!-- Arrow Button -->
-      <button 
+      <button
         @click="$emit('submit', inputValue)"
         class="bg-(--system-input-background) border border-(--system-border) rounded-[11px] w-10 h-10 flex items-center justify-center hover:bg-(--system-ring) hover:border-(--system-ring) transition-colors group"
         :disabled="!inputValue"
       >
-        <span class="material-symbols-outlined text-[21px] text-(--text-body-titles) group-hover:text-white transition-colors">
+        <span
+          class="material-symbols-outlined text-[21px] text-(--text-body-titles) group-hover:text-white transition-colors"
+        >
           arrow_forward_ios
         </span>
       </button>
@@ -84,47 +92,47 @@ export default {
   props: {
     label: {
       type: String,
-      required: true
+      required: true,
     },
     image: {
       type: String,
-      default: null
+      default: null,
     },
     unit: {
       type: String,
-      default: 'hr'
+      default: 'hr',
     },
     placeholder: {
       type: String,
-      default: 'Introduza o valor...'
+      default: 'Introduza o valor...',
     },
     energyConsumed: {
       type: Number,
-      default: null
+      default: null,
     },
     powerWatts: {
       type: Number,
-      default: null
-    }
+      default: null,
+    },
   },
   emits: ['input-change', 'submit'],
   data() {
     return {
-      inputValue: ''
+      inputValue: '',
     }
-  }
+  },
 }
 </script>
 
 <style scoped>
 /* Remove number input spinners */
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
-input[type="number"] {
+input[type='number'] {
   -moz-appearance: textfield;
 }
 </style>

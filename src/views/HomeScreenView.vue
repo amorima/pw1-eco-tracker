@@ -150,7 +150,12 @@
               class="h-full"
             >
               <div class="space-y-2.5">
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+                <div
+                  :class="[
+                    'grid gap-2.5',
+                    gridColumns === 1 ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1',
+                  ]"
+                >
                   <ConsumptionCard
                     v-for="usage in recentApplianceUsages"
                     :key="usage.id"
@@ -173,7 +178,12 @@
               class="h-full"
             >
               <div class="space-y-2.5">
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+                <div
+                  :class="[
+                    'grid gap-2.5',
+                    gridColumns === 1 ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1',
+                  ]"
+                >
                   <TaskCard
                     v-for="activity in recentTaskCompletions"
                     :key="activity.id"
@@ -192,10 +202,18 @@
               v-model="cardOpenStates.tools"
               class="h-full"
             >
-              <div class="flex flex-col lg:flex-row gap-4 overflow-x-auto pb-2">
+              <div
+                :class="[
+                  'flex gap-4 overflow-x-auto pb-2',
+                  gridColumns === 1 ? 'flex-col lg:flex-row' : 'flex-col',
+                ]"
+              >
                 <!-- Emission Calculator Tool -->
                 <div
-                  class="bg-(--system-background) border-2 border-(--system-border) rounded-[14px] w-full lg:w-[280px] shrink-0 p-6 flex flex-col gap-6"
+                  :class="[
+                    'bg-(--system-background) border-2 border-(--system-border) rounded-[14px] shrink-0 p-6 flex flex-col gap-6',
+                    gridColumns === 1 ? 'w-full lg:w-[280px]' : 'w-full',
+                  ]"
                 >
                   <h3 class="font-bold text-base text-(--text-body-titles) text-center">
                     Estimativa de emissão
@@ -267,7 +285,10 @@
 
                 <!-- Quick Task Complete Tool -->
                 <div
-                  class="bg-(--system-background) border-2 border-(--system-border) rounded-[14px] w-full lg:w-[280px] shrink-0 p-6 flex flex-col gap-4"
+                  :class="[
+                    'bg-(--system-background) border-2 border-(--system-border) rounded-[14px] shrink-0 p-6 flex flex-col gap-4',
+                    gridColumns === 1 ? 'w-full lg:w-[280px]' : 'w-full',
+                  ]"
                 >
                   <h3 class="font-bold text-base text-(--text-body-titles) text-center">
                     Tarefa Rápida
@@ -300,7 +321,10 @@
 
                 <!-- Placeholder Card -->
                 <div
-                  class="border-2 border-(--system-border) rounded-[14px] w-full lg:w-[280px] shrink-0 h-[431px] flex items-center justify-center hidden lg:flex"
+                  :class="[
+                    'border-2 border-(--system-border) rounded-[14px] shrink-0 h-[431px] items-center justify-center',
+                    gridColumns === 1 ? 'w-full lg:w-[280px] hidden lg:flex' : 'hidden',
+                  ]"
                 >
                   <span
                     class="material-symbols-outlined text-(--system-ring)"
