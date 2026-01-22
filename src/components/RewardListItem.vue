@@ -1,39 +1,41 @@
 <template>
-  <div class="bg-(--system-card) border border-(--system-border) flex gap-[16px] items-start overflow-hidden p-[10px] relative rounded-[10px] shrink-0 w-full mb-2">
-    <div class="h-[100px] relative rounded-[8px] shrink-0 w-[190px]">
-      <img 
-        :src="image" 
-        :alt="title"
-        class="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[8px] w-full h-full"
-      />
+  <div
+    class="bg-(--system-card) border border-(--system-border) flex flex-col sm:flex-row gap-3 sm:gap-4 items-start sm:items-center overflow-hidden p-3 relative rounded-[10px] shrink-0 w-full mb-2 transition-all hover:shadow-sm"
+  >
+    <!-- Image -->
+    <div
+      class="w-full sm:w-[140px] md:w-[190px] h-[120px] sm:h-[100px] relative rounded-[8px] shrink-0 overflow-hidden"
+    >
+      <img :src="image" :alt="title" class="w-full h-full object-cover" />
     </div>
-    
-    <div class="basis-0 flex flex-col gap-0 grow items-start justify-between min-h-px min-w-px relative h-[100px] shrink-0">
-      <div class="font-['Noto_Sans'] font-normal h-[52px] relative shrink-0 w-full">
-        <p class="absolute leading-[1.75] left-0 text-[18px] text-(--text-headings) top-0">
-          {{ title }}
-        </p>
-        <p class="absolute leading-[1.5] left-0 text-[16px] text-(--text-disabled) text-nowrap top-[28px]">
-          {{ date || `${points} pontos` }}
-        </p>
+
+    <!-- Content -->
+    <div class="flex flex-col flex-grow min-w-0 gap-1 w-full sm:w-auto h-full justify-center">
+      <div class="flex items-start justify-between w-full gap-2">
+        <div class="flex flex-col gap-0.5 min-w-0">
+          <h3
+            class="font-['Noto_Sans'] font-semibold text-base sm:text-lg text-(--text-headings) leading-tight line-clamp-1"
+            :title="title"
+          >
+            {{ title }}
+          </h3>
+          <p class="text-sm text-(--text-disabled)">
+            {{ date || `${points} pontos` }}
+          </p>
+        </div>
+
+        <!-- Action Button -->
+        <div v-if="showAction" class="shrink-0">
+          <CardButton :variant="actionVariant" @click="$emit('action')" />
+        </div>
       </div>
-      
-      <p 
+
+      <p
         v-if="status"
-        :class="[
-          'font-[\'Noto_Sans\'] font-normal leading-[1.5] relative shrink-0 text-[16px] text-nowrap',
-          statusClass
-        ]"
+        :class="['font-[\'Noto_Sans\'] font-medium text-sm sm:text-base mt-1', statusClass]"
       >
         Estado: {{ statusText }}
       </p>
-    </div>
-    
-    <div v-if="showAction" class="flex flex-col h-[100px] items-start justify-between relative shrink-0">
-      <CardButton 
-        :variant="actionVariant"
-        @click="$emit('action')"
-      />
     </div>
   </div>
 </template>
@@ -44,30 +46,33 @@ import CardButton from './CardButton.vue'
 export default {
   name: 'RewardListItem',
   components: {
-    CardButton
+    CardButton,
   },
   props: {
     image: {
       type: String,
-      required: true
+      required: true,
     },
     title: {
       type: String,
-      required: true
+      required: true,
     },
     points: {
       type: Number,
-      default: 0
+      default: 0,
     },
     date: {
       type: String,
-      default: ''
+      default: '',
     },
     status: {
       type: String,
       default: '',
-      validator: (value) => ['', 'pending', 'pendente', 'complete', 'completo', 'cancelado', 'cancelled'].includes(value)
-    }
+      validator: (value) =>
+        ['', 'pending', 'pendente', 'complete', 'completo', 'cancelado', 'cancelled'].includes(
+          value,
+        ),
+    },
   },
   computed: {
     showAction() {
@@ -80,26 +85,26 @@ export default {
     },
     statusClass() {
       const classes = {
-        'pending': 'text-(--semantic-warning-default)',
-        'pendente': 'text-(--semantic-warning-default)',
-        'complete': 'text-(--semantic-success-default)',
-        'completo': 'text-(--semantic-success-default)',
-        'cancelado': 'text-(--semantic-error-default)',
-        'cancelled': 'text-(--semantic-error-default)'
+        pending: 'text-(--semantic-warning-default)',
+        pendente: 'text-(--semantic-warning-default)',
+        complete: 'text-(--semantic-success-default)',
+        completo: 'text-(--semantic-success-default)',
+        cancelado: 'text-(--semantic-error-default)',
+        cancelled: 'text-(--semantic-error-default)',
       }
       return classes[this.status] || ''
     },
     statusText() {
       const texts = {
-        'pending': 'pendente',
-        'pendente': 'pendente',
-        'complete': 'completo',
-        'completo': 'completo',
-        'cancelado': 'cancelado',
-        'cancelled': 'cancelado'
+        pending: 'pendente',
+        pendente: 'pendente',
+        complete: 'completo',
+        completo: 'completo',
+        cancelado: 'cancelado',
+        cancelled: 'cancelado',
       }
       return texts[this.status] || this.status
-    }
-  }
+    },
+  },
 }
 </script>

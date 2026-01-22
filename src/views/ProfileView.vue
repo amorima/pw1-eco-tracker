@@ -117,106 +117,74 @@
       <div class="w-full max-w-[930px] space-y-6">
         <!-- Profile Header -->
         <div
-          class="bg-(--system-card) border-2 border-(--system-border) flex flex-col sm:flex-row gap-[16px] items-center p-[16px] relative rounded-[14px] shrink-0 w-full"
+          class="bg-(--system-card) border-2 border-(--system-border) flex flex-col md:flex-row gap-6 items-center p-6 rounded-[14px] w-full shadow-sm"
         >
           <div
-            class="border-2 border-(--system-border) overflow-hidden relative rounded-[999px] shrink-0 w-[80px] h-[80px] sm:w-[100px] sm:h-[100px]"
+            class="border-2 border-(--system-border) overflow-hidden rounded-full w-24 h-24 md:w-32 md:h-32 shrink-0"
           >
             <img
               :src="
                 currentProfile?.avatar || 'https://api.dicebear.com/7.x/avataaars/svg?seed=User'
               "
               alt="User avatar"
-              class="absolute inset-0 max-w-none object-cover pointer-events-none w-full h-full"
+              class="w-full h-full object-cover"
             />
           </div>
 
-          <div
-            class="w-full sm:basis-0 bg-(--system-card) gap-[12px] sm:gap-[16px] grid grid-cols-1 sm:grid-cols-[fit-content(100%)_fit-content(100%)_minmax(0px,_1fr)] grid-rows-[repeat(2,_fit-content(100%))] sm:grow min-h-px min-w-px overflow-hidden p-[12px] sm:p-[16px] relative rounded-[14px] shrink-0"
-          >
+          <div class="w-full grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
             <div
-              class="sm:[grid-area:1/1] flex font-['Noto_Sans'] font-normal gap-[8px] items-center sm:justify-center relative shrink-0"
+              class="flex flex-col sm:flex-row items-center sm:items-baseline gap-2 text-center sm:text-left"
             >
-              <p
-                class="leading-normal relative shrink-0 text-[14px] sm:text-[16px] text-(--text-body-sub-titles) whitespace-nowrap"
-              >
-                Nome:
-              </p>
-              <p
-                class="leading-[1.75] relative shrink-0 text-[16px] sm:text-[18px] text-(--text-body) truncate"
-              >
+              <span class="text-sm text-(--text-body-sub-titles) font-medium"> Nome: </span>
+              <span class="text-base md:text-lg text-(--text-body) font-semibold truncate">
                 {{ currentProfile?.name || 'Utilizador' }}
-              </p>
+              </span>
             </div>
             <div
-              class="sm:[grid-area:1/2] flex font-['Noto_Sans'] font-normal gap-[8px] items-center relative shrink-0"
+              class="flex flex-col sm:flex-row items-center sm:items-baseline gap-2 text-center sm:text-left"
             >
-              <p
-                class="leading-normal relative shrink-0 text-[14px] sm:text-[16px] text-(--text-body-sub-titles) whitespace-nowrap"
-              >
-                País:
-              </p>
-              <p
-                class="leading-[1.75] relative shrink-0 text-[16px] sm:text-[18px] text-(--text-body)"
-              >
-                Portugal
-              </p>
+              <span class="text-sm text-(--text-body-sub-titles) font-medium"> País: </span>
+              <span class="text-base md:text-lg text-(--text-body) font-semibold"> Portugal </span>
             </div>
             <div
-              class="sm:[grid-area:1_/_3] flex font-['Noto_Sans'] font-normal gap-[8px] items-center place-self-stretch relative shrink-0"
+              class="flex flex-col sm:flex-row items-center sm:items-baseline gap-2 text-center sm:text-left"
             >
-              <p
-                class="leading-[1.5] relative shrink-0 text-[14px] sm:text-[16px] text-(--text-body-sub-titles) whitespace-nowrap"
-              >
-                Contacto:
-              </p>
-              <p
-                class="leading-[1.75] relative shrink-0 text-[16px] sm:text-[18px] text-(--text-body) truncate"
+              <span class="text-sm text-(--text-body-sub-titles) font-medium"> Contacto: </span>
+              <span
+                class="text-base md:text-lg text-(--text-body) font-semibold truncate max-w-[200px] sm:max-w-none"
               >
                 {{ userStore.currentUser?.email || 'email@example.com' }}
-              </p>
+              </span>
             </div>
             <div
-              class="sm:[grid-area:2_/_1] flex font-['Noto_Sans'] font-normal gap-[8px] items-center place-self-stretch relative shrink-0"
+              class="flex flex-col sm:flex-row items-center sm:items-baseline gap-2 text-center sm:text-left"
             >
-              <p
-                class="leading-[1.5] relative shrink-0 text-[14px] sm:text-[16px] text-(--text-body-sub-titles) whitespace-nowrap"
-              >
-                Idade:
-              </p>
-              <p
-                class="leading-[1.75] relative shrink-0 text-[16px] sm:text-[18px] text-(--text-body)"
-              >
+              <span class="text-sm text-(--text-body-sub-titles) font-medium"> Idade: </span>
+              <span class="text-base md:text-lg text-(--text-body) font-semibold">
                 {{ currentProfile?.age || '-' }}
-              </p>
+              </span>
             </div>
           </div>
         </div>
 
         <!-- Level & Streak Cards -->
-        <div class="flex flex-col sm:flex-row gap-[16px] items-center relative shrink-0 w-full">
+        <div class="flex flex-col md:flex-row gap-6 w-full">
           <!-- Level Card -->
           <div
-            class="basis-0 bg-(--system-card) border-2 border-(--system-border) gap-[16px] grid grid-cols-[repeat(2,_minmax(0px,_1fr))] grid-rows-[repeat(2,_fit-content(100%))] grow min-h-px min-w-px overflow-hidden p-[16px] relative rounded-[14px] shrink-0"
+            class="flex-1 bg-(--system-card) border-2 border-(--system-border) p-6 rounded-[14px] shadow-sm flex flex-col justify-between gap-4"
           >
-            <div
-              class="[grid-area:1_/_1] flex flex-col font-['Noto_Sans'] font-normal justify-center leading-[0] relative shrink-0 text-[16px] text-(--text-body-sub-titles) text-nowrap"
-            >
-              <p class="leading-[1.5]">Nível: {{ currentProfile?.level || 1 }}</p>
+            <div class="flex items-center justify-between">
+              <span class="text-lg font-bold text-(--text-body-titles)"
+                >Nível {{ currentProfile?.level || 1 }}</span
+              >
+              <span class="text-sm text-(--text-body-sub-titles)"
+                >{{ xpInCurrentLevel }}/{{ xpForNextLevel }} xp</span
+              >
             </div>
-            <div
-              class="[grid-area:2_/_1_/_auto_/_span_2] flex flex-col gap-[8px] h-[47px] items-start justify-end justify-self-stretch relative shrink-0"
-            >
-              <p
-                class="font-['Noto_Sans'] font-normal leading-[1.5] min-w-full relative shrink-0 text-[14px] text-(--text-body) w-[min-content]"
-              >
-                {{ xpInCurrentLevel }}/{{ xpForNextLevel }}xp
-              </p>
-              <div
-                class="bg-(--system-popover) flex h-[8px] items-center overflow-hidden relative rounded-[999px] shrink-0 w-full"
-              >
+            <div class="w-full">
+              <div class="bg-(--system-popover) h-3 rounded-full overflow-hidden w-full">
                 <div
-                  class="bg-(--system-ring) h-full rounded-[999px] shrink-0 transition-all duration-500"
+                  class="bg-(--system-ring) h-full rounded-full transition-all duration-500"
                   :style="{ width: `${xpPercentage}%` }"
                 ></div>
               </div>
@@ -225,20 +193,14 @@
 
           <!-- Streak Card -->
           <div
-            class="w-full sm:basis-0 bg-(--system-card) border-2 border-(--system-border) gap-[16px] sm:gap-[24px] flex flex-col sm:grid sm:grid-cols-[repeat(2,_fit-content(100%))] sm:grid-rows-[repeat(2,_fit-content(100%))] sm:grow min-h-px min-w-px overflow-hidden p-[12px] sm:p-[16px] relative rounded-[14px] shrink-0"
+            class="flex-1 bg-(--system-card) border-2 border-(--system-border) p-6 rounded-[14px] shadow-sm flex flex-col gap-4"
           >
-            <div class="flex items-center justify-between sm:contents">
-              <p
-                class="sm:[grid-area:1_/_1] font-['Noto_Sans'] font-normal leading-[1.5] relative shrink-0 text-[14px] sm:text-[16px] text-(--text-body-sub-titles)"
-              >
-                Streak
-              </p>
-              <div class="sm:[grid-area:1_/_2_/_span_2] sm:justify-self-end">
-                <StreakCard :days="currentProfile?.streak || 0" />
-              </div>
+            <div class="flex items-center justify-between">
+              <span class="text-lg font-bold text-(--text-body-titles)"> Streak </span>
+              <StreakCard :days="currentProfile?.streak || 0" />
             </div>
             <div
-              class="sm:[grid-area:2_/_1] flex items-start justify-between gap-1 sm:gap-2 relative shrink-0 w-full overflow-x-auto"
+              class="flex items-center justify-between gap-2 overflow-x-auto pb-2 scrollbar-hide"
             >
               <StreakButton
                 v-for="(day, index) in weekDaysStreak"
@@ -269,9 +231,7 @@
                 v-model="cardOpenStates.badges"
                 class="h-full"
               >
-                <div
-                  class="grid gap-[12px] sm:gap-[16px] grid-cols-2 sm:grid-cols-3 md:grid-cols-4 w-full items-start overflow-hidden px-0 py-[12px] sm:py-[16px] relative shrink-0"
-                >
+                <div class="grid gap-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 w-full py-4">
                   <BadgeCard
                     v-for="badge in allBadgesWithStatus"
                     :key="badge.id"
@@ -290,9 +250,7 @@
                 v-model="cardOpenStates.ranking"
                 class="h-full"
               >
-                <div
-                  class="flex flex-col gap-[8px] items-start overflow-hidden px-0 py-[8px] relative shrink-0 w-full"
-                >
+                <div class="flex flex-col gap-2 w-full py-2">
                   <RankingRow
                     v-for="profile in householdLeaderboard"
                     :key="profile.id"
@@ -330,7 +288,7 @@
 
                 <div
                   v-if="paginatedChallenges.length > 0"
-                  class="gap-[8px] grid grid-cols-1 sm:grid-cols-2 relative shrink-0 w-full"
+                  class="gap-4 grid grid-cols-1 md:grid-cols-2 w-full"
                 >
                   <ChallengeCard
                     v-for="challenge in paginatedChallenges"
@@ -367,68 +325,48 @@
                 class="h-full"
               >
                 <!-- Tab Navigation -->
-                <div
-                  class="flex items-center justify-between px-0 py-[8px] relative shrink-0 w-full"
-                >
+                <div class="flex items-center w-full border-b border-(--system-border) mb-4">
                   <button
                     @click="rewardTab = 'redeem'"
                     :class="[
-                      'flex flex-col items-center justify-center px-0 py-[8px] relative shrink-0',
+                      'flex-1 py-3 text-center font-bold text-base transition-colors relative',
                       rewardTab === 'redeem'
-                        ? 'border-b-2 border-(--text-body-sub-titles)'
-                        : 'border-b border-(--system-border)',
+                        ? 'text-(--text-body-sub-titles)'
+                        : 'text-(--text-disabled) hover:text-(--text-body)',
                     ]"
                   >
-                    <p
-                      :class="[
-                        'font-[\'Noto_Sans\'] font-bold leading-[1.5] relative shrink-0 text-[16px] text-center w-full',
-                        rewardTab === 'redeem'
-                          ? 'text-(--text-body-sub-titles)'
-                          : 'text-(--text-disabled)',
-                      ]"
-                    >
-                      Resgatar pontos
-                    </p>
+                    Resgatar pontos
+                    <div
+                      v-if="rewardTab === 'redeem'"
+                      class="absolute bottom-0 left-0 w-full h-0.5 bg-(--text-body-sub-titles)"
+                    ></div>
                   </button>
                   <button
                     @click="rewardTab = 'redeemed'"
                     :class="[
-                      'basis-0 flex flex-col grow items-center justify-center min-h-px min-w-px px-0 py-[8px] relative shrink-0',
+                      'flex-1 py-3 text-center font-bold text-base transition-colors relative',
                       rewardTab === 'redeemed'
-                        ? 'border-b-2 border-(--text-body-sub-titles)'
-                        : 'border-b border-(--system-border)',
+                        ? 'text-(--text-body-sub-titles)'
+                        : 'text-(--text-disabled) hover:text-(--text-body)',
                     ]"
                   >
-                    <p
-                      :class="[
-                        'font-[\'Noto_Sans\'] font-bold leading-[1.5] relative shrink-0 text-[16px] text-center w-full',
-                        rewardTab === 'redeemed'
-                          ? 'text-(--text-body-sub-titles)'
-                          : 'text-(--text-disabled)',
-                      ]"
-                    >
-                      Pontos resgatados ({{ redeemedRewards.length }})
-                    </p>
+                    Histórico ({{ redeemedRewards.length }})
+                    <div
+                      v-if="rewardTab === 'redeemed'"
+                      class="absolute bottom-0 left-0 w-full h-0.5 bg-(--text-body-sub-titles)"
+                    ></div>
                   </button>
                 </div>
 
                 <!-- Search -->
-                <div class="flex gap-[10px] items-start relative shrink-0 w-full mb-4">
-                  <div
-                    class="basis-0 flex flex-col gap-[4px] grow h-[40px] items-start min-h-px min-w-px relative shrink-0"
-                  >
-                    <div
-                      class="basis-0 bg-(--system-card) border-2 border-(--system-border) grow min-h-px min-w-px overflow-hidden relative rounded-[8px] shrink-0 w-full"
-                    >
-                      <input
-                        v-model="rewardSearch"
-                        type="text"
-                        placeholder="Pesquisar . . ."
-                        class="absolute font-['Noto_Sans'] font-normal leading-[1.5] left-[10px] text-[16px] text-(--text-disabled) top-[6px] bg-transparent border-none outline-none w-[calc(100%-20px)]"
-                      />
-                    </div>
-                  </div>
-                  <div class="absolute right-[10px] top-[10px] w-[20px] h-[20px]">
+                <div class="relative w-full mb-6">
+                  <input
+                    v-model="rewardSearch"
+                    type="text"
+                    placeholder="Pesquisar recompensas..."
+                    class="w-full pl-10 pr-4 py-2 bg-(--system-card) border-2 border-(--system-border) rounded-lg outline-none focus:border-(--system-ring) transition-colors"
+                  />
+                  <div class="absolute left-3 top-1/2 -translate-y-1/2">
                     <span class="material-symbols-outlined text-[20px] text-(--text-disabled)"
                       >search</span
                     >
@@ -436,7 +374,7 @@
                 </div>
 
                 <!-- Rewards List -->
-                <div v-if="rewardTab === 'redeem'">
+                <div v-if="rewardTab === 'redeem'" class="space-y-2">
                   <RewardListItem
                     v-for="reward in filteredAvailableRewards"
                     :key="reward.id"
@@ -453,7 +391,7 @@
                   </p>
                 </div>
 
-                <div v-else>
+                <div v-else class="space-y-2">
                   <p
                     class="font-['Noto_Sans'] font-bold leading-[1.5] text-[16px] text-(--text-body-sub-titles) mb-4"
                   >
@@ -478,7 +416,7 @@
                 </div>
 
                 <p
-                  class="font-['Noto_Sans'] font-semibold leading-[1.5] relative shrink-0 text-[20px] text-(--text-body-titles) text-right w-full mt-4"
+                  class="font-['Noto_Sans'] font-semibold text-xl text-(--text-body-titles) text-right w-full mt-6"
                 >
                   {{ currentProfile?.points || 0 }} pontos
                 </p>
@@ -491,32 +429,26 @@
                 v-model="cardOpenStates.settings"
                 class="h-full"
               >
-                <div
-                  class="flex flex-col gap-[4px] items-start overflow-hidden relative shrink-0 w-full"
-                >
+                <div class="flex flex-col gap-3 w-full">
                   <div
                     v-for="setting in settingsList"
                     :key="setting.key"
-                    class="bg-(--system-card) flex items-center justify-between overflow-hidden px-[24px] py-[16px] relative rounded-[10px] shrink-0 w-full"
+                    class="bg-(--system-card) border border-(--system-border) flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-lg w-full gap-4 transition-all hover:border-(--system-ring)"
                   >
-                    <div
-                      class="flex flex-col gap-[8px] items-start leading-[0] relative shrink-0 text-(--text-body) text-nowrap"
-                    >
-                      <div
-                        class="flex flex-col font-['Noto_Sans'] font-semibold justify-center relative shrink-0 text-[20px]"
-                      >
-                        <p class="leading-[1.5] text-nowrap">{{ setting.title }}</p>
-                      </div>
-                      <div
-                        class="flex flex-col font-['Noto_Sans'] font-normal justify-center relative shrink-0 text-[16px]"
-                      >
-                        <p class="leading-[1.5] text-nowrap">{{ setting.description }}</p>
-                      </div>
+                    <div class="flex flex-col gap-1">
+                      <span class="font-semibold text-base sm:text-lg text-(--text-body)">{{
+                        setting.title
+                      }}</span>
+                      <span class="text-sm text-(--text-body-sub-titles) leading-relaxed">{{
+                        setting.description
+                      }}</span>
                     </div>
-                    <ToggleSwitch
-                      v-model="localSettings[setting.key]"
-                      @update:modelValue="saveSettings"
-                    />
+                    <div class="flex justify-end shrink-0">
+                      <ToggleSwitch
+                        v-model="localSettings[setting.key]"
+                        @update:modelValue="saveSettings"
+                      />
+                    </div>
                   </div>
                 </div>
               </CollapsibleCard>
