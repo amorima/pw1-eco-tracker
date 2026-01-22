@@ -1,6 +1,6 @@
 <template>
-  <MenuNav :landing="false" />
-  
+  <MenuNav :landing="false" :showGridSelector="true" @layout-change="updateLayout" />
+
   <!-- Toast Notification -->
   <Transition name="slide-fade">
     <div v-if="showToast" class="fixed top-6 left-1/2 -translate-x-1/2 z-50">
@@ -47,7 +47,7 @@
           <p class="text-sm text-(--text-body-sub-titles)">{{ selectedAppliance?.category }}</p>
         </div>
       </div>
-      
+
       <div class="space-y-2">
         <label class="block text-sm font-medium text-(--text-body-sub-titles)">
           Tempo de utilização
@@ -61,18 +61,25 @@
             placeholder="0"
             class="flex-1 px-4 py-3 bg-(--system-card) border-2 border-(--system-border) rounded-lg text-(--text-body) outline-none focus:border-(--system-ring)"
           />
-          <span class="flex items-center px-4 bg-(--system-border) rounded-lg text-(--text-body-sub-titles) font-medium">
+          <span
+            class="flex items-center px-4 bg-(--system-border) rounded-lg text-(--text-body-sub-titles) font-medium"
+          >
             horas
           </span>
         </div>
       </div>
-      
-      <div v-if="calculatedEmissions !== null" class="bg-(--system-card) border border-(--system-border) rounded-lg p-4">
+
+      <div
+        v-if="calculatedEmissions !== null"
+        class="bg-(--system-card) border border-(--system-border) rounded-lg p-4"
+      >
         <p class="text-sm text-(--text-body-sub-titles)">Emissão estimada:</p>
-        <p class="text-2xl font-bold text-(--system-ring)">{{ calculatedEmissions.toFixed(2) }} kg CO2</p>
+        <p class="text-2xl font-bold text-(--system-ring)">
+          {{ calculatedEmissions.toFixed(2) }} kg CO2
+        </p>
       </div>
     </div>
-    
+
     <template #footer>
       <button
         @click="showConsumptionInputModal = false"
@@ -90,173 +97,244 @@
     </template>
   </ModalComponent>
 
-  <div class="min-h-fit py-8 flex justify-center">
-    <div class="w-[930px]">
+  <div class="min-h-fit py-8 flex flex-col items-center px-4 sm:px-6 lg:px-8">
+    <div class="w-full max-w-[930px] space-y-6">
       <draggable
         v-model="cardOrder"
         @end="saveCardOrder"
         item-key="id"
-        class="space-y-4"
+        :class="[
+          'grid gap-6',
+          gridColumns === 1 ? 'grid-cols-1' : '',
+          gridColumns === 2 ? 'grid-cols-1 md:grid-cols-2' : '',
+          gridColumns === 3 ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' : '',
+        ]"
         handle=".drag-handle"
         :animation="200"
         ghost-class="ghost-card"
       >
         <template #item="{ element }">
-          <CollapsibleCard v-if="element === 'statistics'" title="ESTATÍSTICAS" v-model="cardOpenStates.statistics">
-        <StatisticsChart
-          v-if="statistics"
-          :data="statistics.last7Days"
-          :totalCo2="statistics.totalCo2Saved"
-          :totalPoints="statistics.totalPoints"
-          :totalTasks="statistics.totalTasks"
-          :streak="statistics.streak"
-        />
-        <div v-else class="w-full h-[260px] flex items-center justify-center text-(--text-body-sub-titles)">
-          <div class="text-center">
-            <span class="material-symbols-outlined text-6xl mb-4 text-(--system-border)">
-              show_chart
-            </span>
-            <p>A carregar estatísticas...</p>
-          </div>
-        </div>
-          </CollapsibleCard>
-
-          <CollapsibleCard v-else-if="element === 'consumptions'" title="CONSUMOS" v-model="cardOpenStates.consumptions">
-        <div class="space-y-2.5">
-          <div class="grid grid-cols-3 gap-2.5 flex-wrap">
-            <ConsumptionCard
-              v-for="usage in recentApplianceUsages"
-              :key="usage.id"
-              :label="usage.appliance.name"
-              :image="usage.appliance.image || getApplianceImage(usage.appliance)"
-              :energyConsumed="usage.energyConsumed"
-              :powerWatts="usage.device_power_watts || usage.appliance.avgPowerConsumption"
-              unit="hr"
-              @submit="(value) => submitApplianceUsage(usage.appliance, value)"
-            />
-            <AddCard @click="openAddConsumptionModal" />
-          </div>
-        </div>
-          </CollapsibleCard>
-
-          <CollapsibleCard v-else-if="element === 'tasks'" title="TAREFAS" v-model="cardOpenStates.tasks">
-        <div class="space-y-2.5">
-          <div class="grid grid-cols-3 gap-2.5 flex-wrap">
-            <TaskCard
-              v-for="activity in recentTaskCompletions"
-              :key="activity.id"
-              :label="activity.task.title"
-              :image="activity.task.image || getTaskImage(activity.task)"
-              @click="completeTask(activity.task)"
-            />
-            <AddCard @click="openAddTaskModal" />
-          </div>
-        </div>
-          </CollapsibleCard>
-
-          <CollapsibleCard v-else-if="element === 'tools'" title="FERRAMENTAS" v-model="cardOpenStates.tools">
-        <div class="flex gap-2.5">
-          <!-- Emission Calculator Tool -->
-          <div
-            class="bg-(--system-background) border-2 border-(--system-border) rounded-[14px] w-[280px] p-6 flex flex-col gap-6"
-          >
-            <h3 class="font-bold text-base text-(--text-body-titles) text-center">
-              Estimativa de emissão
-            </h3>
-
-            <div class="space-y-6">
-              <!-- Distance Input -->
-              <div class="space-y-2">
-                <label class="block text-[10px] font-medium text-(--text-disabled)">
-                  Distância percorrida (Km)
-                </label>
-                <FormInput v-model="calculator.distance" placeholder="50km" type="number" />
+          <div :class="{ 'col-span-full': element === 'statistics' && gridColumns > 1 }">
+            <!-- Wrapper div to handle col-span logic if needed, e.g. Statistics always full width -->
+            <CollapsibleCard
+              v-if="element === 'statistics'"
+              title="ESTATÍSTICAS"
+              v-model="cardOpenStates.statistics"
+              class="h-full"
+            >
+              <StatisticsChart
+                v-if="statistics"
+                :data="statistics.last7Days"
+                :totalCo2="statistics.totalCo2Saved"
+                :totalPoints="statistics.totalPoints"
+                :totalTasks="statistics.totalTasks"
+                :streak="statistics.streak"
+              />
+              <div
+                v-else
+                class="w-full h-[260px] flex items-center justify-center text-(--text-body-sub-titles)"
+              >
+                <div class="text-center">
+                  <span class="material-symbols-outlined text-6xl mb-4 text-(--system-border)">
+                    show_chart
+                  </span>
+                  <p>A carregar estatísticas...</p>
+                </div>
               </div>
+            </CollapsibleCard>
 
-              <!-- Fuel Consumption Slider -->
-              <div class="space-y-2">
-                <label class="block text-[10px] font-medium text-(--text-disabled)">
-                  Consumo médio (L/100Km) :
-                </label>
-                <div class="flex items-center gap-2">
-                  <span class="text-[10px] text-(--text-disabled)">0</span>
-                  <input
-                    v-model="calculator.consumption"
-                    type="range"
-                    min="0"
-                    max="10"
-                    step="0.1"
-                    class="flex-1 h-2 bg-[#e3e3e3] rounded-full appearance-none cursor-pointer accent-(--system-ring)"
+            <CollapsibleCard
+              v-else-if="element === 'consumptions'"
+              title="CONSUMOS"
+              v-model="cardOpenStates.consumptions"
+              class="h-full"
+            >
+              <div class="space-y-2.5">
+                <div
+                  :class="[
+                    'grid gap-2.5',
+                    gridColumns === 1 ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1',
+                  ]"
+                >
+                  <ConsumptionCard
+                    v-for="usage in recentApplianceUsages"
+                    :key="usage.id"
+                    :label="usage.appliance.name"
+                    :image="usage.appliance.image || getApplianceImage(usage.appliance)"
+                    :energyConsumed="usage.energyConsumed"
+                    :powerWatts="usage.device_power_watts || usage.appliance.avgPowerConsumption"
+                    unit="hr"
+                    @submit="(value) => submitApplianceUsage(usage.appliance, value)"
                   />
-                  <span class="text-[10px] text-(--text-disabled)">10</span>
+                  <AddCard @click="openAddConsumptionModal" />
                 </div>
               </div>
+            </CollapsibleCard>
 
-              <!-- Fuel Type Checkboxes -->
-              <div class="space-y-2">
-                <label class="block text-[10px] font-medium text-(--text-disabled)">
-                  Tipo de Combustível
-                </label>
-                <div class="grid grid-cols-2 gap-4">
-                  <CheckboxInput v-model="calculator.fuelTypes.gasoline" label="Gasolina" />
-                  <CheckboxInput v-model="calculator.fuelTypes.diesel" label="Gasóleo" />
-                  <CheckboxInput v-model="calculator.fuelTypes.electric" label="Elétrico" />
-                  <CheckboxInput v-model="calculator.fuelTypes.gas" label="Gás" />
+            <CollapsibleCard
+              v-else-if="element === 'tasks'"
+              title="TAREFAS"
+              v-model="cardOpenStates.tasks"
+              class="h-full"
+            >
+              <div class="space-y-2.5">
+                <div
+                  :class="[
+                    'grid gap-2.5',
+                    gridColumns === 1 ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1',
+                  ]"
+                >
+                  <TaskCard
+                    v-for="activity in recentTaskCompletions"
+                    :key="activity.id"
+                    :label="activity.task.title"
+                    :image="activity.task.image || getTaskImage(activity.task)"
+                    @click="completeTask(activity.task)"
+                  />
+                  <AddCard @click="openAddTaskModal" />
                 </div>
               </div>
-            </div>
+            </CollapsibleCard>
 
-            <!-- Calculate Button -->
-            <ActionButton @click="calculateEmissions"> Calcular </ActionButton>
+            <CollapsibleCard
+              v-else-if="element === 'tools'"
+              title="FERRAMENTAS"
+              v-model="cardOpenStates.tools"
+              class="h-full"
+            >
+              <div
+                :class="[
+                  'flex gap-4 overflow-x-auto pb-2',
+                  gridColumns === 1 ? 'flex-col lg:flex-row' : 'flex-col',
+                ]"
+              >
+                <!-- Emission Calculator Tool -->
+                <div
+                  :class="[
+                    'bg-(--system-background) border-2 border-(--system-border) rounded-[14px] shrink-0 p-6 flex flex-col gap-6',
+                    gridColumns === 1 ? 'w-full lg:w-[280px]' : 'w-full',
+                  ]"
+                >
+                  <h3 class="font-bold text-base text-(--text-body-titles) text-center">
+                    Estimativa de emissão
+                  </h3>
 
-            <!-- Result -->
-            <div class="flex items-center gap-2 justify-center font-semibold text-[20px]">
-              <span
-                :class="calculator.result > 0 ? 'text-(--system-ring)' : 'text-(--text-disabled)'"
-              >
-                {{ calculator.result }}
-              </span>
-              <span
-                :class="calculator.result > 0 ? 'text-(--system-ring)' : 'text-(--text-disabled)'"
-              >
-                Kg CO2
-              </span>
-            </div>
-          </div>
+                  <div class="space-y-6">
+                    <!-- Distance Input -->
+                    <div class="space-y-2">
+                      <label class="block text-[10px] font-medium text-(--text-disabled)">
+                        Distância percorrida (Km)
+                      </label>
+                      <FormInput v-model="calculator.distance" placeholder="50km" type="number" />
+                    </div>
 
-          <!-- Quick Task Complete Tool -->
-          <div
-            class="bg-(--system-background) border-2 border-(--system-border) rounded-[14px] w-[280px] p-6 flex flex-col gap-4"
-          >
-            <h3 class="font-bold text-base text-(--text-body-titles) text-center">
-              Tarefa Rápida
-            </h3>
-            
-            <div class="flex-1 space-y-3 max-h-[300px] overflow-y-auto">
-              <button
-                v-for="task in quickTasks"
-                :key="task.id"
-                @click="completeTask(task)"
-                class="w-full flex items-center gap-3 p-3 bg-(--system-card) border border-(--system-border) rounded-lg hover:border-(--system-ring) transition-colors"
-              >
-                <span class="material-symbols-outlined text-(--system-ring)">{{ task.icon }}</span>
-                <div class="flex-1 text-left">
-                  <p class="text-sm font-medium text-(--text-body-titles)">{{ task.title }}</p>
-                  <p class="text-xs text-(--semantic-success-default)">+{{ task.points }} pts</p>
+                    <!-- Fuel Consumption Slider -->
+                    <div class="space-y-2">
+                      <label class="block text-[10px] font-medium text-(--text-disabled)">
+                        Consumo médio (L/100Km) :
+                      </label>
+                      <div class="flex items-center gap-2">
+                        <span class="text-[10px] text-(--text-disabled)">0</span>
+                        <input
+                          v-model="calculator.consumption"
+                          type="range"
+                          min="0"
+                          max="10"
+                          step="0.1"
+                          class="flex-1 h-2 bg-[#e3e3e3] rounded-full appearance-none cursor-pointer accent-(--system-ring)"
+                        />
+                        <span class="text-[10px] text-(--text-disabled)">10</span>
+                      </div>
+                    </div>
+
+                    <!-- Fuel Type Checkboxes -->
+                    <div class="space-y-2">
+                      <label class="block text-[10px] font-medium text-(--text-disabled)">
+                        Tipo de Combustível
+                      </label>
+                      <div class="grid grid-cols-2 gap-4">
+                        <CheckboxInput v-model="calculator.fuelTypes.gasoline" label="Gasolina" />
+                        <CheckboxInput v-model="calculator.fuelTypes.diesel" label="Gasóleo" />
+                        <CheckboxInput v-model="calculator.fuelTypes.electric" label="Elétrico" />
+                        <CheckboxInput v-model="calculator.fuelTypes.gas" label="Gás" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Calculate Button -->
+                  <ActionButton @click="calculateEmissions"> Calcular </ActionButton>
+
+                  <!-- Result -->
+                  <div class="flex items-center gap-2 justify-center font-semibold text-[20px]">
+                    <span
+                      :class="
+                        calculator.result > 0 ? 'text-(--system-ring)' : 'text-(--text-disabled)'
+                      "
+                    >
+                      {{ calculator.result }}
+                    </span>
+                    <span
+                      :class="
+                        calculator.result > 0 ? 'text-(--system-ring)' : 'text-(--text-disabled)'
+                      "
+                    >
+                      Kg CO2
+                    </span>
+                  </div>
                 </div>
-                <span class="material-symbols-outlined text-(--text-disabled)">add_circle</span>
-              </button>
-            </div>
-          </div>
 
-          <!-- Placeholder Card -->
-          <div
-            class="border-2 border-(--system-border) rounded-[14px] w-[280px] h-[431px] flex items-center justify-center"
-          >
-            <span class="material-symbols-outlined text-(--system-ring)" style="font-size: 56px">add</span>
+                <!-- Quick Task Complete Tool -->
+                <div
+                  :class="[
+                    'bg-(--system-background) border-2 border-(--system-border) rounded-[14px] shrink-0 p-6 flex flex-col gap-4',
+                    gridColumns === 1 ? 'w-full lg:w-[280px]' : 'w-full',
+                  ]"
+                >
+                  <h3 class="font-bold text-base text-(--text-body-titles) text-center">
+                    Tarefa Rápida
+                  </h3>
+
+                  <div class="flex-1 space-y-3 max-h-[300px] overflow-y-auto">
+                    <button
+                      v-for="task in quickTasks"
+                      :key="task.id"
+                      @click="completeTask(task)"
+                      class="w-full flex items-center gap-3 p-3 bg-(--system-card) border border-(--system-border) rounded-lg hover:border-(--system-ring) transition-colors"
+                    >
+                      <span class="material-symbols-outlined text-(--system-ring)">{{
+                        task.icon
+                      }}</span>
+                      <div class="flex-1 text-left">
+                        <p class="text-sm font-medium text-(--text-body-titles)">
+                          {{ task.title }}
+                        </p>
+                        <p class="text-xs text-(--semantic-success-default)">
+                          +{{ task.points }} pts
+                        </p>
+                      </div>
+                      <span class="material-symbols-outlined text-(--text-disabled)"
+                        >add_circle</span
+                      >
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Placeholder Card -->
+                <div
+                  :class="[
+                    'border-2 border-(--system-border) rounded-[14px] shrink-0 h-[431px] items-center justify-center',
+                    gridColumns === 1 ? 'w-full lg:w-[280px] hidden lg:flex' : 'hidden',
+                  ]"
+                >
+                  <span
+                    class="material-symbols-outlined text-(--system-ring)"
+                    style="font-size: 56px"
+                    >add</span
+                  >
+                </div>
+              </div>
+            </CollapsibleCard>
           </div>
-        </div>
-          </CollapsibleCard>
         </template>
       </draggable>
     </div>
@@ -306,17 +384,17 @@ export default {
       showToast: false,
       toastMessage: '',
       toastVariant: 'success',
-      
+
       // Modals
       showApplianceModal: false,
       showTaskModal: false,
       showConsumptionInputModal: false,
-      
+
       // Selected items
       selectedAppliance: null,
       consumptionHours: '',
       calculatedEmissions: null,
-      
+
       // Calculator
       calculator: {
         distance: '',
@@ -329,36 +407,50 @@ export default {
         },
         result: 0,
       },
-      
+
       // Appliance images mapping
       applianceImages: {
-        'Frigorífico': 'https://images.unsplash.com/photo-1571175443880-49e1d25b2bc5?w=300&h=200&fit=crop',
-        'Máquina de lavar roupa': 'https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?w=300&h=200&fit=crop',
-        'Máquina de lavar loiça': 'https://images.unsplash.com/photo-1585515320310-259814833e62?w=300&h=200&fit=crop',
-        'Forno': 'https://images.unsplash.com/photo-1585515320310-259814833e62?w=300&h=200&fit=crop',
-        'Micro-ondas': 'https://images.unsplash.com/photo-1574269909862-7e1d70bb8078?w=300&h=200&fit=crop',
-        'Televisão': 'https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=300&h=200&fit=crop',
-        'Ar condicionado': 'https://images.unsplash.com/photo-1631567091586-3eb8a9c46dc9?w=300&h=200&fit=crop',
-        'Aspirador': 'https://images.unsplash.com/photo-1558317374-067fb5f30001?w=300&h=200&fit=crop',
-        'Computador': 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=300&h=200&fit=crop',
-        'Cafeteira': 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=300&h=200&fit=crop',
+        Frigorífico:
+          'https://images.unsplash.com/photo-1571175443880-49e1d25b2bc5?w=300&h=200&fit=crop',
+        'Máquina de lavar roupa':
+          'https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?w=300&h=200&fit=crop',
+        'Máquina de lavar loiça':
+          'https://images.unsplash.com/photo-1585515320310-259814833e62?w=300&h=200&fit=crop',
+        Forno: 'https://images.unsplash.com/photo-1585515320310-259814833e62?w=300&h=200&fit=crop',
+        'Micro-ondas':
+          'https://images.unsplash.com/photo-1574269909862-7e1d70bb8078?w=300&h=200&fit=crop',
+        Televisão:
+          'https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=300&h=200&fit=crop',
+        'Ar condicionado':
+          'https://images.unsplash.com/photo-1631567091586-3eb8a9c46dc9?w=300&h=200&fit=crop',
+        Aspirador: 'https://images.unsplash.com/photo-1558317374-067fb5f30001?w=300&h=200&fit=crop',
+        Computador:
+          'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=300&h=200&fit=crop',
+        Cafeteira:
+          'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=300&h=200&fit=crop',
       },
-      
+
       // Task images mapping
       taskImages: {
-        'Energia': 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=300&h=250&fit=crop',
-        'Mobilidade': 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=300&h=250&fit=crop',
-        'Reciclagem': 'https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=300&h=250&fit=crop',
-        'Água': 'https://images.unsplash.com/photo-1527100673774-cce25eafaf7f?w=300&h=250&fit=crop',
-        'Alimentação': 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=300&h=250&fit=crop',
-        'Consumo': 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=300&h=250&fit=crop',
-        'Ambiente': 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=300&h=250&fit=crop',
-        'Limpeza': 'https://images.unsplash.com/photo-1628177142898-93e36e4e3a50?w=300&h=250&fit=crop',
+        Energia:
+          'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=300&h=250&fit=crop',
+        Mobilidade:
+          'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=300&h=250&fit=crop',
+        Reciclagem:
+          'https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=300&h=250&fit=crop',
+        Água: 'https://images.unsplash.com/photo-1527100673774-cce25eafaf7f?w=300&h=250&fit=crop',
+        Alimentação:
+          'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=300&h=250&fit=crop',
+        Consumo: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=300&h=250&fit=crop',
+        Ambiente:
+          'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=300&h=250&fit=crop',
+        Limpeza:
+          'https://images.unsplash.com/photo-1628177142898-93e36e4e3a50?w=300&h=250&fit=crop',
       },
-      
+
       // Card order
       cardOrder: ['statistics', 'consumptions', 'tasks', 'tools'],
-      
+
       // Card open states
       cardOpenStates: {
         statistics: true,
@@ -366,6 +458,9 @@ export default {
         tasks: true,
         tools: true,
       },
+
+      // Dashboard Layout State
+      gridColumns: 1,
     }
   },
   computed: {
@@ -398,7 +493,7 @@ export default {
         tasks: { id: 'tasks', title: 'TAREFAS', component: 'tasks' },
         tools: { id: 'tools', title: 'FERRAMENTAS', component: 'tools' },
       }
-      return this.cardOrder.map(id => cards[id])
+      return this.cardOrder.map((id) => cards[id])
     },
   },
   watch: {
@@ -429,6 +524,12 @@ export default {
         console.error('Error loading card order:', e)
       }
     }
+
+    // Load saved grid layout preference
+    const savedGrid = localStorage.getItem('homeGridColumns')
+    if (savedGrid) {
+      this.gridColumns = parseInt(savedGrid)
+    }
   },
   methods: {
     showNotification(message, variant = 'success') {
@@ -439,25 +540,29 @@ export default {
         this.showToast = false
       }, 3000)
     },
-    
+
     getApplianceImage(appliance) {
-      return this.applianceImages[appliance.name] || 
+      return (
+        this.applianceImages[appliance.name] ||
         'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&h=200&fit=crop'
+      )
     },
-    
+
     getTaskImage(task) {
-      return this.taskImages[task.category] || 
+      return (
+        this.taskImages[task.category] ||
         'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=300&h=250&fit=crop'
+      )
     },
-    
+
     openAddConsumptionModal() {
       this.showApplianceModal = true
     },
-    
+
     openAddTaskModal() {
       this.showTaskModal = true
     },
-    
+
     selectAppliance(appliance) {
       this.selectedAppliance = appliance
       this.consumptionHours = ''
@@ -465,30 +570,34 @@ export default {
       this.showApplianceModal = false
       this.showConsumptionInputModal = true
     },
-    
+
+    updateLayout(columns) {
+      this.gridColumns = columns
+    },
+
     async selectTask(task) {
       this.showTaskModal = false
       await this.completeTask(task)
     },
-    
+
     async submitApplianceUsage(appliance, hours) {
       const hoursValue = parseFloat(hours)
       if (!hoursValue || hoursValue <= 0) {
         this.showNotification('Introduza um valor válido', 'error')
         return
       }
-      
+
       // Calculate emissions using API first
       try {
         const apiResult = await calculateApplianceEmissions(appliance, hoursValue)
-        
+
         // Pass the API data to the store function
         const result = await this.userStore.trackApplianceUsage(
-          appliance.id, 
-          hoursValue, 
-          apiResult.success ? apiResult.data : null
+          appliance.id,
+          hoursValue,
+          apiResult.success ? apiResult.data : null,
         )
-        
+
         if (result.success) {
           this.showNotification(result.message, 'success')
         } else {
@@ -499,21 +608,21 @@ export default {
         this.showNotification('Erro ao registar consumo', 'error')
       }
     },
-    
+
     async submitConsumption() {
       if (!this.selectedAppliance || !this.consumptionHours) return
-      
+
       await this.submitApplianceUsage(this.selectedAppliance, this.consumptionHours)
       this.showConsumptionInputModal = false
       this.selectedAppliance = null
       this.consumptionHours = ''
       this.calculatedEmissions = null
     },
-    
+
     async completeTask(task) {
       try {
         const result = await this.userStore.completeTaskWithApi(task.id)
-        
+
         if (result.success) {
           let message = `${result.message}`
           if (result.leveledUp) {
@@ -531,11 +640,16 @@ export default {
         this.showNotification('Erro ao completar tarefa', 'error')
       }
     },
-    
+
     saveCardOrder() {
       localStorage.setItem('homeCardOrder', JSON.stringify(this.cardOrder))
     },
-    
+
+    // Watch for grid changes to save preference
+    saveGridPreference() {
+      localStorage.setItem('homeGridColumns', this.gridColumns.toString())
+    },
+
     async calculateEmissions() {
       const distance = parseFloat(this.calculator.distance) || 0
       const consumption = parseFloat(this.calculator.consumption) || 0
@@ -547,7 +661,7 @@ export default {
 
       // Determine fuel type
       let emissionFactor = 2.31 // Default gasoline kg CO2 per liter
-      
+
       if (this.calculator.fuelTypes.diesel) {
         emissionFactor = 2.68 // Diesel
       } else if (this.calculator.fuelTypes.electric) {
@@ -564,6 +678,12 @@ export default {
       const fuelUsed = (distance * consumption) / 100
       this.calculator.result = (fuelUsed * emissionFactor).toFixed(2)
     },
+  },
+  watch: {
+    gridColumns() {
+      this.saveGridPreference()
+    },
+    // ... existing watchers
   },
 }
 </script>
