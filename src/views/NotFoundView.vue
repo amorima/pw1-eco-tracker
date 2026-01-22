@@ -2,26 +2,26 @@
   <div class="bg-(--system-background) min-h-screen">
     <MenuNav :landing="true" />
 
-    <div class="max-w-[1280px] mx-auto px-[186px] py-8">
+    <div class="max-w-[1280px] mx-auto px-6 lg:px-[186px] py-8">
       <!-- 404 Image -->
-      <div class="flex justify-center mt-[48px]">
+      <div class="flex justify-center mt-8 lg:mt-[48px]">
         <img
           src="@/assets/img/404.png"
           alt="404 Error"
-          class="w-[600px] h-[441px] object-contain"
+          class="w-full max-w-[400px] lg:max-w-[600px] h-auto object-contain"
         />
       </div>
 
       <!-- Error Message -->
-      <div class="text-center mt-[112px]">
+      <div class="text-center mt-12 lg:mt-[112px] mb-12 lg:mb-0">
         <h1
-          class="font-['Clash_Grotesk'] font-bold text-[48px] leading-[1.25] uppercase text-(--system-ring)"
+          class="font-['Clash_Grotesk'] font-bold text-3xl sm:text-4xl lg:text-[48px] leading-[1.25] uppercase text-(--system-ring)"
         >
           OOPS! ACONTECEU UM PROBLEMA!
         </h1>
 
         <!-- Action Buttons -->
-        <div class="flex gap-4 items-center justify-center mt-[40px]">
+        <div class="flex gap-4 items-center justify-center mt-8 lg:mt-[40px]">
           <button
             @click="goBack"
             class="border-2 border-(--system-ring) flex items-center justify-center px-[11px] py-0 h-[50px] w-[110px] rounded-[14px] cursor-pointer hover:opacity-90"

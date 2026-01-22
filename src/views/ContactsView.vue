@@ -2,26 +2,26 @@
   <div class="bg-(--system-background) min-h-screen">
     <MenuNav :landing="true" />
 
-    <div class="max-w-[1280px] mx-auto px-[186px] py-8">
+    <div class="max-w-[1280px] mx-auto px-6 lg:px-[186px] py-8">
       <!-- Page Title -->
       <h1
-        class="font-['Clash_Grotesk'] font-bold text-[48px] leading-[1.25] text-(--text-body) text-nowrap mt-[52px] mb-[104px]"
+        class="font-['Clash_Grotesk'] font-bold text-4xl lg:text-[48px] leading-[1.25] text-(--text-body) mt-8 lg:mt-[52px] mb-12 lg:mb-[104px] text-center lg:text-left"
       >
         Contactos
       </h1>
 
       <!-- Contact Form Card -->
       <div
-        class="bg-(--system-card) border-2 border-(--system-border) flex flex-col gap-4 max-w-[500px] mx-auto p-4 rounded-[14px] mb-[120px]"
+        class="bg-(--system-card) border-2 border-(--system-border) flex flex-col gap-4 w-full max-w-[500px] mx-auto p-4 lg:p-6 rounded-[14px] mb-12 lg:mb-[120px]"
       >
         <p
-          class="font-['Noto_Sans'] font-semibold text-[30px] leading-[1.25] text-(--text-body-sub-titles) text-center"
+          class="font-['Noto_Sans'] font-semibold text-2xl lg:text-[30px] leading-[1.25] text-(--text-body-sub-titles) text-center"
         >
           Fale connosco
         </p>
 
         <div
-          class="font-['Noto_Sans'] font-normal text-[16px] leading-[1.5] text-(--text-headings)"
+          class="font-['Noto_Sans'] font-normal text-sm lg:text-[16px] leading-[1.5] text-(--text-headings)"
         >
           <p class="mb-2">
             Tem dúvidas, sugestões ou quer saber mais sobre a b.green? Estamos aqui para ajudar e
