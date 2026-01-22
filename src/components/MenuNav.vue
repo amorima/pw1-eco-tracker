@@ -36,7 +36,7 @@
             >
               {{ isDark ? 'dark_mode' : 'light_mode' }}
             </span>
-            <div class="relative">
+            <div v-if="showGridSelector" class="relative">
               <span
                 @click="toggleGridDropdown"
                 class="material-symbols-outlined cursor-pointer hover:opacity-70 transition-opacity"
@@ -149,6 +149,10 @@ export default {
     landing: {
       type: Boolean,
       default: true,
+    },
+    showGridSelector: {
+      type: Boolean,
+      default: false,
     },
   },
   computed: {

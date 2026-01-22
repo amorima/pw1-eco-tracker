@@ -1,4 +1,3 @@
-
 <template>
   <div class="bg-(--system-background) min-h-screen">
     <MenuNav :landing="false" />
@@ -11,11 +10,7 @@
     </Transition>
 
     <!-- Badge Modal -->
-    <BadgeModal
-      :isOpen="showBadgeModal"
-      :badge="selectedBadge"
-      @close="showBadgeModal = false"
-    />
+    <BadgeModal :isOpen="showBadgeModal" :badge="selectedBadge" @close="showBadgeModal = false" />
 
     <!-- PIN Confirmation Modal (for disabling) -->
     <ModalComponent
@@ -62,12 +57,7 @@
     </ModalComponent>
 
     <!-- PIN Setup Modal -->
-    <ModalComponent
-      :isOpen="showPinModal"
-      title="Definir PIN"
-      size="sm"
-      @close="cancelPinSetup"
-    >
+    <ModalComponent :isOpen="showPinModal" title="Definir PIN" size="sm" @close="cancelPinSetup">
       <div class="flex flex-col gap-4">
         <p class="text-(--text-body-sub-titles) text-sm">
           Defina um PIN de 4 dígitos para proteger o seu perfil.
@@ -123,346 +113,418 @@
       </template>
     </ModalComponent>
 
-    <div class="max-w-[912px] mx-auto px-4 py-8 flex flex-col gap-8">
-      <!-- Profile Header -->
-      <div
-        class="bg-(--system-card) border-2 border-(--system-border) flex gap-[16px] items-center p-[16px] relative rounded-[14px] shrink-0 w-full"
-      >
+    <div class="min-h-fit py-8 flex flex-col items-center px-4 sm:px-6 lg:px-8">
+      <div class="w-full max-w-[930px] space-y-6">
+        <!-- Profile Header -->
         <div
-          class="border-2 border-(--system-border) overflow-hidden relative rounded-[999px] shrink-0 w-[100px] h-[100px]"
+          class="bg-(--system-card) border-2 border-(--system-border) flex flex-col sm:flex-row gap-[16px] items-center p-[16px] relative rounded-[14px] shrink-0 w-full"
         >
-          <img
-            :src="currentProfile?.avatar || 'https://api.dicebear.com/7.x/avataaars/svg?seed=User'"
-            alt="User avatar"
-            class="absolute inset-0 max-w-none object-cover pointer-events-none w-full h-full"
-          />
-        </div>
+          <div
+            class="border-2 border-(--system-border) overflow-hidden relative rounded-[999px] shrink-0 w-[80px] h-[80px] sm:w-[100px] sm:h-[100px]"
+          >
+            <img
+              :src="
+                currentProfile?.avatar || 'https://api.dicebear.com/7.x/avataaars/svg?seed=User'
+              "
+              alt="User avatar"
+              class="absolute inset-0 max-w-none object-cover pointer-events-none w-full h-full"
+            />
+          </div>
 
-        <div
-          class="basis-0 bg-(--system-card) gap-[16px] grid grid-cols-[fit-content(100%)_fit-content(100%)_minmax(0px,_1fr)] grid-rows-[repeat(2,_fit-content(100%))] grow min-h-px min-w-px overflow-hidden p-[16px] relative rounded-[14px] shrink-0"
-        >
           <div
-            class="[grid-area:1/1] flex font-['Noto_Sans'] font-normal gap-[8px] items-center justify-center relative shrink-0 text-nowrap"
+            class="w-full sm:basis-0 bg-(--system-card) gap-[12px] sm:gap-[16px] grid grid-cols-1 sm:grid-cols-[fit-content(100%)_fit-content(100%)_minmax(0px,_1fr)] grid-rows-[repeat(2,_fit-content(100%))] sm:grow min-h-px min-w-px overflow-hidden p-[12px] sm:p-[16px] relative rounded-[14px] shrink-0"
           >
-            <p class="leading-normal relative shrink-0 text-[16px] text-(--text-body-sub-titles)">
-              Nome:
-            </p>
-            <p class="leading-[1.75] relative shrink-0 text-[18px] text-(--text-body)">
-              {{ currentProfile?.name || 'Utilizador' }}
-            </p>
-          </div>
-          <div
-            class="[grid-area:1/2] flex font-['Noto_Sans'] font-normal gap-[8px] items-center relative shrink-0 text-nowrap"
-          >
-            <p class="leading-normal relative shrink-0 text-[16px] text-(--text-body-sub-titles)">
-              País:
-            </p>
-            <p class="leading-[1.75] relative shrink-0 text-[18px] text-(--text-body)">
-              Portugal
-            </p>
-          </div>
-          <div
-            class="[grid-area:1_/_3] flex font-['Noto_Sans'] font-normal gap-[8px] items-center place-self-stretch relative shrink-0 text-nowrap"
-          >
-            <p class="leading-[1.5] relative shrink-0 text-[16px] text-(--text-body-sub-titles)">
-              Contacto:
-            </p>
-            <p class="leading-[1.75] relative shrink-0 text-[18px] text-(--text-body)">
-              {{ userStore.currentUser?.email || 'email@example.com' }}
-            </p>
-          </div>
-          <div
-            class="[grid-area:2_/_1] flex font-['Noto_Sans'] font-normal gap-[8px] items-center place-self-stretch relative shrink-0 text-nowrap"
-          >
-            <p class="leading-[1.5] relative shrink-0 text-[16px] text-(--text-body-sub-titles)">
-              Idade:
-            </p>
-            <p class="leading-[1.75] relative shrink-0 text-[18px] text-(--text-body)">
-              {{ currentProfile?.age || '-' }}
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Level & Streak Cards -->
-      <div class="flex gap-[16px] items-center relative shrink-0 w-full">
-        <!-- Level Card -->
-        <div
-          class="basis-0 bg-(--system-card) border-2 border-(--system-border) gap-[16px] grid grid-cols-[repeat(2,_minmax(0px,_1fr))] grid-rows-[repeat(2,_fit-content(100%))] grow min-h-px min-w-px overflow-hidden p-[16px] relative rounded-[14px] shrink-0"
-        >
-          <div
-            class="[grid-area:1_/_1] flex flex-col font-['Noto_Sans'] font-normal justify-center leading-[0] relative shrink-0 text-[16px] text-(--text-body-sub-titles) text-nowrap"
-          >
-            <p class="leading-[1.5]">Nível: {{ currentProfile?.level || 1 }}</p>
-          </div>
-          <div
-            class="[grid-area:2_/_1_/_auto_/_span_2] flex flex-col gap-[8px] h-[47px] items-start justify-end justify-self-stretch relative shrink-0"
-          >
-            <p
-              class="font-['Noto_Sans'] font-normal leading-[1.5] min-w-full relative shrink-0 text-[14px] text-(--text-body) w-[min-content]"
-            >
-              {{ xpInCurrentLevel }}/{{ xpForNextLevel }}xp
-            </p>
             <div
-              class="bg-(--system-popover) flex h-[8px] items-center overflow-hidden relative rounded-[999px] shrink-0 w-full"
+              class="sm:[grid-area:1/1] flex font-['Noto_Sans'] font-normal gap-[8px] items-center sm:justify-center relative shrink-0"
             >
-              <div
-                class="bg-(--system-ring) h-full rounded-[999px] shrink-0 transition-all duration-500"
-                :style="{ width: `${xpPercentage}%` }"
-              ></div>
+              <p
+                class="leading-normal relative shrink-0 text-[14px] sm:text-[16px] text-(--text-body-sub-titles) whitespace-nowrap"
+              >
+                Nome:
+              </p>
+              <p
+                class="leading-[1.75] relative shrink-0 text-[16px] sm:text-[18px] text-(--text-body) truncate"
+              >
+                {{ currentProfile?.name || 'Utilizador' }}
+              </p>
+            </div>
+            <div
+              class="sm:[grid-area:1/2] flex font-['Noto_Sans'] font-normal gap-[8px] items-center relative shrink-0"
+            >
+              <p
+                class="leading-normal relative shrink-0 text-[14px] sm:text-[16px] text-(--text-body-sub-titles) whitespace-nowrap"
+              >
+                País:
+              </p>
+              <p
+                class="leading-[1.75] relative shrink-0 text-[16px] sm:text-[18px] text-(--text-body)"
+              >
+                Portugal
+              </p>
+            </div>
+            <div
+              class="sm:[grid-area:1_/_3] flex font-['Noto_Sans'] font-normal gap-[8px] items-center place-self-stretch relative shrink-0"
+            >
+              <p
+                class="leading-[1.5] relative shrink-0 text-[14px] sm:text-[16px] text-(--text-body-sub-titles) whitespace-nowrap"
+              >
+                Contacto:
+              </p>
+              <p
+                class="leading-[1.75] relative shrink-0 text-[16px] sm:text-[18px] text-(--text-body) truncate"
+              >
+                {{ userStore.currentUser?.email || 'email@example.com' }}
+              </p>
+            </div>
+            <div
+              class="sm:[grid-area:2_/_1] flex font-['Noto_Sans'] font-normal gap-[8px] items-center place-self-stretch relative shrink-0"
+            >
+              <p
+                class="leading-[1.5] relative shrink-0 text-[14px] sm:text-[16px] text-(--text-body-sub-titles) whitespace-nowrap"
+              >
+                Idade:
+              </p>
+              <p
+                class="leading-[1.75] relative shrink-0 text-[16px] sm:text-[18px] text-(--text-body)"
+              >
+                {{ currentProfile?.age || '-' }}
+              </p>
             </div>
           </div>
         </div>
 
-        <!-- Streak Card -->
-        <div
-          class="basis-0 bg-(--system-card) border-2 border-(--system-border) gap-[24px] grid grid-cols-[repeat(2,_fit-content(100%))] grid-rows-[repeat(2,_fit-content(100%))] grow min-h-px min-w-px overflow-hidden p-[16px] relative rounded-[14px] shrink-0"
-        >
-          <p
-            class="[grid-area:1_/_1] font-['Noto_Sans'] font-normal leading-[1.5] relative self-start shrink-0 text-[16px] text-(--text-body-sub-titles) w-[200px]"
-          >
-            Streak
-          </p>
-          <div class="[grid-area:2_/_1] flex items-start justify-between relative shrink-0">
-            <StreakButton
-              v-for="(day, index) in weekDaysStreak"
-              :key="index"
-              :day="day.label"
-              :completed="day.completed"
-            />
-          </div>
-          <div class="[grid-area:1_/_2_/_span_2] justify-self-end">
-            <StreakCard :days="currentProfile?.streak || 0" />
-          </div>
-        </div>
-      </div>
-
-      <!-- Draggable Collapsible Cards -->
-      <draggable
-        v-model="cardOrder"
-        @end="saveCardOrder"
-        item-key="id"
-        class="flex flex-col gap-8"
-        handle=".drag-handle"
-        :animation="200"
-        ghost-class="ghost-card"
-      >
-        <template #item="{ element }">
-          <CollapsibleCard v-if="element === 'badges'" title="Badges" icon="apps" v-model="cardOpenStates.badges">
-        <div
-          class="grid grid-cols-3 gap-[8px] w-full items-start overflow-hidden px-0 py-[16px] relative shrink-0 w-full"
-        >
-          <BadgeCard
-            v-for="badge in allBadgesWithStatus"
-            :key="badge.id"
-            :icon="badge.icon"
-            :title="badge.title"
-            :locked="!badge.earned"
-            @click="openBadgeModal(badge)"
-          />
-        </div>
-          </CollapsibleCard>
-
-          <CollapsibleCard v-else-if="element === 'ranking'" title="Ranking" icon="apps" v-model="cardOpenStates.ranking">
-        <div
-          class="flex flex-col gap-[8px] items-start overflow-hidden px-0 py-[8px] relative shrink-0 w-full"
-        >
-          <RankingRow
-            v-for="profile in householdLeaderboard"
-            :key="profile.id"
-            :position="profile.rank"
-            :name="profile.name"
-            :highlight="profile.id === currentProfile?.id"
-          />
-        </div>
-          </CollapsibleCard>
-
-          <CollapsibleCard v-else-if="element === 'challenges'" title="Desafios" icon="apps" v-model="cardOpenStates.challenges">
-        <!-- Sort Toggle -->
-        <div v-if="profileChallenges.length > 0" class="flex items-center justify-end mb-4">
-          <button
-            @click="sortCompletedFirst = !sortCompletedFirst"
-            :class="[
-              'flex items-center gap-2 px-3 py-2 rounded-lg transition-colors',
-              sortCompletedFirst
-                ? 'bg-(--system-ring) text-white'
-                : 'bg-(--system-card) border-2 border-(--system-border) text-(--text-body-sub-titles)'
-            ]"
-          >
-            <span class="material-symbols-outlined text-[20px]">
-              {{ sortCompletedFirst ? 'check_circle' : 'radio_button_unchecked' }}
-            </span>
-            <span class="text-sm font-medium">Completados primeiro</span>
-          </button>
-        </div>
-
-        <div
-          v-if="paginatedChallenges.length > 0"
-          class="gap-[8px] grid grid-cols-[repeat(2,_minmax(0px,_1fr))] relative shrink-0 w-full"
-        >
-          <ChallengeCard
-            v-for="challenge in paginatedChallenges"
-            :key="challenge.id"
-            :title="challenge.title"
-            :description="challenge.description"
-            :progress="challenge.progress"
-            :xp="challenge.xp"
-            :active="challenge.completed"
-          />
-        </div>
-        <div v-else class="text-center py-8 text-(--text-disabled)">
-          <span class="material-symbols-outlined text-4xl mb-2">emoji_events</span>
-          <p>Nenhum desafio ativo no momento.</p>
-          <p class="text-sm">O administrador pode criar desafios para a família.</p>
-        </div>
-
-        <!-- Ver Mais Button -->
-        <button
-          v-if="sortedChallenges.length > displayedChallengesCount"
-          @click="displayedChallengesCount += 6"
-          class="flex items-center gap-1 mx-auto text-(--system-ring) text-lg mt-4 hover:opacity-80 transition-opacity"
-        >
-          <span class="material-symbols-outlined">expand_more</span>
-          <span>Ver mais</span>
-        </button>
-          </CollapsibleCard>
-
-          <CollapsibleCard v-else-if="element === 'rewards'" title="Recompensas" icon="apps" v-model="cardOpenStates.rewards">
-        <!-- Tab Navigation -->
-        <div class="flex items-center justify-between px-0 py-[8px] relative shrink-0 w-full">
-          <button
-            @click="rewardTab = 'redeem'"
-            :class="[
-              'flex flex-col items-center justify-center px-0 py-[8px] relative shrink-0',
-              rewardTab === 'redeem'
-                ? 'border-b-2 border-(--text-body-sub-titles)'
-                : 'border-b border-(--system-border)',
-            ]"
-          >
-            <p
-              :class="[
-                'font-[\'Noto_Sans\'] font-bold leading-[1.5] relative shrink-0 text-[16px] text-center w-[440px]',
-                rewardTab === 'redeem' ? 'text-(--text-body-sub-titles)' : 'text-(--text-disabled)',
-              ]"
-            >
-              Resgatar pontos
-            </p>
-          </button>
-          <button
-            @click="rewardTab = 'redeemed'"
-            :class="[
-              'basis-0 flex flex-col grow items-center justify-center min-h-px min-w-px px-0 py-[8px] relative shrink-0',
-              rewardTab === 'redeemed'
-                ? 'border-b-2 border-(--text-body-sub-titles)'
-                : 'border-b border-(--system-border)',
-            ]"
-          >
-            <p
-              :class="[
-                'font-[\'Noto_Sans\'] font-bold leading-[1.5] relative shrink-0 text-[16px] text-center w-full',
-                rewardTab === 'redeemed'
-                  ? 'text-(--text-body-sub-titles)'
-                  : 'text-(--text-disabled)',
-              ]"
-            >
-              Pontos resgatados ({{ redeemedRewards.length }})
-            </p>
-          </button>
-        </div>
-
-        <!-- Search -->
-        <div class="flex gap-[10px] items-start relative shrink-0 w-full mb-4">
+        <!-- Level & Streak Cards -->
+        <div class="flex flex-col sm:flex-row gap-[16px] items-center relative shrink-0 w-full">
+          <!-- Level Card -->
           <div
-            class="basis-0 flex flex-col gap-[4px] grow h-[40px] items-start min-h-px min-w-px relative shrink-0"
+            class="basis-0 bg-(--system-card) border-2 border-(--system-border) gap-[16px] grid grid-cols-[repeat(2,_minmax(0px,_1fr))] grid-rows-[repeat(2,_fit-content(100%))] grow min-h-px min-w-px overflow-hidden p-[16px] relative rounded-[14px] shrink-0"
           >
             <div
-              class="basis-0 bg-(--system-card) border-2 border-(--system-border) grow min-h-px min-w-px overflow-hidden relative rounded-[8px] shrink-0 w-full"
+              class="[grid-area:1_/_1] flex flex-col font-['Noto_Sans'] font-normal justify-center leading-[0] relative shrink-0 text-[16px] text-(--text-body-sub-titles) text-nowrap"
             >
-              <input
-                v-model="rewardSearch"
-                type="text"
-                placeholder="Pesquisar . . ."
-                class="absolute font-['Noto_Sans'] font-normal leading-[1.5] left-[10px] text-[16px] text-(--text-disabled) top-[6px] bg-transparent border-none outline-none w-[calc(100%-20px)]"
+              <p class="leading-[1.5]">Nível: {{ currentProfile?.level || 1 }}</p>
+            </div>
+            <div
+              class="[grid-area:2_/_1_/_auto_/_span_2] flex flex-col gap-[8px] h-[47px] items-start justify-end justify-self-stretch relative shrink-0"
+            >
+              <p
+                class="font-['Noto_Sans'] font-normal leading-[1.5] min-w-full relative shrink-0 text-[14px] text-(--text-body) w-[min-content]"
+              >
+                {{ xpInCurrentLevel }}/{{ xpForNextLevel }}xp
+              </p>
+              <div
+                class="bg-(--system-popover) flex h-[8px] items-center overflow-hidden relative rounded-[999px] shrink-0 w-full"
+              >
+                <div
+                  class="bg-(--system-ring) h-full rounded-[999px] shrink-0 transition-all duration-500"
+                  :style="{ width: `${xpPercentage}%` }"
+                ></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Streak Card -->
+          <div
+            class="w-full sm:basis-0 bg-(--system-card) border-2 border-(--system-border) gap-[16px] sm:gap-[24px] flex flex-col sm:grid sm:grid-cols-[repeat(2,_fit-content(100%))] sm:grid-rows-[repeat(2,_fit-content(100%))] sm:grow min-h-px min-w-px overflow-hidden p-[12px] sm:p-[16px] relative rounded-[14px] shrink-0"
+          >
+            <div class="flex items-center justify-between sm:contents">
+              <p
+                class="sm:[grid-area:1_/_1] font-['Noto_Sans'] font-normal leading-[1.5] relative shrink-0 text-[14px] sm:text-[16px] text-(--text-body-sub-titles)"
+              >
+                Streak
+              </p>
+              <div class="sm:[grid-area:1_/_2_/_span_2] sm:justify-self-end">
+                <StreakCard :days="currentProfile?.streak || 0" />
+              </div>
+            </div>
+            <div
+              class="sm:[grid-area:2_/_1] flex items-start justify-between gap-1 sm:gap-2 relative shrink-0 w-full overflow-x-auto"
+            >
+              <StreakButton
+                v-for="(day, index) in weekDaysStreak"
+                :key="index"
+                :day="day.label"
+                :completed="day.completed"
               />
             </div>
           </div>
-          <div class="absolute right-[10px] top-[10px] w-[20px] h-[20px]">
-            <span class="material-symbols-outlined text-[20px] text-(--text-disabled)">search</span>
-          </div>
         </div>
 
-        <!-- Rewards List -->
-        <div v-if="rewardTab === 'redeem'">
-          <RewardListItem
-            v-for="reward in filteredAvailableRewards"
-            :key="reward.id"
-            :image="reward.image"
-            :title="reward.title"
-            :points="reward.points"
-            @action="redeemReward(reward)"
-          />
-          <p v-if="filteredAvailableRewards.length === 0" class="text-center py-4 text-(--text-disabled)">
-            Nenhuma recompensa disponível
-          </p>
-        </div>
-
-        <div v-else>
-          <p
-            class="font-['Noto_Sans'] font-bold leading-[1.5] text-[16px] text-(--text-body-sub-titles) mb-4"
-          >
-            Histórico:
-          </p>
-          <RewardListItem
-            v-for="reward in redeemedRewards"
-            :key="reward.id"
-            :image="getRewardImage(reward.rewardId)"
-            :title="reward.title"
-            :points="reward.pointsCost"
-            :date="formatDate(reward.redeemedAt)"
-            :status="reward.status"
-            @action="cancelReward(reward)"
-          />
-          <p v-if="redeemedRewards.length === 0" class="text-center py-4 text-(--text-disabled)">
-            Nenhuma recompensa resgatada
-          </p>
-        </div>
-
-        <p
-          class="font-['Noto_Sans'] font-semibold leading-[1.5] relative shrink-0 text-[20px] text-(--text-body-titles) text-right w-full mt-4"
+        <!-- Draggable Collapsible Cards -->
+        <draggable
+          v-model="cardOrder"
+          @end="saveCardOrder"
+          item-key="id"
+          class="grid gap-6 grid-cols-1"
+          handle=".drag-handle"
+          :animation="200"
+          ghost-class="ghost-card"
         >
-          {{ currentProfile?.points || 0 }} pontos
-        </p>
-          </CollapsibleCard>
+          <template #item="{ element }">
+            <div>
+              <CollapsibleCard
+                v-if="element === 'badges'"
+                title="Badges"
+                icon="apps"
+                v-model="cardOpenStates.badges"
+                class="h-full"
+              >
+                <div
+                  class="grid gap-[12px] sm:gap-[16px] grid-cols-2 sm:grid-cols-3 md:grid-cols-4 w-full items-start overflow-hidden px-0 py-[12px] sm:py-[16px] relative shrink-0"
+                >
+                  <BadgeCard
+                    v-for="badge in allBadgesWithStatus"
+                    :key="badge.id"
+                    :icon="badge.icon"
+                    :title="badge.title"
+                    :locked="!badge.earned"
+                    @click="openBadgeModal(badge)"
+                  />
+                </div>
+              </CollapsibleCard>
 
-          <CollapsibleCard v-else-if="element === 'settings'" title="Configurações" icon="apps" v-model="cardOpenStates.settings">
-        <div class="flex flex-col gap-[4px] items-start overflow-hidden relative shrink-0 w-full">
-          <div
-            v-for="setting in settingsList"
-            :key="setting.key"
-            class="bg-(--system-card) flex items-center justify-between overflow-hidden px-[24px] py-[16px] relative rounded-[10px] shrink-0 w-full"
-          >
-            <div
-              class="flex flex-col gap-[8px] items-start leading-[0] relative shrink-0 text-(--text-body) text-nowrap"
-            >
-              <div
-                class="flex flex-col font-['Noto_Sans'] font-semibold justify-center relative shrink-0 text-[20px]"
+              <CollapsibleCard
+                v-else-if="element === 'ranking'"
+                title="Ranking"
+                icon="apps"
+                v-model="cardOpenStates.ranking"
+                class="h-full"
               >
-                <p class="leading-[1.5] text-nowrap">{{ setting.title }}</p>
-              </div>
-              <div
-                class="flex flex-col font-['Noto_Sans'] font-normal justify-center relative shrink-0 text-[16px]"
+                <div
+                  class="flex flex-col gap-[8px] items-start overflow-hidden px-0 py-[8px] relative shrink-0 w-full"
+                >
+                  <RankingRow
+                    v-for="profile in householdLeaderboard"
+                    :key="profile.id"
+                    :position="profile.rank"
+                    :name="profile.name"
+                    :highlight="profile.id === currentProfile?.id"
+                  />
+                </div>
+              </CollapsibleCard>
+
+              <CollapsibleCard
+                v-else-if="element === 'challenges'"
+                title="Desafios"
+                icon="apps"
+                v-model="cardOpenStates.challenges"
+                class="h-full"
               >
-                <p class="leading-[1.5] text-nowrap">{{ setting.description }}</p>
-              </div>
+                <!-- Sort Toggle -->
+                <div v-if="profileChallenges.length > 0" class="flex items-center justify-end mb-4">
+                  <button
+                    @click="sortCompletedFirst = !sortCompletedFirst"
+                    :class="[
+                      'flex items-center gap-2 px-3 py-2 rounded-lg transition-colors',
+                      sortCompletedFirst
+                        ? 'bg-(--system-ring) text-white'
+                        : 'bg-(--system-card) border-2 border-(--system-border) text-(--text-body-sub-titles)',
+                    ]"
+                  >
+                    <span class="material-symbols-outlined text-[20px]">
+                      {{ sortCompletedFirst ? 'check_circle' : 'radio_button_unchecked' }}
+                    </span>
+                    <span class="text-sm font-medium">Completados primeiro</span>
+                  </button>
+                </div>
+
+                <div
+                  v-if="paginatedChallenges.length > 0"
+                  class="gap-[8px] grid grid-cols-1 sm:grid-cols-2 relative shrink-0 w-full"
+                >
+                  <ChallengeCard
+                    v-for="challenge in paginatedChallenges"
+                    :key="challenge.id"
+                    :title="challenge.title"
+                    :description="challenge.description"
+                    :progress="challenge.progress"
+                    :xp="challenge.xp"
+                    :active="challenge.completed"
+                  />
+                </div>
+                <div v-else class="text-center py-8 text-(--text-disabled)">
+                  <span class="material-symbols-outlined text-4xl mb-2">emoji_events</span>
+                  <p>Nenhum desafio ativo no momento.</p>
+                  <p class="text-sm">O administrador pode criar desafios para a família.</p>
+                </div>
+
+                <!-- Ver Mais Button -->
+                <button
+                  v-if="sortedChallenges.length > displayedChallengesCount"
+                  @click="displayedChallengesCount += 6"
+                  class="flex items-center gap-1 mx-auto text-(--system-ring) text-lg mt-4 hover:opacity-80 transition-opacity"
+                >
+                  <span class="material-symbols-outlined">expand_more</span>
+                  <span>Ver mais</span>
+                </button>
+              </CollapsibleCard>
+
+              <CollapsibleCard
+                v-else-if="element === 'rewards'"
+                title="Recompensas"
+                icon="apps"
+                v-model="cardOpenStates.rewards"
+                class="h-full"
+              >
+                <!-- Tab Navigation -->
+                <div
+                  class="flex items-center justify-between px-0 py-[8px] relative shrink-0 w-full"
+                >
+                  <button
+                    @click="rewardTab = 'redeem'"
+                    :class="[
+                      'flex flex-col items-center justify-center px-0 py-[8px] relative shrink-0',
+                      rewardTab === 'redeem'
+                        ? 'border-b-2 border-(--text-body-sub-titles)'
+                        : 'border-b border-(--system-border)',
+                    ]"
+                  >
+                    <p
+                      :class="[
+                        'font-[\'Noto_Sans\'] font-bold leading-[1.5] relative shrink-0 text-[16px] text-center w-full',
+                        rewardTab === 'redeem'
+                          ? 'text-(--text-body-sub-titles)'
+                          : 'text-(--text-disabled)',
+                      ]"
+                    >
+                      Resgatar pontos
+                    </p>
+                  </button>
+                  <button
+                    @click="rewardTab = 'redeemed'"
+                    :class="[
+                      'basis-0 flex flex-col grow items-center justify-center min-h-px min-w-px px-0 py-[8px] relative shrink-0',
+                      rewardTab === 'redeemed'
+                        ? 'border-b-2 border-(--text-body-sub-titles)'
+                        : 'border-b border-(--system-border)',
+                    ]"
+                  >
+                    <p
+                      :class="[
+                        'font-[\'Noto_Sans\'] font-bold leading-[1.5] relative shrink-0 text-[16px] text-center w-full',
+                        rewardTab === 'redeemed'
+                          ? 'text-(--text-body-sub-titles)'
+                          : 'text-(--text-disabled)',
+                      ]"
+                    >
+                      Pontos resgatados ({{ redeemedRewards.length }})
+                    </p>
+                  </button>
+                </div>
+
+                <!-- Search -->
+                <div class="flex gap-[10px] items-start relative shrink-0 w-full mb-4">
+                  <div
+                    class="basis-0 flex flex-col gap-[4px] grow h-[40px] items-start min-h-px min-w-px relative shrink-0"
+                  >
+                    <div
+                      class="basis-0 bg-(--system-card) border-2 border-(--system-border) grow min-h-px min-w-px overflow-hidden relative rounded-[8px] shrink-0 w-full"
+                    >
+                      <input
+                        v-model="rewardSearch"
+                        type="text"
+                        placeholder="Pesquisar . . ."
+                        class="absolute font-['Noto_Sans'] font-normal leading-[1.5] left-[10px] text-[16px] text-(--text-disabled) top-[6px] bg-transparent border-none outline-none w-[calc(100%-20px)]"
+                      />
+                    </div>
+                  </div>
+                  <div class="absolute right-[10px] top-[10px] w-[20px] h-[20px]">
+                    <span class="material-symbols-outlined text-[20px] text-(--text-disabled)"
+                      >search</span
+                    >
+                  </div>
+                </div>
+
+                <!-- Rewards List -->
+                <div v-if="rewardTab === 'redeem'">
+                  <RewardListItem
+                    v-for="reward in filteredAvailableRewards"
+                    :key="reward.id"
+                    :image="reward.image"
+                    :title="reward.title"
+                    :points="reward.points"
+                    @action="redeemReward(reward)"
+                  />
+                  <p
+                    v-if="filteredAvailableRewards.length === 0"
+                    class="text-center py-4 text-(--text-disabled)"
+                  >
+                    Nenhuma recompensa disponível
+                  </p>
+                </div>
+
+                <div v-else>
+                  <p
+                    class="font-['Noto_Sans'] font-bold leading-[1.5] text-[16px] text-(--text-body-sub-titles) mb-4"
+                  >
+                    Histórico:
+                  </p>
+                  <RewardListItem
+                    v-for="reward in redeemedRewards"
+                    :key="reward.id"
+                    :image="getRewardImage(reward.rewardId)"
+                    :title="reward.title"
+                    :points="reward.pointsCost"
+                    :date="formatDate(reward.redeemedAt)"
+                    :status="reward.status"
+                    @action="cancelReward(reward)"
+                  />
+                  <p
+                    v-if="redeemedRewards.length === 0"
+                    class="text-center py-4 text-(--text-disabled)"
+                  >
+                    Nenhuma recompensa resgatada
+                  </p>
+                </div>
+
+                <p
+                  class="font-['Noto_Sans'] font-semibold leading-[1.5] relative shrink-0 text-[20px] text-(--text-body-titles) text-right w-full mt-4"
+                >
+                  {{ currentProfile?.points || 0 }} pontos
+                </p>
+              </CollapsibleCard>
+
+              <CollapsibleCard
+                v-else-if="element === 'settings'"
+                title="Configurações"
+                icon="apps"
+                v-model="cardOpenStates.settings"
+                class="h-full"
+              >
+                <div
+                  class="flex flex-col gap-[4px] items-start overflow-hidden relative shrink-0 w-full"
+                >
+                  <div
+                    v-for="setting in settingsList"
+                    :key="setting.key"
+                    class="bg-(--system-card) flex items-center justify-between overflow-hidden px-[24px] py-[16px] relative rounded-[10px] shrink-0 w-full"
+                  >
+                    <div
+                      class="flex flex-col gap-[8px] items-start leading-[0] relative shrink-0 text-(--text-body) text-nowrap"
+                    >
+                      <div
+                        class="flex flex-col font-['Noto_Sans'] font-semibold justify-center relative shrink-0 text-[20px]"
+                      >
+                        <p class="leading-[1.5] text-nowrap">{{ setting.title }}</p>
+                      </div>
+                      <div
+                        class="flex flex-col font-['Noto_Sans'] font-normal justify-center relative shrink-0 text-[16px]"
+                      >
+                        <p class="leading-[1.5] text-nowrap">{{ setting.description }}</p>
+                      </div>
+                    </div>
+                    <ToggleSwitch
+                      v-model="localSettings[setting.key]"
+                      @update:modelValue="saveSettings"
+                    />
+                  </div>
+                </div>
+              </CollapsibleCard>
             </div>
-            <ToggleSwitch v-model="localSettings[setting.key]" @update:modelValue="saveSettings" />
-          </div>
-        </div>
-          </CollapsibleCard>
-        </template>
-      </draggable>
+          </template>
+        </draggable>
+      </div>
     </div>
-
 
     <!-- ChatBot -->
     <ChatBot context="profile" />
@@ -562,7 +624,7 @@ export default {
 
       // Card order
       cardOrder: ['badges', 'ranking', 'challenges', 'rewards', 'settings'],
-      
+
       // Card open states
       cardOpenStates: {
         badges: true,
@@ -571,7 +633,7 @@ export default {
         rewards: true,
         settings: true,
       },
-      
+
       // Default challenges (used when admin hasn't set any)
       defaultChallenges: [
         {
@@ -661,41 +723,46 @@ export default {
       const storeChallenges = this.userStore.householdChallenges || []
       const activities = this.currentProfile?.activityHistory || []
       const allChallenges = []
-      
+
       // Process household challenges (both old and new format)
-      storeChallenges.forEach(challenge => {
+      storeChallenges.forEach((challenge) => {
         let progress = 0
         let title = challenge.title || ''
         let description = challenge.description || ''
-        
+
         // NEW FORMAT: Task-based challenges
         if (challenge.taskId) {
-          const task = this.userStore.availableTasks.find(t => String(t.id) === String(challenge.taskId))
-          
+          const task = this.userStore.availableTasks.find(
+            (t) => String(t.id) === String(challenge.taskId),
+          )
+
           if (task) {
             title = task.title
-            description = challenge.type === 'streak' 
-              ? `Complete ${challenge.target} dias consecutivos`
-              : `Complete ${challenge.target} vezes`
-            
+            description =
+              challenge.type === 'streak'
+                ? `Complete ${challenge.target} dias consecutivos`
+                : `Complete ${challenge.target} vezes`
+
             // Calculate progress based on challenge type
             if (challenge.type === 'streak') {
               // Streak-based: count consecutive days with this task completed
               const taskActivities = activities
-                .filter(a => String(a.taskId) === String(challenge.taskId))
+                .filter((a) => String(a.taskId) === String(challenge.taskId))
                 .sort((a, b) => new Date(b.completedAt) - new Date(a.completedAt))
-              
+
               let currentStreak = 0
               let lastDate = null
-              
+
               for (const activity of taskActivities) {
                 const activityDate = new Date(activity.completedAt).toDateString()
-                
+
                 if (!lastDate) {
                   currentStreak = 1
                   lastDate = new Date(activity.completedAt)
                 } else {
-                  const dayDiff = Math.floor((lastDate - new Date(activity.completedAt)) / (1000 * 60 * 60 * 24))
+                  const dayDiff = Math.floor(
+                    (lastDate - new Date(activity.completedAt)) / (1000 * 60 * 60 * 24),
+                  )
                   if (dayDiff === 1) {
                     currentStreak++
                     lastDate = new Date(activity.completedAt)
@@ -704,56 +771,70 @@ export default {
                   }
                 }
               }
-              
+
               progress = currentStreak
             } else {
               // Completion-based: count total completions of this task
-              progress = activities.filter(a => String(a.taskId) === String(challenge.taskId)).length
+              progress = activities.filter(
+                (a) => String(a.taskId) === String(challenge.taskId),
+              ).length
             }
           }
-        } 
+        }
         // OLD FORMAT: Category/Title-based challenges (backward compatibility)
         else {
           // Use existing title and description from the challenge
           title = challenge.title || ''
           description = challenge.description || ''
-          
+
           // Calculate progress based on category if present
           if (challenge.category) {
             if (challenge.category === 'Mobilidade') {
-              progress = activities.filter(a => {
-                const task = this.userStore.availableTasks.find(t => String(t.id) === String(a.taskId))
+              progress = activities.filter((a) => {
+                const task = this.userStore.availableTasks.find(
+                  (t) => String(t.id) === String(a.taskId),
+                )
                 return task?.category === 'Mobilidade'
               }).length
             } else if (challenge.category === 'Reciclagem') {
-              progress = activities.filter(a => {
-                const task = this.userStore.availableTasks.find(t => String(t.id) === String(a.taskId))
+              progress = activities.filter((a) => {
+                const task = this.userStore.availableTasks.find(
+                  (t) => String(t.id) === String(a.taskId),
+                )
                 return task?.category === 'Reciclagem'
               }).length
             } else if (challenge.category === 'Energia') {
-              progress = activities.filter(a => {
-                const task = this.userStore.availableTasks.find(t => String(t.id) === String(a.taskId))
+              progress = activities.filter((a) => {
+                const task = this.userStore.availableTasks.find(
+                  (t) => String(t.id) === String(a.taskId),
+                )
                 return task?.category === 'Energia'
               }).length
             } else if (challenge.category === 'Água') {
-              progress = activities.filter(a => {
-                const task = this.userStore.availableTasks.find(t => String(t.id) === String(a.taskId))
+              progress = activities.filter((a) => {
+                const task = this.userStore.availableTasks.find(
+                  (t) => String(t.id) === String(a.taskId),
+                )
                 return task?.category === 'Água'
               }).length
             } else if (challenge.category === 'Alimentação') {
-              progress = activities.filter(a => {
-                const task = this.userStore.availableTasks.find(t => String(t.id) === String(a.taskId))
+              progress = activities.filter((a) => {
+                const task = this.userStore.availableTasks.find(
+                  (t) => String(t.id) === String(a.taskId),
+                )
                 return task?.category === 'Alimentação'
               }).length
             } else if (challenge.category === 'Ambiente') {
-              progress = activities.filter(a => {
-                const task = this.userStore.availableTasks.find(t => String(t.id) === String(a.taskId))
+              progress = activities.filter((a) => {
+                const task = this.userStore.availableTasks.find(
+                  (t) => String(t.id) === String(a.taskId),
+                )
                 return task?.category === 'Ambiente'
               }).length
             }
           }
         }
-        
+
         // Add to unified array with consistent structure
         allChallenges.push({
           id: challenge.id,
@@ -766,28 +847,34 @@ export default {
           target: challenge.target || 1,
         })
       })
-      
+
       // Process and add default challenges to the same array
-      this.defaultChallenges.forEach(challenge => {
+      this.defaultChallenges.forEach((challenge) => {
         let progress = 0
-        
+
         // Calculate progress based on challenge type
         switch (challenge.id) {
           case 1: // Transportes verdes
-            progress = activities.filter(a => {
-              const task = this.userStore.availableTasks.find(t => String(t.id) === String(a.taskId))
+            progress = activities.filter((a) => {
+              const task = this.userStore.availableTasks.find(
+                (t) => String(t.id) === String(a.taskId),
+              )
               return task?.category === 'Mobilidade'
             }).length
             break
           case 2: // Reciclar
-            progress = activities.filter(a => {
-              const task = this.userStore.availableTasks.find(t => String(t.id) === String(a.taskId))
+            progress = activities.filter((a) => {
+              const task = this.userStore.availableTasks.find(
+                (t) => String(t.id) === String(a.taskId),
+              )
               return task?.category === 'Reciclagem'
             }).length
             break
           case 3: // Casa verde (energia)
-            progress = activities.filter(a => {
-              const task = this.userStore.availableTasks.find(t => String(t.id) === String(a.taskId))
+            progress = activities.filter((a) => {
+              const task = this.userStore.availableTasks.find(
+                (t) => String(t.id) === String(a.taskId),
+              )
               return task?.category === 'Energia'
             }).length
             break
@@ -795,19 +882,23 @@ export default {
             progress = Math.min(this.currentProfile?.co2Saved || 0, challenge.target)
             break
           case 5: // Limpeza
-            progress = activities.filter(a => {
-              const task = this.userStore.availableTasks.find(t => String(t.id) === String(a.taskId))
+            progress = activities.filter((a) => {
+              const task = this.userStore.availableTasks.find(
+                (t) => String(t.id) === String(a.taskId),
+              )
               return task?.title?.toLowerCase().includes('limp')
             }).length
             break
           case 6: // Banhos rápidos
-            progress = activities.filter(a => {
-              const task = this.userStore.availableTasks.find(t => String(t.id) === String(a.taskId))
+            progress = activities.filter((a) => {
+              const task = this.userStore.availableTasks.find(
+                (t) => String(t.id) === String(a.taskId),
+              )
               return task?.category === 'Água'
             }).length
             break
         }
-        
+
         // Add to unified array with consistent structure
         allChallenges.push({
           id: challenge.id,
@@ -820,7 +911,7 @@ export default {
           target: challenge.target || 1,
         })
       })
-      
+
       return allChallenges
     },
     sortedChallenges() {
@@ -895,7 +986,7 @@ export default {
       })
     },
     getRewardImage(rewardId) {
-      const reward = this.availableRewards.find(r => String(r.id) === String(rewardId))
+      const reward = this.availableRewards.find((r) => String(r.id) === String(rewardId))
       return reward?.image || 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=400'
     },
     async saveSettings() {
@@ -941,7 +1032,7 @@ export default {
     },
     async confirmPinDisable() {
       if (!this.currentProfile?.settings?.pin) return
-      
+
       if (this.pinConfirmInput !== this.currentProfile.settings.pin) {
         this.pinError = 'PIN incorreto. Tente novamente.'
         this.pinConfirmInput = ''
@@ -1010,13 +1101,16 @@ export default {
 
         const result = await this.userStore.redeemReward(reward)
         if (result.success) {
-          this.showNotification(`Recompensa "${reward.title}" resgatada! Aguarde aprovação do administrador.`, 'success')
+          this.showNotification(
+            `Recompensa "${reward.title}" resgatada! Aguarde aprovação do administrador.`,
+            'success',
+          )
         } else {
           this.showNotification(result.message || 'Erro ao resgatar recompensa', 'error')
         }
       } finally {
         // Ensure we always remove the id from the in-progress list
-        this.redeemingRewards = this.redeemingRewards.filter(id => id !== reward.id)
+        this.redeemingRewards = this.redeemingRewards.filter((id) => id !== reward.id)
       }
     },
     async cancelReward(reward) {
@@ -1027,7 +1121,10 @@ export default {
 
       const result = await this.userStore.cancelReward(reward.id)
       if (result.success) {
-        this.showNotification(`Recompensa cancelada. ${result.pointsReturned} pontos devolvidos!`, 'success')
+        this.showNotification(
+          `Recompensa cancelada. ${result.pointsReturned} pontos devolvidos!`,
+          'success',
+        )
       } else {
         this.showNotification(result.message || 'Erro ao cancelar recompensa', 'error')
       }

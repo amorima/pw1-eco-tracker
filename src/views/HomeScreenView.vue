@@ -1,5 +1,5 @@
 <template>
-  <MenuNav :landing="false" @layout-change="updateLayout" />
+  <MenuNav :landing="false" :showGridSelector="true" @layout-change="updateLayout" />
 
   <!-- Toast Notification -->
   <Transition name="slide-fade">
