@@ -2,20 +2,31 @@
   <div class="snap-container" ref="scrollContainer" @scroll="handleScroll">
     <!-- Hero Section with Diagonal Cut -->
     <section
-      class="snap-section relative pb-20 bg-(--system-foreground)"
-      style="clip-path: polygon(0 0, 100% 0, 100% calc(100% - 80px), 0 100%)"
+      class="snap-section relative pb-20 bg-(--system-foreground) hero-clip flex flex-col justify-center"
     >
       <!-- Navigation -->
       <MenuNav :landing="true" />
 
-      <div class="max-w-[910px] mx-auto relative h-[calc(100vh-80px)] flex items-center">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center w-full py-2">
+      <div
+        class="max-w-[910px] mx-auto relative min-h-[calc(100vh-80px)] flex items-center px-6 lg:px-0"
+      >
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center w-full py-12 lg:py-2">
           <!-- Left Content -->
           <div class="space-y-6 lg:space-y-8 z-10 lg:pr-8">
             <div class="space-y-2">
-              <h1 class="text-hero text-white leading-none">Gerir energia,</h1>
-              <h1 class="text-hero text-(--system-ring) leading-none">poupar o</h1>
-              <h1 class="text-hero text-(--system-ring) leading-none">planeta!</h1>
+              <h1 class="text-4xl sm:text-5xl lg:text-7xl font-bold text-white leading-none">
+                Gerir energia,
+              </h1>
+              <h1
+                class="text-4xl sm:text-5xl lg:text-7xl font-bold text-(--system-ring) leading-none"
+              >
+                poupar o
+              </h1>
+              <h1
+                class="text-4xl sm:text-5xl lg:text-7xl font-bold text-(--system-ring) leading-none"
+              >
+                planeta!
+              </h1>
             </div>
 
             <p class="text-body-base text-[#d9d9d9] max-w-lg">
@@ -34,22 +45,22 @@
 
             <div class="grid grid-cols-3 gap-8 pt-4">
               <div class="space-y-1">
-                <span class="text-heading-h4 text-[#d9d9d9] block">15k+</span>
+                <span class="text-2xl lg:text-4xl font-bold text-[#d9d9d9] block">15k+</span>
                 <span class="text-body-small text-(--system-ring)">Famílias Activas</span>
               </div>
               <div class="space-y-1">
-                <span class="text-heading-h4 text-[#d9d9d9] block">2.4M€</span>
+                <span class="text-2xl lg:text-4xl font-bold text-[#d9d9d9] block">2.4M€</span>
                 <span class="text-body-small text-(--system-ring)">Poupados</span>
               </div>
               <div class="space-y-1">
-                <span class="text-heading-h4 text-[#d9d9d9] block">890t</span>
+                <span class="text-2xl lg:text-4xl font-bold text-[#d9d9d9] block">890t</span>
                 <span class="text-body-small text-(--system-ring)">CO₂ Evitado</span>
               </div>
             </div>
           </div>
 
           <!-- Right Image -->
-          <div class="relative h-[600px] lg:h-[800px] w-full max-w-[800px]">
+          <div class="hidden lg:block relative h-[600px] lg:h-[800px] w-full max-w-[800px]">
             <div class="absolute inset-0 -bottom-50 py-20 px-50 flex items-center justify-center">
               <img
                 src="@/assets/img/hero-girl.png"
@@ -61,7 +72,7 @@
         </div>
 
         <!-- Center Button -->
-        <div class="absolute bottom-20 left-1/2 transform -translate-x-1/2 z-20">
+        <div class="absolute bottom-10 lg:bottom-20 left-1/2 transform -translate-x-1/2 z-20">
           <a
             href="#carrosel"
             class="bounce-animation bg-(--system-ring) border-[0.5px] py-1.5 border-(--system-popover-foreground) rounded-full w-[35px] h-[59px] flex items-center justify-center hover:bg-(--system-popover-foreground) hover:scale-110 transition-all duration-300"
@@ -73,7 +84,7 @@
     </section>
 
     <section id="carrosel" class="snap-section bg-(--system-background) py-20 flex items-center">
-      <div class="max-w-[910px] mx-auto px-6 h-full flex items-center">
+      <div class="max-w-[910px] mx-auto px-6 w-full flex justify-center">
         <FeatureCarousel />
       </div>
     </section>
@@ -86,16 +97,20 @@
         <div class="flex flex-col gap-[73px] items-center">
           <!-- Header -->
           <div class="flex flex-col gap-[29px] items-center text-center max-w-[511px]">
-            <h2 class="text-hero text-(--text-body-titles) leading-tight">Como funciona</h2>
-            <p class="text-heading-h3 text-(--system-ring) leading-relaxed">
+            <h2 class="text-4xl lg:text-6xl font-bold text-(--text-body-titles) leading-tight">
+              Como funciona
+            </h2>
+            <p class="text-xl lg:text-2xl font-semibold text-(--system-ring) leading-relaxed">
               Comece a poupar em 4 passos simples
             </p>
           </div>
 
           <!-- Steps -->
-          <div class="flex gap-4 items-center justify-between w-full">
+          <div
+            class="flex flex-col lg:flex-row gap-12 lg:gap-4 items-center justify-between w-full"
+          >
             <!-- Step 1 -->
-            <div class="flex flex-col gap-[25px] items-center w-[216px]">
+            <div class="flex flex-col gap-[25px] items-center w-full max-w-[250px] lg:w-[216px]">
               <div
                 class="bg-(--text-body-titles) w-[100px] h-[100px] rounded-full flex items-center justify-center overflow-hidden"
               >
@@ -115,7 +130,7 @@
             </div>
 
             <!-- Step 2 -->
-            <div class="flex flex-col gap-[25px] items-center w-[216px]">
+            <div class="flex flex-col gap-[25px] items-center w-full max-w-[250px] lg:w-[216px]">
               <div
                 class="bg-(--text-body-titles) w-[100px] h-[100px] rounded-full flex items-center justify-center overflow-hidden"
               >
@@ -135,7 +150,7 @@
             </div>
 
             <!-- Step 3 -->
-            <div class="flex flex-col gap-[25px] items-center w-[216px]">
+            <div class="flex flex-col gap-[25px] items-center w-full max-w-[250px] lg:w-[216px]">
               <div
                 class="bg-(--text-body-titles) w-[100px] h-[100px] rounded-full flex items-center justify-center overflow-hidden"
               >
@@ -155,7 +170,7 @@
             </div>
 
             <!-- Step 4 -->
-            <div class="flex flex-col gap-[25px] items-center w-[216px]">
+            <div class="flex flex-col gap-[25px] items-center w-full max-w-[250px] lg:w-[216px]">
               <div
                 class="bg-(--text-body-titles) w-[100px] h-[100px] rounded-full flex items-center justify-center overflow-hidden"
               >
@@ -179,19 +194,24 @@
 
     <section
       id="cta"
-      class="snap-section bg-(--system-foreground) py-20 flex items-center relative"
-      style="clip-path: polygon(0 10%, 100% 0, 100% 90%, 0 100%)"
+      class="snap-section bg-(--system-foreground) py-20 flex items-center relative cta-clip"
     >
       <div class="max-w-[910px] mx-auto px-6 w-full">
         <div class="flex flex-col items-center text-center space-y-8">
           <!-- Main Title -->
           <div class="space-y-0">
-            <h2 class="text-hero text-white leading-none">PRONTO PARA</h2>
-            <h2 class="text-hero text-white leading-none">COMEÇAR A POUPAR?</h2>
+            <h2 class="text-4xl sm:text-5xl lg:text-7xl font-bold text-white leading-none">
+              PRONTO PARA
+            </h2>
+            <h2 class="text-4xl sm:text-5xl lg:text-7xl font-bold text-white leading-none">
+              COMEÇAR A POUPAR?
+            </h2>
           </div>
 
           <!-- Subtitle -->
-          <p class="text-heading-h3 text-(--system-ring) leading-relaxed max-w-[700px]">
+          <p
+            class="text-xl lg:text-2xl font-semibold text-(--system-ring) leading-relaxed max-w-[700px]"
+          >
             Junte-se a milhares de famílias que já estão a fazer a diferença
           </p>
 
@@ -212,16 +232,18 @@
         <div class="flex flex-col gap-[53px] items-center">
           <!-- Header -->
           <div class="flex flex-col gap-[19px] items-center text-center w-full">
-            <h2 class="text-hero text-(--text-body-titles) leading-tight">
+            <h2 class="text-4xl lg:text-6xl font-bold text-(--text-body-titles) leading-tight">
               O nosso impacto coletivo
             </h2>
-            <p class="text-heading-h3 text-(--text-body-sub-titles) leading-relaxed">
+            <p
+              class="text-xl lg:text-2xl font-semibold text-(--text-body-sub-titles) leading-relaxed"
+            >
               Resultados reais da nossa comunidade
             </p>
           </div>
 
           <!-- Stats Grid -->
-          <div class="grid grid-cols-4 gap-6 w-full max-w-[872px]">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full max-w-[872px]">
             <!-- Stat 1: Energy -->
             <div class="flex flex-col items-center gap-3">
               <div
@@ -273,10 +295,10 @@
 
           <!-- Chart -->
           <div
-            class="bg-(--text-body-sub-titles) rounded-(--border-radius-xl) p-6 w-full max-w-[872px] h-[284px]"
+            class="bg-(--text-body-sub-titles) rounded-(--border-radius-xl) p-6 w-full max-w-[872px] h-auto lg:h-[284px] overflow-x-auto"
           >
             <h3 class="text-[18px] text-(--system-ring) mb-4">Evolução Mensal da Poupança</h3>
-            <div class="flex items-end justify-between h-48 gap-2">
+            <div class="flex items-end justify-between h-48 gap-2 min-w-[600px] lg:min-w-0">
               <!-- Bar 1 -->
               <div class="flex flex-col items-center gap-2 flex-1">
                 <div
@@ -378,19 +400,19 @@
         <div class="flex flex-col gap-[73px] items-center">
           <!-- Header -->
           <div class="flex flex-col gap-[29px] items-center text-center w-full">
-            <h2 class="text-hero text-(--system-foreground) leading-tight">
+            <h2 class="text-4xl lg:text-6xl font-bold text-(--system-foreground) leading-tight">
               O que dizem as famílias
             </h2>
-            <p class="text-heading-h3 text-white leading-relaxed max-w-[596px]">
+            <p class="text-xl lg:text-2xl font-semibold text-white leading-relaxed max-w-[596px]">
               Histórias reais de quem já está a fazer a diferença
             </p>
           </div>
 
           <!-- Testimonial Cards -->
-          <div class="flex items-start justify-between w-full gap-6">
+          <div class="flex flex-col lg:flex-row items-center justify-center w-full gap-6">
             <!-- Card 1: Ana Costa -->
             <div
-              class="bg-(--system-background) border-[1.6px] border-(--system-border) rounded-(--border-radius-xl) p-[26px] w-[260px] flex flex-col gap-4"
+              class="bg-(--system-background) border-[1.6px] border-(--system-border) rounded-(--border-radius-xl) p-[26px] w-full max-w-[320px] lg:w-[260px] flex flex-col gap-4"
             >
               <div class="flex gap-3 items-center">
                 <div class="w-12 h-12 rounded-full bg-gray-200 overflow-hidden">
@@ -420,7 +442,7 @@
 
             <!-- Card 2: Carlos Silva -->
             <div
-              class="bg-(--system-background) border-[1.6px] border-(--system-border) rounded-(--border-radius-xl) p-[26px] w-[260px] flex flex-col gap-4"
+              class="bg-(--system-background) border-[1.6px] border-(--system-border) rounded-(--border-radius-xl) p-[26px] w-full max-w-[320px] lg:w-[260px] flex flex-col gap-4"
             >
               <div class="flex gap-3 items-center">
                 <div class="w-12 h-12 rounded-full bg-gray-200 overflow-hidden">
@@ -451,7 +473,7 @@
 
             <!-- Card 3: Maria Santos -->
             <div
-              class="bg-(--system-background) border-[1.6px] border-(--system-border) rounded-(--border-radius-xl) p-[26px] w-[260px] flex flex-col gap-4"
+              class="bg-(--system-background) border-[1.6px] border-(--system-border) rounded-(--border-radius-xl) p-[26px] w-full max-w-[320px] lg:w-[260px] flex flex-col gap-4"
             >
               <div class="flex gap-3 items-center">
                 <div class="w-12 h-12 rounded-full bg-gray-200 overflow-hidden">
@@ -484,14 +506,14 @@
     </section>
 
     <!-- FAQ Section -->
-    <section id="faqs" class="snap-section flex flex-col items-center justify-center px-6">
+    <section id="faqs" class="snap-section flex flex-col items-center justify-center px-6 py-20">
       <div class="w-full max-w-[912px] flex flex-col gap-[73px]">
         <!-- Header -->
         <div class="flex flex-col gap-[29px] items-center text-center">
-          <h2 class="text-hero font-bold text-(--text-body-titles) max-w-[858px]">
+          <h2 class="text-4xl lg:text-6xl font-bold text-(--text-body-titles) max-w-[858px]">
             Perguntas frequentes
           </h2>
-          <p class="text-heading-h3 font-semibold text-(--text-body-sub-titles) max-w-[596px]">
+          <p class="text-xl lg:text-2xl font-semibold text-(--text-body-sub-titles) max-w-[596px]">
             Tudo o que precisa de saber sobre o b.green
           </p>
         </div>
@@ -622,17 +644,39 @@ export default {
 
 <style scoped>
 .snap-container {
-  height: 100vh;
-  overflow-y: scroll;
+  min-height: 100vh;
   overflow-x: hidden;
-  scroll-snap-type: y mandatory;
-  scroll-behavior: smooth;
 }
 
 .snap-section {
   min-height: 100vh;
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
+}
+
+.hero-clip {
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 40px), 0 100%);
+}
+
+.cta-clip {
+  clip-path: polygon(0 5%, 100% 0, 100% 95%, 0 100%);
+}
+
+@media (min-width: 1024px) {
+  .snap-container {
+    height: 100vh;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
+    scroll-behavior: smooth;
+  }
+  .snap-section {
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+  .hero-clip {
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 80px), 0 100%);
+  }
+  .cta-clip {
+    clip-path: polygon(0 10%, 100% 0, 100% 90%, 0 100%);
+  }
 }
 
 .fade-enter-active,
