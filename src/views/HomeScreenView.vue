@@ -122,14 +122,93 @@
               v-model="cardOpenStates.statistics"
               class="h-full"
             >
-              <StatisticsChart
-                v-if="statistics"
-                :data="statistics.last7Days"
-                :totalCo2="statistics.totalCo2Saved"
-                :totalPoints="statistics.totalPoints"
-                :totalTasks="statistics.totalTasks"
-                :streak="statistics.streak"
-              />
+              <div v-if="statistics" class="flex flex-col gap-6">
+                <!-- Summary Grid -->
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                  <!-- CO2 Card -->
+                  <div
+                    class="bg-(--system-card) border border-(--system-border) rounded-xl p-4 flex flex-col items-center justify-center gap-2 transition-all hover:border-(--system-ring)"
+                  >
+                    <div
+                      class="w-10 h-10 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-green-600 dark:text-green-400"
+                    >
+                      <span class="material-symbols-outlined">eco</span>
+                    </div>
+                    <div class="text-center">
+                      <p class="text-2xl font-bold text-(--text-body-titles)">
+                        {{ statistics.totalCo2Saved.toFixed(1) }}
+                      </p>
+                      <p class="text-xs text-(--text-body-sub-titles) uppercase font-semibold">
+                        kg CO₂
+                      </p>
+                    </div>
+                  </div>
+
+                  <!-- Points Card -->
+                  <div
+                    class="bg-(--system-card) border border-(--system-border) rounded-xl p-4 flex flex-col items-center justify-center gap-2 transition-all hover:border-(--system-ring)"
+                  >
+                    <div
+                      class="w-10 h-10 rounded-full bg-yellow-100 dark:bg-yellow-900/30 flex items-center justify-center text-yellow-600 dark:text-yellow-400"
+                    >
+                      <span class="material-symbols-outlined">emoji_events</span>
+                    </div>
+                    <div class="text-center">
+                      <p class="text-2xl font-bold text-(--text-body-titles)">
+                        {{ statistics.totalPoints }}
+                      </p>
+                      <p class="text-xs text-(--text-body-sub-titles) uppercase font-semibold">
+                        Pontos
+                      </p>
+                    </div>
+                  </div>
+
+                  <!-- Tasks Card -->
+                  <div
+                    class="bg-(--system-card) border border-(--system-border) rounded-xl p-4 flex flex-col items-center justify-center gap-2 transition-all hover:border-(--system-ring)"
+                  >
+                    <div
+                      class="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400"
+                    >
+                      <span class="material-symbols-outlined">task_alt</span>
+                    </div>
+                    <div class="text-center">
+                      <p class="text-2xl font-bold text-(--text-body-titles)">
+                        {{ statistics.totalTasks }}
+                      </p>
+                      <p class="text-xs text-(--text-body-sub-titles) uppercase font-semibold">
+                        Tarefas
+                      </p>
+                    </div>
+                  </div>
+
+                  <!-- Streak Card -->
+                  <div
+                    class="bg-(--system-card) border border-(--system-border) rounded-xl p-4 flex flex-col items-center justify-center gap-2 transition-all hover:border-(--system-ring)"
+                  >
+                    <div
+                      class="w-10 h-10 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center text-orange-600 dark:text-orange-400"
+                    >
+                      <span class="material-symbols-outlined">local_fire_department</span>
+                    </div>
+                    <div class="text-center">
+                      <p class="text-2xl font-bold text-(--text-body-titles)">
+                        {{ statistics.streak }}
+                      </p>
+                      <p class="text-xs text-(--text-body-sub-titles) uppercase font-semibold">
+                        Dias Streak
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Chart Container -->
+                <StatisticsChart
+                  :data="statistics.last7Days"
+                  :showCo2="false"
+                  pointsColor="var(--system-ring)"
+                />
+              </div>
               <div
                 v-else
                 class="w-full h-[260px] flex items-center justify-center text-(--text-body-sub-titles)"

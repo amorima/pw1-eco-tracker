@@ -1,215 +1,252 @@
 <template>
-  <div class="w-full">
-    <!-- Chart Header -->
-    <div class="flex items-center justify-between mb-6">
-      <div class="flex items-center gap-4">
-        <div class="flex items-center gap-2">
-          <div class="w-3 h-3 rounded-full bg-(--system-ring)"></div>
-          <span class="text-sm text-(--text-body-sub-titles)">CO2 Poupado (kg)</span>
-        </div>
-        <div class="flex items-center gap-2">
-          <div class="w-3 h-3 rounded-full bg-(--semantic-warning-default)"></div>
-          <span class="text-sm text-(--text-body-sub-titles)">Pontos</span>
-        </div>
-      </div>
-      <div class="flex items-center gap-2">
-        <button 
-          @click="chartType = 'bar'"
+  <div class="flex flex-col gap-4" ref="chartContainer">
+    <div class="flex justify-end">
+      <div class="flex bg-(--system-border) rounded-lg p-1 gap-1">
+        <button
+          @click="setChartType('bar')"
           :class="[
-            'p-2 rounded-lg transition-colors',
-            chartType === 'bar' ? 'bg-(--system-ring) text-white' : 'bg-(--system-border) text-(--text-body-sub-titles)'
+            'px-3 py-1.5 rounded-md text-sm font-medium transition-colors',
+            currentChartType === 'bar'
+              ? 'bg-(--system-background) text-(--system-ring) shadow-sm'
+              : 'text-(--text-body-sub-titles) hover:text-(--text-body)',
           ]"
         >
-          <span class="material-symbols-outlined text-lg">bar_chart</span>
+          Barras
         </button>
-        <button 
-          @click="chartType = 'line'"
+        <button
+          @click="setChartType('line')"
           :class="[
-            'p-2 rounded-lg transition-colors',
-            chartType === 'line' ? 'bg-(--system-ring) text-white' : 'bg-(--system-border) text-(--text-body-sub-titles)'
+            'px-3 py-1.5 rounded-md text-sm font-medium transition-colors',
+            currentChartType === 'line'
+              ? 'bg-(--system-background) text-(--system-ring) shadow-sm'
+              : 'text-(--text-body-sub-titles) hover:text-(--text-body)',
           ]"
         >
-          <span class="material-symbols-outlined text-lg">show_chart</span>
+          Linha
         </button>
       </div>
     </div>
-    
-    <!-- Bar Chart -->
-    <div v-if="chartType === 'bar'" class="flex items-end justify-between gap-2 h-[180px] px-2">
-      <div 
-        v-for="(day, index) in data" 
-        :key="index"
-        class="flex-1 flex flex-col items-center gap-1"
-      >
-        <!-- Bars Container -->
-        <div class="w-full flex items-end justify-center gap-1 h-[150px]">
-          <!-- CO2 Bar -->
-          <div 
-            class="w-1/3 bg-(--system-ring) rounded-t-md transition-all duration-500"
-            :style="{ height: `${getBarHeight(day.co2Saved, maxCo2)}%` }"
-            :title="`${day.co2Saved.toFixed(2)} kg CO2`"
-          ></div>
-          <!-- Points Bar -->
-          <div 
-            class="w-1/3 bg-(--semantic-warning-default) rounded-t-md transition-all duration-500"
-            :style="{ height: `${getBarHeight(day.points, maxPoints)}%` }"
-            :title="`${day.points} pontos`"
-          ></div>
-        </div>
-        <!-- Day Label -->
-        <span class="text-xs text-(--text-body-sub-titles) capitalize">{{ day.label }}</span>
-      </div>
-    </div>
-    
-    <!-- Line Chart -->
-    <div v-else class="relative h-[180px] px-2">
-      <svg class="w-full h-[150px]" viewBox="0 0 100 50" preserveAspectRatio="none">
-        <!-- Grid Lines -->
-        <line x1="0" y1="12.5" x2="100" y2="12.5" stroke="var(--system-border)" stroke-width="0.2" />
-        <line x1="0" y1="25" x2="100" y2="25" stroke="var(--system-border)" stroke-width="0.2" />
-        <line x1="0" y1="37.5" x2="100" y2="37.5" stroke="var(--system-border)" stroke-width="0.2" />
-        
-        <!-- CO2 Line -->
-        <polyline
-          :points="co2LinePoints"
-          fill="none"
-          stroke="var(--system-ring)"
-          stroke-width="0.5"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-        
-        <!-- Points Line -->
-        <polyline
-          :points="pointsLinePoints"
-          fill="none"
-          stroke="var(--semantic-warning-default)"
-          stroke-width="0.5"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-        
-        <!-- CO2 Dots -->
-        <circle
-          v-for="(point, index) in co2Points"
-          :key="`co2-${index}`"
-          :cx="point.x"
-          :cy="point.y"
-          r="1"
-          fill="var(--system-ring)"
-        />
-        
-        <!-- Points Dots -->
-        <circle
-          v-for="(point, index) in pointsPoints"
-          :key="`points-${index}`"
-          :cx="point.x"
-          :cy="point.y"
-          r="1"
-          fill="var(--semantic-warning-default)"
-        />
-      </svg>
-      
-      <!-- Day Labels -->
-      <div class="flex justify-between px-0 mt-1">
-        <span 
-          v-for="(day, index) in data" 
-          :key="index"
-          class="text-xs text-(--text-body-sub-titles) capitalize flex-1 text-center"
-        >
-          {{ day.label }}
-        </span>
-      </div>
-    </div>
-    
-    <!-- Summary Cards -->
-    <div class="grid grid-cols-4 gap-3 mt-6">
-      <div class="bg-(--system-card) border border-(--system-border) rounded-lg p-3 text-center">
-        <p class="text-2xl font-bold text-(--system-ring)">{{ totalCo2.toFixed(1) }}</p>
-        <p class="text-xs text-(--text-body-sub-titles)">kg CO2 poupado</p>
-      </div>
-      <div class="bg-(--system-card) border border-(--system-border) rounded-lg p-3 text-center">
-        <p class="text-2xl font-bold text-(--semantic-warning-default)">{{ totalPoints }}</p>
-        <p class="text-xs text-(--text-body-sub-titles)">Pontos</p>
-      </div>
-      <div class="bg-(--system-card) border border-(--system-border) rounded-lg p-3 text-center">
-        <p class="text-2xl font-bold text-(--text-body-titles)">{{ totalTasks }}</p>
-        <p class="text-xs text-(--text-body-sub-titles)">Tarefas</p>
-      </div>
-      <div class="bg-(--system-card) border border-(--system-border) rounded-lg p-3 text-center">
-        <p class="text-2xl font-bold text-(--primary-primary)">{{ streak }}</p>
-        <p class="text-xs text-(--text-body-sub-titles)">Streak</p>
-      </div>
+    <div class="w-full h-[300px] relative">
+      <canvas ref="chartCanvas"></canvas>
     </div>
   </div>
 </template>
 
 <script>
+import Chart from 'chart.js/auto'
+
 export default {
   name: 'StatisticsChart',
   props: {
     data: {
       type: Array,
-      default: () => [],
+      required: true,
     },
-    totalCo2: {
-      type: Number,
-      default: 0,
+    showCo2: {
+      type: Boolean,
+      default: true,
     },
-    totalPoints: {
-      type: Number,
-      default: 0,
+    showPoints: {
+      type: Boolean,
+      default: true,
     },
-    totalTasks: {
-      type: Number,
-      default: 0,
-    },
-    streak: {
-      type: Number,
-      default: 0,
+    pointsColor: {
+      type: String,
+      default: null,
     },
   },
   data() {
     return {
-      chartType: 'bar',
+      chartInstance: null,
+      currentChartType: 'bar',
+      observer: null,
+      resizeObserver: null,
     }
   },
-  computed: {
-    maxCo2() {
-      const max = Math.max(...this.data.map(d => d.co2Saved), 0.1)
-      return max * 1.2 // Add 20% padding
-    },
-    maxPoints() {
-      const max = Math.max(...this.data.map(d => d.points), 1)
-      return max * 1.2
-    },
-    co2Points() {
-      if (!this.data.length) return []
-      const step = 100 / (this.data.length - 1 || 1)
-      return this.data.map((day, index) => ({
-        x: index * step,
-        y: 50 - (day.co2Saved / this.maxCo2) * 45,
-      }))
-    },
-    pointsPoints() {
-      if (!this.data.length) return []
-      const step = 100 / (this.data.length - 1 || 1)
-      return this.data.map((day, index) => ({
-        x: index * step,
-        y: 50 - (day.points / this.maxPoints) * 45,
-      }))
-    },
-    co2LinePoints() {
-      return this.co2Points.map(p => `${p.x},${p.y}`).join(' ')
-    },
-    pointsLinePoints() {
-      return this.pointsPoints.map(p => `${p.x},${p.y}`).join(' ')
+  mounted() {
+    this.renderChart()
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', this.renderChart)
+    this.observer = new MutationObserver(this.renderChart)
+    this.observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class'],
+    })
+
+    // Monitorizar redimensionamento para corrigir gráficos que desaparecem
+    this.resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.contentRect.width > 0 && entry.contentRect.height > 0) {
+          if (this.chartInstance) {
+            this.chartInstance.resize()
+          } else {
+            this.renderChart()
+          }
+        }
+      }
+    })
+    if (this.$refs.chartContainer) {
+      this.resizeObserver.observe(this.$refs.chartContainer)
+    }
+  },
+  beforeUnmount() {
+    if (this.chartInstance) this.chartInstance.destroy()
+    window
+      .matchMedia('(prefers-color-scheme: dark)')
+      .removeEventListener('change', this.renderChart)
+    if (this.observer) this.observer.disconnect()
+    if (this.resizeObserver) this.resizeObserver.disconnect()
+  },
+  watch: {
+    data: {
+      handler() {
+        this.renderChart()
+      },
+      deep: true,
     },
   },
   methods: {
-    getBarHeight(value, max) {
-      if (!max || max === 0) return 5
-      return Math.max((value / max) * 100, 5)
+    resolveColor(colorInput) {
+      if (!colorInput) return null
+      let color = colorInput.trim()
+      if (color.startsWith('var(')) {
+        const varName = color.match(/var\(([^)]+)\)/)[1]
+        color = getComputedStyle(document.documentElement).getPropertyValue(varName).trim()
+      }
+      return color
+    },
+    hexToRgba(hex, alpha) {
+      if (!hex || !hex.startsWith('#')) return hex
+      let c = hex.substring(1).split('')
+      if (c.length === 3) {
+        c = [c[0], c[0], c[1], c[1], c[2], c[2]]
+      }
+      c = '0x' + c.join('')
+      return 'rgba(' + [(c >> 16) & 255, (c >> 8) & 255, c & 255].join(',') + ',' + alpha + ')'
+    },
+    setChartType(type) {
+      this.currentChartType = type
+      this.renderChart()
+    },
+    renderChart() {
+      if (!this.$refs.chartCanvas) return
+
+      // Evitar renderizar se o contentor estiver oculto (width=0)
+      const container = this.$refs.chartContainer
+      if (!container || container.clientWidth === 0) return
+
+      const ctx = this.$refs.chartCanvas.getContext('2d')
+      const isDark = document.documentElement.classList.contains('dark')
+
+      const defaultPrimary = '#8cb161'
+      const defaultSecondary = '#e89454'
+
+      let primaryColor = this.resolveColor('var(--system-ring)') || defaultPrimary
+      let secondaryColor = this.resolveColor('var(--semantic-warning-default)') || defaultSecondary
+
+      if (this.pointsColor) {
+        secondaryColor = this.resolveColor(this.pointsColor) || secondaryColor
+      }
+
+      // Garantir hex para transparência
+      if (!primaryColor.startsWith('#')) primaryColor = defaultPrimary
+      if (!secondaryColor.startsWith('#')) secondaryColor = defaultSecondary
+
+      const gridColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)'
+      const textColor = isDark ? '#e7e5e4' : '#57534e'
+
+      const datasets = []
+
+      if (this.showCo2) {
+        datasets.push({
+          label: 'CO2 Poupado (kg)',
+          data: this.data.map((d) => d.co2Saved),
+          backgroundColor:
+            this.currentChartType === 'line' ? this.hexToRgba(primaryColor, 0.2) : primaryColor,
+          borderColor: primaryColor,
+          borderWidth: 2,
+          borderRadius: 4,
+          tension: 0.4,
+          fill: this.currentChartType === 'line',
+          pointBackgroundColor: isDark ? '#1c1917' : '#fff',
+          yAxisID: 'y',
+        })
+      }
+
+      if (this.showPoints) {
+        datasets.push({
+          label: 'Pontos',
+          data: this.data.map((d) => d.points),
+          backgroundColor:
+            this.currentChartType === 'line' ? this.hexToRgba(secondaryColor, 0.2) : secondaryColor,
+          borderColor: secondaryColor,
+          borderWidth: 2,
+          borderRadius: 4,
+          tension: 0.4,
+          fill: this.currentChartType === 'line',
+          pointBackgroundColor: isDark ? '#1c1917' : '#fff',
+          yAxisID: this.showCo2 ? 'y1' : 'y',
+        })
+      }
+
+      const chartData = {
+        labels: this.data.map((d) => d.label),
+        datasets,
+      }
+
+      const chartOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: { color: textColor },
+          },
+          tooltip: {
+            mode: 'index',
+            intersect: false,
+            backgroundColor: isDark ? '#292524' : '#fff',
+            titleColor: isDark ? '#fff' : '#1c1917',
+            bodyColor: isDark ? '#d6d3d1' : '#57534e',
+            borderColor: isDark ? '#44403c' : '#e7e5e4',
+            borderWidth: 1,
+          },
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            grid: { color: gridColor },
+            ticks: { color: textColor },
+            position: 'left',
+            display: true,
+          },
+          y1: {
+            beginAtZero: true,
+            grid: { display: false },
+            ticks: { color: textColor },
+            position: 'right',
+            display: this.showCo2 && this.showPoints,
+          },
+          x: {
+            grid: { display: false },
+            ticks: { color: textColor },
+          },
+        },
+        interaction: {
+          mode: 'nearest',
+          axis: 'x',
+          intersect: false,
+        },
+      }
+
+      if (this.chartInstance) {
+        this.chartInstance.destroy()
+      }
+
+      this.chartInstance = new Chart(ctx, {
+        type: this.currentChartType,
+        data: chartData,
+        options: chartOptions,
+      })
     },
   },
 }

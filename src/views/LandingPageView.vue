@@ -295,100 +295,40 @@
 
           <!-- Chart -->
           <div
-            class="bg-(--text-body-sub-titles) rounded-(--border-radius-xl) p-6 w-full max-w-[872px] h-auto lg:h-[284px] overflow-x-auto"
+            class="bg-(--text-body-sub-titles) rounded-(--border-radius-xl) p-6 w-full max-w-[872px] flex flex-col gap-4"
           >
-            <h3 class="text-[18px] text-(--system-ring) mb-4">Evolução Mensal da Poupança</h3>
-            <div class="flex items-end justify-between h-48 gap-2 min-w-[600px] lg:min-w-0">
-              <!-- Bar 1 -->
-              <div class="flex flex-col items-center gap-2 flex-1">
-                <div
-                  class="bg-(--system-ring) rounded-t-[10px] w-full"
-                  style="height: 84.7px"
-                ></div>
-                <span class="text-[10px] text-(--system-ring)">1</span>
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+              <h3 class="text-[18px] text-(--system-ring) font-semibold">
+                Evolução Mensal da Poupança
+              </h3>
+              <div class="flex bg-white/10 rounded-lg p-1 gap-1">
+                <button
+                  @click="setChartType('bar')"
+                  :class="[
+                    'px-3 py-1.5 rounded-md text-sm font-medium transition-colors',
+                    currentChartType === 'bar'
+                      ? 'bg-(--system-ring) text-white'
+                      : 'text-white/70 hover:bg-white/10',
+                  ]"
+                >
+                  Barras
+                </button>
+                <button
+                  @click="setChartType('line')"
+                  :class="[
+                    'px-3 py-1.5 rounded-md text-sm font-medium transition-colors',
+                    currentChartType === 'line'
+                      ? 'bg-(--system-ring) text-white'
+                      : 'text-white/70 hover:bg-white/10',
+                  ]"
+                >
+                  Linha
+                </button>
               </div>
-              <!-- Bar 2 -->
-              <div class="flex flex-col items-center gap-2 flex-1">
-                <div
-                  class="bg-(--system-ring) rounded-t-[10px] w-full"
-                  style="height: 97.875px"
-                ></div>
-                <span class="text-[10px] text-(--system-ring)">2</span>
-              </div>
-              <!-- Bar 3 -->
-              <div class="flex flex-col items-center gap-2 flex-1">
-                <div
-                  class="bg-(--system-ring) rounded-t-[10px] w-full"
-                  style="height: 90.35px"
-                ></div>
-                <span class="text-[10px] text-(--system-ring)">3</span>
-              </div>
-              <!-- Bar 4 -->
-              <div class="flex flex-col items-center gap-2 flex-1">
-                <div
-                  class="bg-(--system-ring) rounded-t-[10px] w-full"
-                  style="height: 122.35px"
-                ></div>
-                <span class="text-[10px] text-(--system-ring)">4</span>
-              </div>
-              <!-- Bar 5 -->
-              <div class="flex flex-col items-center gap-2 flex-1">
-                <div
-                  class="bg-(--system-ring) rounded-t-[10px] w-full"
-                  style="height: 109.175px"
-                ></div>
-                <span class="text-[10px] text-(--system-ring)">5</span>
-              </div>
-              <!-- Bar 6 -->
-              <div class="flex flex-col items-center gap-2 flex-1">
-                <div
-                  class="bg-(--system-ring) rounded-t-[10px] w-full"
-                  style="height: 131.762px"
-                ></div>
-                <span class="text-[10px] text-(--system-ring)">6</span>
-              </div>
-              <!-- Bar 7 -->
-              <div class="flex flex-col items-center gap-2 flex-1">
-                <div class="bg-(--system-ring) rounded-t-[10px] w-full" style="height: 128px"></div>
-                <span class="text-[10px] text-(--system-ring)">7</span>
-              </div>
-              <!-- Bar 8 -->
-              <div class="flex flex-col items-center gap-2 flex-1">
-                <div
-                  class="bg-(--system-ring) rounded-t-[10px] w-full"
-                  style="height: 141.175px"
-                ></div>
-                <span class="text-[10px] text-(--system-ring)">8</span>
-              </div>
-              <!-- Bar 9 -->
-              <div class="flex flex-col items-center gap-2 flex-1">
-                <div
-                  class="bg-(--system-ring) rounded-t-[10px] w-full"
-                  style="height: 135.525px"
-                ></div>
-                <span class="text-[10px] text-(--system-ring)">9</span>
-              </div>
-              <!-- Bar 10 -->
-              <div class="flex flex-col items-center gap-2 flex-1">
-                <div
-                  class="bg-(--system-ring) rounded-t-[10px] w-full"
-                  style="height: 150.588px"
-                ></div>
-                <span class="text-[10px] text-(--system-ring)">10</span>
-              </div>
-              <!-- Bar 11 -->
-              <div class="flex flex-col items-center gap-2 flex-1">
-                <div
-                  class="bg-(--system-ring) rounded-t-[10px] w-full"
-                  style="height: 146.813px"
-                ></div>
-                <span class="text-[10px] text-(--system-ring)">11</span>
-              </div>
-              <!-- Bar 12 -->
-              <div class="flex flex-col items-center gap-2 flex-1">
-                <div class="bg-(--system-ring) rounded-t-[10px] w-full" style="height: 160px"></div>
-                <span class="text-[10px] text-(--system-ring)">12</span>
-              </div>
+            </div>
+
+            <div class="w-full h-[300px] relative">
+              <canvas ref="impactChart"></canvas>
             </div>
           </div>
         </div>
@@ -606,6 +546,7 @@ import ActionButton from '@/components/ActionButton.vue'
 import FeatureCarousel from '@/components/FeatureCarousel.vue'
 import FAQItem from '@/components/FAQItem.vue'
 import FooterSection from '@/components/FooterSection.vue'
+import Chart from 'chart.js/auto'
 
 export default {
   name: 'LandingPageView',
@@ -620,7 +561,12 @@ export default {
     return {
       showScrollButton: false,
       isHovered: false,
+      chartInstance: null,
+      currentChartType: 'bar',
     }
+  },
+  mounted() {
+    this.renderChart()
   },
   methods: {
     handleScroll() {
@@ -637,6 +583,88 @@ export default {
           behavior: 'smooth',
         })
       }
+    },
+    setChartType(type) {
+      this.currentChartType = type
+      this.renderChart()
+    },
+    renderChart() {
+      if (!this.$refs.impactChart) return
+
+      if (this.chartInstance) {
+        this.chartInstance.destroy()
+      }
+
+      const ctx = this.$refs.impactChart.getContext('2d')
+      const primaryColor = '#8cb161' // --system-ring
+
+      // Data matching the previous manual bars roughly
+      const data = [85, 98, 90, 122, 109, 132, 128, 141, 136, 151, 147, 160]
+      const labels = [
+        'Jan',
+        'Fev',
+        'Mar',
+        'Abr',
+        'Mai',
+        'Jun',
+        'Jul',
+        'Ago',
+        'Set',
+        'Out',
+        'Nov',
+        'Dez',
+      ]
+
+      this.chartInstance = new Chart(ctx, {
+        type: this.currentChartType,
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: 'Poupança (kWh)',
+              data: data,
+              backgroundColor: primaryColor,
+              borderColor: primaryColor,
+              borderWidth: 2,
+              borderRadius: 4,
+              tension: 0.4,
+              pointBackgroundColor: '#fff',
+              pointRadius: 4,
+              fill: this.currentChartType === 'line',
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: '#fff',
+              titleColor: '#1c1917',
+              bodyColor: '#57534e',
+              borderColor: '#e7e5e4',
+              borderWidth: 1,
+              padding: 10,
+              displayColors: false,
+              callbacks: {
+                label: (context) => `${context.parsed.y} kWh Poupados`,
+              },
+            },
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              grid: { color: 'rgba(255, 255, 255, 0.1)' },
+              ticks: { color: 'rgba(255, 255, 255, 0.7)' },
+            },
+            x: {
+              grid: { display: false },
+              ticks: { color: 'rgba(255, 255, 255, 0.7)' },
+            },
+          },
+        },
+      })
     },
   },
 }
