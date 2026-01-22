@@ -36,10 +36,44 @@
             >
               {{ isDark ? 'dark_mode' : 'light_mode' }}
             </span>
-            <span
-              class="material-symbols-outlined cursor-pointer hover:opacity-70 transition-opacity"
-              >grid_on</span
-            >
+            <div class="relative">
+              <span
+                @click="toggleGridDropdown"
+                class="material-symbols-outlined cursor-pointer hover:opacity-70 transition-opacity"
+              >
+                grid_on
+              </span>
+              <!-- Grid Dropdown Menu -->
+              <div
+                v-if="gridDropdownOpen"
+                @click.stop
+                class="absolute right-0 mt-2 w-48 bg-(--system-background,white) border-2 border-(--system-border,#e7e5e4) rounded-(--border-radius-lg,10px) shadow-lg z-50"
+              >
+                <div class="py-2">
+                  <button
+                    @click="selectLayout(1)"
+                    class="w-full px-4 py-2 text-left text-(--text-headings,#1c1917) hover:bg-(--system-input-background,#f5f5f4) transition-colors flex items-center gap-2"
+                  >
+                    <span class="material-symbols-outlined text-xl">view_list</span>
+                    <span>Lista</span>
+                  </button>
+                  <button
+                    @click="selectLayout(2)"
+                    class="w-full px-4 py-2 text-left text-(--text-headings,#1c1917) hover:bg-(--system-input-background,#f5f5f4) transition-colors flex items-center gap-2"
+                  >
+                    <span class="material-symbols-outlined text-xl">grid_view</span>
+                    <span>Grelha 2x2</span>
+                  </button>
+                  <button
+                    @click="selectLayout(3)"
+                    class="w-full px-4 py-2 text-left text-(--text-headings,#1c1917) hover:bg-(--system-input-background,#f5f5f4) transition-colors flex items-center gap-2 hidden lg:flex"
+                  >
+                    <span class="material-symbols-outlined text-xl">view_comfy</span>
+                    <span>Grelha 3x3</span>
+                  </button>
+                </div>
+              </div>
+            </div>
             <div class="relative">
               <span
                 @click="toggleDropdown"
@@ -107,6 +141,7 @@ export default {
   data() {
     return {
       isDark: false,
+      gridDropdownOpen: false,
       dropdownOpen: false,
     }
   },
@@ -151,13 +186,23 @@ export default {
         document.documentElement.classList.remove('dark')
       }
     },
+    toggleGridDropdown() {
+      this.gridDropdownOpen = !this.gridDropdownOpen
+      this.dropdownOpen = false
+    },
+    selectLayout(columns) {
+      this.$emit('layout-change', columns)
+      this.gridDropdownOpen = false
+    },
     toggleDropdown() {
       this.dropdownOpen = !this.dropdownOpen
+      this.gridDropdownOpen = false
     },
     handleClickOutside(event) {
       const dropdown = event.target.closest('.relative')
       if (!dropdown) {
         this.dropdownOpen = false
+        this.gridDropdownOpen = false
       }
     },
     navigateTo(routeName) {
