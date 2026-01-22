@@ -34,11 +34,9 @@ describe('LandingPage', () => {
   describe('sends to register', () => {
     // veriricar se envia para a pagina certa
     it('sends the user to the register page when clicked', async () => {
-      // should be HomeScreenPage as default
-
       const actionButtons = wrapper.findAllComponents(ActionButton) // encontrar e criar array com todas as vezes que o componente é encontrado
 
-      const registerButton = actionButtons[0] // AddCard para consumos é o primneiro a aparecer logo é o [0]
+      const registerButton = actionButtons[0] // addCard consumos é o primneiro a aparecer logo é 0
 
       await registerButton.trigger('click') // simular click
 
