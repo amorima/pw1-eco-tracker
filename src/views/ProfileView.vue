@@ -121,7 +121,10 @@
         >
           <!-- Decorative Background Pattern -->
           <div
-            class="absolute top-0 left-0 w-full h-32 bg-gradient-to-r from-green-100 to-blue-100 dark:from-green-900/20 dark:to-blue-900/20"
+            :class="[
+              'absolute top-0 left-0 w-full h-32 transition-colors duration-500',
+              currentBackgroundClass,
+            ]"
           >
             <div
               class="absolute inset-0 opacity-10"
@@ -133,7 +136,7 @@
           </div>
 
           <div
-            class="relative px-6 pb-8 pt-16 md:px-10 md:pt-20 flex flex-col md:flex-row items-center md:items-end gap-6"
+            class="relative px-6 pb-8 pt-16 md:px-10 md:pt-20 flex flex-col md:flex-row items-center md:items-center gap-6"
           >
             <!-- Avatar Section -->
             <div class="relative shrink-0">
@@ -566,6 +569,43 @@
                     </div>
                   </div>
                 </div>
+
+                <!-- Background Customization -->
+                <div class="mt-6 border-t border-(--system-border) pt-6">
+                  <h3 class="font-semibold text-base text-(--text-body) mb-4">
+                    Personalização do Fundo
+                  </h3>
+                  <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                    <button
+                      v-for="bg in availableBackgrounds"
+                      :key="bg.id"
+                      @click="selectBackground(bg)"
+                      :class="[
+                        'h-16 rounded-xl border-2 transition-all relative overflow-hidden group',
+                        currentProfile?.settings?.headerBackground === bg.id
+                          ? 'border-(--system-ring) ring-2 ring-(--system-ring) ring-offset-2'
+                          : 'border-transparent hover:border-(--system-border)',
+                        bg.isLocked ? 'opacity-70 cursor-not-allowed' : 'cursor-pointer',
+                      ]"
+                      :title="bg.isLocked ? bg.hint : bg.name"
+                    >
+                      <div :class="['absolute inset-0', bg.class]"></div>
+                      <div
+                        v-if="bg.isLocked"
+                        class="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/30 transition-colors"
+                      >
+                        <span class="material-symbols-outlined text-white drop-shadow-md"
+                          >lock</span
+                        >
+                      </div>
+                      <span
+                        class="absolute bottom-1 left-2 text-[10px] font-bold text-(--text-body-titles) bg-white/80 px-1.5 py-0.5 rounded-md backdrop-blur-sm shadow-sm"
+                      >
+                        {{ bg.name }}
+                      </span>
+                    </button>
+                  </div>
+                </div>
               </CollapsibleCard>
             </div>
           </template>
@@ -724,6 +764,54 @@ export default {
         },
       ],
 
+      // Header Backgrounds
+      headerBackgrounds: [
+        {
+          id: 'default',
+          name: 'Aurora',
+          class:
+            'bg-gradient-to-r from-green-100 to-blue-100 dark:from-green-900/20 dark:to-blue-900/20',
+          locked: false,
+        },
+        {
+          id: 'sunset',
+          name: 'Sunset',
+          class:
+            'bg-gradient-to-r from-orange-100 to-rose-100 dark:from-orange-900/20 dark:to-rose-900/20',
+          locked: false,
+        },
+        {
+          id: 'ocean',
+          name: 'Ocean',
+          class:
+            'bg-gradient-to-r from-cyan-100 to-blue-100 dark:from-cyan-900/20 dark:to-blue-900/20',
+          locked: false,
+        },
+        {
+          id: 'lavender',
+          name: 'Lavender',
+          class:
+            'bg-gradient-to-r from-purple-100 to-indigo-100 dark:from-purple-900/20 dark:to-indigo-900/20',
+          locked: false,
+        },
+        {
+          id: 'gold',
+          name: 'Gold',
+          class:
+            'bg-gradient-to-r from-yellow-100 to-amber-100 dark:from-yellow-900/20 dark:to-amber-900/20',
+          badgeId: 'early_adopter',
+          hint: 'Desbloqueie o badge "Early Adopter"',
+        },
+        {
+          id: 'fire',
+          name: 'Fire',
+          class:
+            'bg-gradient-to-r from-red-100 to-orange-100 dark:from-red-900/20 dark:to-orange-900/20',
+          badgeId: 'eco_warrior',
+          hint: 'Desbloqueie o badge "Eco Warrior"',
+        },
+      ],
+
       // Chart
       levelChartInstance: null,
     }
@@ -753,6 +841,17 @@ export default {
     },
     xpPercentage() {
       return (this.xpInCurrentLevel / this.xpForNextLevel) * 100
+    },
+    currentBackgroundClass() {
+      const bgId = this.currentProfile?.settings?.headerBackground || 'default'
+      const bg = this.headerBackgrounds.find((b) => b.id === bgId)
+      return bg ? bg.class : this.headerBackgrounds[0].class
+    },
+    availableBackgrounds() {
+      return this.headerBackgrounds.map((bg) => {
+        const isLocked = bg.badgeId ? !this.hasBadge(bg.badgeId) : false
+        return { ...bg, isLocked }
+      })
     },
     availableRewards() {
       return this.userStore.householdRewards || []
@@ -1056,6 +1155,10 @@ export default {
       const reward = this.availableRewards.find((r) => String(r.id) === String(rewardId))
       return reward?.image || 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=400'
     },
+    hasBadge(badgeId) {
+      const badge = this.allBadgesWithStatus.find((b) => b.id === badgeId)
+      return badge ? badge.earned : false
+    },
     async saveSettings() {
       if (!this.currentProfile) return
 
@@ -1075,12 +1178,27 @@ export default {
         pin: this.localSettings.privateProfile ? this.currentProfile.settings?.pin || null : null,
         notifications: this.localSettings.notifications,
         defaultDevice: this.localSettings.keepSession,
+        headerBackground: this.currentProfile.settings?.headerBackground || 'default',
       }
 
       const result = await this.userStore.updateProfileSettings(this.currentProfile.id, settings)
       if (!result.success) {
         this.showNotification('Erro ao guardar configurações', 'error')
       }
+    },
+    async selectBackground(bg) {
+      if (bg.isLocked) {
+        this.showNotification(bg.hint || 'Fundo bloqueado', 'error')
+        return
+      }
+
+      const settings = {
+        ...this.currentProfile.settings,
+        headerBackground: bg.id,
+      }
+
+      await this.userStore.updateProfileSettings(this.currentProfile.id, settings)
+      this.showNotification(`Fundo "${bg.name}" aplicado!`)
     },
     cancelPinSetup() {
       this.pinInput = ''
@@ -1111,6 +1229,7 @@ export default {
         pin: null,
         notifications: this.localSettings.notifications,
         defaultDevice: this.localSettings.keepSession,
+        headerBackground: this.currentProfile.settings?.headerBackground || 'default',
       }
 
       const result = await this.userStore.updateProfileSettings(this.currentProfile.id, settings)
@@ -1137,6 +1256,7 @@ export default {
         pin: this.pinInput,
         notifications: this.localSettings.notifications,
         defaultDevice: this.localSettings.keepSession,
+        headerBackground: this.currentProfile.settings?.headerBackground || 'default',
       }
 
       const result = await this.userStore.updateProfileSettings(this.currentProfile.id, settings)
