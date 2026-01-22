@@ -171,43 +171,92 @@
         <div class="flex flex-col md:flex-row gap-6 w-full">
           <!-- Level Card -->
           <div
-            class="flex-1 bg-(--system-card) border-2 border-(--system-border) p-6 rounded-[14px] shadow-sm flex flex-col justify-between gap-4"
+            class="flex-1 bg-(--system-card) border border-(--system-border) p-6 rounded-2xl shadow-sm flex items-center gap-6 relative overflow-hidden transition-all hover:border-(--system-ring)"
           >
-            <div class="flex items-center justify-between">
-              <span class="text-lg font-bold text-(--text-body-titles)"
-                >Nível {{ currentProfile?.level || 1 }}</span
+            <!-- Chart Container -->
+            <div class="relative w-24 h-24 shrink-0">
+              <canvas ref="levelChart"></canvas>
+              <!-- Center Text -->
+              <div
+                class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none"
               >
-              <span class="text-sm text-(--text-body-sub-titles)"
-                >{{ xpInCurrentLevel }}/{{ xpForNextLevel }} xp</span
-              >
-            </div>
-            <div class="w-full">
-              <div class="bg-(--system-popover) h-3 rounded-full overflow-hidden w-full">
-                <div
-                  class="bg-(--system-ring) h-full rounded-full transition-all duration-500"
-                  :style="{ width: `${xpPercentage}%` }"
-                ></div>
+                <span class="text-xs text-(--text-body-sub-titles) font-medium uppercase"
+                  >Nível</span
+                >
+                <span class="text-2xl font-bold text-(--text-body-titles) leading-none">{{
+                  currentProfile?.level || 1
+                }}</span>
               </div>
+            </div>
+
+            <!-- Text Info -->
+            <div class="flex flex-col gap-1 z-10">
+              <h3 class="text-lg font-bold text-(--text-body-titles)">Progresso</h3>
+              <p class="text-sm text-(--text-body-sub-titles)">
+                <span class="font-semibold text-(--system-ring)">{{ xpInCurrentLevel }} XP</span>
+                ganhos de {{ xpForNextLevel }} XP
+              </p>
+              <p class="text-xs text-(--text-disabled) mt-1">
+                Complete mais tarefas para subir de nível!
+              </p>
             </div>
           </div>
 
           <!-- Streak Card -->
           <div
-            class="flex-1 bg-(--system-card) border-2 border-(--system-border) p-6 rounded-[14px] shadow-sm flex flex-col gap-4"
+            class="flex-1 bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-950 dark:to-orange-900 border border-orange-200 dark:border-orange-800 p-6 rounded-2xl shadow-sm flex flex-col justify-between gap-4 relative overflow-hidden"
           >
-            <div class="flex items-center justify-between">
-              <span class="text-lg font-bold text-(--text-body-titles)"> Streak </span>
-              <StreakCard :days="currentProfile?.streak || 0" />
+            <!-- Background Decoration -->
+            <div class="absolute -right-4 -top-4 text-orange-500/10 dark:text-orange-500/5">
+              <span class="material-symbols-outlined text-[120px]">local_fire_department</span>
             </div>
-            <div
-              class="flex items-center justify-between gap-2 overflow-x-auto pb-2 scrollbar-hide"
-            >
-              <StreakButton
+
+            <div class="flex items-start justify-between z-10">
+              <div>
+                <h3 class="text-lg font-bold text-orange-950 dark:text-orange-50">Sequência</h3>
+                <div class="flex items-baseline gap-1">
+                  <span
+                    class="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-red-600 dark:from-orange-400 dark:to-orange-600"
+                  >
+                    {{ currentProfile?.streak || 0 }}
+                  </span>
+                  <span class="text-sm font-medium text-orange-800 dark:text-orange-200">dias</span>
+                </div>
+              </div>
+              <div
+                class="w-10 h-10 rounded-full bg-orange-600 dark:bg-orange-500 flex items-center justify-center shadow-lg shadow-orange-600/30 animate-pulse"
+              >
+                <span class="material-symbols-outlined text-white text-xl"
+                  >local_fire_department</span
+                >
+              </div>
+            </div>
+
+            <!-- Week Visualizer -->
+            <div class="flex items-center justify-between gap-2 z-10 mt-2">
+              <div
                 v-for="(day, index) in weekDaysStreak"
                 :key="index"
-                :day="day.label"
-                :completed="day.completed"
-              />
+                class="flex flex-col items-center gap-1.5"
+              >
+                <div
+                  :class="[
+                    'w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all border-2',
+                    day.completed
+                      ? 'bg-orange-600 border-orange-600 text-white shadow-md shadow-orange-600/20 dark:bg-orange-500 dark:border-orange-500'
+                      : 'bg-orange-100/50 dark:bg-orange-900/30 border-orange-300 dark:border-orange-700 text-orange-700 dark:text-orange-300',
+                  ]"
+                >
+                  <span v-if="day.completed" class="material-symbols-outlined text-base"
+                    >check</span
+                  >
+                  <span v-else class="text-[10px]">{{ day.label.charAt(0) }}</span>
+                </div>
+                <span
+                  class="text-[10px] font-bold text-orange-900/80 dark:text-orange-100/80 uppercase"
+                  >{{ day.label }}</span
+                >
+              </div>
             </div>
           </div>
         </div>
@@ -467,8 +516,6 @@
 import MenuNav from '@/components/MenuNav.vue'
 import draggable from 'vuedraggable'
 import CollapsibleCard from '@/components/CollapsibleCard.vue'
-import StreakCard from '@/components/StreakCard.vue'
-import StreakButton from '@/components/StreakButton.vue'
 import BadgeCard from '@/components/BadgeCard.vue'
 import BadgeModal from '@/components/BadgeModal.vue'
 import RankingRow from '@/components/RankingRow.vue'
@@ -480,6 +527,7 @@ import ToastNotification from '@/components/ToastNotification.vue'
 import ModalComponent from '@/components/ModalComponent.vue'
 import FormInput from '@/components/FormInput.vue'
 import { useUserStore } from '@/stores/userStore'
+import Chart from 'chart.js/auto'
 
 export default {
   name: 'ProfileView',
@@ -487,8 +535,6 @@ export default {
     draggable,
     MenuNav,
     CollapsibleCard,
-    StreakCard,
-    StreakButton,
     BadgeCard,
     BadgeModal,
     RankingRow,
@@ -611,6 +657,9 @@ export default {
           xp: 50,
         },
       ],
+
+      // Chart
+      levelChartInstance: null,
     }
   },
   computed: {
@@ -891,6 +940,26 @@ export default {
         console.error('Error loading card order:', e)
       }
     }
+
+    this.$nextTick(() => {
+      this.renderLevelChart()
+    })
+  },
+  mounted() {
+    // Watch for theme changes to update chart colors
+    window
+      .matchMedia('(prefers-color-scheme: dark)')
+      .addEventListener('change', this.renderLevelChart)
+    // Observer for manual theme toggle
+    new MutationObserver(this.renderLevelChart).observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class'],
+    })
+  },
+  beforeUnmount() {
+    if (this.levelChartInstance) {
+      this.levelChartInstance.destroy()
+    }
   },
   methods: {
     showNotification(message, variant = 'success') {
@@ -1063,6 +1132,54 @@ export default {
     },
     loadMoreChallenges() {
       this.displayedChallengesCount += 6
+    },
+
+    renderLevelChart() {
+      if (!this.$refs.levelChart) return
+
+      if (this.levelChartInstance) {
+        this.levelChartInstance.destroy()
+      }
+
+      const ctx = this.$refs.levelChart.getContext('2d')
+      const isDark = document.documentElement.classList.contains('dark')
+
+      // Colors
+      const primaryColor = '#8cb161' // --system-ring
+      const emptyColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
+
+      // Data
+      const current = this.xpInCurrentLevel
+      const remaining = this.xpForNextLevel - current
+
+      this.levelChartInstance = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ['XP Ganho', 'XP Restante'],
+          datasets: [
+            {
+              data: [current, remaining],
+              backgroundColor: [primaryColor, emptyColor],
+              borderWidth: 0,
+              borderRadius: 20, // Rounded ends
+              cutout: '75%', // Thickness of the ring
+              spacing: 5,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: { enabled: false }, // Disable tooltip for cleaner look
+          },
+          animation: {
+            animateScale: true,
+            animateRotate: true,
+          },
+        },
+      })
     },
   },
 }
