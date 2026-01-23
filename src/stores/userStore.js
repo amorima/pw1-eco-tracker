@@ -26,6 +26,10 @@ export const useUserStore = defineStore('userStore', {
     // Household challenges (set by admin)
     householdChallenges: [],
   }),
+  persist: {
+    storage: localStorage,
+    pick: ['currentUser','currentProfile']
+  },
 
   getters: {
     // Check if user is logged in (email/password authenticated)
