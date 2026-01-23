@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col gap-4" ref="chartContainer">
+  <div class="flex flex-col gap-4">
     <div class="flex justify-end">
       <div class="flex bg-(--system-border) rounded-lg p-1 gap-1">
         <button
@@ -26,17 +26,26 @@
         </button>
       </div>
     </div>
-    <div class="w-full h-[300px] relative">
-      <canvas ref="chartCanvas"></canvas>
+    <div class="w-full h-[300px]">
+      <apexchart
+        v-if="chartOptions.series.length > 0"
+        :type="currentChartType"
+        :options="chartOptions"
+        :series="chartSeries"
+        height="100%"
+      />
     </div>
   </div>
 </template>
 
 <script>
-import Chart from 'chart.js/auto'
+import VueApexCharts from 'vue3-apexcharts'
 
 export default {
   name: 'StatisticsChart',
+  components: {
+    apexchart: VueApexCharts,
+  },
   props: {
     data: {
       type: Array,
@@ -57,17 +66,188 @@ export default {
   },
   data() {
     return {
-      chartInstance: null,
       currentChartType: 'bar',
       observer: null,
-      resizeObserver: null,
-      renderTimeout: null,
-      isRendering: false,
-      lastRenderTime: 0,
     }
   },
+  computed: {
+    isDark() {
+      return document.documentElement.classList.contains('dark')
+    },
+    primaryColor() {
+      const color = this.resolveColor('var(--system-ring)')
+      return color && color.startsWith('#') ? color : '#8cb161'
+    },
+    secondaryColor() {
+      if (this.pointsColor) {
+        const color = this.resolveColor(this.pointsColor)
+        if (color && color.startsWith('#')) return color
+      }
+      const color = this.resolveColor('var(--semantic-warning-default)')
+      return color && color.startsWith('#') ? color : '#e89454'
+    },
+    chartSeries() {
+      const series = []
+
+      if (this.showCo2) {
+        series.push({
+          name: 'CO2 Poupado (kg)',
+          data: this.data.map((d) => d.co2Saved),
+        })
+      }
+
+      if (this.showPoints) {
+        series.push({
+          name: 'Pontos',
+          data: this.data.map((d) => d.points),
+        })
+      }
+
+      return series
+    },
+    chartOptions() {
+      const textColor = this.isDark ? '#e7e5e4' : '#57534e'
+      const gridColor = this.isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)'
+      const tooltipBg = this.isDark ? '#292524' : '#ffffff'
+      const borderColor = this.isDark ? '#44403c' : '#e7e5e4'
+
+      const colors = []
+      if (this.showCo2) colors.push(this.primaryColor)
+      if (this.showPoints) colors.push(this.secondaryColor)
+
+      return {
+        series: this.chartSeries,
+        chart: {
+          type: this.currentChartType,
+          toolbar: {
+            show: false,
+          },
+          animations: {
+            enabled: true,
+            speed: 300,
+          },
+          background: 'transparent',
+        },
+        colors: colors,
+        plotOptions: {
+          bar: {
+            borderRadius: 4,
+            columnWidth: '60%',
+          },
+        },
+        dataLabels: {
+          enabled: false,
+        },
+        stroke: {
+          curve: 'smooth',
+          width: this.currentChartType === 'line' ? 3 : 0,
+        },
+        fill: {
+          opacity: this.currentChartType === 'line' ? 0.3 : 1,
+          type: this.currentChartType === 'line' ? 'gradient' : 'solid',
+          gradient: {
+            shade: this.isDark ? 'dark' : 'light',
+            type: 'vertical',
+            opacityFrom: 0.6,
+            opacityTo: 0.2,
+            stops: [0, 90, 100],
+          },
+        },
+        xaxis: {
+          categories: this.data.map((d) => d.label),
+          labels: {
+            style: {
+              colors: textColor,
+            },
+          },
+          axisBorder: {
+            show: false,
+          },
+          axisTicks: {
+            show: false,
+          },
+        },
+        yaxis:
+          this.showCo2 && this.showPoints
+            ? [
+                {
+                  title: {
+                    text: 'CO2 Poupado (kg)',
+                    style: {
+                      color: textColor,
+                    },
+                  },
+                  labels: {
+                    style: {
+                      colors: textColor,
+                    },
+                  },
+                },
+                {
+                  opposite: true,
+                  title: {
+                    text: 'Pontos',
+                    style: {
+                      color: textColor,
+                    },
+                  },
+                  labels: {
+                    style: {
+                      colors: textColor,
+                    },
+                  },
+                },
+              ]
+            : {
+                labels: {
+                  style: {
+                    colors: textColor,
+                  },
+                },
+              },
+        grid: {
+          borderColor: gridColor,
+          strokeDashArray: 0,
+          xaxis: {
+            lines: {
+              show: false,
+            },
+          },
+        },
+        legend: {
+          position: 'bottom',
+          labels: {
+            colors: textColor,
+          },
+        },
+        tooltip: {
+          theme: this.isDark ? 'dark' : 'light',
+          style: {
+            fontSize: '12px',
+          },
+          custom: ({ series, seriesIndex, dataPointIndex, w }) => {
+            const label = w.globals.labels[dataPointIndex]
+            let content = `<div class="apex-tooltip" style="background: ${tooltipBg}; border: 1px solid ${borderColor}; padding: 8px; border-radius: 4px;">`
+            content += `<div style="color: ${textColor}; font-weight: 600; margin-bottom: 4px;">${label}</div>`
+
+            series.forEach((s, i) => {
+              const name = w.globals.seriesNames[i]
+              const value = s[dataPointIndex]
+              const color = w.globals.colors[i]
+              content += `<div style="color: ${textColor}; display: flex; align-items: center; gap: 6px;">`
+              content += `<span style="width: 8px; height: 8px; background: ${color}; border-radius: 50%; display: inline-block;"></span>`
+              content += `<span>${name}: ${value}</span>`
+              content += `</div>`
+            })
+
+            content += `</div>`
+            return content
+          },
+        },
+      }
+    },
+  },
   mounted() {
-    this.renderChart()
     window
       .matchMedia('(prefers-color-scheme: dark)')
       .addEventListener('change', this.handleThemeChange)
@@ -76,28 +256,8 @@ export default {
       attributes: true,
       attributeFilter: ['class'],
     })
-
-    this.resizeObserver = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        if (entry.contentRect.width > 0 && entry.contentRect.height > 0) {
-          if (this.chartInstance) {
-            this.chartInstance.resize()
-          }
-        }
-      }
-    })
-    if (this.$refs.chartContainer) {
-      this.resizeObserver.observe(this.$refs.chartContainer)
-    }
   },
   beforeUnmount() {
-    if (this.renderTimeout) {
-      clearTimeout(this.renderTimeout)
-    }
-    if (this.chartInstance) {
-      this.chartInstance.destroy()
-      this.chartInstance = null
-    }
     window
       .matchMedia('(prefers-color-scheme: dark)')
       .removeEventListener('change', this.handleThemeChange)
@@ -105,28 +265,8 @@ export default {
       this.observer.disconnect()
       this.observer = null
     }
-    if (this.resizeObserver) {
-      this.resizeObserver.disconnect()
-      this.resizeObserver = null
-    }
-  },
-  watch: {
-    data: {
-      handler() {
-        this.renderChart()
-      },
-      deep: true,
-    },
   },
   methods: {
-    handleThemeChange() {
-      if (this.renderTimeout) {
-        clearTimeout(this.renderTimeout)
-      }
-      this.renderTimeout = setTimeout(() => {
-        this.renderChart()
-      }, 100)
-    },
     resolveColor(colorInput) {
       if (!colorInput) return null
       let color = colorInput.trim()
@@ -136,178 +276,12 @@ export default {
       }
       return color
     },
-    hexToRgba(hex, alpha) {
-      if (!hex || !hex.startsWith('#')) return hex
-      let c = hex.substring(1).split('')
-      if (c.length === 3) {
-        c = [c[0], c[0], c[1], c[1], c[2], c[2]]
-      }
-      c = '0x' + c.join('')
-      return 'rgba(' + [(c >> 16) & 255, (c >> 8) & 255, c & 255].join(',') + ',' + alpha + ')'
-    },
     setChartType(type) {
       if (this.currentChartType === type) return
       this.currentChartType = type
-
-      if (this.renderTimeout) {
-        clearTimeout(this.renderTimeout)
-      }
-
-      this.renderTimeout = setTimeout(() => {
-        this.renderChart()
-      }, 150)
     },
-    renderChart() {
-      if (!this.$refs.chartCanvas || this.isRendering) return
-
-      const container = this.$refs.chartContainer
-      if (!container || container.clientWidth === 0) return
-
-      this.isRendering = true
-      const now = Date.now()
-      const timeSinceLastRender = now - this.lastRenderTime
-      const shouldAnimate = timeSinceLastRender > 300
-
-      try {
-        if (this.chartInstance) {
-          this.chartInstance.destroy()
-          this.chartInstance = null
-        }
-
-        const canvas = this.$refs.chartCanvas
-        if (!canvas) {
-          this.isRendering = false
-          return
-        }
-
-        const ctx = canvas.getContext('2d')
-        if (!ctx) {
-          this.isRendering = false
-          return
-        }
-
-        const isDark = document.documentElement.classList.contains('dark')
-
-        const defaultPrimary = '#8cb161'
-        const defaultSecondary = '#e89454'
-
-        let primaryColor = this.resolveColor('var(--system-ring)') || defaultPrimary
-        let secondaryColor =
-          this.resolveColor('var(--semantic-warning-default)') || defaultSecondary
-
-        if (this.pointsColor) {
-          secondaryColor = this.resolveColor(this.pointsColor) || secondaryColor
-        }
-
-        if (!primaryColor.startsWith('#')) primaryColor = defaultPrimary
-        if (!secondaryColor.startsWith('#')) secondaryColor = defaultSecondary
-
-        const gridColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)'
-        const textColor = isDark ? '#e7e5e4' : '#57534e'
-
-        const datasets = []
-
-        if (this.showCo2) {
-          datasets.push({
-            label: 'CO2 Poupado (kg)',
-            data: this.data.map((d) => d.co2Saved),
-            backgroundColor:
-              this.currentChartType === 'line' ? this.hexToRgba(primaryColor, 0.2) : primaryColor,
-            borderColor: primaryColor,
-            borderWidth: 2,
-            borderRadius: 4,
-            tension: 0.4,
-            fill: this.currentChartType === 'line',
-            pointBackgroundColor: isDark ? '#1c1917' : '#fff',
-            yAxisID: 'y',
-          })
-        }
-
-        if (this.showPoints) {
-          datasets.push({
-            label: 'Pontos',
-            data: this.data.map((d) => d.points),
-            backgroundColor:
-              this.currentChartType === 'line'
-                ? this.hexToRgba(secondaryColor, 0.2)
-                : secondaryColor,
-            borderColor: secondaryColor,
-            borderWidth: 2,
-            borderRadius: 4,
-            tension: 0.4,
-            fill: this.currentChartType === 'line',
-            pointBackgroundColor: isDark ? '#1c1917' : '#fff',
-            yAxisID: this.showCo2 ? 'y1' : 'y',
-          })
-        }
-
-        const chartData = {
-          labels: this.data.map((d) => d.label),
-          datasets,
-        }
-
-        const chartOptions = {
-          responsive: true,
-          maintainAspectRatio: false,
-          animation: shouldAnimate
-            ? {
-                duration: 300,
-              }
-            : false,
-          plugins: {
-            legend: {
-              position: 'bottom',
-              labels: { color: textColor },
-            },
-            tooltip: {
-              mode: 'index',
-              intersect: false,
-              backgroundColor: isDark ? '#292524' : '#fff',
-              titleColor: isDark ? '#fff' : '#1c1917',
-              bodyColor: isDark ? '#d6d3d1' : '#57534e',
-              borderColor: isDark ? '#44403c' : '#e7e5e4',
-              borderWidth: 1,
-            },
-          },
-          scales: {
-            y: {
-              beginAtZero: true,
-              grid: { color: gridColor },
-              ticks: { color: textColor },
-              position: 'left',
-              display: true,
-            },
-            y1: {
-              beginAtZero: true,
-              grid: { display: false },
-              ticks: { color: textColor },
-              position: 'right',
-              display: this.showCo2 && this.showPoints,
-            },
-            x: {
-              grid: { display: false },
-              ticks: { color: textColor },
-            },
-          },
-          interaction: {
-            mode: 'nearest',
-            axis: 'x',
-            intersect: false,
-          },
-        }
-
-        this.chartInstance = new Chart(ctx, {
-          type: this.currentChartType,
-          data: chartData,
-          options: chartOptions,
-        })
-
-        this.lastRenderTime = now
-      } catch (error) {
-        console.error('Erro ao renderizar gráfico:', error)
-      } finally {
-        this.isRendering = false
-      }
+    handleThemeChange() {
+      this.$forceUpdate()
     },
   },
 }

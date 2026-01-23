@@ -662,7 +662,7 @@ export const projectInfo = {
     'Integração com API backend real (substituir mock data)',
     'Persistência em LocalStorage / IndexedDB',
     'Sistema de notificações push para resgates e achievements',
-    'Gráficos de estatísticas interativos (chart.js)',
+    'Gráficos de estatísticas interativos (ApexCharts)',
     'Comparação com médias nacionais de consumo',
     'Integração com dispositivos IoT (smart plugs)',
     'Desafios semanais temáticos',
