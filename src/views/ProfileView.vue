@@ -242,14 +242,14 @@
             class="flex-1 bg-(--system-card) border border-(--system-border) p-6 rounded-2xl shadow-sm flex items-center gap-6 relative overflow-hidden transition-all hover:border-(--system-ring)"
           >
             <!-- Chart Container -->
-            <div class="relative w-24 h-24 shrink-0">
+            <div class="relative w-40 h-40 shrink-0">
               <apexchart
                 :key="themeKey"
                 type="radialBar"
                 :options="levelChartOptions"
                 :series="levelChartSeries"
-                width="96"
-                height="96"
+                width="100%"
+                height="100%"
               ></apexchart>
               <!-- Center Text -->
               <div
@@ -852,8 +852,8 @@ export default {
     },
     levelChartOptions() {
       const isDark = document.documentElement.classList.contains('dark')
-      const primaryColor = '#8cb161'
-      const emptyColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
+      const primaryColor = '#86efac' // Pastel Green (Green-300)
+      const secondaryColor = '#4ade80' // Soft Green (Green-400)
 
       return {
         chart: {
@@ -873,18 +873,34 @@ export default {
           sparkline: {
             enabled: true,
           },
+          dropShadow: {
+            enabled: false,
+          },
         },
         colors: [primaryColor],
+        fill: {
+          type: 'gradient',
+          gradient: {
+            shade: 'light',
+            type: 'horizontal',
+            shadeIntensity: 0.3,
+            gradientToColors: [secondaryColor],
+            inverseColors: true,
+            opacityFrom: 1,
+            opacityTo: 1,
+            stops: [0, 100],
+          },
+        },
         plotOptions: {
           radialBar: {
             hollow: {
               margin: 0,
-              size: '60%',
+              size: '45%',
               background: 'transparent',
             },
             track: {
               show: true,
-              background: emptyColor,
+              background: isDark ? '#333333' : '#f3f4f6',
               strokeWidth: '100%',
               margin: 0,
             },
