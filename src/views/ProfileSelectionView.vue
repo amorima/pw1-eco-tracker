@@ -2,11 +2,11 @@
   <div class="min-h-screen bg-(--system-background) relative">
     <!-- Back Arrow -->
     <div
-      class="absolute left-[73px] top-[70px] w-12 h-12 flex items-center justify-center transition-transform"
+      class="absolute left-4 top-4 md:left-[73px] md:top-[70px] w-12 h-12 flex items-center justify-center transition-transform z-10"
     >
       <button
-        @click="$router.push({name:'login'})"
-        class="pointer-events-auto -ml-10 w-12 h-12 rounded-full border-2 border-(--system-ring) bg-(--system-background) flex items-center justify-center text-(--system-ring) hover:bg-(--system-ring) hover:text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+        @click="$router.push({ name: 'login' })"
+        class="pointer-events-auto w-12 h-12 rounded-full border-2 border-(--system-ring) bg-(--system-background) flex items-center justify-center text-(--system-ring) hover:bg-(--system-ring) hover:text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed"
       >
         <span class="material-symbols-outlined text-xl">arrow_back</span>
       </button>
@@ -20,10 +20,10 @@
     </Transition>
 
     <!-- Main Content -->
-    <div class="flex flex-col items-center justify-center min-h-screen py-20">
+    <div class="flex flex-col items-center justify-center min-h-screen py-20 px-4 pb-40">
       <!-- Title -->
       <h1
-        class="text-[48px] font-bold text-(--primary-primary) text-center mb-16"
+        class="text-3xl md:text-5xl font-bold text-(--primary-primary) text-center mb-8 md:mb-16"
         style="font-family: 'Clash Grotesk', sans-serif"
       >
         Selecione o seu perfil
@@ -58,9 +58,7 @@
           Este perfil está protegido por PIN. Introduza o PIN para continuar.
         </p>
         <div>
-          <label class="block text-sm font-medium text-(--text-body-sub-titles) mb-2">
-            PIN
-          </label>
+          <label class="block text-sm font-medium text-(--text-body-sub-titles) mb-2"> PIN </label>
           <FormInput
             v-model="pinInput"
             type="password"
@@ -142,15 +140,18 @@
     </ModalComponent>
 
     <!-- Admin PIN Modal -->
-    <ModalComponent :isOpen="showAdminPinModal" title="PIN de Administrador" size="sm" @close="closeAdminPinModal">
+    <ModalComponent
+      :isOpen="showAdminPinModal"
+      title="PIN de Administrador"
+      size="sm"
+      @close="closeAdminPinModal"
+    >
       <div class="flex flex-col gap-4">
         <p class="text-(--text-body-sub-titles) text-sm">
           Para aceder ao painel de administração, introduza o PIN do administrador.
         </p>
         <div>
-          <label class="block text-sm font-medium text-(--text-body-sub-titles) mb-2">
-            PIN
-          </label>
+          <label class="block text-sm font-medium text-(--text-body-sub-titles) mb-2"> PIN </label>
           <FormInput
             v-model="adminPinInput"
             type="password"
@@ -243,7 +244,7 @@ export default {
     },
     selectProfile(profileId) {
       // Check if profile has PIN protection
-      const profile = this.profiles.find(p => p.id === profileId)
+      const profile = this.profiles.find((p) => p.id === profileId)
       if (profile?.settings?.pin) {
         // Show PIN modal
         this.selectedProfileId = profileId
@@ -267,10 +268,10 @@ export default {
     },
     validateAndSelectProfile() {
       if (!this.selectedProfileId) return
-      
-      const profile = this.profiles.find(p => p.id === this.selectedProfileId)
+
+      const profile = this.profiles.find((p) => p.id === this.selectedProfileId)
       if (!profile?.settings?.pin) return
-      
+
       // Validate PIN
       if (this.pinInput === profile.settings.pin) {
         // PIN correct, select profile
@@ -365,7 +366,7 @@ export default {
     },
     goToAdmin() {
       // Check if admin profile has a PIN
-      const adminProfile = this.profiles.find(p => p.isAdmin)
+      const adminProfile = this.profiles.find((p) => p.isAdmin)
       if (adminProfile?.settings?.pin) {
         // Show PIN modal
         this.adminPinInput = ''
@@ -382,9 +383,9 @@ export default {
       this.adminPinError = ''
     },
     validateAndGoToAdmin() {
-      const adminProfile = this.profiles.find(p => p.isAdmin)
+      const adminProfile = this.profiles.find((p) => p.isAdmin)
       if (!adminProfile?.settings?.pin) return
-      
+
       // Validate PIN
       if (this.adminPinInput === adminProfile.settings.pin) {
         // PIN correct, go to admin
