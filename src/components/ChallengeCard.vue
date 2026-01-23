@@ -54,11 +54,15 @@
     <!-- Footer: Progress & XP -->
     <div class="mt-auto w-full flex items-center justify-between gap-3 pt-2">
       <!-- Progress Bar (if not active) -->
-      <div v-if="!active" class="flex-1 h-2 bg-(--system-popover) rounded-full overflow-hidden">
-        <div
-          class="h-full bg-(--system-ring) rounded-full transition-all duration-500"
-          :style="{ width: `${progress}%` }"
-        ></div>
+      <div v-if="!active" class="flex-1 h-4 relative">
+        <apexchart
+          :key="themeKey"
+          type="bar"
+          :options="chartOptions"
+          :series="chartSeries"
+          height="100%"
+          width="100%"
+        />
       </div>
       <div v-else class="flex-1 flex items-center gap-1 text-white/90 text-xs font-medium">
         <span class="material-symbols-outlined text-sm">check_circle</span>
@@ -98,11 +102,15 @@
               <span>Progresso</span>
               <span>{{ Math.round(progress) }}%</span>
             </div>
-            <div class="w-full h-4 bg-(--system-border) rounded-full overflow-hidden">
-              <div
-                class="h-full bg-(--system-ring) transition-all duration-500"
-                :style="{ width: `${progress}%` }"
-              ></div>
+            <div class="w-full h-4 relative">
+              <apexchart
+                :key="themeKey"
+                type="bar"
+                :options="chartOptions"
+                :series="chartSeries"
+                height="100%"
+                width="100%"
+              />
             </div>
           </div>
         </div>
@@ -113,11 +121,13 @@
 
 <script>
 import ModalComponent from '@/components/ModalComponent.vue'
+import VueApexCharts from 'vue3-apexcharts'
 
 export default {
   name: 'ChallengeCard',
   components: {
     ModalComponent,
+    apexchart: VueApexCharts,
   },
   props: {
     title: {
@@ -149,9 +159,95 @@ export default {
   data() {
     return {
       showModal: false,
+      themeKey: 0,
+      observer: null,
     }
   },
+  computed: {
+    chartSeries() {
+      // Single series for progress, background handled by plotOptions
+      return [
+        {
+          name: 'Progresso',
+          data: [this.progress > 100 ? 100 : this.progress],
+        },
+      ]
+    },
+    chartOptions() {
+      const isDark = document.documentElement.classList.contains('dark')
+      const primaryColor = '#8cb161' // --system-ring
+      const backgroundColor = isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'
+
+      return {
+        chart: {
+          type: 'bar',
+          stacked: false, // Desativa empilhamento para usar o backgroundBar
+          sparkline: {
+            enabled: true,
+          },
+          animations: {
+            enabled: true,
+            easing: 'easeinout',
+            speed: 800,
+            animateGradually: {
+              enabled: true,
+              delay: 150,
+            },
+            dynamicAnimation: {
+              enabled: true,
+              speed: 350,
+            },
+          },
+        },
+        plotOptions: {
+          bar: {
+            horizontal: true,
+            borderRadius: 5,
+            barHeight: '100%',
+            colors: {
+              backgroundBarColors: [backgroundColor],
+              backgroundBarRadius: 5,
+            },
+          },
+        },
+        colors: [primaryColor],
+        xaxis: {
+          min: 0,
+          max: 100, // Escala fixa 0-100
+        },
+        tooltip: {
+          enabled: false,
+        },
+        states: {
+          hover: {
+            filter: { type: 'none' },
+          },
+          active: {
+            filter: { type: 'none' },
+          },
+        },
+        stroke: {
+          width: 0,
+        },
+      }
+    },
+  },
+  mounted() {
+    this.updateTheme()
+    // Observar mudanças de tema (classe dark no html)
+    this.observer = new MutationObserver(this.updateTheme)
+    this.observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class'],
+    })
+  },
+  beforeUnmount() {
+    if (this.observer) this.observer.disconnect()
+  },
   methods: {
+    updateTheme() {
+      this.themeKey += 1
+    },
     openDetails() {
       this.showModal = true
     },
