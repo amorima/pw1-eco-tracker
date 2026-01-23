@@ -96,17 +96,9 @@ export const useUserStore = defineStore('userStore', {
       return Math.floor(xp / 100) + 1
     },
     
-    // Calculate points from activity history
+    // Get current profile's points (stored value)
     currentProfilePoints: (state) => {
-      const activities = state.currentProfile?.activity_history || []
-      const redeemed = state.currentProfile?.rewards_history || []
-      
-      const earned = activities.reduce((sum, a) => sum + (a.pointsEarned || 0), 0)
-      const spent = redeemed
-        .filter(r => r.status !== 'cancelado')
-        .reduce((sum, r) => sum + (r.points_cost || 0), 0)
-      
-      return earned - spent
+      return state.currentProfile?.points || 0
     },
     
     // Calculate total CO2 saved from activity history
@@ -130,17 +122,9 @@ export const useUserStore = defineStore('userStore', {
       if (!state.currentUser?.profiles) return []
       
       const profilesWithPoints = state.currentUser.profiles.map(profile => {
-        const activities = profile.activity_history || []
-        const redeemed = profile.rewards_history || []
-        
-        const earned = activities.reduce((sum, a) => sum + (a.pointsEarned || 0), 0)
-        const spent = redeemed
-          .filter(r => r.status !== 'cancelado')
-          .reduce((sum, r) => sum + (r.points_cost || 0), 0)
-        
         return {
           ...profile,
-          points: earned - spent,
+          points: profile.points || 0,
           level: Math.floor((profile.xp || 0) / 100) + 1,
           avatar: profile.avatarUrl,
         }
@@ -160,17 +144,9 @@ export const useUserStore = defineStore('userStore', {
       state.users.forEach((user) => {
         if (user.profiles) {
           user.profiles.forEach((profile) => {
-            const activities = profile.activity_history || []
-            const redeemed = profile.rewards_history || []
-            
-            const earned = activities.reduce((sum, a) => sum + (a.pointsEarned || 0), 0)
-            const spent = redeemed
-              .filter(r => r.status !== 'cancelado')
-              .reduce((sum, r) => sum + (r.points_cost || 0), 0)
-            
             allProfiles.push({
               ...profile,
-              points: earned - spent,
+              points: profile.points || 0,
               level: Math.floor((profile.xp || 0) / 100) + 1,
               avatar: profile.avatarUrl,
               userEmail: user.email,
@@ -488,6 +464,7 @@ export const useUserStore = defineStore('userStore', {
         birthDate: null,
         createdAt: new Date().toISOString(),
         xp: 0,
+        points: 0,
         streak: 0,
         settings: {
           pin: setupData.adminProfile.pin || null,
@@ -571,6 +548,7 @@ export const useUserStore = defineStore('userStore', {
         birthDate: null,
         createdAt: new Date().toISOString(),
         xp: 0,
+        points: 0,
         streak: 0,
         settings: {
           pin: profileData.pin || null,
@@ -712,6 +690,7 @@ export const useUserStore = defineStore('userStore', {
       
       this.currentProfile.activity_history.push(activity)
       this.currentProfile.xp = (this.currentProfile.xp || 0) + task.points
+      this.currentProfile.points = (this.currentProfile.points || 0) + task.points
 
       const newLevel = Math.floor(this.currentProfile.xp / 100) + 1
       const oldLevel = Math.floor((this.currentProfile.xp - task.points) / 100) + 1
@@ -779,6 +758,9 @@ export const useUserStore = defineStore('userStore', {
         this.currentProfile.rewards_history = []
       }
       this.currentProfile.rewards_history.push(redemption)
+      
+      // Subtract points for the reward
+      this.currentProfile.points = (this.currentProfile.points || 0) - reward.points_cost
 
       const profileIndex = this.currentUser.profiles.findIndex(
         (p) => String(p.id) === String(this.currentProfile.id),
@@ -836,6 +818,9 @@ export const useUserStore = defineStore('userStore', {
       const profilesBackup = JSON.parse(JSON.stringify(this.currentUser.profiles))
 
       targetProfile.rewards_history[rewardIndex].status = 'cancelado'
+      
+      // Return points to the profile
+      targetProfile.points = (targetProfile.points || 0) + reward.points_cost
 
       if (String(this.currentProfile?.id) === String(profileId)) {
         this.currentProfile = targetProfile

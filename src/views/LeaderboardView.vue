@@ -30,7 +30,7 @@
           </div>
           <div class="flex-1">
             <h2 class="text-2xl font-bold text-gray-800">{{ currentProfile?.name }}</h2>
-            <p class="text-gray-600">{{ currentProfile?.points }} points · Level {{ currentProfile?.level }}</p>
+            <p class="text-gray-600">{{ currentProfile?.points }} points · Level {{ userStore.currentProfileLevel }}</p>
           </div>
           <div class="text-right">
             <div class="flex items-center gap-1 text-emerald-600">
