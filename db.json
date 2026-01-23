@@ -466,11 +466,11 @@
           "avatar": "https://i.pravatar.cc/150?img=49",
           "isAdmin": true,
           "createdAt": "2026-01-05T22:45:12.355Z",
-          "points": 0,
-          "co2Saved": 0,
+          "points": 55,
+          "co2Saved": 10.5,
           "level": 1,
-          "xp": 0,
-          "streak": 0,
+          "xp": 80,
+          "streak": 1,
           "settings": {
             "pin": null,
             "notifications": true,
@@ -478,8 +478,35 @@
             "language": "pt",
             "theme": "light"
           },
-          "activityHistory": [],
-          "applianceUsage": [],
+          "activityHistory": [
+            {
+              "id": 1769121468136,
+              "taskId": "1",
+              "completedAt": "2026-01-22T22:37:48.136Z",
+              "pointsEarned": 20,
+              "co2Saved": 10
+            },
+            {
+              "id": 1769121471274,
+              "taskId": "3",
+              "completedAt": "2026-01-22T22:37:51.274Z",
+              "pointsEarned": 10,
+              "co2Saved": 0.5
+            }
+          ],
+          "applianceUsage": [
+            {
+              "id": 1769121461980,
+              "applianceId": "1",
+              "date": "2026-01-22",
+              "hoursUsed": 10,
+              "type": "electricity",
+              "energyConsumed": 1.5,
+              "co2Emitted": 0.28200000000000003,
+              "minutes": 600,
+              "device_power_watts": 150
+            }
+          ],
           "rewardsRedeemed": [],
           "badges": [
             {
@@ -488,8 +515,16 @@
               "icon": "star",
               "earnedAt": "2026-01-05T22:45:12.355Z",
               "description": "Primeiro perfil criado"
+            },
+            {
+              "id": "eco_warrior",
+              "title": "Eco Warrior",
+              "icon": "eco",
+              "earnedAt": "2026-01-22T22:37:48.141Z",
+              "description": "Poupou 10kg de CO2"
             }
-          ]
+          ],
+          "lastActivityDate": "2026-01-22"
         }
       ]
     },

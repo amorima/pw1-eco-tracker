@@ -61,29 +61,58 @@
           v-model="cardOpenStates.analysis"
         >
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
+            <!-- CO2 Card -->
             <div
-              class="bg-(--system-card) border-2 border-(--system-border) rounded-[10px] p-4 flex flex-col gap-4 text-(--text-body-sub-titles)"
+              class="bg-(--system-card) border border-(--system-border) rounded-xl p-6 flex items-center gap-4 transition-all hover:border-(--system-ring)"
             >
-              <p class="font-normal text-base">CO2 Evitado</p>
-              <p class="font-semibold text-4xl">{{ householdStats.totalCo2.toFixed(1) }} kg</p>
+              <div
+                class="w-12 h-12 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-green-600 dark:text-green-400 shrink-0"
+              >
+                <span class="material-symbols-outlined text-2xl">eco</span>
+              </div>
+              <div>
+                <p class="text-sm text-(--text-body-sub-titles) font-medium">CO2 Evitado</p>
+                <p class="text-2xl font-bold text-(--text-body-titles)">
+                  {{ householdStats.totalCo2.toFixed(1) }}
+                  <span class="text-sm font-normal text-(--text-body-sub-titles)">kg</span>
+                </p>
+              </div>
             </div>
 
+            <!-- Consumption Card -->
             <div
-              class="bg-(--system-card) border-2 border-(--system-border) rounded-[10px] p-4 flex flex-col gap-4 text-(--text-body-sub-titles)"
+              class="bg-(--system-card) border border-(--system-border) rounded-xl p-6 flex items-center gap-4 transition-all hover:border-(--system-ring)"
             >
-              <p class="font-normal text-base">Consumo mensal total</p>
-              <p class="font-semibold text-4xl">
-                {{ householdStats.totalConsumption.toFixed(0) }} kWh
-              </p>
+              <div
+                class="w-12 h-12 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center text-orange-600 dark:text-orange-400 shrink-0"
+              >
+                <span class="material-symbols-outlined text-2xl">bolt</span>
+              </div>
+              <div>
+                <p class="text-sm text-(--text-body-sub-titles) font-medium">Consumo Total</p>
+                <p class="text-2xl font-bold text-(--text-body-titles)">
+                  {{ householdStats.totalConsumption.toFixed(0) }}
+                  <span class="text-sm font-normal text-(--text-body-sub-titles)">kWh</span>
+                </p>
+              </div>
             </div>
 
+            <!-- Average Card -->
             <div
-              class="bg-(--system-card) border-2 border-(--system-border) rounded-[10px] p-4 flex flex-col gap-4 flex-1 text-(--text-body-sub-titles)"
+              class="bg-(--system-card) border border-(--system-border) rounded-xl p-6 flex items-center gap-4 transition-all hover:border-(--system-ring)"
             >
-              <p class="font-normal text-base">Consumo médio por membro</p>
-              <p class="font-semibold text-4xl">
-                {{ householdStats.avgConsumptionPerMember.toFixed(2) }} kWh/membro
-              </p>
+              <div
+                class="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400 shrink-0"
+              >
+                <span class="material-symbols-outlined text-2xl">group</span>
+              </div>
+              <div>
+                <p class="text-sm text-(--text-body-sub-titles) font-medium">Média por Membro</p>
+                <p class="text-2xl font-bold text-(--text-body-titles)">
+                  {{ householdStats.avgConsumptionPerMember.toFixed(1) }}
+                  <span class="text-sm font-normal text-(--text-body-sub-titles)">kWh</span>
+                </p>
+              </div>
             </div>
           </div>
         </CollapsibleCard>
@@ -93,14 +122,7 @@
           title="Consumos de energia diários"
           v-model="cardOpenStates.consumption"
         >
-          <StatisticsChart
-            v-if="dailyStats"
-            :data="dailyStats.last7Days"
-            :totalCo2="dailyStats.totalCo2Saved"
-            :totalPoints="dailyStats.totalPoints"
-            :totalTasks="dailyStats.totalTasks"
-            :streak="dailyStats.streak"
-          />
+          <StatisticsChart v-if="dailyStats" :data="dailyStats.last7Days" />
           <div
             v-else
             class="h-[259px] w-full flex items-center justify-center bg-(--system-input-background) rounded-lg"
@@ -515,9 +537,9 @@ import ConfirmModal from '@/components/ConfirmModal.vue'
 import ProfileEditModal from '@/components/ProfileEditModal.vue'
 import RewardEditModal from '@/components/RewardEditModal.vue'
 import ItemEditModal from '@/components/ItemEditModal.vue'
-import StatisticsChart from '@/components/StatisticsChart.vue'
 import ChallengeCard from '@/components/ChallengeCard.vue'
 import ModalComponent from '@/components/ModalComponent.vue'
+import StatisticsChart from '@/components/StatisticsChart.vue'
 
 export default {
   name: 'AdminDashboardView',
@@ -535,9 +557,9 @@ export default {
     ProfileEditModal,
     RewardEditModal,
     ItemEditModal,
-    StatisticsChart,
     ChallengeCard,
     ModalComponent,
+    StatisticsChart,
   },
   data() {
     return {

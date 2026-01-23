@@ -117,97 +117,214 @@
       <div class="w-full max-w-[930px] space-y-6">
         <!-- Profile Header -->
         <div
-          class="bg-(--system-card) border-2 border-(--system-border) flex flex-col md:flex-row gap-6 items-center p-6 rounded-[14px] w-full shadow-sm"
+          class="relative w-full overflow-hidden bg-(--system-card) border border-(--system-border) rounded-3xl shadow-sm transition-all hover:shadow-md group"
         >
+          <!-- Decorative Background Pattern -->
           <div
-            class="border-2 border-(--system-border) overflow-hidden rounded-full w-24 h-24 md:w-32 md:h-32 shrink-0"
+            :class="[
+              'absolute top-0 left-0 w-full h-32 transition-colors duration-500',
+              currentBackgroundClass,
+            ]"
           >
-            <img
-              :src="
-                currentProfile?.avatar || 'https://api.dicebear.com/7.x/avataaars/svg?seed=User'
+            <div
+              class="absolute inset-0 opacity-10"
+              style="
+                background-image: radial-gradient(var(--system-ring) 1px, transparent 1px);
+                background-size: 20px 20px;
               "
-              alt="User avatar"
-              class="w-full h-full object-cover"
-            />
+            ></div>
           </div>
 
-          <div class="w-full grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
-            <div
-              class="flex flex-col sm:flex-row items-center sm:items-baseline gap-2 text-center sm:text-left"
-            >
-              <span class="text-sm text-(--text-body-sub-titles) font-medium"> Nome: </span>
-              <span class="text-base md:text-lg text-(--text-body) font-semibold truncate">
-                {{ currentProfile?.name || 'Utilizador' }}
-              </span>
-            </div>
-            <div
-              class="flex flex-col sm:flex-row items-center sm:items-baseline gap-2 text-center sm:text-left"
-            >
-              <span class="text-sm text-(--text-body-sub-titles) font-medium"> País: </span>
-              <span class="text-base md:text-lg text-(--text-body) font-semibold"> Portugal </span>
-            </div>
-            <div
-              class="flex flex-col sm:flex-row items-center sm:items-baseline gap-2 text-center sm:text-left"
-            >
-              <span class="text-sm text-(--text-body-sub-titles) font-medium"> Contacto: </span>
-              <span
-                class="text-base md:text-lg text-(--text-body) font-semibold truncate max-w-[200px] sm:max-w-none"
+          <div
+            class="relative px-6 pb-8 pt-16 md:px-10 md:pt-20 flex flex-col md:flex-row items-center md:items-center gap-6"
+          >
+            <!-- Avatar Section -->
+            <div class="relative shrink-0">
+              <div
+                class="w-32 h-32 md:w-40 md:h-40 rounded-full border-[6px] border-(--system-card) shadow-xl overflow-hidden bg-(--system-background)"
               >
-                {{ userStore.currentUser?.email || 'email@example.com' }}
-              </span>
+                <img
+                  :src="
+                    currentProfile?.avatar || 'https://api.dicebear.com/7.x/avataaars/svg?seed=User'
+                  "
+                  alt="User avatar"
+                  class="w-full h-full object-cover"
+                />
+              </div>
             </div>
-            <div
-              class="flex flex-col sm:flex-row items-center sm:items-baseline gap-2 text-center sm:text-left"
-            >
-              <span class="text-sm text-(--text-body-sub-titles) font-medium"> Idade: </span>
-              <span class="text-base md:text-lg text-(--text-body) font-semibold">
-                {{ currentProfile?.age || '-' }}
-              </span>
+
+            <!-- User Info Section -->
+            <div class="flex-1 text-center md:text-left pb-2 w-full">
+              <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                  <h2
+                    class="text-3xl md:text-4xl font-bold text-(--text-body-titles) mb-1 tracking-tight"
+                  >
+                    {{ currentProfile?.name || 'Utilizador' }}
+                  </h2>
+                  <p
+                    class="text-(--system-ring) font-medium mb-4 flex items-center justify-center md:justify-start gap-2"
+                  >
+                    <span class="material-symbols-outlined text-xl">verified</span>
+                    {{ getProfileTitle(currentProfile?.level || 1) }}
+                  </p>
+                </div>
+
+                <!-- Gamification Stats (Mini) -->
+                <div class="flex gap-4 justify-center md:justify-end">
+                  <div
+                    class="flex flex-col items-center justify-center bg-(--system-background) border border-(--system-border) rounded-2xl px-5 py-2 shadow-sm min-w-[90px]"
+                  >
+                    <span
+                      class="text-[10px] text-(--text-body-sub-titles) uppercase font-bold tracking-wider"
+                      >Rank</span
+                    >
+                    <div class="flex items-center gap-1 text-(--text-body-titles)">
+                      <span class="material-symbols-outlined text-base text-yellow-500"
+                        >trophy</span
+                      >
+                      <span class="text-xl font-black">#{{ getUserRank(currentProfile?.id) }}</span>
+                    </div>
+                  </div>
+                  <div
+                    class="flex flex-col items-center justify-center bg-(--system-background) border border-(--system-border) rounded-2xl px-5 py-2 shadow-sm min-w-[90px]"
+                  >
+                    <span
+                      class="text-[10px] text-(--text-body-sub-titles) uppercase font-bold tracking-wider"
+                      >Pontos</span
+                    >
+                    <div class="flex items-center gap-1 text-(--text-body-titles)">
+                      <span class="material-symbols-outlined text-base text-orange-500">bolt</span>
+                      <span class="text-xl font-black">{{ currentProfile?.points || 0 }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Details Chips -->
+              <div class="flex flex-wrap justify-center md:justify-start gap-3 mt-4">
+                <div
+                  class="flex items-center gap-2 bg-(--system-background) px-4 py-2 rounded-xl border border-(--system-border) text-sm font-medium text-(--text-body-sub-titles)"
+                >
+                  <span class="material-symbols-outlined text-lg text-blue-500">public</span>
+                  Portugal
+                </div>
+                <div
+                  class="flex items-center gap-2 bg-(--system-background) px-4 py-2 rounded-xl border border-(--system-border) text-sm font-medium text-(--text-body-sub-titles)"
+                >
+                  <span class="material-symbols-outlined text-lg text-orange-500">mail</span>
+                  {{ userStore.currentUser?.email || 'email@example.com' }}
+                </div>
+                <div
+                  class="flex items-center gap-2 bg-(--system-background) px-4 py-2 rounded-xl border border-(--system-border) text-sm font-medium text-(--text-body-sub-titles)"
+                >
+                  <span class="material-symbols-outlined text-lg text-purple-500">cake</span>
+                  {{ currentProfile?.age || '-' }} anos
+                </div>
+              </div>
             </div>
           </div>
+
+          <!-- Settings Button (Absolute) -->
+          <button
+            @click="scrollToSettings"
+            class="absolute top-4 right-4 p-2 text-(--text-body-sub-titles) hover:text-(--system-ring) hover:bg-(--system-background) rounded-full transition-all z-10"
+            title="Configurações"
+          >
+            <span class="material-symbols-outlined">settings</span>
+          </button>
         </div>
 
         <!-- Level & Streak Cards -->
         <div class="flex flex-col md:flex-row gap-6 w-full">
           <!-- Level Card -->
           <div
-            class="flex-1 bg-(--system-card) border-2 border-(--system-border) p-6 rounded-[14px] shadow-sm flex flex-col justify-between gap-4"
+            class="flex-1 bg-(--system-card) border border-(--system-border) p-6 rounded-2xl shadow-sm flex items-center gap-6 relative overflow-hidden transition-all hover:border-(--system-ring)"
           >
-            <div class="flex items-center justify-between">
-              <span class="text-lg font-bold text-(--text-body-titles)"
-                >Nível {{ currentProfile?.level || 1 }}</span
+            <!-- Chart Container -->
+            <div class="relative w-24 h-24 shrink-0">
+              <canvas ref="levelChart"></canvas>
+              <!-- Center Text -->
+              <div
+                class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none"
               >
-              <span class="text-sm text-(--text-body-sub-titles)"
-                >{{ xpInCurrentLevel }}/{{ xpForNextLevel }} xp</span
-              >
-            </div>
-            <div class="w-full">
-              <div class="bg-(--system-popover) h-3 rounded-full overflow-hidden w-full">
-                <div
-                  class="bg-(--system-ring) h-full rounded-full transition-all duration-500"
-                  :style="{ width: `${xpPercentage}%` }"
-                ></div>
+                <span class="text-xs text-(--text-body-sub-titles) font-medium uppercase"
+                  >Nível</span
+                >
+                <span class="text-2xl font-bold text-(--text-body-titles) leading-none">{{
+                  currentProfile?.level || 1
+                }}</span>
               </div>
+            </div>
+
+            <!-- Text Info -->
+            <div class="flex flex-col gap-1 z-10">
+              <h3 class="text-lg font-bold text-(--text-body-titles)">Progresso</h3>
+              <p class="text-sm text-(--text-body-sub-titles)">
+                <span class="font-semibold text-(--system-ring)">{{ xpInCurrentLevel }} XP</span>
+                ganhos de {{ xpForNextLevel }} XP
+              </p>
+              <p class="text-xs text-(--text-disabled) mt-1">
+                Complete mais tarefas para subir de nível!
+              </p>
             </div>
           </div>
 
           <!-- Streak Card -->
           <div
-            class="flex-1 bg-(--system-card) border-2 border-(--system-border) p-6 rounded-[14px] shadow-sm flex flex-col gap-4"
+            class="flex-1 bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-950 dark:to-orange-900 border border-orange-200 dark:border-orange-800 p-6 rounded-2xl shadow-sm flex flex-col justify-between gap-4 relative overflow-hidden"
           >
-            <div class="flex items-center justify-between">
-              <span class="text-lg font-bold text-(--text-body-titles)"> Streak </span>
-              <StreakCard :days="currentProfile?.streak || 0" />
+            <!-- Background Decoration -->
+            <div class="absolute -right-4 -top-4 text-orange-500/10 dark:text-orange-500/5">
+              <span class="material-symbols-outlined text-[120px]">local_fire_department</span>
             </div>
-            <div
-              class="flex items-center justify-between gap-2 overflow-x-auto pb-2 scrollbar-hide"
-            >
-              <StreakButton
+
+            <div class="flex items-start justify-between z-10">
+              <div>
+                <h3 class="text-lg font-bold text-orange-950 dark:text-orange-50">Sequência</h3>
+                <div class="flex items-baseline gap-1">
+                  <span
+                    class="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-red-600 dark:from-orange-400 dark:to-orange-600"
+                  >
+                    {{ currentProfile?.streak || 0 }}
+                  </span>
+                  <span class="text-sm font-medium text-orange-800 dark:text-orange-200">dias</span>
+                </div>
+              </div>
+              <div
+                class="w-10 h-10 rounded-full bg-orange-600 dark:bg-orange-500 flex items-center justify-center shadow-lg shadow-orange-600/30 animate-pulse"
+              >
+                <span class="material-symbols-outlined text-white text-xl"
+                  >local_fire_department</span
+                >
+              </div>
+            </div>
+
+            <!-- Week Visualizer -->
+            <div class="flex items-center justify-between gap-2 z-10 mt-2">
+              <div
                 v-for="(day, index) in weekDaysStreak"
                 :key="index"
-                :day="day.label"
-                :completed="day.completed"
-              />
+                class="flex flex-col items-center gap-1.5"
+              >
+                <div
+                  :class="[
+                    'w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all border-2',
+                    day.completed
+                      ? 'bg-orange-600 border-orange-600 text-white shadow-md shadow-orange-600/20 dark:bg-orange-500 dark:border-orange-500'
+                      : 'bg-orange-100/50 dark:bg-orange-900/30 border-orange-300 dark:border-orange-700 text-orange-700 dark:text-orange-300',
+                  ]"
+                >
+                  <span v-if="day.completed" class="material-symbols-outlined text-base"
+                    >check</span
+                  >
+                  <span v-else class="text-[10px]">{{ day.label.charAt(0) }}</span>
+                </div>
+                <span
+                  class="text-[10px] font-bold text-orange-900/80 dark:text-orange-100/80 uppercase"
+                  >{{ day.label }}</span
+                >
+              </div>
             </div>
           </div>
         </div>
@@ -424,6 +541,7 @@
 
               <CollapsibleCard
                 v-else-if="element === 'settings'"
+                id="card-settings"
                 title="Configurações"
                 icon="apps"
                 v-model="cardOpenStates.settings"
@@ -451,6 +569,43 @@
                     </div>
                   </div>
                 </div>
+
+                <!-- Background Customization -->
+                <div class="mt-6 border-t border-(--system-border) pt-6">
+                  <h3 class="font-semibold text-base text-(--text-body) mb-4">
+                    Personalização do Fundo
+                  </h3>
+                  <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                    <button
+                      v-for="bg in availableBackgrounds"
+                      :key="bg.id"
+                      @click="selectBackground(bg)"
+                      :class="[
+                        'h-16 rounded-xl border-2 transition-all relative overflow-hidden group',
+                        currentProfile?.settings?.headerBackground === bg.id
+                          ? 'border-(--system-ring) ring-2 ring-(--system-ring) ring-offset-2'
+                          : 'border-transparent hover:border-(--system-border)',
+                        bg.isLocked ? 'opacity-70 cursor-not-allowed' : 'cursor-pointer',
+                      ]"
+                      :title="bg.isLocked ? bg.hint : bg.name"
+                    >
+                      <div :class="['absolute inset-0', bg.class]"></div>
+                      <div
+                        v-if="bg.isLocked"
+                        class="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/30 transition-colors"
+                      >
+                        <span class="material-symbols-outlined text-white drop-shadow-md"
+                          >lock</span
+                        >
+                      </div>
+                      <span
+                        class="absolute bottom-1 left-2 text-[10px] font-bold text-(--text-body-titles) bg-white/80 px-1.5 py-0.5 rounded-md backdrop-blur-sm shadow-sm"
+                      >
+                        {{ bg.name }}
+                      </span>
+                    </button>
+                  </div>
+                </div>
               </CollapsibleCard>
             </div>
           </template>
@@ -467,8 +622,6 @@
 import MenuNav from '@/components/MenuNav.vue'
 import draggable from 'vuedraggable'
 import CollapsibleCard from '@/components/CollapsibleCard.vue'
-import StreakCard from '@/components/StreakCard.vue'
-import StreakButton from '@/components/StreakButton.vue'
 import BadgeCard from '@/components/BadgeCard.vue'
 import BadgeModal from '@/components/BadgeModal.vue'
 import RankingRow from '@/components/RankingRow.vue'
@@ -480,6 +633,7 @@ import ToastNotification from '@/components/ToastNotification.vue'
 import ModalComponent from '@/components/ModalComponent.vue'
 import FormInput from '@/components/FormInput.vue'
 import { useUserStore } from '@/stores/userStore'
+import Chart from 'chart.js/auto'
 
 export default {
   name: 'ProfileView',
@@ -487,8 +641,6 @@ export default {
     draggable,
     MenuNav,
     CollapsibleCard,
-    StreakCard,
-    StreakButton,
     BadgeCard,
     BadgeModal,
     RankingRow,
@@ -611,6 +763,57 @@ export default {
           xp: 50,
         },
       ],
+
+      // Header Backgrounds
+      headerBackgrounds: [
+        {
+          id: 'default',
+          name: 'Aurora',
+          class:
+            'bg-gradient-to-r from-green-100 to-blue-100 dark:from-green-900/20 dark:to-blue-900/20',
+          locked: false,
+        },
+        {
+          id: 'sunset',
+          name: 'Sunset',
+          class:
+            'bg-gradient-to-r from-orange-100 to-rose-100 dark:from-orange-900/20 dark:to-rose-900/20',
+          locked: false,
+        },
+        {
+          id: 'ocean',
+          name: 'Ocean',
+          class:
+            'bg-gradient-to-r from-cyan-100 to-blue-100 dark:from-cyan-900/20 dark:to-blue-900/20',
+          locked: false,
+        },
+        {
+          id: 'lavender',
+          name: 'Lavender',
+          class:
+            'bg-gradient-to-r from-purple-100 to-indigo-100 dark:from-purple-900/20 dark:to-indigo-900/20',
+          locked: false,
+        },
+        {
+          id: 'gold',
+          name: 'Gold',
+          class:
+            'bg-gradient-to-r from-yellow-100 to-amber-100 dark:from-yellow-900/20 dark:to-amber-900/20',
+          badgeId: 'early_adopter',
+          hint: 'Desbloqueie o badge "Early Adopter"',
+        },
+        {
+          id: 'fire',
+          name: 'Fire',
+          class:
+            'bg-gradient-to-r from-red-100 to-orange-100 dark:from-red-900/20 dark:to-orange-900/20',
+          badgeId: 'eco_warrior',
+          hint: 'Desbloqueie o badge "Eco Warrior"',
+        },
+      ],
+
+      // Chart
+      levelChartInstance: null,
     }
   },
   computed: {
@@ -638,6 +841,17 @@ export default {
     },
     xpPercentage() {
       return (this.xpInCurrentLevel / this.xpForNextLevel) * 100
+    },
+    currentBackgroundClass() {
+      const bgId = this.currentProfile?.settings?.headerBackground || 'default'
+      const bg = this.headerBackgrounds.find((b) => b.id === bgId)
+      return bg ? bg.class : this.headerBackgrounds[0].class
+    },
+    availableBackgrounds() {
+      return this.headerBackgrounds.map((bg) => {
+        const isLocked = bg.badgeId ? !this.hasBadge(bg.badgeId) : false
+        return { ...bg, isLocked }
+      })
     },
     availableRewards() {
       return this.userStore.householdRewards || []
@@ -891,6 +1105,26 @@ export default {
         console.error('Error loading card order:', e)
       }
     }
+
+    this.$nextTick(() => {
+      this.renderLevelChart()
+    })
+  },
+  mounted() {
+    // Watch for theme changes to update chart colors
+    window
+      .matchMedia('(prefers-color-scheme: dark)')
+      .addEventListener('change', this.renderLevelChart)
+    // Observer for manual theme toggle
+    new MutationObserver(this.renderLevelChart).observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class'],
+    })
+  },
+  beforeUnmount() {
+    if (this.levelChartInstance) {
+      this.levelChartInstance.destroy()
+    }
   },
   methods: {
     showNotification(message, variant = 'success') {
@@ -921,6 +1155,10 @@ export default {
       const reward = this.availableRewards.find((r) => String(r.id) === String(rewardId))
       return reward?.image || 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=400'
     },
+    hasBadge(badgeId) {
+      const badge = this.allBadgesWithStatus.find((b) => b.id === badgeId)
+      return badge ? badge.earned : false
+    },
     async saveSettings() {
       if (!this.currentProfile) return
 
@@ -940,12 +1178,27 @@ export default {
         pin: this.localSettings.privateProfile ? this.currentProfile.settings?.pin || null : null,
         notifications: this.localSettings.notifications,
         defaultDevice: this.localSettings.keepSession,
+        headerBackground: this.currentProfile.settings?.headerBackground || 'default',
       }
 
       const result = await this.userStore.updateProfileSettings(this.currentProfile.id, settings)
       if (!result.success) {
         this.showNotification('Erro ao guardar configurações', 'error')
       }
+    },
+    async selectBackground(bg) {
+      if (bg.isLocked) {
+        this.showNotification(bg.hint || 'Fundo bloqueado', 'error')
+        return
+      }
+
+      const settings = {
+        ...this.currentProfile.settings,
+        headerBackground: bg.id,
+      }
+
+      await this.userStore.updateProfileSettings(this.currentProfile.id, settings)
+      this.showNotification(`Fundo "${bg.name}" aplicado!`)
     },
     cancelPinSetup() {
       this.pinInput = ''
@@ -976,6 +1229,7 @@ export default {
         pin: null,
         notifications: this.localSettings.notifications,
         defaultDevice: this.localSettings.keepSession,
+        headerBackground: this.currentProfile.settings?.headerBackground || 'default',
       }
 
       const result = await this.userStore.updateProfileSettings(this.currentProfile.id, settings)
@@ -1002,6 +1256,7 @@ export default {
         pin: this.pinInput,
         notifications: this.localSettings.notifications,
         defaultDevice: this.localSettings.keepSession,
+        headerBackground: this.currentProfile.settings?.headerBackground || 'default',
       }
 
       const result = await this.userStore.updateProfileSettings(this.currentProfile.id, settings)
@@ -1063,6 +1318,75 @@ export default {
     },
     loadMoreChallenges() {
       this.displayedChallengesCount += 6
+    },
+
+    getUserRank(profileId) {
+      const profile = this.householdLeaderboard.find((p) => p.id === profileId)
+      return profile ? profile.rank : '-'
+    },
+    getProfileTitle(level) {
+      if (level >= 50) return 'Lenda Ecológica'
+      if (level >= 30) return 'Guardião do Planeta'
+      if (level >= 20) return 'Mestre da Sustentabilidade'
+      if (level >= 10) return 'Eco Warrior'
+      if (level >= 5) return 'Explorador Verde'
+      return 'Iniciado'
+    },
+
+    scrollToSettings() {
+      this.cardOpenStates.settings = true
+      this.$nextTick(() => {
+        const el = document.getElementById('card-settings')
+        if (el) el.scrollIntoView({ behavior: 'smooth' })
+      })
+    },
+
+    renderLevelChart() {
+      if (!this.$refs.levelChart) return
+
+      if (this.levelChartInstance) {
+        this.levelChartInstance.destroy()
+      }
+
+      const ctx = this.$refs.levelChart.getContext('2d')
+      const isDark = document.documentElement.classList.contains('dark')
+
+      // Colors
+      const primaryColor = '#8cb161' // --system-ring
+      const emptyColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
+
+      // Data
+      const current = this.xpInCurrentLevel
+      const remaining = this.xpForNextLevel - current
+
+      this.levelChartInstance = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ['XP Ganho', 'XP Restante'],
+          datasets: [
+            {
+              data: [current, remaining],
+              backgroundColor: [primaryColor, emptyColor],
+              borderWidth: 0,
+              borderRadius: 20, // Rounded ends
+              cutout: '75%', // Thickness of the ring
+              spacing: 5,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: { enabled: false }, // Disable tooltip for cleaner look
+          },
+          animation: {
+            animateScale: true,
+            animateRotate: true,
+          },
+        },
+      })
     },
   },
 }
