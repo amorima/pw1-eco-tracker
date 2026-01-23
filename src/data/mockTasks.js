@@ -1,167 +1,169 @@
+import { getTaskIcon } from './categoryIcons'
+
 export const mockTasks = [
   {
-    id: 1,
-    title: 'Desligar luzes ao sair',
-    description: 'Desligar todas as luzes quando sair de uma divisão',
+    id: '1',
+    title: 'Desligar luzes ao sair de casa',
     category: 'Energia',
-    points: 5,
-    co2Saved: 0.05, // kg
-    frequency: 'daily',
-    icon: 'lightbulb',
-    difficulty: 'easy'
+    points: 20,
+    description: 'Desligar todas as luzes quando sair de uma divisão',
+    imgUrl: null,
+    co2saved: 10,
+    isDefault: true,
+    get icon() { return getTaskIcon(this.category) }
   },
   {
-    id: 2,
+    id: '2',
     title: 'Usar transporte público',
-    description: 'Usar transporte público em vez de carro próprio',
     category: 'Mobilidade',
     points: 15,
-    co2Saved: 2.3,
-    frequency: 'daily',
-    icon: 'directions_bus',
-    difficulty: 'medium'
+    description: 'Usar transporte público em vez de carro próprio',
+    imgUrl: null,
+    co2saved: 7.5,
+    isDefault: true,
+    get icon() { return getTaskIcon(this.category) }
   },
   {
-    id: 3,
+    id: '3',
     title: 'Reciclar plástico',
-    description: 'Separar e reciclar embalagens de plástico',
     category: 'Reciclagem',
     points: 10,
-    co2Saved: 0.5,
-    frequency: 'daily',
-    icon: 'recycling',
-    difficulty: 'easy'
+    description: 'Separar e reciclar embalagens de plástico',
+    imgUrl: null,
+    co2saved: 0.5,
+    isDefault: true,
+    get icon() { return getTaskIcon(this.category) }
   },
   {
-    id: 4,
+    id: '4',
     title: 'Duche de 5 minutos',
-    description: 'Tomar duches rápidos para poupar água e energia',
     category: 'Água',
     points: 8,
-    co2Saved: 0.3,
-    frequency: 'daily',
-    icon: 'shower',
-    difficulty: 'medium'
+    description: 'Tomar duches rápidos para poupar água e energia',
+    imgUrl: null,
+    co2saved: 0.3,
+    isDefault: true,
+    get icon() { return getTaskIcon(this.category) }
   },
   {
-    id: 5,
+    id: '5',
     title: 'Desligar aparelhos em standby',
-    description: 'Desligar completamente aparelhos eletrónicos',
     category: 'Energia',
     points: 7,
-    co2Saved: 0.2,
-    frequency: 'daily',
-    icon: 'power_settings_new',
-    difficulty: 'easy'
+    description: 'Desligar completamente aparelhos eletrónicos',
+    imgUrl: null,
+    co2saved: 0.2,
+    isDefault: true,
+    get icon() { return getTaskIcon(this.category) }
   },
   {
-    id: 6,
+    id: '6',
     title: 'Refeição vegetariana',
-    description: 'Fazer uma refeição sem carne',
     category: 'Alimentação',
     points: 12,
-    co2Saved: 1.5,
-    frequency: 'daily',
-    icon: 'restaurant',
-    difficulty: 'medium'
+    description: 'Fazer uma refeição sem carne',
+    imgUrl: null,
+    co2saved: 1.5,
+    isDefault: true,
+    get icon() { return getTaskIcon(this.category) }
   },
   {
-    id: 7,
+    id: '7',
     title: 'Usar saco reutilizável',
-    description: 'Levar saco próprio às compras',
     category: 'Consumo',
     points: 5,
-    co2Saved: 0.1,
-    frequency: 'weekly',
-    icon: 'shopping_bag',
-    difficulty: 'easy'
+    description: 'Levar saco próprio às compras',
+    imgUrl: null,
+    co2saved: 0.1,
+    isDefault: true,
+    get icon() { return getTaskIcon(this.category) }
   },
   {
-    id: 8,
+    id: '8',
     title: 'Lavar roupa a frio',
-    description: 'Lavar roupa com água fria (máx 30°C)',
     category: 'Energia',
     points: 10,
-    co2Saved: 0.6,
-    frequency: 'weekly',
-    icon: 'local_laundry_service',
-    difficulty: 'easy'
+    description: 'Lavar roupa com água fria (máx 30°C)',
+    imgUrl: null,
+    co2saved: 0.6,
+    isDefault: true,
+    get icon() { return getTaskIcon(this.category) }
   },
   {
-    id: 9,
+    id: '9',
     title: 'Andar de bicicleta',
-    description: 'Usar bicicleta para deslocações curtas',
     category: 'Mobilidade',
     points: 20,
-    co2Saved: 3.0,
-    frequency: 'weekly',
-    icon: 'pedal_bike',
-    difficulty: 'hard'
+    description: 'Usar bicicleta para deslocações curtas',
+    imgUrl: null,
+    co2saved: 3,
+    isDefault: true,
+    get icon() { return getTaskIcon(this.category) }
   },
   {
-    id: 10,
+    id: '10',
     title: 'Compostar resíduos orgânicos',
-    description: 'Fazer compostagem com restos de comida',
     category: 'Reciclagem',
     points: 15,
-    co2Saved: 1.0,
-    frequency: 'weekly',
-    icon: 'compost',
-    difficulty: 'medium'
+    description: 'Fazer compostagem com restos de comida',
+    imgUrl: null,
+    co2saved: 1,
+    isDefault: true,
+    get icon() { return getTaskIcon(this.category) }
   },
   {
-    id: 11,
+    id: '11',
     title: 'Secar roupa ao ar',
-    description: 'Secar roupa naturalmente em vez de usar secadora',
     category: 'Energia',
     points: 12,
-    co2Saved: 0.8,
-    frequency: 'weekly',
-    icon: 'dry_cleaning',
-    difficulty: 'easy'
+    description: 'Secar roupa naturalmente em vez de usar secadora',
+    imgUrl: null,
+    co2saved: 0.8,
+    isDefault: true,
+    get icon() { return getTaskIcon(this.category) }
   },
   {
-    id: 12,
+    id: '12',
     title: 'Comprar produtos locais',
-    description: 'Comprar alimentos produzidos localmente',
     category: 'Consumo',
     points: 18,
-    co2Saved: 1.2,
-    frequency: 'weekly',
-    icon: 'storefront',
-    difficulty: 'medium'
+    description: 'Comprar alimentos produzidos localmente',
+    imgUrl: null,
+    co2saved: 1.2,
+    isDefault: true,
+    get icon() { return getTaskIcon(this.category) }
   },
   {
-    id: 13,
+    id: '13',
     title: 'Plantar uma árvore',
-    description: 'Plantar uma árvore ou planta',
     category: 'Ambiente',
     points: 50,
-    co2Saved: 21.0, // lifetime absorption
-    frequency: 'once',
-    icon: 'park',
-    difficulty: 'hard'
+    description: 'Plantar uma árvore ou planta',
+    imgUrl: null,
+    co2saved: 21,
+    isDefault: true,
+    get icon() { return getTaskIcon(this.category) }
   },
   {
-    id: 14,
+    id: '14',
     title: 'Reparar em vez de substituir',
-    description: 'Reparar um objeto em vez de comprar novo',
     category: 'Consumo',
     points: 25,
-    co2Saved: 5.0,
-    frequency: 'monthly',
-    icon: 'build',
-    difficulty: 'medium'
+    description: 'Reparar um objeto em vez de comprar novo',
+    imgUrl: null,
+    co2saved: 5,
+    isDefault: true,
+    get icon() { return getTaskIcon(this.category) }
   },
   {
-    id: 15,
+    id: '15',
     title: 'Participar em limpeza comunitária',
-    description: 'Participar numa ação de limpeza local',
     category: 'Ambiente',
     points: 30,
-    co2Saved: 2.0,
-    frequency: 'monthly',
-    icon: 'volunteer_activism',
-    difficulty: 'hard'
+    description: 'Participar numa ação de limpeza local',
+    imgUrl: null,
+    co2saved: 2,
+    isDefault: true,
+    get icon() { return getTaskIcon(this.category) }
   }
 ]

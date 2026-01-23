@@ -20,21 +20,22 @@
       <div class="bg-(--system-background) rounded-2xl shadow-lg p-6 mb-8">
         <div class="flex items-center gap-4">
           <div 
-            class="w-20 h-20 rounded-full flex items-center justify-center"
+            class="w-20 h-20 rounded-full flex items-center justify-center overflow-hidden"
             :style="{ backgroundColor: currentProfile?.color }"
           >
-            <span class="material-symbols-outlined text-white text-4xl">
-              {{ currentProfile?.avatar }}
+            <img v-if="currentProfile?.avatarUrl" :src="currentProfile.avatarUrl" class="w-full h-full object-cover" />
+            <span v-else class="material-symbols-outlined text-white text-4xl">
+              person
             </span>
           </div>
           <div class="flex-1">
             <h2 class="text-2xl font-bold text-gray-800">{{ currentProfile?.name }}</h2>
-            <p class="text-gray-600">{{ currentProfile?.points }} points · Level {{ currentProfile?.level }}</p>
+            <p class="text-gray-600">{{ currentProfile?.points }} points · Level {{ userStore.currentProfileLevel }}</p>
           </div>
           <div class="text-right">
             <div class="flex items-center gap-1 text-emerald-600">
               <span class="material-symbols-outlined">co2</span>
-              <span class="text-2xl font-bold">{{ (currentProfile?.co2Saved || 0).toFixed(1) }}kg</span>
+              <span class="text-2xl font-bold">{{ (userStore.currentProfileCo2Saved || 0).toFixed(1) }}kg</span>
             </div>
             <p class="text-sm text-gray-500">CO₂ Saved</p>
           </div>
@@ -90,11 +91,12 @@
             </div>
 
             <div 
-              class="w-16 h-16 rounded-full flex items-center justify-center"
+              class="w-16 h-16 rounded-full flex items-center justify-center overflow-hidden"
               :style="{ backgroundColor: profile.color }"
             >
-              <span class="material-symbols-outlined text-white text-3xl">
-                {{ profile.avatar }}
+              <img v-if="profile.avatar" :src="profile.avatar" class="w-full h-full object-cover" />
+              <span v-else class="material-symbols-outlined text-white text-3xl">
+                person
               </span>
             </div>
 

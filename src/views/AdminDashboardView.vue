@@ -144,7 +144,7 @@
                 name: profile.name,
                 rank: getProfileRank(profile.id),
                 points: profile.points,
-                avatar: profile.avatar,
+                avatar: profile.avatarUrl,
               }"
               @edit="editProfile(profile)"
               @delete="confirmDeleteProfile(profile.id)"
@@ -216,8 +216,8 @@
               v-for="reward in paginatedAvailableRewards"
               :key="reward.id"
               :title="reward.title"
-              :points="reward.points"
-              :image="reward.image"
+              :points="reward.points_cost"
+              :image="reward.imgUrl"
               @edit="editReward(reward)"
               @delete="confirmDeleteReward(reward.id)"
             />
@@ -240,9 +240,9 @@
               :reward="{
                 ...redeemed,
                 userName: getProfileName(redeemed.profileId),
-                title: getRewardTitle(redeemed.rewardId),
-                points: redeemed.pointsCost,
-                image: getRewardImage(redeemed.rewardId),
+                title: getRewardTitle(redeemed.id_reward),
+                points: redeemed.points_cost,
+                image: getRewardImage(redeemed.id_reward),
                 status: redeemed.status,
               }"
               @confirm="confirmRedeemedReward(redeemed)"
@@ -292,7 +292,7 @@
               v-for="appliance in paginatedAppliances"
               :key="appliance.id"
               :title="appliance.name"
-              :subtitle="`${appliance.avgPowerConsumption || 0} KWh/h`"
+              :subtitle="`${appliance.powerWatts || 0}W`"
               :category="appliance.category"
               :icon="appliance.icon || 'electrical_services'"
               :image="getApplianceImage(appliance)"
@@ -344,7 +344,7 @@
               v-for="task in paginatedTasks"
               :key="task.id"
               :title="task.title"
-              :subtitle="`-${task.co2Saved || 0} Kg de CO2`"
+              :subtitle="`-${task.co2saved || 0} Kg de CO2`"
               :category="task.category"
               :icon="task.icon || 'task_alt'"
               :image="getTaskImage(task)"
@@ -683,16 +683,20 @@ export default {
       let totalCo2Emitted = 0
 
       this.profiles.forEach((profile) => {
-        // Use applianceUsage array (the correct property name from db.json)
-        ;(profile.applianceUsage || []).forEach((usage) => {
-          // energyConsumed is already in kWh from userStore.trackApplianceUsage
-          totalConsumption += usage.energyConsumed || 0
-          totalCo2Emitted += usage.co2Emitted || 0
+        // Use appliance_history array (new data structure)
+        ;(profile.appliance_history || []).forEach((usage) => {
+          // energy_consumed is in kWh from userStore.trackApplianceUsage
+          totalConsumption += usage.energy_consumed || 0
+          totalCo2Emitted += usage.co2emited || 0
         })
       })
 
       const profileCount = this.profiles.length || 1
-      const totalCo2Saved = this.profiles.reduce((sum, p) => sum + (p.co2Saved || 0), 0)
+      // Calculate CO2 saved from activity_history
+      const totalCo2Saved = this.profiles.reduce((sum, p) => {
+        const activities = p.activity_history || []
+        return sum + activities.reduce((actSum, a) => actSum + (a.co2saved || 0), 0)
+      }, 0)
 
       return {
         totalCo2: totalCo2Saved,
@@ -724,22 +728,23 @@ export default {
         let dayPoints = 0
 
         this.profiles.forEach((profile) => {
-          // Check activityHistory for tasks completed
-          const activities = profile.activityHistory || []
+          // Check activity_history for tasks completed (new data structure)
+          const activities = profile.activity_history || []
           activities.forEach((activity) => {
             const activityDate = activity.completedAt ? activity.completedAt.split('T')[0] : null
             if (activityDate === dateString) {
-              dayCo2 += activity.co2Saved || 0
+              dayCo2 += activity.co2saved || 0
               dayPoints += activity.pointsEarned || 0
             }
           })
 
-          // Check applianceUsage for consumption CO2
-          const usages = profile.applianceUsage || []
+          // Check appliance_history for consumption CO2 (new data structure)
+          const usages = profile.appliance_history || []
           usages.forEach((usage) => {
-            if (usage.date === dateString) {
+            const usageDate = usage.usedAt ? usage.usedAt.split('T')[0] : null
+            if (usageDate === dateString) {
               // For consumption, we track CO2 emitted (negative impact)
-              dayCo2 -= usage.co2Emitted || 0
+              dayCo2 -= usage.co2emited || 0
             }
           })
         })
@@ -755,7 +760,7 @@ export default {
       }
 
       this.profiles.forEach((profile) => {
-        stats.totalTasks += (profile.activityHistory || []).length
+        stats.totalTasks += (profile.activity_history || []).length
       })
 
       return stats
@@ -774,11 +779,11 @@ export default {
     allRedeemedRewards() {
       const redeemed = []
       this.profiles.forEach((profile) => {
-        ;(profile.rewardsRedeemed || []).forEach((reward) => {
+        ;(profile.rewards_history || []).forEach((reward) => {
           redeemed.push({ ...reward, profileId: profile.id })
         })
       })
-      return redeemed.sort((a, b) => new Date(b.redeemedAt) - new Date(a.redeemedAt))
+      return redeemed.sort((a, b) => new Date(b.redemedAt) - new Date(a.redemedAt))
     },
     paginatedRedeemedRewards() {
       return this.allRedeemedRewards.slice(0, this.displayedRedeemedCount)
@@ -988,8 +993,8 @@ export default {
       this.selectedReward = {
         id: reward.id,
         title: reward.title,
-        points: reward.points,
-        image: reward.image,
+        points: reward.points_cost,
+        image: reward.imgUrl,
       }
       this.showRewardModal = true
     },
