@@ -145,7 +145,7 @@
               >
                 <img
                   :src="
-                    currentProfile?.avatar || 'https://api.dicebear.com/7.x/avataaars/svg?seed=User'
+                    currentProfile?.avatarUrl || 'https://api.dicebear.com/7.x/avataaars/svg?seed=User'
                   "
                   alt="User avatar"
                   class="w-full h-full object-cover"
@@ -503,9 +503,9 @@
                 <RewardListItem
                   v-for="reward in filteredAvailableRewards"
                   :key="reward.id"
-                  :image="reward.image"
+                  :image="reward.imgUrl"
                   :title="reward.title"
-                  :points="reward.points"
+                  :points="reward.points_cost"
                   @action="redeemReward(reward)"
                 />
                 <p
@@ -525,10 +525,10 @@
                 <RewardListItem
                   v-for="reward in redeemedRewards"
                   :key="reward.id"
-                  :image="getRewardImage(reward.rewardId)"
+                  :image="getRewardImage(reward.id_reward)"
                   :title="reward.title"
-                  :points="reward.pointsCost"
-                  :date="formatDate(reward.redeemedAt)"
+                  :points="reward.points_cost"
+                  :date="formatDate(reward.redemedAt)"
                   :status="reward.status"
                   @action="cancelReward(reward)"
                 />
@@ -942,7 +942,7 @@ export default {
       return this.userStore.householdRewards || []
     },
     redeemedRewards() {
-      return this.currentProfile?.rewardsRedeemed || []
+      return this.currentProfile?.rewards_history || []
     },
     filteredAvailableRewards() {
       if (!this.rewardSearch) return this.availableRewards
@@ -952,7 +952,7 @@ export default {
     },
     profileChallenges() {
       const storeChallenges = this.userStore.householdChallenges || []
-      const activities = this.currentProfile?.activityHistory || []
+      const activities = this.currentProfile?.activity_history || []
       const allChallenges = []
 
       // Process household challenges (both old and new format)
@@ -961,10 +961,10 @@ export default {
         let title = challenge.title || ''
         let description = challenge.description || ''
 
-        // NEW FORMAT: Task-based challenges
-        if (challenge.taskId) {
+        // NEW FORMAT: Task-based challenges with task_id
+        if (challenge.task_id) {
           const task = this.userStore.availableTasks.find(
-            (t) => String(t.id) === String(challenge.taskId),
+            (t) => String(t.id) === String(challenge.task_id),
           )
 
           if (task) {
@@ -978,7 +978,7 @@ export default {
             if (challenge.type === 'streak') {
               // Streak-based: count consecutive days with this task completed
               const taskActivities = activities
-                .filter((a) => String(a.taskId) === String(challenge.taskId))
+                .filter((a) => String(a.task_id) === String(challenge.task_id))
                 .sort((a, b) => new Date(b.completedAt) - new Date(a.completedAt))
 
               let currentStreak = 0
@@ -1007,7 +1007,7 @@ export default {
             } else {
               // Completion-based: count total completions of this task
               progress = activities.filter(
-                (a) => String(a.taskId) === String(challenge.taskId),
+                (a) => String(a.task_id) === String(challenge.task_id),
               ).length
             }
           }
@@ -1023,42 +1023,42 @@ export default {
             if (challenge.category === 'Mobilidade') {
               progress = activities.filter((a) => {
                 const task = this.userStore.availableTasks.find(
-                  (t) => String(t.id) === String(a.taskId),
+                  (t) => String(t.id) === String(a.task_id),
                 )
                 return task?.category === 'Mobilidade'
               }).length
             } else if (challenge.category === 'Reciclagem') {
               progress = activities.filter((a) => {
                 const task = this.userStore.availableTasks.find(
-                  (t) => String(t.id) === String(a.taskId),
+                  (t) => String(t.id) === String(a.task_id),
                 )
                 return task?.category === 'Reciclagem'
               }).length
             } else if (challenge.category === 'Energia') {
               progress = activities.filter((a) => {
                 const task = this.userStore.availableTasks.find(
-                  (t) => String(t.id) === String(a.taskId),
+                  (t) => String(t.id) === String(a.task_id),
                 )
                 return task?.category === 'Energia'
               }).length
             } else if (challenge.category === 'Água') {
               progress = activities.filter((a) => {
                 const task = this.userStore.availableTasks.find(
-                  (t) => String(t.id) === String(a.taskId),
+                  (t) => String(t.id) === String(a.task_id),
                 )
                 return task?.category === 'Água'
               }).length
             } else if (challenge.category === 'Alimentação') {
               progress = activities.filter((a) => {
                 const task = this.userStore.availableTasks.find(
-                  (t) => String(t.id) === String(a.taskId),
+                  (t) => String(t.id) === String(a.task_id),
                 )
                 return task?.category === 'Alimentação'
               }).length
             } else if (challenge.category === 'Ambiente') {
               progress = activities.filter((a) => {
                 const task = this.userStore.availableTasks.find(
-                  (t) => String(t.id) === String(a.taskId),
+                  (t) => String(t.id) === String(a.task_id),
                 )
                 return task?.category === 'Ambiente'
               }).length
@@ -1074,7 +1074,7 @@ export default {
           currentProgress: progress,
           progress: Math.min((progress / (challenge.target || 1)) * 100, 100),
           completed: progress >= (challenge.target || 1),
-          xp: challenge.xp || 0,
+          xp: challenge.xp_awarded || challenge.xp || 0,
           target: challenge.target || 1,
         })
       })
@@ -1088,7 +1088,7 @@ export default {
           case 1: // Transportes verdes
             progress = activities.filter((a) => {
               const task = this.userStore.availableTasks.find(
-                (t) => String(t.id) === String(a.taskId),
+                (t) => String(t.id) === String(a.task_id),
               )
               return task?.category === 'Mobilidade'
             }).length
@@ -1096,7 +1096,7 @@ export default {
           case 2: // Reciclar
             progress = activities.filter((a) => {
               const task = this.userStore.availableTasks.find(
-                (t) => String(t.id) === String(a.taskId),
+                (t) => String(t.id) === String(a.task_id),
               )
               return task?.category === 'Reciclagem'
             }).length
@@ -1104,18 +1104,18 @@ export default {
           case 3: // Casa verde (energia)
             progress = activities.filter((a) => {
               const task = this.userStore.availableTasks.find(
-                (t) => String(t.id) === String(a.taskId),
+                (t) => String(t.id) === String(a.task_id),
               )
               return task?.category === 'Energia'
             }).length
             break
           case 4: // CO2 saved
-            progress = Math.min(this.currentProfile?.co2Saved || 0, challenge.target)
+            progress = Math.min(this.userStore.currentProfileCo2Saved || 0, challenge.target)
             break
           case 5: // Limpeza
             progress = activities.filter((a) => {
               const task = this.userStore.availableTasks.find(
-                (t) => String(t.id) === String(a.taskId),
+                (t) => String(t.id) === String(a.task_id),
               )
               return task?.title?.toLowerCase().includes('limp')
             }).length
@@ -1123,7 +1123,7 @@ export default {
           case 6: // Banhos rápidos
             progress = activities.filter((a) => {
               const task = this.userStore.availableTasks.find(
-                (t) => String(t.id) === String(a.taskId),
+                (t) => String(t.id) === String(a.task_id),
               )
               return task?.category === 'Água'
             }).length
@@ -1364,7 +1364,7 @@ export default {
           return
         }
 
-        if ((this.currentProfile.points || 0) < reward.points) {
+        if (this.userStore.currentProfilePoints < reward.points_cost) {
           this.showNotification('Pontos insuficientes!', 'error')
           return
         }
@@ -1389,7 +1389,7 @@ export default {
         return
       }
 
-      const result = await this.userStore.cancelReward(reward.id)
+      const result = await this.userStore.cancelReward(this.currentProfile.id, reward.id)
       if (result.success) {
         this.showNotification(
           `Recompensa cancelada. ${result.pointsReturned} pontos devolvidos!`,

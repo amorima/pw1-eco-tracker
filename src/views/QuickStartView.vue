@@ -117,7 +117,7 @@
                 <div>
                   <p class="font-semibold text-(--text-body-titles)">{{ appliance.name }}</p>
                   <p class="text-xs text-(--text-body-sub-titles)">
-                    {{ appliance.avgPowerConsumption }}W
+                    {{ appliance.powerWatts }}W
                   </p>
                 </div>
                 <span

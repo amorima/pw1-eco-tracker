@@ -212,7 +212,12 @@ export const applianceToApiType = {
  * Calculate emissions for an appliance usage
  * API expects: type (required), time (defaults to 60min), watts (default depends on type)
  * API returns: { success, message, data: { type, carbon_kg_co2, unit, factor, minutes, kwh, device_power_watts } }
- * @param {object} appliance - Appliance object with apiType and avgPowerConsumption
+ * 
+ * New data structure uses:
+ * - appliance.type: API device type (laptop, desktop, television, etc.)
+ * - appliance.powerWatts: Power consumption in watts
+ * 
+ * @param {object} appliance - Appliance object with type and powerWatts
  * @param {number} hoursUsed - Hours used
  * @returns {Promise<{success: boolean, data?: object, message?: string}>}
  */
@@ -226,15 +231,14 @@ export async function calculateApplianceEmissions(appliance, hoursUsed) {
     }
   }
 
-  // Use the apiType directly from the appliance if available
-  const apiType = appliance.apiType || appliance.name
-  
   // Valid device types for the API
   const validTypes = ['refrigerator', 'washing_machine', 'dishwasher', 'television', 
                       'air_conditioner', 'desktop', 'laptop', 'electricity']
   
-  // Determine the type to use
-  let type = validTypes.includes(apiType) ? apiType : 'electricity'
+  // Use the type directly from the appliance (new data structure)
+  // Fallback to 'electricity' for generic calculations
+  const deviceType = appliance.type || 'electricity'
+  const type = validTypes.includes(deviceType) ? deviceType : 'electricity'
   
   // Convert hours to minutes for the API
   const minutes = Math.round(hoursUsed * 60)
@@ -245,9 +249,9 @@ export async function calculateApplianceEmissions(appliance, hoursUsed) {
     minutes: minutes,
   }
   
-  // If appliance has custom power consumption and it's not a standard device type, include watts
-  if (appliance.avgPowerConsumption && type === 'electricity') {
-    body.watts = appliance.avgPowerConsumption
+  // If appliance has custom power consumption (powerWatts) and it's generic electricity type, include watts
+  if (appliance.powerWatts && type === 'electricity') {
+    body.watts = appliance.powerWatts
   }
 
   try {
@@ -297,7 +301,9 @@ export async function calculateApplianceEmissions(appliance, hoursUsed) {
     console.error('Error calculating appliance emissions:', error)
     
     // Fallback calculation if API fails
-    const powerKW = (appliance.avgPowerConsumption || 200) / 1000
+    // Use powerWatts from new data structure
+    const powerWatts = appliance.powerWatts || 200
+    const powerKW = powerWatts / 1000
     const kWh = hoursUsed * powerKW
     const co2 = kWh * 0.188 // Portugal grid factor
     
@@ -310,7 +316,7 @@ export async function calculateApplianceEmissions(appliance, hoursUsed) {
         factor: 0.188,
         minutes: minutes,
         kwh: kWh,
-        device_power_watts: appliance.avgPowerConsumption || 200,
+        device_power_watts: powerWatts,
       },
     }
   }
@@ -338,15 +344,16 @@ export const taskCategoryToApiType = {
 
 /**
  * Calculate CO2 saved from completing a task
+ * Uses co2saved field from new data structure (lowercase)
  * @param {object} task - Task object with title and category
  * @returns {Promise<{success: boolean, co2Saved?: number, message?: string}>}
  */
 export async function calculateTaskSavings(task) {
-  // For most tasks, use the predefined co2Saved value
+  // For most tasks, use the predefined co2saved value (lowercase in new structure)
   // The API is mainly used for consumption tracking
   return {
     success: true,
-    co2Saved: task.co2Saved || 0,
+    co2Saved: task.co2saved || 0,
   }
 }
 

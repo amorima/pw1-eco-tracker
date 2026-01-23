@@ -36,7 +36,7 @@
           v-for="profile in profiles"
           :key="profile.id"
           :name="profile.name"
-          :avatar="profile.avatar"
+          :avatar="profile.avatarUrl"
           @click="selectProfile(profile.id)"
         />
 

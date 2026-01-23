@@ -1,137 +1,169 @@
+import { getApplianceIcon } from './categoryIcons'
+
 export const mockAppliances = [
   {
-    id: 1,
+    id: '1',
     name: 'Frigorífico',
-    icon: 'kitchen',
+    type: 'refrigerator',
+    powerWatts: 150,
     category: 'Cozinha',
-    avgPowerConsumption: 150, // watts
-    avgUsageHoursPerDay: 24,
-    co2PerKwh: 0.233 // kg CO2 per kWh (Portugal average)
+    description: 'Frigorífico de casa',
+    imgUrl: null,
+    isDefault: true,
+    get icon() { return getApplianceIcon(this.category) }
   },
   {
-    id: 2,
+    id: '2',
     name: 'Máquina de lavar roupa',
-    icon: 'local_laundry_service',
+    type: 'washing_machine',
+    powerWatts: 2000,
     category: 'Lavandaria',
-    avgPowerConsumption: 2000,
-    avgUsageHoursPerDay: 1,
-    co2PerKwh: 0.233
+    description: 'Máquina de lavar roupa',
+    imgUrl: null,
+    isDefault: true,
+    get icon() { return getApplianceIcon(this.category) }
   },
   {
-    id: 3,
+    id: '3',
     name: 'Máquina de lavar loiça',
-    icon: 'countertops',
+    type: 'dishwasher',
+    powerWatts: 1800,
     category: 'Cozinha',
-    avgPowerConsumption: 1800,
-    avgUsageHoursPerDay: 1,
-    co2PerKwh: 0.233
+    description: 'Máquina de lavar loiça',
+    imgUrl: null,
+    isDefault: true,
+    get icon() { return getApplianceIcon(this.category) }
   },
   {
-    id: 4,
+    id: '4',
     name: 'Forno',
-    icon: 'oven_gen',
+    type: 'electricity',
+    powerWatts: 2400,
     category: 'Cozinha',
-    avgPowerConsumption: 2400,
-    avgUsageHoursPerDay: 0.5,
-    co2PerKwh: 0.233
+    description: 'Forno elétrico',
+    imgUrl: null,
+    isDefault: true,
+    get icon() { return getApplianceIcon(this.category) }
   },
   {
-    id: 5,
+    id: '5',
     name: 'Micro-ondas',
-    icon: 'microwave',
+    type: 'electricity',
+    powerWatts: 1000,
     category: 'Cozinha',
-    avgPowerConsumption: 1000,
-    avgUsageHoursPerDay: 0.3,
-    co2PerKwh: 0.233
+    description: 'Micro-ondas',
+    imgUrl: null,
+    isDefault: true,
+    get icon() { return getApplianceIcon(this.category) }
   },
   {
-    id: 6,
+    id: '6',
     name: 'Televisão',
-    icon: 'tv',
+    type: 'television',
+    powerWatts: 100,
     category: 'Entretenimento',
-    avgPowerConsumption: 100,
-    avgUsageHoursPerDay: 5,
-    co2PerKwh: 0.233
+    description: 'Televisão da sala',
+    imgUrl: null,
+    isDefault: true,
+    get icon() { return getApplianceIcon(this.category) }
   },
   {
-    id: 7,
+    id: '7',
     name: 'Ar condicionado',
-    icon: 'ac_unit',
+    type: 'air_conditioner',
+    powerWatts: 3500,
     category: 'Climatização',
-    avgPowerConsumption: 3500,
-    avgUsageHoursPerDay: 6,
-    co2PerKwh: 0.233
+    description: 'Ar condicionado',
+    imgUrl: null,
+    isDefault: true,
+    get icon() { return getApplianceIcon(this.category) }
   },
   {
-    id: 8,
+    id: '8',
     name: 'Aspirador',
-    icon: 'vacuum',
+    type: 'electricity',
+    powerWatts: 1400,
     category: 'Limpeza',
-    avgPowerConsumption: 1400,
-    avgUsageHoursPerDay: 0.5,
-    co2PerKwh: 0.233
+    description: 'Aspirador de pó',
+    imgUrl: null,
+    isDefault: true,
+    get icon() { return getApplianceIcon(this.category) }
   },
   {
-    id: 9,
+    id: '9',
     name: 'Ferro de engomar',
-    icon: 'iron',
+    type: 'electricity',
+    powerWatts: 2000,
     category: 'Lavandaria',
-    avgPowerConsumption: 2000,
-    avgUsageHoursPerDay: 0.5,
-    co2PerKwh: 0.233
+    description: 'Ferro de engomar',
+    imgUrl: null,
+    isDefault: true,
+    get icon() { return getApplianceIcon(this.category) }
   },
   {
-    id: 10,
+    id: '10',
     name: 'Secador de cabelo',
-    icon: 'styler',
+    type: 'electricity',
+    powerWatts: 1500,
     category: 'Cuidados pessoais',
-    avgPowerConsumption: 1500,
-    avgUsageHoursPerDay: 0.2,
-    co2PerKwh: 0.233
+    description: 'Secador de cabelo',
+    imgUrl: null,
+    isDefault: true,
+    get icon() { return getApplianceIcon(this.category) }
   },
   {
-    id: 11,
+    id: '11',
     name: 'Computador',
-    icon: 'computer',
+    type: 'desktop',
+    powerWatts: 200,
     category: 'Tecnologia',
-    avgPowerConsumption: 200,
-    avgUsageHoursPerDay: 8,
-    co2PerKwh: 0.233
+    description: 'Computador de secretária',
+    imgUrl: null,
+    isDefault: true,
+    get icon() { return getApplianceIcon(this.category) }
   },
   {
-    id: 12,
+    id: '12',
     name: 'Consola de jogos',
-    icon: 'sports_esports',
+    type: 'electricity',
+    powerWatts: 150,
     category: 'Entretenimento',
-    avgPowerConsumption: 150,
-    avgUsageHoursPerDay: 3,
-    co2PerKwh: 0.233
+    description: 'Consola de jogos',
+    imgUrl: null,
+    isDefault: true,
+    get icon() { return getApplianceIcon(this.category) }
   },
   {
-    id: 13,
+    id: '13',
     name: 'Carregador de telemóvel',
-    icon: 'phone_android',
+    type: 'electricity',
+    powerWatts: 5,
     category: 'Tecnologia',
-    avgPowerConsumption: 5,
-    avgUsageHoursPerDay: 3,
-    co2PerKwh: 0.233
+    description: 'Carregador de telemóvel',
+    imgUrl: null,
+    isDefault: true,
+    get icon() { return getApplianceIcon(this.category) }
   },
   {
-    id: 14,
+    id: '14',
     name: 'Router Wi-Fi',
-    icon: 'router',
+    type: 'electricity',
+    powerWatts: 10,
     category: 'Tecnologia',
-    avgPowerConsumption: 10,
-    avgUsageHoursPerDay: 24,
-    co2PerKwh: 0.233
+    description: 'Router Wi-Fi',
+    imgUrl: null,
+    isDefault: true,
+    get icon() { return getApplianceIcon(this.category) }
   },
   {
-    id: 15,
+    id: '15',
     name: 'Cafeteira',
-    icon: 'coffee_maker',
+    type: 'electricity',
+    powerWatts: 1000,
     category: 'Cozinha',
-    avgPowerConsumption: 1000,
-    avgUsageHoursPerDay: 0.5,
-    co2PerKwh: 0.233
+    description: 'Cafeteira/Máquina de café',
+    imgUrl: null,
+    isDefault: true,
+    get icon() { return getApplianceIcon(this.category) }
   }
 ]

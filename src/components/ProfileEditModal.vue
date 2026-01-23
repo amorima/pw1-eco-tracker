@@ -148,7 +148,7 @@ export default {
           id: this.profile.id,
           name: this.profile.name || '',
           age: this.profile.age || '',
-          avatar: this.profile.avatar || '',
+          avatar: this.profile.avatarUrl || this.profile.avatar || '',
           isAdmin: this.profile.isAdmin || false,
         }
       } else {

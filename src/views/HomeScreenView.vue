@@ -240,8 +240,8 @@
                     :key="usage.id"
                     :label="usage.appliance.name"
                     :image="usage.appliance.image || getApplianceImage(usage.appliance)"
-                    :energyConsumed="usage.energyConsumed"
-                    :powerWatts="usage.device_power_watts || usage.appliance.avgPowerConsumption"
+                    :energyConsumed="usage.energy_consumed"
+                    :powerWatts="usage.device_power_watts || usage.appliance.powerWatts"
                     unit="hr"
                     @submit="(value) => submitApplianceUsage(usage.appliance, value)"
                   />
@@ -581,7 +581,7 @@ export default {
         if (value && this.selectedAppliance) {
           const hours = parseFloat(value)
           if (hours > 0) {
-            const energyKwh = (this.selectedAppliance.avgPowerConsumption * hours) / 1000
+            const energyKwh = (this.selectedAppliance.powerWatts * hours) / 1000
             this.calculatedEmissions = energyKwh * (this.selectedAppliance.co2PerKwh || 0.233)
           } else {
             this.calculatedEmissions = null
