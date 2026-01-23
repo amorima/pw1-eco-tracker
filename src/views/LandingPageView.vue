@@ -327,8 +327,13 @@
               </div>
             </div>
 
-            <div class="w-full h-[300px] relative">
-              <canvas ref="impactChart"></canvas>
+            <div class="w-full h-[300px]">
+              <apexchart
+                :type="currentChartType"
+                :options="chartOptions"
+                :series="chartSeries"
+                height="100%"
+              />
             </div>
           </div>
         </div>
@@ -546,7 +551,7 @@ import ActionButton from '@/components/ActionButton.vue'
 import FeatureCarousel from '@/components/FeatureCarousel.vue'
 import FAQItem from '@/components/FAQItem.vue'
 import FooterSection from '@/components/FooterSection.vue'
-import Chart from 'chart.js/auto'
+import VueApexCharts from 'vue3-apexcharts'
 
 export default {
   name: 'LandingPageView',
@@ -556,17 +561,82 @@ export default {
     FeatureCarousel,
     FAQItem,
     FooterSection,
+    apexchart: VueApexCharts,
   },
   data() {
     return {
       showScrollButton: false,
       isHovered: false,
-      chartInstance: null,
       currentChartType: 'bar',
     }
   },
-  mounted() {
-    this.renderChart()
+  computed: {
+    chartData() {
+      return [85, 98, 90, 122, 109, 132, 128, 141, 136, 151, 147, 160]
+    },
+    chartLabels() {
+      return ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']
+    },
+    chartSeries() {
+      return [
+        {
+          name: 'Poupança (kWh)',
+          data: this.chartData,
+        },
+      ]
+    },
+    chartOptions() {
+      const primaryColor = '#8cb161'
+
+      return {
+        series: this.chartSeries,
+        chart: {
+          type: this.currentChartType,
+          toolbar: { show: false },
+          background: 'transparent',
+        },
+        colors: [primaryColor],
+        plotOptions: {
+          bar: {
+            borderRadius: 4,
+            columnWidth: '60%',
+          },
+        },
+        dataLabels: { enabled: false },
+        stroke: {
+          curve: 'smooth',
+          width: this.currentChartType === 'line' ? 2 : 0,
+        },
+        fill: {
+          opacity: this.currentChartType === 'line' ? 0.4 : 1,
+          type: this.currentChartType === 'line' ? 'gradient' : 'solid',
+        },
+        xaxis: {
+          categories: this.chartLabels,
+          labels: {
+            style: { colors: 'rgba(255, 255, 255, 0.7)' },
+          },
+          axisBorder: { show: false },
+          axisTicks: { show: false },
+        },
+        yaxis: {
+          labels: {
+            style: { colors: 'rgba(255, 255, 255, 0.7)' },
+          },
+        },
+        grid: {
+          borderColor: 'rgba(255, 255, 255, 0.1)',
+          xaxis: { lines: { show: false } },
+        },
+        legend: { show: false },
+        tooltip: {
+          theme: 'dark',
+          y: {
+            formatter: (val) => `${val} kWh Poupados`,
+          },
+        },
+      }
+    },
   },
   methods: {
     handleScroll() {
@@ -586,85 +656,6 @@ export default {
     },
     setChartType(type) {
       this.currentChartType = type
-      this.renderChart()
-    },
-    renderChart() {
-      if (!this.$refs.impactChart) return
-
-      if (this.chartInstance) {
-        this.chartInstance.destroy()
-      }
-
-      const ctx = this.$refs.impactChart.getContext('2d')
-      const primaryColor = '#8cb161' // --system-ring
-
-      // Data matching the previous manual bars roughly
-      const data = [85, 98, 90, 122, 109, 132, 128, 141, 136, 151, 147, 160]
-      const labels = [
-        'Jan',
-        'Fev',
-        'Mar',
-        'Abr',
-        'Mai',
-        'Jun',
-        'Jul',
-        'Ago',
-        'Set',
-        'Out',
-        'Nov',
-        'Dez',
-      ]
-
-      this.chartInstance = new Chart(ctx, {
-        type: this.currentChartType,
-        data: {
-          labels: labels,
-          datasets: [
-            {
-              label: 'Poupança (kWh)',
-              data: data,
-              backgroundColor: primaryColor,
-              borderColor: primaryColor,
-              borderWidth: 2,
-              borderRadius: 4,
-              tension: 0.4,
-              pointBackgroundColor: '#fff',
-              pointRadius: 4,
-              fill: this.currentChartType === 'line',
-            },
-          ],
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { display: false },
-            tooltip: {
-              backgroundColor: '#fff',
-              titleColor: '#1c1917',
-              bodyColor: '#57534e',
-              borderColor: '#e7e5e4',
-              borderWidth: 1,
-              padding: 10,
-              displayColors: false,
-              callbacks: {
-                label: (context) => `${context.parsed.y} kWh Poupados`,
-              },
-            },
-          },
-          scales: {
-            y: {
-              beginAtZero: true,
-              grid: { color: 'rgba(255, 255, 255, 0.1)' },
-              ticks: { color: 'rgba(255, 255, 255, 0.7)' },
-            },
-            x: {
-              grid: { display: false },
-              ticks: { color: 'rgba(255, 255, 255, 0.7)' },
-            },
-          },
-        },
-      })
     },
   },
 }
