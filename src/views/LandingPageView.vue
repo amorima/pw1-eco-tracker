@@ -2,7 +2,7 @@
   <div class="snap-container" ref="scrollContainer" @scroll="handleScroll">
     <!-- Hero Section with Diagonal Cut -->
     <section
-      class="snap-section relative pb-20 bg-(--system-foreground) hero-clip flex flex-col justify-center"
+      class="snap-section relative pb-20 bg-(--system-foreground) hero-clip flex flex-col justify-start"
     >
       <!-- Navigation -->
       <MenuNav :landing="true" />
@@ -568,6 +568,8 @@ export default {
       showScrollButton: false,
       isHovered: false,
       currentChartType: 'bar',
+      lastScrollTop: 0,
+      isAutoScrolling: false,
     }
   },
   computed: {
@@ -638,21 +640,51 @@ export default {
       }
     },
   },
+  mounted() {
+    window.addEventListener('scroll', this.handleScroll)
+  },
+  beforeUnmount() {
+    window.removeEventListener('scroll', this.handleScroll)
+  },
   methods: {
     handleScroll() {
       const container = this.$refs.scrollContainer
-      if (container) {
-        this.showScrollButton = container.scrollTop > window.innerHeight
+      const scrollTop =
+        container?.scrollTop || window.scrollY || document.documentElement.scrollTop || 0
+
+      this.showScrollButton = scrollTop > window.innerHeight
+
+      // Auto-scroll to top when scrolling up into Hero Section
+      if (!this.isAutoScrolling && scrollTop < this.lastScrollTop) {
+        // If we are in the hero section (first 80% of viewport) and not at top
+        if (scrollTop < window.innerHeight * 0.8 && scrollTop > 50) {
+          this.scrollToTop()
+        }
       }
+
+      this.lastScrollTop = scrollTop <= 0 ? 0 : scrollTop
     },
     scrollToTop() {
       const container = this.$refs.scrollContainer
+      this.isAutoScrolling = true
+
       if (container) {
         container.scrollTo({
           top: 0,
           behavior: 'smooth',
         })
       }
+
+      // Ensure window scroll is also reset (for mobile)
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      })
+
+      // Reset auto-scroll lock after animation
+      setTimeout(() => {
+        this.isAutoScrolling = false
+      }, 1000)
     },
     scrollToCarousel() {
       const element = document.getElementById('carrosel')
