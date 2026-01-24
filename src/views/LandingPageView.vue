@@ -40,7 +40,7 @@
                   >keyboard_arrow_right</span
                 ></ActionButton
               >
-              <ActionButton variant="secondary">Ver demo </ActionButton>
+              <ActionButton @click="handleDemoLogin" variant="secondary">Ver demo </ActionButton>
             </div>
 
             <div class="grid grid-cols-3 gap-8 pt-4">
@@ -221,7 +221,7 @@
               Começar agora
               <span class="material-symbols-outlined text-base ml-2">keyboard_arrow_right</span>
             </ActionButton>
-            <ActionButton variant="secondary">Ver demo</ActionButton>
+            <ActionButton @click="handleDemoLogin" variant="secondary">Ver demo</ActionButton>
           </div>
         </div>
       </div>
@@ -552,6 +552,7 @@ import FeatureCarousel from '@/components/FeatureCarousel.vue'
 import FAQItem from '@/components/FAQItem.vue'
 import FooterSection from '@/components/FooterSection.vue'
 import VueApexCharts from 'vue3-apexcharts'
+import { useUserStore } from '@/stores/userStore'
 
 export default {
   name: 'LandingPageView',
@@ -694,6 +695,18 @@ export default {
     },
     setChartType(type) {
       this.currentChartType = type
+    },
+    async handleDemoLogin() {
+      const userStore = useUserStore()
+      try {
+        const result = await userStore.login({ email: 'demo@bgreen.pt', password: 'demo' })
+        if (result.success) {
+          // Redireciona para a seleção de perfil ou home
+          this.$router.push({ name: 'profile-selection' })
+        }
+      } catch (error) {
+        console.error('Erro ao iniciar demo:', error)
+      }
     },
   },
 }

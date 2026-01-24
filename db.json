@@ -6,8 +6,27 @@
       "password": "456789",
       "createdAt": "2024-01-15T10:00:00Z",
       "maxProfiles": 7,
-      "appliances": ["1", "2", "3", "6", "11", "13", "14", "15"],
-      "tasks": ["1", "2", "3", "4", "5", "6", "7", "8", "9"],
+      "appliances": [
+        "1",
+        "2",
+        "3",
+        "6",
+        "11",
+        "13",
+        "14",
+        "15"
+      ],
+      "tasks": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9"
+      ],
       "profiles": [
         {
           "id": "101",
@@ -467,8 +486,19 @@
       "password": "123456",
       "createdAt": "2024-02-01T09:00:00Z",
       "maxProfiles": 3,
-      "appliances": ["1", "2", "6", "11"],
-      "tasks": ["1", "2", "3", "4", "5"],
+      "appliances": [
+        "1",
+        "2",
+        "6",
+        "11"
+      ],
+      "tasks": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5"
+      ],
       "profiles": [
         {
           "id": "201",
@@ -519,8 +549,25 @@
       "password": "123456",
       "createdAt": "2024-03-10T11:30:00Z",
       "maxProfiles": 5,
-      "appliances": ["1", "2", "3", "4", "6", "7", "11"],
-      "tasks": ["1", "2", "3", "4", "5", "6", "7", "8"],
+      "appliances": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "6",
+        "7",
+        "11"
+      ],
+      "tasks": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8"
+      ],
       "profiles": [
         {
           "id": "301",
@@ -554,6 +601,80 @@
           ],
           "badges": [],
           "lastActivitie": "2025-12-29T19:00:00Z"
+        }
+      ]
+    },
+    {
+      "id": "demo",
+      "email": "demo@bgreen.pt",
+      "password": "demo",
+      "createdAt": "2024-01-01T00:00:00Z",
+      "maxProfiles": 4,
+      "appliances": [
+        "1",
+        "6",
+        "11"
+      ],
+      "tasks": [
+        "1",
+        "2",
+        "3"
+      ],
+      "profiles": [
+        {
+          "id": "demo-1",
+          "name": "Família Demo",
+          "age": 30,
+          "avatarUrl": "https://api.dicebear.com/7.x/avataaars/svg?seed=Demo",
+          "isAdmin": true,
+          "birthDate": "1994-01-01",
+          "createdAt": "2024-01-01T00:00:00Z",
+          "xp": 615,
+          "streak": 1,
+          "points": 165,
+          "settings": {
+            "pin": null,
+            "notification": true,
+            "deviceDefault": false,
+            "header_background": "default"
+          },
+          "activity_history": [
+            {
+              "id": "1769256288700",
+              "task_id": "2",
+              "completedAt": "2026-01-24T12:04:48.700Z",
+              "pointsEarned": 15,
+              "co2saved": 7.5
+            }
+          ],
+          "appliance_history": [
+            {
+              "id": "1769256286244",
+              "appliance_id": "1",
+              "usedAt": "2026-01-24T12:04:46.244Z",
+              "duration": 300,
+              "energy_consumed": 0.75,
+              "co2emited": 0.14100000000000001
+            }
+          ],
+          "rewards_history": [],
+          "badges": [
+            {
+              "id_badge": "early_adopter",
+              "title": "Early Adopter",
+              "description": "Primeiro perfil criado",
+              "icon": "star",
+              "earnedAt": "2026-01-24T12:04:46.247Z"
+            },
+            {
+              "id_badge": "level_5",
+              "title": "Nível 5",
+              "description": "Alcançou o nível 5",
+              "icon": "emoji_events",
+              "earnedAt": "2026-01-24T12:04:46.248Z"
+            }
+          ],
+          "lastActivitie": "2026-01-24T12:04:46.246Z"
         }
       ]
     }

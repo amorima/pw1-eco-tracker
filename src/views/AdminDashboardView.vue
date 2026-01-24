@@ -991,6 +991,11 @@ export default {
       this.showProfileModal = true
     },
     async saveProfile(profileData) {
+      if (this.userStore.currentUser?.email === 'demo@bgreen.pt') {
+        this.showNotification('Modo Demo: Ação não permitida', 'warning')
+        return
+      }
+
       try {
         // Se for admin, atualiza as credenciais na raiz do utilizador (db.json/users/ID)
         if (profileData.isAdmin) {
@@ -1043,6 +1048,11 @@ export default {
       }
     },
     confirmDeleteProfile(profileId) {
+      if (this.userStore.currentUser?.email === 'demo@bgreen.pt') {
+        this.showNotification('Modo Demo: Ação não permitida', 'warning')
+        return
+      }
+
       this.confirmData = {
         title: 'Eliminar Perfil',
         message: 'Tem a certeza que deseja eliminar este perfil? Esta ação não pode ser revertida.',
@@ -1062,6 +1072,11 @@ export default {
       }
     },
     async increaseMaxProfiles() {
+      if (this.userStore.currentUser?.email === 'demo@bgreen.pt') {
+        this.showNotification('Modo Demo: Ação não permitida', 'warning')
+        return
+      }
+
       try {
         await this.userStore.updateMaxProfiles(this.maxProfiles + 1)
         this.showNotification('Limite de perfis aumentado')
@@ -1071,6 +1086,11 @@ export default {
       }
     },
     async decreaseMaxProfiles() {
+      if (this.userStore.currentUser?.email === 'demo@bgreen.pt') {
+        this.showNotification('Modo Demo: Ação não permitida', 'warning')
+        return
+      }
+
       if (this.maxProfiles <= this.profiles.length) return
       try {
         await this.userStore.updateMaxProfiles(this.maxProfiles - 1)
@@ -1095,6 +1115,11 @@ export default {
       this.showRewardModal = true
     },
     async saveReward(rewardData) {
+      if (this.userStore.currentUser?.email === 'demo@bgreen.pt') {
+        this.showNotification('Modo Demo: Ação não permitida', 'warning')
+        return
+      }
+
       try {
         // Check if this is an update or create operation
         if (
@@ -1119,6 +1144,11 @@ export default {
       }
     },
     confirmDeleteReward(rewardId) {
+      if (this.userStore.currentUser?.email === 'demo@bgreen.pt') {
+        this.showNotification('Modo Demo: Ação não permitida', 'warning')
+        return
+      }
+
       this.confirmData = {
         title: 'Eliminar Recompensa',
         message: 'Tem a certeza que deseja eliminar esta recompensa?',
@@ -1163,6 +1193,11 @@ export default {
       return date.toLocaleDateString('pt-PT')
     },
     async confirmRedeemedReward(redeemed) {
+      if (this.userStore.currentUser?.email === 'demo@bgreen.pt') {
+        this.showNotification('Modo Demo: Ação não permitida', 'warning')
+        return
+      }
+
       try {
         await this.userStore.completeReward(redeemed.profileId, redeemed.id)
         this.showNotification('Recompensa confirmada')
@@ -1172,6 +1207,11 @@ export default {
       }
     },
     async rejectRedeemedReward(redeemed) {
+      if (this.userStore.currentUser?.email === 'demo@bgreen.pt') {
+        this.showNotification('Modo Demo: Ação não permitida', 'warning')
+        return
+      }
+
       try {
         await this.userStore.cancelReward(redeemed.profileId, redeemed.id)
         this.showNotification('Recompensa rejeitada')
@@ -1194,6 +1234,11 @@ export default {
       this.showItemModal = true
     },
     async saveItem(itemData) {
+      if (this.userStore.currentUser?.email === 'demo@bgreen.pt') {
+        this.showNotification('Modo Demo: Ação não permitida', 'warning')
+        return
+      }
+
       try {
         console.log('AdminDashboard saveItem received:', itemData)
         if (this.itemModalType === 'appliance') {
@@ -1236,6 +1281,11 @@ export default {
       }
     },
     confirmDeleteAppliance(applianceId) {
+      if (this.userStore.currentUser?.email === 'demo@bgreen.pt') {
+        this.showNotification('Modo Demo: Ação não permitida', 'warning')
+        return
+      }
+
       this.confirmData = {
         title: 'Eliminar Consumo',
         message: 'Tem a certeza que deseja eliminar este consumo?',
@@ -1268,6 +1318,11 @@ export default {
       this.showItemModal = true
     },
     confirmDeleteTask(taskId) {
+      if (this.userStore.currentUser?.email === 'demo@bgreen.pt') {
+        this.showNotification('Modo Demo: Ação não permitida', 'warning')
+        return
+      }
+
       this.confirmData = {
         title: 'Eliminar Tarefa',
         message: 'Tem a certeza que deseja eliminar esta tarefa?',
@@ -1360,6 +1415,11 @@ export default {
       }
     },
     async saveChallenge() {
+      if (this.userStore.currentUser?.email === 'demo@bgreen.pt') {
+        this.showNotification('Modo Demo: Ação não permitida', 'warning')
+        return
+      }
+
       try {
         // Get task to derive category
         const task = this.getTaskById(this.challengeFormData.taskId)
@@ -1397,6 +1457,11 @@ export default {
       }
     },
     confirmDeleteChallenge(challengeId) {
+      if (this.userStore.currentUser?.email === 'demo@bgreen.pt') {
+        this.showNotification('Modo Demo: Ação não permitida', 'warning')
+        return
+      }
+
       // Don't allow deleting default challenges
       const challenge = this.challenges.find((c) => c.id === challengeId)
       if (challenge?.isDefault) {

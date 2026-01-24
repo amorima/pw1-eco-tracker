@@ -1280,6 +1280,11 @@ export default {
       this.editProfileData = null
     },
     async handleSaveProfile(profileData) {
+      if (this.userStore.currentUser?.email === 'demo@bgreen.pt') {
+        this.showNotification('Modo Demo: Ação não permitida', 'warning')
+        return
+      }
+
       if (!profileData?.id) {
         this.showNotification('Perfil inválido', 'error')
         return
@@ -1321,6 +1326,11 @@ export default {
     async saveSettings() {
       if (!this.currentProfile) return
 
+      if (this.userStore.currentUser?.email === 'demo@bgreen.pt') {
+        this.showNotification('Modo Demo: Ação não permitida', 'warning')
+        return
+      }
+
       // If enabling private profile and no PIN is set, open PIN modal
       if (this.localSettings.privateProfile && !this.currentProfile.settings?.pin) {
         this.showPinModal = true
@@ -1346,6 +1356,11 @@ export default {
       }
     },
     async selectBackground(bg) {
+      if (this.userStore.currentUser?.email === 'demo@bgreen.pt') {
+        this.showNotification('Modo Demo: Ação não permitida', 'warning')
+        return
+      }
+
       if (bg.isLocked) {
         this.showNotification(bg.hint || 'Fundo bloqueado', 'error')
         return
@@ -1375,6 +1390,11 @@ export default {
       this.localSettings.privateProfile = true
     },
     async confirmPinDisable() {
+      if (this.userStore.currentUser?.email === 'demo@bgreen.pt') {
+        this.showNotification('Modo Demo: Ação não permitida', 'warning')
+        return
+      }
+
       if (!this.currentProfile?.settings?.pin) return
 
       if (this.pinConfirmInput !== this.currentProfile.settings.pin) {
@@ -1402,6 +1422,11 @@ export default {
       }
     },
     async confirmPinSetup() {
+      if (this.userStore.currentUser?.email === 'demo@bgreen.pt') {
+        this.showNotification('Modo Demo: Ação não permitida', 'warning')
+        return
+      }
+
       if (this.pinInput.length !== 4) {
         this.pinError = 'O PIN deve ter exatamente 4 dígitos'
         return
@@ -1434,6 +1459,11 @@ export default {
       if (this.redeemingRewards.includes(reward.id)) return
       this.redeemingRewards.push(reward.id)
 
+      if (this.userStore.currentUser?.email === 'demo@bgreen.pt') {
+        this.showNotification('Modo Demo: Ação não permitida', 'warning')
+        return
+      }
+
       try {
         if (!this.currentProfile) {
           this.showNotification('Perfil não selecionado', 'error')
@@ -1460,6 +1490,11 @@ export default {
       }
     },
     async cancelReward(reward) {
+      if (this.userStore.currentUser?.email === 'demo@bgreen.pt') {
+        this.showNotification('Modo Demo: Ação não permitida', 'warning')
+        return
+      }
+
       if (reward.status !== 'pendente' && reward.status !== 'pending') {
         this.showNotification('Apenas recompensas pendentes podem ser canceladas', 'error')
         return
