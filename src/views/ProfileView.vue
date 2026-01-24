@@ -12,6 +12,14 @@
     <!-- Badge Modal -->
     <BadgeModal :isOpen="showBadgeModal" :badge="selectedBadge" @close="showBadgeModal = false" />
 
+    <!-- Profile Edit Modal -->
+    <ProfileEditModal
+      :isOpen="showEditProfileModal"
+      :profile="editProfileData"
+      @close="closeEditProfileModal"
+      @save="handleSaveProfile"
+    />
+
     <!-- PIN Confirmation Modal (for disabling) -->
     <ModalComponent
       :isOpen="showPinConfirmModal"
@@ -139,17 +147,28 @@
             class="relative px-6 pb-8 pt-16 md:px-10 md:pt-20 flex flex-col md:flex-row items-center md:items-center gap-6"
           >
             <!-- Avatar Section -->
-            <div class="relative shrink-0">
+            <div class="relative shrink-0 group cursor-pointer" @click="openEditProfileModal">
               <div
-                class="w-32 h-32 md:w-40 md:h-40 rounded-full border-[6px] border-(--system-card) shadow-xl overflow-hidden bg-(--system-background)"
+                class="w-32 h-32 md:w-40 md:h-40 rounded-full border-4 border-(--system-ring) shadow-xl overflow-hidden bg-(--system-background) ring-4 ring-(--system-ring) ring-opacity-20 transition-all duration-300 group-hover:ring-opacity-40 group-hover:shadow-2xl"
               >
                 <img
                   :src="
-                    currentProfile?.avatarUrl || 'https://api.dicebear.com/7.x/avataaars/svg?seed=User'
+                    currentProfile?.avatarUrl ||
+                    'https://api.dicebear.com/7.x/avataaars/svg?seed=User'
                   "
                   alt="User avatar"
-                  class="w-full h-full object-cover"
+                  class="w-full h-full object-cover transition-all duration-300 group-hover:brightness-75"
                 />
+              </div>
+              <!-- Edit Icon Overlay -->
+              <div
+                class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+              >
+                <div
+                  class="w-12 h-12 bg-(--system-ring) rounded-full shadow-lg flex items-center justify-center transform scale-90 group-hover:scale-100 transition-transform duration-300"
+                >
+                  <span class="material-symbols-outlined text-white text-xl">edit</span>
+                </div>
               </div>
             </div>
 
@@ -213,7 +232,7 @@
                   class="flex items-center gap-2 bg-(--system-background) px-4 py-2 rounded-xl border border-(--system-border) text-sm font-medium text-(--text-body-sub-titles)"
                 >
                   <span class="material-symbols-outlined text-lg text-orange-500">mail</span>
-                  {{ userStore.currentUser?.email || 'email@example.com' }}
+                  {{ currentProfile?.email || 'Sem email' }}
                 </div>
                 <div
                   class="flex items-center gap-2 bg-(--system-background) px-4 py-2 rounded-xl border border-(--system-border) text-sm font-medium text-(--text-body-sub-titles)"
@@ -228,18 +247,18 @@
           <!-- Settings Button (Absolute) -->
           <button
             @click="scrollToSettings"
-            class="absolute top-4 right-4 p-2 text-(--text-body-sub-titles) hover:text-(--system-ring) hover:bg-(--system-background) rounded-full transition-all z-10"
+            class="absolute top-4 right-4 w-10 h-10 flex items-center justify-center text-(--text-body-sub-titles) hover:text-(--system-ring) hover:bg-(--system-background) rounded-full transition-all z-10"
             title="Configurações"
           >
-            <span class="material-symbols-outlined">settings</span>
+            <span class="material-symbols-outlined text-xl">settings</span>
           </button>
         </div>
 
         <!-- Level & Streak Cards -->
-        <div class="flex flex-col md:flex-row gap-6 w-full mb-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full mb-6">
           <!-- Level Card -->
           <div
-            class="flex-1 bg-(--system-card) border border-(--system-border) p-6 rounded-2xl shadow-sm flex items-center gap-6 relative overflow-hidden transition-all hover:border-(--system-ring)"
+            class="bg-(--system-card) border border-(--system-border) p-6 rounded-2xl shadow-sm flex items-center gap-6 relative overflow-hidden transition-all hover:border-(--system-ring)"
           >
             <!-- Chart Container -->
             <div class="relative w-40 h-40 shrink-0">
@@ -279,7 +298,7 @@
 
           <!-- Streak Card -->
           <div
-            class="flex-1 bg-linear-to-br from-orange-50 to-orange-100 dark:from-orange-950 dark:to-orange-900 border border-orange-200 dark:border-orange-800 p-6 rounded-2xl shadow-sm flex flex-col justify-between gap-4 relative overflow-hidden"
+            class="bg-linear-to-br from-orange-50 to-orange-100 dark:from-orange-950 dark:to-orange-900 border border-orange-200 dark:border-orange-800 p-6 rounded-2xl shadow-sm flex flex-col justify-between gap-4 relative overflow-hidden"
           >
             <!-- Background Decoration -->
             <div class="absolute -right-4 -top-4 text-orange-500/10 dark:text-orange-500/5">
@@ -338,284 +357,288 @@
       </div>
 
       <!-- Draggable Collapsible Cards -->
-      <draggable
-        v-model="cardOrder"
-        @end="saveCardOrder"
-        item-key="id"
-        class="grid gap-6 grid-cols-1"
-        handle=".drag-handle"
-        :animation="200"
-        ghost-class="ghost-card"
-      >
-        <template #item="{ element }">
-          <div>
-            <CollapsibleCard
-              v-if="element === 'badges'"
-              title="Badges"
-              icon="apps"
-              v-model="cardOpenStates.badges"
-              class="h-full"
-            >
-              <div class="grid gap-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 w-full py-4">
-                <BadgeCard
-                  v-for="badge in allBadgesWithStatus"
-                  :key="badge.id"
-                  :icon="badge.icon"
-                  :title="badge.title"
-                  :locked="!badge.earned"
-                  @click="openBadgeModal(badge)"
-                />
-              </div>
-            </CollapsibleCard>
-
-            <CollapsibleCard
-              v-else-if="element === 'ranking'"
-              title="Ranking"
-              icon="apps"
-              v-model="cardOpenStates.ranking"
-              class="h-full"
-            >
-              <div class="flex flex-col gap-2 w-full py-2">
-                <RankingRow
-                  v-for="profile in householdLeaderboard"
-                  :key="profile.id"
-                  :position="profile.rank"
-                  :name="profile.name"
-                  :highlight="profile.id === currentProfile?.id"
-                />
-              </div>
-            </CollapsibleCard>
-
-            <CollapsibleCard
-              v-else-if="element === 'challenges'"
-              title="Desafios"
-              icon="apps"
-              v-model="cardOpenStates.challenges"
-              class="h-full"
-            >
-              <!-- Sort Toggle -->
-              <div v-if="profileChallenges.length > 0" class="flex items-center justify-end mb-4">
-                <button
-                  @click="sortCompletedFirst = !sortCompletedFirst"
-                  :class="[
-                    'flex items-center gap-2 px-3 py-2 rounded-lg transition-colors',
-                    sortCompletedFirst
-                      ? 'bg-(--system-ring) text-white'
-                      : 'bg-(--system-card) border-2 border-(--system-border) text-(--text-body-sub-titles)',
-                  ]"
-                >
-                  <span class="material-symbols-outlined text-[20px]">
-                    {{ sortCompletedFirst ? 'check_circle' : 'radio_button_unchecked' }}
-                  </span>
-                  <span class="text-sm font-medium">Completados primeiro</span>
-                </button>
-              </div>
-
-              <div
-                v-if="paginatedChallenges.length > 0"
-                class="gap-4 grid grid-cols-1 md:grid-cols-2 w-full"
+      <div class="w-full max-w-[930px]">
+        <draggable
+          v-model="cardOrder"
+          @end="saveCardOrder"
+          item-key="id"
+          class="grid gap-6 grid-cols-1"
+          handle=".drag-handle"
+          :animation="200"
+          ghost-class="ghost-card"
+        >
+          <template #item="{ element }">
+            <div>
+              <CollapsibleCard
+                v-if="element === 'badges'"
+                title="Badges"
+                icon="apps"
+                v-model="cardOpenStates.badges"
+                class="h-full"
               >
-                <ChallengeCard
-                  v-for="challenge in paginatedChallenges"
-                  :key="challenge.id"
-                  :title="challenge.title"
-                  :description="challenge.description"
-                  :progress="challenge.progress"
-                  :xp="challenge.xp"
-                  :active="challenge.completed"
-                />
-              </div>
-              <div v-else class="text-center py-8 text-(--text-disabled)">
-                <span class="material-symbols-outlined text-4xl mb-2">emoji_events</span>
-                <p>Nenhum desafio ativo no momento.</p>
-                <p class="text-sm">O administrador pode criar desafios para a família.</p>
-              </div>
-
-              <!-- Ver Mais Button -->
-              <button
-                v-if="sortedChallenges.length > displayedChallengesCount"
-                @click="displayedChallengesCount += 6"
-                class="flex items-center gap-1 mx-auto text-(--system-ring) text-lg mt-4 hover:opacity-80 transition-opacity"
-              >
-                <span class="material-symbols-outlined">expand_more</span>
-                <span>Ver mais</span>
-              </button>
-            </CollapsibleCard>
-
-            <CollapsibleCard
-              v-else-if="element === 'rewards'"
-              title="Recompensas"
-              icon="apps"
-              v-model="cardOpenStates.rewards"
-              class="h-full"
-            >
-              <!-- Tab Navigation -->
-              <div class="flex items-center w-full border-b border-(--system-border) mb-4">
-                <button
-                  @click="rewardTab = 'redeem'"
-                  :class="[
-                    'flex-1 py-3 text-center font-bold text-base transition-colors relative',
-                    rewardTab === 'redeem'
-                      ? 'text-(--text-body-sub-titles)'
-                      : 'text-(--text-disabled) hover:text-(--text-body)',
-                  ]"
-                >
-                  Resgatar pontos
-                  <div
-                    v-if="rewardTab === 'redeem'"
-                    class="absolute bottom-0 left-0 w-full h-0.5 bg-(--text-body-sub-titles)"
-                  ></div>
-                </button>
-                <button
-                  @click="rewardTab = 'redeemed'"
-                  :class="[
-                    'flex-1 py-3 text-center font-bold text-base transition-colors relative',
-                    rewardTab === 'redeemed'
-                      ? 'text-(--text-body-sub-titles)'
-                      : 'text-(--text-disabled) hover:text-(--text-body)',
-                  ]"
-                >
-                  Histórico ({{ redeemedRewards.length }})
-                  <div
-                    v-if="rewardTab === 'redeemed'"
-                    class="absolute bottom-0 left-0 w-full h-0.5 bg-(--text-body-sub-titles)"
-                  ></div>
-                </button>
-              </div>
-
-              <!-- Search -->
-              <div class="relative w-full mb-6">
-                <input
-                  v-model="rewardSearch"
-                  type="text"
-                  placeholder="Pesquisar recompensas..."
-                  class="w-full pl-10 pr-4 py-2 bg-(--system-card) border-2 border-(--system-border) rounded-lg outline-none focus:border-(--system-ring) transition-colors"
-                />
-                <div class="absolute left-3 top-1/2 -translate-y-1/2">
-                  <span class="material-symbols-outlined text-[20px] text-(--text-disabled)"
-                    >search</span
-                  >
+                <div class="grid gap-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 w-full py-4">
+                  <BadgeCard
+                    v-for="badge in allBadgesWithStatus"
+                    :key="badge.id"
+                    :icon="badge.icon"
+                    :title="badge.title"
+                    :locked="!badge.earned"
+                    @click="openBadgeModal(badge)"
+                  />
                 </div>
-              </div>
+              </CollapsibleCard>
 
-              <!-- Rewards List -->
-              <div v-if="rewardTab === 'redeem'" class="space-y-2">
-                <RewardListItem
-                  v-for="reward in filteredAvailableRewards"
-                  :key="reward.id"
-                  :image="reward.imgUrl"
-                  :title="reward.title"
-                  :points="reward.points_cost"
-                  @action="redeemReward(reward)"
-                />
-                <p
-                  v-if="filteredAvailableRewards.length === 0"
-                  class="text-center py-4 text-(--text-disabled)"
-                >
-                  Nenhuma recompensa disponível
-                </p>
-              </div>
-
-              <div v-else class="space-y-2">
-                <p
-                  class="font-['Noto_Sans'] font-bold leading-[1.5] text-[16px] text-(--text-body-sub-titles) mb-4"
-                >
-                  Histórico:
-                </p>
-                <RewardListItem
-                  v-for="reward in redeemedRewards"
-                  :key="reward.id"
-                  :image="getRewardImage(reward.id_reward)"
-                  :title="reward.title"
-                  :points="reward.points_cost"
-                  :date="formatDate(reward.redemedAt)"
-                  :status="reward.status"
-                  @action="cancelReward(reward)"
-                />
-                <p
-                  v-if="redeemedRewards.length === 0"
-                  class="text-center py-4 text-(--text-disabled)"
-                >
-                  Nenhuma recompensa resgatada
-                </p>
-              </div>
-
-              <p
-                class="font-['Noto_Sans'] font-semibold text-xl text-(--text-body-titles) text-right w-full mt-6"
+              <CollapsibleCard
+                v-else-if="element === 'ranking'"
+                title="Ranking"
+                icon="apps"
+                v-model="cardOpenStates.ranking"
+                class="h-full"
               >
-                {{ currentProfile?.points || 0 }} pontos
-              </p>
-            </CollapsibleCard>
-
-            <CollapsibleCard
-              v-else-if="element === 'settings'"
-              id="card-settings"
-              title="Configurações"
-              icon="apps"
-              v-model="cardOpenStates.settings"
-              class="h-full"
-            >
-              <div class="flex flex-col gap-3 w-full">
-                <div
-                  v-for="setting in settingsList"
-                  :key="setting.key"
-                  class="bg-(--system-card) border border-(--system-border) flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-lg w-full gap-4 transition-all hover:border-(--system-ring)"
-                >
-                  <div class="flex flex-col gap-1">
-                    <span class="font-semibold text-base sm:text-lg text-(--text-body)">{{
-                      setting.title
-                    }}</span>
-                    <span class="text-sm text-(--text-body-sub-titles) leading-relaxed">{{
-                      setting.description
-                    }}</span>
-                  </div>
-                  <div class="flex justify-end shrink-0">
-                    <ToggleSwitch
-                      v-model="localSettings[setting.key]"
-                      @update:modelValue="saveSettings"
-                    />
-                  </div>
+                <div class="flex flex-col gap-2 w-full py-2">
+                  <RankingRow
+                    v-for="profile in householdLeaderboard"
+                    :key="profile.id"
+                    :position="profile.rank"
+                    :name="profile.name"
+                    :highlight="profile.id === currentProfile?.id"
+                  />
                 </div>
-              </div>
+              </CollapsibleCard>
 
-              <!-- Background Customization -->
-              <div class="mt-6 border-t border-(--system-border) pt-6">
-                <h3 class="font-semibold text-base text-(--text-body) mb-4">
-                  Personalização do Fundo
-                </h3>
-                <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              <CollapsibleCard
+                v-else-if="element === 'challenges'"
+                title="Desafios"
+                icon="apps"
+                v-model="cardOpenStates.challenges"
+                class="h-full"
+              >
+                <!-- Sort Toggle -->
+                <div v-if="profileChallenges.length > 0" class="flex items-center justify-end mb-4">
                   <button
-                    v-for="bg in availableBackgrounds"
-                    :key="bg.id"
-                    @click="selectBackground(bg)"
+                    @click="sortCompletedFirst = !sortCompletedFirst"
                     :class="[
-                      'h-16 rounded-xl border-2 transition-all relative overflow-hidden group',
-                      currentProfile?.settings?.headerBackground === bg.id
-                        ? 'border-(--system-ring) ring-2 ring-(--system-ring) ring-offset-2'
-                        : 'border-transparent hover:border-(--system-border)',
-                      bg.isLocked ? 'opacity-70 cursor-not-allowed' : 'cursor-pointer',
+                      'flex items-center gap-2 px-3 py-2 rounded-lg transition-colors',
+                      sortCompletedFirst
+                        ? 'bg-(--system-ring) text-white'
+                        : 'bg-(--system-card) border-2 border-(--system-border) text-(--text-body-sub-titles)',
                     ]"
-                    :title="bg.isLocked ? bg.hint : bg.name"
                   >
-                    <div :class="['absolute inset-0', bg.class]"></div>
-                    <div
-                      v-if="bg.isLocked"
-                      class="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/30 transition-colors"
-                    >
-                      <span class="material-symbols-outlined text-white drop-shadow-md">lock</span>
-                    </div>
-                    <span
-                      class="absolute bottom-1 left-2 text-[10px] font-bold text-(--text-body-titles) bg-white/80 px-1.5 py-0.5 rounded-md backdrop-blur-sm shadow-sm"
-                    >
-                      {{ bg.name }}
+                    <span class="material-symbols-outlined text-[20px]">
+                      {{ sortCompletedFirst ? 'check_circle' : 'radio_button_unchecked' }}
                     </span>
+                    <span class="text-sm font-medium">Completados primeiro</span>
                   </button>
                 </div>
-              </div>
-            </CollapsibleCard>
-          </div>
-        </template>
-      </draggable>
+
+                <div
+                  v-if="paginatedChallenges.length > 0"
+                  class="gap-4 grid grid-cols-1 md:grid-cols-2 w-full"
+                >
+                  <ChallengeCard
+                    v-for="challenge in paginatedChallenges"
+                    :key="challenge.id"
+                    :title="challenge.title"
+                    :description="challenge.description"
+                    :progress="challenge.progress"
+                    :xp="challenge.xp"
+                    :active="challenge.completed"
+                  />
+                </div>
+                <div v-else class="text-center py-8 text-(--text-disabled)">
+                  <span class="material-symbols-outlined text-4xl mb-2">emoji_events</span>
+                  <p>Nenhum desafio ativo no momento.</p>
+                  <p class="text-sm">O administrador pode criar desafios para a família.</p>
+                </div>
+
+                <!-- Ver Mais Button -->
+                <button
+                  v-if="sortedChallenges.length > displayedChallengesCount"
+                  @click="displayedChallengesCount += 6"
+                  class="flex items-center gap-1 mx-auto text-(--system-ring) text-lg mt-4 hover:opacity-80 transition-opacity"
+                >
+                  <span class="material-symbols-outlined">expand_more</span>
+                  <span>Ver mais</span>
+                </button>
+              </CollapsibleCard>
+
+              <CollapsibleCard
+                v-else-if="element === 'rewards'"
+                title="Recompensas"
+                icon="apps"
+                v-model="cardOpenStates.rewards"
+                class="h-full"
+              >
+                <!-- Tab Navigation -->
+                <div class="flex items-center w-full border-b border-(--system-border) mb-4">
+                  <button
+                    @click="rewardTab = 'redeem'"
+                    :class="[
+                      'flex-1 py-3 text-center font-bold text-base transition-colors relative',
+                      rewardTab === 'redeem'
+                        ? 'text-(--text-body-sub-titles)'
+                        : 'text-(--text-disabled) hover:text-(--text-body)',
+                    ]"
+                  >
+                    Resgatar pontos
+                    <div
+                      v-if="rewardTab === 'redeem'"
+                      class="absolute bottom-0 left-0 w-full h-0.5 bg-(--text-body-sub-titles)"
+                    ></div>
+                  </button>
+                  <button
+                    @click="rewardTab = 'redeemed'"
+                    :class="[
+                      'flex-1 py-3 text-center font-bold text-base transition-colors relative',
+                      rewardTab === 'redeemed'
+                        ? 'text-(--text-body-sub-titles)'
+                        : 'text-(--text-disabled) hover:text-(--text-body)',
+                    ]"
+                  >
+                    Histórico ({{ redeemedRewards.length }})
+                    <div
+                      v-if="rewardTab === 'redeemed'"
+                      class="absolute bottom-0 left-0 w-full h-0.5 bg-(--text-body-sub-titles)"
+                    ></div>
+                  </button>
+                </div>
+
+                <!-- Search -->
+                <div class="relative w-full mb-6">
+                  <input
+                    v-model="rewardSearch"
+                    type="text"
+                    placeholder="Pesquisar recompensas..."
+                    class="w-full pl-10 pr-4 py-2 bg-(--system-card) border-2 border-(--system-border) rounded-lg outline-none focus:border-(--system-ring) transition-colors"
+                  />
+                  <div class="absolute left-3 top-1/2 -translate-y-1/2">
+                    <span class="material-symbols-outlined text-[20px] text-(--text-disabled)"
+                      >search</span
+                    >
+                  </div>
+                </div>
+
+                <!-- Rewards List -->
+                <div v-if="rewardTab === 'redeem'" class="space-y-2">
+                  <RewardListItem
+                    v-for="reward in filteredAvailableRewards"
+                    :key="reward.id"
+                    :image="reward.imgUrl"
+                    :title="reward.title"
+                    :points="reward.points_cost"
+                    @action="redeemReward(reward)"
+                  />
+                  <p
+                    v-if="filteredAvailableRewards.length === 0"
+                    class="text-center py-4 text-(--text-disabled)"
+                  >
+                    Nenhuma recompensa disponível
+                  </p>
+                </div>
+
+                <div v-else class="space-y-2">
+                  <p
+                    class="font-['Noto_Sans'] font-bold leading-[1.5] text-[16px] text-(--text-body-sub-titles) mb-4"
+                  >
+                    Histórico:
+                  </p>
+                  <RewardListItem
+                    v-for="reward in redeemedRewards"
+                    :key="reward.id"
+                    :image="getRewardImage(reward.id_reward)"
+                    :title="reward.title"
+                    :points="reward.points_cost"
+                    :date="formatDate(reward.redemedAt)"
+                    :status="reward.status"
+                    @action="cancelReward(reward)"
+                  />
+                  <p
+                    v-if="redeemedRewards.length === 0"
+                    class="text-center py-4 text-(--text-disabled)"
+                  >
+                    Nenhuma recompensa resgatada
+                  </p>
+                </div>
+
+                <p
+                  class="font-['Noto_Sans'] font-semibold text-xl text-(--text-body-titles) text-right w-full mt-6"
+                >
+                  {{ currentProfile?.points || 0 }} pontos
+                </p>
+              </CollapsibleCard>
+
+              <CollapsibleCard
+                v-else-if="element === 'settings'"
+                id="card-settings"
+                title="Configurações"
+                icon="apps"
+                v-model="cardOpenStates.settings"
+                class="h-full"
+              >
+                <div class="flex flex-col gap-3 w-full">
+                  <div
+                    v-for="setting in settingsList"
+                    :key="setting.key"
+                    class="bg-(--system-card) border border-(--system-border) flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-lg w-full gap-4 transition-all hover:border-(--system-ring)"
+                  >
+                    <div class="flex flex-col gap-1">
+                      <span class="font-semibold text-base sm:text-lg text-(--text-body)">{{
+                        setting.title
+                      }}</span>
+                      <span class="text-sm text-(--text-body-sub-titles) leading-relaxed">{{
+                        setting.description
+                      }}</span>
+                    </div>
+                    <div class="flex justify-end shrink-0">
+                      <ToggleSwitch
+                        v-model="localSettings[setting.key]"
+                        @update:modelValue="saveSettings"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Background Customization -->
+                <div class="mt-6 border-t border-(--system-border) pt-6">
+                  <h3 class="font-semibold text-base text-(--text-body) mb-4">
+                    Personalização do Fundo
+                  </h3>
+                  <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                    <button
+                      v-for="bg in availableBackgrounds"
+                      :key="bg.id"
+                      @click="selectBackground(bg)"
+                      :class="[
+                        'h-16 rounded-xl border-2 transition-all relative overflow-hidden group',
+                        currentProfile?.settings?.headerBackground === bg.id
+                          ? 'border-(--system-ring) ring-2 ring-(--system-ring) ring-offset-2'
+                          : 'border-transparent hover:border-(--system-border)',
+                        bg.isLocked ? 'opacity-70 cursor-not-allowed' : 'cursor-pointer',
+                      ]"
+                      :title="bg.isLocked ? bg.hint : bg.name"
+                    >
+                      <div :class="['absolute inset-0', bg.class]"></div>
+                      <div
+                        v-if="bg.isLocked"
+                        class="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/30 transition-colors"
+                      >
+                        <span class="material-symbols-outlined text-white drop-shadow-md"
+                          >lock</span
+                        >
+                      </div>
+                      <span
+                        class="absolute bottom-1 left-2 text-[10px] font-bold text-(--text-body-titles) bg-white/80 px-1.5 py-0.5 rounded-md backdrop-blur-sm shadow-sm"
+                      >
+                        {{ bg.name }}
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              </CollapsibleCard>
+            </div>
+          </template>
+        </draggable>
+      </div>
     </div>
   </div>
 
@@ -629,6 +652,7 @@ import draggable from 'vuedraggable'
 import CollapsibleCard from '@/components/CollapsibleCard.vue'
 import BadgeCard from '@/components/BadgeCard.vue'
 import BadgeModal from '@/components/BadgeModal.vue'
+import ProfileEditModal from '@/components/ProfileEditModal.vue'
 import RankingRow from '@/components/RankingRow.vue'
 import ChallengeCard from '@/components/ChallengeCard.vue'
 import RewardListItem from '@/components/RewardListItem.vue'
@@ -648,6 +672,7 @@ export default {
     CollapsibleCard,
     BadgeCard,
     BadgeModal,
+    ProfileEditModal,
     RankingRow,
     ChallengeCard,
     RewardListItem,
@@ -668,6 +693,10 @@ export default {
       // Badge Modal
       showBadgeModal: false,
       selectedBadge: null,
+
+      // Profile Edit Modal
+      showEditProfileModal: false,
+      editProfileData: null,
 
       // PIN Setup Modal
       showPinModal: false,
@@ -1224,6 +1253,43 @@ export default {
     openBadgeModal(badge) {
       this.selectedBadge = badge
       this.showBadgeModal = true
+    },
+    openEditProfileModal() {
+      this.editProfileData = {
+        id: this.currentProfile?.id,
+        name: this.currentProfile?.name || '',
+        age: this.currentProfile?.age || '',
+        avatarUrl: this.currentProfile?.avatarUrl || '',
+        email: this.currentProfile?.email || '',
+        birthdate: this.currentProfile?.birthdate || '',
+      }
+      this.showEditProfileModal = true
+    },
+    closeEditProfileModal() {
+      this.showEditProfileModal = false
+      this.editProfileData = null
+    },
+    async handleSaveProfile(profileData) {
+      if (!profileData?.id) {
+        this.showNotification('Perfil inválido', 'error')
+        return
+      }
+
+      const updateData = {
+        name: profileData.name,
+        age: profileData.age,
+        avatarUrl: profileData.avatarUrl || profileData.avatar,
+        birthdate: profileData.birthdate,
+        email: profileData.email || null,
+      }
+
+      const result = await this.userStore.updateProfile(profileData.id, updateData)
+
+      if (result.success) {
+        this.showNotification('Perfil atualizado com sucesso!', 'success')
+      } else {
+        this.showNotification('Erro ao atualizar perfil', 'error')
+      }
     },
     formatDate(dateString) {
       if (!dateString) return ''

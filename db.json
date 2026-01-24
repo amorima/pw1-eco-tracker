@@ -6,33 +6,14 @@
       "password": "123456",
       "createdAt": "2024-01-15T10:00:00Z",
       "maxProfiles": 7,
-      "appliances": [
-        "1",
-        "2",
-        "3",
-        "6",
-        "11",
-        "13",
-        "14",
-        "15"
-      ],
-      "tasks": [
-        "1",
-        "2",
-        "3",
-        "4",
-        "5",
-        "6",
-        "7",
-        "8",
-        "9"
-      ],
+      "appliances": ["1", "2", "3", "6", "11", "13", "14", "15"],
+      "tasks": ["1", "2", "3", "4", "5", "6", "7", "8", "9"],
       "profiles": [
         {
           "id": "101",
-          "name": "Mário Pires",
-          "age": 35,
-          "avatarUrl": "https://i.pravatar.cc/150?img=12",
+          "name": "Mário Piress",
+          "age": 36,
+          "avatarUrl": "https://plus.unsplash.com/premium_photo-1664298528358-790433ba0815?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
           "isAdmin": true,
           "birthDate": "1989-05-15",
           "createdAt": "2024-01-15T10:05:00Z",
@@ -256,12 +237,13 @@
             }
           ],
           "lastActivitie": "2026-01-23T23:08:53.733Z",
-          "points": 75
+          "points": 75,
+          "birthdate": "1989-05-06"
         },
         {
           "id": "102",
           "name": "Ana Pires",
-          "age": 32,
+          "age": 34,
           "avatarUrl": "https://i.pravatar.cc/150?img=5",
           "isAdmin": false,
           "birthDate": "1992-08-20",
@@ -293,7 +275,9 @@
           "appliance_history": [],
           "rewards_history": [],
           "badges": [],
-          "lastActivitie": "2025-12-31T13:00:00Z"
+          "lastActivitie": "2025-12-31T13:00:00Z",
+          "birthdate": "1991-11-11",
+          "email": "ana.pires@pires.pt"
         },
         {
           "id": "103",
@@ -325,24 +309,14 @@
       "password": "123456",
       "createdAt": "2024-02-01T09:00:00Z",
       "maxProfiles": 3,
-      "appliances": [
-        "1",
-        "2",
-        "6",
-        "11"
-      ],
-      "tasks": [
-        "1",
-        "2",
-        "3",
-        "4",
-        "5"
-      ],
+      "appliances": ["1", "2", "6", "11"],
+      "tasks": ["1", "2", "3", "4", "5"],
       "profiles": [
         {
           "id": "201",
           "name": "José Maria",
           "age": 28,
+          "email": null,
           "avatarUrl": "https://i.pravatar.cc/150?img=13",
           "isAdmin": true,
           "birthDate": "1996-11-05",
@@ -387,30 +361,14 @@
       "password": "123456",
       "createdAt": "2024-03-10T11:30:00Z",
       "maxProfiles": 5,
-      "appliances": [
-        "1",
-        "2",
-        "3",
-        "4",
-        "6",
-        "7",
-        "11"
-      ],
-      "tasks": [
-        "1",
-        "2",
-        "3",
-        "4",
-        "5",
-        "6",
-        "7",
-        "8"
-      ],
+      "appliances": ["1", "2", "3", "4", "6", "7", "11"],
+      "tasks": ["1", "2", "3", "4", "5", "6", "7", "8"],
       "profiles": [
         {
           "id": "301",
           "name": "Manuel Sá",
           "age": 42,
+          "email": null,
           "avatarUrl": "https://i.pravatar.cc/150?img=14",
           "isAdmin": true,
           "birthDate": "1982-07-22",
