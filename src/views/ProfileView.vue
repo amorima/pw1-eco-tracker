@@ -223,10 +223,20 @@
               <!-- Details Chips -->
               <div class="flex flex-wrap justify-center md:justify-start gap-3 mt-4">
                 <div
-                  class="flex items-center gap-2 bg-(--system-background) px-4 py-2 rounded-xl border border-(--system-border) text-sm font-medium text-(--text-body-sub-titles)"
+                  class="relative group flex items-center gap-2 bg-(--system-background) px-4 py-2 rounded-xl border border-(--system-border) text-sm font-medium text-(--text-body-sub-titles) cursor-help"
                 >
-                  <span class="material-symbols-outlined text-lg text-blue-500">public</span>
-                  Portugal
+                  <span class="material-symbols-outlined text-lg text-green-500">eco</span>
+                  {{ currentProfile?.co2Saved || 0 }} kg CO₂
+                  <!-- Custom Tooltip -->
+                  <div
+                    class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1.5 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap shadow-lg z-50"
+                  >
+                    Total de CO₂ poupado
+                    <!-- Arrow -->
+                    <div
+                      class="absolute top-full left-1/2 transform -translate-x-1/2 -mt-1 border-4 border-transparent border-t-gray-800"
+                    ></div>
+                  </div>
                 </div>
                 <div
                   class="flex items-center gap-2 bg-(--system-background) px-4 py-2 rounded-xl border border-(--system-border) text-sm font-medium text-(--text-body-sub-titles)"
@@ -258,7 +268,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full mb-6">
           <!-- Level Card -->
           <div
-            class="bg-(--system-card) border border-(--system-border) p-6 rounded-2xl shadow-sm flex items-center gap-6 relative overflow-hidden transition-all hover:border-(--system-ring)"
+            class="bg-(--system-card) border border-(--system-border) p-6 rounded-2xl shadow-sm flex items-center gap-6 relative overflow-hidden transition-all"
           >
             <!-- Chart Container -->
             <div class="relative w-40 h-40 shrink-0">
