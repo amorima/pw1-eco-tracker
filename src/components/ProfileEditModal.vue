@@ -43,7 +43,7 @@
           Data de Nascimento
         </label>
         <input
-          v-model="formData.birthdate"
+          v-model="formData.birthDate"
           type="date"
           :max="maxDate"
           class="w-full px-4 py-3 bg-(--system-card) border-2 border-(--system-border) rounded-lg text-(--text-body) outline-none focus:border-(--system-ring) transition-colors"
@@ -169,7 +169,7 @@ export default {
         email: '',
         password: '',
         confirmPassword: '',
-        birthdate: '',
+        birthDate: '',
         avatarUrl: '',
         isAdmin: false,
       },
@@ -195,8 +195,8 @@ export default {
       return emailRegex.test(this.formData.email)
     },
     calculatedAge() {
-      if (!this.formData.birthdate) return null
-      const birthDate = new Date(this.formData.birthdate)
+      if (!this.formData.birthDate) return null
+      const birthDate = new Date(this.formData.birthDate)
       const today = new Date()
       let age = today.getFullYear() - birthDate.getFullYear()
       const monthDiff = today.getMonth() - birthDate.getMonth()
@@ -261,7 +261,7 @@ export default {
           email: this.profile.email || '',
           password: '',
           confirmPassword: '',
-          birthdate: this.profile.birthdate || '',
+          birthDate: this.profile.birthDate || '',
           avatarUrl: this.profile.avatarUrl || this.profile.avatar || '',
           isAdmin: this.profile.isAdmin || false,
         }
@@ -272,7 +272,7 @@ export default {
           email: '',
           password: '',
           confirmPassword: '',
-          birthdate: '',
+          birthDate: '',
           avatarUrl: '',
           isAdmin: false,
         }

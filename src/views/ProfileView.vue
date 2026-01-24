@@ -1271,7 +1271,7 @@ export default {
         age: this.currentProfile?.age || '',
         avatarUrl: this.currentProfile?.avatarUrl || '',
         email: this.currentProfile?.email || '',
-        birthdate: this.currentProfile?.birthdate || '',
+        birthDate: this.currentProfile?.birthDate || '',
       }
       this.showEditProfileModal = true
     },
@@ -1289,7 +1289,7 @@ export default {
         name: profileData.name,
         age: profileData.age,
         avatarUrl: profileData.avatarUrl || profileData.avatar,
-        birthdate: profileData.birthdate,
+        birthDate: profileData.birthDate,
         email: profileData.email || null,
       }
 
