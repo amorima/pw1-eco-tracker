@@ -16,9 +16,7 @@
     >
       <!-- Left Form Section -->
       <div class="flex items-center justify-center w-full lg:flex-1">
-        <div
-          class="flex flex-col gap-8 items-start justify-center w-full max-w-[400px] lg:max-w-none lg:w-fit"
-        >
+        <div class="flex flex-col gap-8 items-start justify-center w-full max-w-[400px]">
           <!-- Form Container -->
           <div class="flex flex-col gap-4 items-start justify-center w-full">
             <!-- Title and Fields -->
@@ -34,6 +32,7 @@
                 v-model="formData.email"
                 placeholder="Email"
                 type="email"
+                class="rounded-lg"
                 @keyup.enter="handleLogin"
               />
 
@@ -41,16 +40,21 @@
                 v-model="formData.password"
                 placeholder="Password"
                 type="password"
+                class="rounded-lg"
                 @keyup.enter="handleLogin"
               />
             </div>
 
             <!-- Action Buttons -->
             <div class="flex gap-4 items-center w-full">
-              <ActionButton @click="$router.push({ name: 'register' })" :variant="'secondary'">
+              <ActionButton
+                @click="$router.push({ name: 'register' })"
+                :variant="'secondary'"
+                class="flex-1"
+              >
                 Não tem conta?
               </ActionButton>
-              <ActionButton @click="handleLogin" :disabled="isLoading">
+              <ActionButton @click="handleLogin" :disabled="isLoading" class="flex-1">
                 {{ isLoading ? 'A entrar...' : 'Começar agora' }}
               </ActionButton>
             </div>

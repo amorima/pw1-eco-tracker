@@ -16,9 +16,7 @@
     >
       <!-- Left Form Section -->
       <div class="flex items-center justify-center w-full lg:flex-1">
-        <div
-          class="flex flex-col gap-8 items-start justify-center w-full max-w-[400px] lg:max-w-none lg:w-fit"
-        >
+        <div class="flex flex-col gap-8 items-start justify-center w-full max-w-[400px]">
           <!-- Form Container -->
           <div class="flex flex-col gap-4 items-start justify-center w-full">
             <!-- Title and Fields -->
@@ -30,16 +28,32 @@
                 Registo
               </h1>
 
-              <FormInput v-model="formData.name" placeholder="Nome" type="text" />
+              <FormInput
+                v-model="formData.name"
+                placeholder="Nome"
+                type="text"
+                class="rounded-lg"
+              />
 
-              <FormInput v-model="formData.email" placeholder="Email" type="email" />
+              <FormInput
+                v-model="formData.email"
+                placeholder="Email"
+                type="email"
+                class="rounded-lg"
+              />
 
-              <FormInput v-model="formData.password" placeholder="Password" type="password" />
+              <FormInput
+                v-model="formData.password"
+                placeholder="Password"
+                type="password"
+                class="rounded-lg"
+              />
 
               <FormInput
                 v-model="formData.confirmPassword"
                 placeholder="Confirmar Password"
                 type="password"
+                class="rounded-lg"
               />
             </div>
 
@@ -58,13 +72,17 @@
 
             <!-- Action Buttons -->
             <div class="flex gap-4 items-center w-full">
-              <ActionButton @click="$router.push({ name: 'login' })" :variant="'secondary'">
+              <ActionButton
+                @click="$router.push({ name: 'login' })"
+                :variant="'secondary'"
+                class="flex-1"
+              >
                 Já tem conta?
               </ActionButton>
               <ActionButton
                 @click="handleRegister"
                 :disabled="isLoading"
-                class="bg-(--system-ring) rounded-lg px-6 py-2.5 text-[10px] font-bold text-(--text-body-titles) hover:bg-(--system-popover-foreground) transition-colors"
+                class="bg-(--system-ring) rounded-lg px-6 py-2.5 text-[10px] font-bold text-(--text-body-titles) hover:bg-(--system-popover-foreground) transition-colors flex-1"
               >
                 {{ isLoading ? 'A criar conta...' : 'Criar Conta' }}
               </ActionButton>
