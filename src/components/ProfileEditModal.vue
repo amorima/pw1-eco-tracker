@@ -18,6 +18,25 @@
         :error="errors.email"
       />
 
+      <!-- Password Section (Only if enabled) -->
+      <div v-if="showPasswordFields" class="space-y-4 pt-2 border-t border-(--system-border)">
+        <p class="text-sm font-medium text-(--text-body-titles)">Alterar Password</p>
+        <FormInput
+          v-model="formData.password"
+          label="Nova Password"
+          placeholder="Deixe em branco para manter"
+          type="password"
+        />
+        <FormInput
+          v-if="formData.password"
+          v-model="formData.confirmPassword"
+          label="Confirmar Password"
+          placeholder="Confirme a nova password"
+          type="password"
+          :error="errors.password"
+        />
+      </div>
+
       <!-- Data de Nascimento -->
       <div class="space-y-2">
         <label class="block text-sm font-medium text-(--text-body-sub-titles)">
@@ -135,6 +154,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    showPasswordFields: {
+      type: Boolean,
+      default: false,
+    },
   },
   emits: ['close', 'save'],
   data() {
@@ -144,6 +167,8 @@ export default {
         id: null,
         name: '',
         email: '',
+        password: '',
+        confirmPassword: '',
         birthdate: '',
         avatarUrl: '',
         isAdmin: false,
@@ -151,6 +176,7 @@ export default {
       errors: {
         name: '',
         email: '',
+        password: '',
       },
     }
   },
@@ -159,7 +185,9 @@ export default {
       return this.profile?.id ? 'Editar Perfil' : 'Criar Perfil'
     },
     isValid() {
-      return this.formData.name.trim() && this.isEmailValid && !this.errors.name
+      return (
+        this.formData.name.trim() && this.isEmailValid && !this.errors.name && !this.errors.password
+      )
     },
     isEmailValid() {
       if (!this.formData.email) return true
@@ -209,6 +237,20 @@ export default {
         this.errors.email = ''
       }
     },
+    'formData.password'(newVal) {
+      if (this.formData.confirmPassword && newVal !== this.formData.confirmPassword) {
+        this.errors.password = 'As passwords não coincidem'
+      } else {
+        this.errors.password = ''
+      }
+    },
+    'formData.confirmPassword'(newVal) {
+      if (this.formData.password && newVal !== this.formData.password) {
+        this.errors.password = 'As passwords não coincidem'
+      } else {
+        this.errors.password = ''
+      }
+    },
   },
   methods: {
     initForm() {
@@ -217,6 +259,8 @@ export default {
           id: this.profile.id,
           name: this.profile.name || '',
           email: this.profile.email || '',
+          password: '',
+          confirmPassword: '',
           birthdate: this.profile.birthdate || '',
           avatarUrl: this.profile.avatarUrl || this.profile.avatar || '',
           isAdmin: this.profile.isAdmin || false,
@@ -226,12 +270,14 @@ export default {
           id: null,
           name: '',
           email: '',
+          password: '',
+          confirmPassword: '',
           birthdate: '',
           avatarUrl: '',
           isAdmin: false,
         }
       }
-      this.errors = { name: '', email: '' }
+      this.errors = { name: '', email: '', password: '' }
     },
     async handleImageUpload(event) {
       const file = event.target.files[0]
@@ -270,6 +316,11 @@ export default {
       const dataToSave = {
         ...this.formData,
         age: this.calculatedAge,
+      }
+
+      if (!dataToSave.password) {
+        delete dataToSave.password
+        delete dataToSave.confirmPassword
       }
 
       this.$emit('save', dataToSave)

@@ -23,6 +23,7 @@
   <ProfileEditModal
     :isOpen="showProfileModal"
     :profile="selectedProfile"
+    :showPasswordFields="selectedProfile?.isAdmin"
     @close="showProfileModal = false"
     @save="saveProfile"
   />
@@ -136,9 +137,49 @@
           title="Gestão de utilizadores"
           v-model="cardOpenStates.users"
         >
+          <!-- Admin Section -->
+          <div
+            v-if="adminProfile"
+            class="mb-6 p-4 bg-(--system-background) border border-(--system-border) rounded-xl"
+          >
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-4">
+                <div class="relative">
+                  <img
+                    :src="
+                      adminProfile.avatarUrl ||
+                      'https://api.dicebear.com/7.x/avataaars/svg?seed=Admin'
+                    "
+                    class="w-16 h-16 rounded-full object-cover border-2 border-(--system-ring)"
+                    alt="Admin Avatar"
+                  />
+                  <div
+                    class="absolute -bottom-1 -right-1 bg-(--system-ring) text-white rounded-full w-6 h-6 flex items-center justify-center"
+                  >
+                    <span class="material-symbols-outlined text-xs">verified_user</span>
+                  </div>
+                </div>
+                <div>
+                  <h4 class="font-bold text-lg text-(--text-body-titles)">
+                    {{ adminProfile.name }} (Administrador)
+                  </h4>
+                  <p class="text-sm text-(--text-body-sub-titles)">
+                    {{ userStore.currentUser?.email || 'Sem email definido' }}
+                  </p>
+                </div>
+              </div>
+              <button
+                @click="editProfile(adminProfile)"
+                class="px-4 py-2 text-sm font-medium text-(--system-ring) hover:bg-(--system-ring) hover:text-white border border-(--system-ring) rounded-lg transition-colors"
+              >
+                Editar Dados
+              </button>
+            </div>
+          </div>
+
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
             <UserCard
-              v-for="profile in profiles"
+              v-for="profile in memberProfiles"
               :key="profile.id"
               :user="{
                 name: profile.name,
@@ -158,7 +199,7 @@
           </div>
           <div class="flex flex-col sm:flex-row gap-4 items-center justify-between">
             <div class="flex flex-col gap-2 text-base text-(--text-body-titles)">
-              <p>Nº membros: {{ profiles.length }}</p>
+              <p>Nº membros: {{ memberProfiles.length }} (+1 Admin)</p>
               <p>Nº vagas: {{ maxProfiles - profiles.length }}</p>
             </div>
             <div class="flex gap-2.5">
@@ -671,6 +712,12 @@ export default {
     profiles() {
       return this.userStore.profiles || []
     },
+    adminProfile() {
+      return this.profiles.find((p) => p.isAdmin)
+    },
+    memberProfiles() {
+      return this.profiles.filter((p) => !p.isAdmin)
+    },
     maxProfiles() {
       return this.userStore.maxProfiles || 4
     },
@@ -932,13 +979,62 @@ export default {
       return profile ? `${profile.rank}º` : '-'
     },
     editProfile(profile) {
-      this.selectedProfile = profile
+      if (profile.isAdmin) {
+        // Se for admin, injeta o email da conta raiz para edição
+        this.selectedProfile = {
+          ...profile,
+          email: this.userStore.currentUser?.email || '',
+        }
+      } else {
+        this.selectedProfile = profile
+      }
       this.showProfileModal = true
     },
     async saveProfile(profileData) {
       try {
+        // Se for admin, atualiza as credenciais na raiz do utilizador (db.json/users/ID)
+        if (profileData.isAdmin) {
+          const userId = this.userStore.currentUser?.id
+
+          if (!userId) {
+            this.showNotification('Erro: Utilizador não identificado', 'error')
+            return
+          }
+
+          if (userId) {
+            const rootUpdates = {}
+            if (profileData.email) rootUpdates.email = profileData.email
+            if (profileData.password) rootUpdates.password = profileData.password
+
+            if (Object.keys(rootUpdates).length > 0) {
+              // Atualização direta ao json-server para a raiz do user
+              const response = await fetch(`http://localhost:3000/users/${userId}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(rootUpdates),
+              })
+
+              if (!response.ok) {
+                throw new Error('Erro ao atualizar credenciais de administrador')
+              }
+
+              // Atualiza o estado local da store para refletir a mudança imediatamente
+              if (this.userStore.currentUser && profileData.email) {
+                this.userStore.currentUser.email = profileData.email
+              }
+              if (this.userStore.currentUser && profileData.password) {
+                this.userStore.currentUser.password = profileData.password
+              }
+            }
+          }
+        }
+
         if (profileData.id) {
-          await this.userStore.updateProfile(profileData.id, profileData)
+          // Remove email e password do payload do perfil para não sujar a estrutura do perfil no JSON
+          // eslint-disable-next-line no-unused-vars
+          const { email, password, confirmPassword, ...profilePayload } = profileData
+
+          await this.userStore.updateProfile(profileData.id, profilePayload)
           this.showNotification('Perfil atualizado com sucesso')
         }
       } catch (error) {
