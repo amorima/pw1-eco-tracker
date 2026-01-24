@@ -13,7 +13,7 @@
           class="w-full px-4 py-3 bg-(--system-card) border-2 border-(--system-border) rounded-lg text-(--text-body) outline-none focus:border-(--system-ring)"
         />
       </div>
-      
+
       <!-- API Type Selection (for appliances) -->
       <div v-if="!isTask" class="space-y-2">
         <label class="block text-sm font-medium text-(--text-body-sub-titles)">
@@ -57,12 +57,10 @@
           Se não souber, deixe vazio para usar valores médios
         </p>
       </div>
-      
+
       <!-- Category -->
       <div class="space-y-2">
-        <label class="block text-sm font-medium text-(--text-body-sub-titles)">
-          Categoria *
-        </label>
+        <label class="block text-sm font-medium text-(--text-body-sub-titles)"> Categoria * </label>
         <select
           v-model="formData.category"
           class="w-full px-4 py-3 bg-(--system-card) border-2 border-(--system-border) rounded-lg text-(--text-body) outline-none focus:border-(--system-ring)"
@@ -71,7 +69,7 @@
           <option v-for="cat in categories" :key="cat" :value="cat">{{ cat }}</option>
         </select>
       </div>
-      
+
       <!-- Points and CO2 Saved (for tasks) -->
       <div v-if="isTask" class="grid grid-cols-2 gap-4">
         <div class="space-y-2">
@@ -128,12 +126,12 @@
           v-model="formData.difficulty"
           class="w-full px-4 py-3 bg-(--system-card) border-2 border-(--system-border) rounded-lg text-(--text-body) outline-none focus:border-(--system-ring)"
         >
-          <option value="easy"> Fácil</option>
-          <option value="medium"> Médio</option>
-          <option value="hard"> Difícil</option>
+          <option value="easy">Fácil</option>
+          <option value="medium">Médio</option>
+          <option value="hard">Difícil</option>
         </select>
       </div>
-      
+
       <!-- Description -->
       <div class="space-y-2">
         <label class="block text-sm font-medium text-(--text-body-sub-titles)">
@@ -142,11 +140,15 @@
         <textarea
           v-model="formData.description"
           rows="3"
-          :placeholder="isTask ? 'Ex: Esta tarefa ajuda a reduzir o desperdício e promove a reciclagem' : 'Ex: Aparelho essencial que funciona 24 horas por dia'"
+          :placeholder="
+            isTask
+              ? 'Ex: Esta tarefa ajuda a reduzir o desperdício e promove a reciclagem'
+              : 'Ex: Aparelho essencial que funciona 24 horas por dia'
+          "
           class="w-full px-4 py-3 bg-(--system-card) border-2 border-(--system-border) rounded-lg text-(--text-body) outline-none focus:border-(--system-ring) resize-none"
         ></textarea>
       </div>
-      
+
       <!-- Image Upload Section -->
       <div class="space-y-2">
         <label class="block text-sm font-medium text-(--text-body-sub-titles)">
@@ -154,29 +156,33 @@
         </label>
         <div class="flex items-start gap-4">
           <!-- Preview -->
-          <div class="w-24 h-20 rounded-lg overflow-hidden bg-(--system-border) flex items-center justify-center">
-            <img 
-              v-if="formData.image" 
-              :src="formData.image" 
-              alt="Preview" 
+          <div
+            class="w-24 h-20 rounded-lg overflow-hidden bg-(--system-border) flex items-center justify-center"
+          >
+            <img
+              v-if="formData.image"
+              :src="formData.image"
+              alt="Preview"
               class="w-full h-full object-cover"
             />
             <span v-else class="material-symbols-outlined text-3xl text-(--text-disabled)">
               {{ isTask ? 'task_alt' : 'electrical_services' }}
             </span>
           </div>
-          
+
           <!-- Upload Button -->
           <div class="flex-1">
-            <label 
+            <label
               class="flex items-center gap-2 px-4 py-2 bg-(--system-border) rounded-lg cursor-pointer hover:bg-(--system-ring) hover:text-white transition-colors text-sm"
               :class="{ 'opacity-50 cursor-not-allowed': isUploading }"
             >
-              <span class="material-symbols-outlined text-lg">{{ isUploading ? 'hourglass_empty' : 'cloud_upload' }}</span>
+              <span class="material-symbols-outlined text-lg">{{
+                isUploading ? 'hourglass_empty' : 'cloud_upload'
+              }}</span>
               <span>{{ isUploading ? 'A carregar...' : 'Carregar' }}</span>
-              <input 
-                type="file" 
-                accept="image/*" 
+              <input
+                type="file"
+                accept="image/*"
                 class="hidden"
                 :disabled="isUploading"
                 @change="handleImageUpload"
@@ -185,7 +191,7 @@
             <p class="text-xs text-(--text-disabled) mt-1">PNG, JPG até 5MB</p>
           </div>
         </div>
-        
+
         <!-- URL Input as alternative -->
         <input
           v-model="formData.image"
@@ -271,70 +277,90 @@ export default {
     },
     categories() {
       if (this.isTask) {
-        return ['Energia', 'Mobilidade', 'Reciclagem', 'Água', 'Alimentação', 'Consumo', 'Ambiente', 'Limpeza']
+        return [
+          'Energia',
+          'Mobilidade',
+          'Reciclagem',
+          'Água',
+          'Alimentação',
+          'Consumo',
+          'Ambiente',
+          'Limpeza',
+        ]
       }
-      return ['Cozinha', 'Lavandaria', 'Climatização', 'Entretenimento', 'Limpeza', 'Tecnologia', 'Cuidados pessoais', 'Outros']
+      return [
+        'Cozinha',
+        'Lavandaria',
+        'Climatização',
+        'Entretenimento',
+        'Limpeza',
+        'Tecnologia',
+        'Cuidados pessoais',
+        'Outros',
+      ]
     },
     isValid() {
       const baseValid = this.formData.name.trim() && this.formData.category
-      
+
       if (this.isTask) {
-        return baseValid && 
-               this.formData.points > 0 &&
-               this.formData.frequency &&
-               this.formData.difficulty
+        return (
+          baseValid &&
+          this.formData.points > 0 &&
+          this.formData.frequency &&
+          this.formData.difficulty
+        )
       }
-      
+
       // For appliances, only require name, category, and API type
       return baseValid && this.formData.apiType
     },
     categoryIconMap() {
       if (this.isTask) {
         return {
-          'Energia': 'bolt',
-          'Mobilidade': 'directions_bus',
-          'Reciclagem': 'recycling',
-          'Água': 'water_drop',
-          'Alimentação': 'restaurant',
-          'Consumo': 'shopping_bag',
-          'Ambiente': 'park',
-          'Limpeza': 'cleaning_services'
+          Energia: 'bolt',
+          Mobilidade: 'directions_bus',
+          Reciclagem: 'recycling',
+          Água: 'water_drop',
+          Alimentação: 'restaurant',
+          Consumo: 'shopping_bag',
+          Ambiente: 'park',
+          Limpeza: 'cleaning_services',
         }
       } else {
         return {
-          'Cozinha': 'kitchen',
-          'Lavandaria': 'local_laundry_service',
-          'Climatização': 'ac_unit',
-          'Entretenimento': 'tv',
-          'Limpeza': 'vacuum',
-          'Tecnologia': 'computer',
+          Cozinha: 'kitchen',
+          Lavandaria: 'local_laundry_service',
+          Climatização: 'ac_unit',
+          Entretenimento: 'tv',
+          Limpeza: 'vacuum',
+          Tecnologia: 'computer',
           'Cuidados pessoais': 'styler',
-          'Outros': 'devices'
+          Outros: 'devices',
         }
       }
     },
     defaultCO2Values() {
       return {
-        'Energia': 0.2,
-        'Mobilidade': 2.5,
-        'Reciclagem': 0.5,
-        'Água': 0.3,
-        'Alimentação': 1.5,
-        'Consumo': 0.8,
-        'Ambiente': 1.0,
-        'Limpeza': 0.4
+        Energia: 0.2,
+        Mobilidade: 2.5,
+        Reciclagem: 0.5,
+        Água: 0.3,
+        Alimentação: 1.5,
+        Consumo: 0.8,
+        Ambiente: 1.0,
+        Limpeza: 0.4,
       }
     },
     defaultPowerConsumption() {
       const typeMap = {
-        'refrigerator': 150,
-        'washing_machine': 2000,
-        'dishwasher': 1800,
-        'air_conditioner': 3500,
-        'television': 100,
-        'desktop': 200,
-        'laptop': 50,
-        'electricity': 100
+        refrigerator: 150,
+        washing_machine: 500,
+        dishwasher: 1800,
+        air_conditioner: 3500,
+        television: 150,
+        desktop: 200,
+        laptop: 50,
+        electricity: 100,
       }
       return typeMap[this.formData.apiType] || 100
     },
@@ -397,23 +423,23 @@ export default {
     async handleImageUpload(event) {
       const file = event.target.files[0]
       if (!file) return
-      
+
       if (!file.type.startsWith('image/')) {
         console.error('Invalid file type. Please select an image.')
         return
       }
-      
+
       if (file.size > 5 * 1024 * 1024) {
         console.error('File size too large. Please select an image under 5MB.')
         return
       }
-      
+
       this.isUploading = true
-      
+
       try {
         const folder = this.isTask ? 'bgreen/tasks' : 'bgreen/appliances'
         const result = await uploadImage(file, { folder })
-        
+
         if (result.success) {
           this.formData.image = result.url
           console.log('Image uploaded successfully:', result.url)
@@ -428,10 +454,12 @@ export default {
     },
     handleSave() {
       if (!this.isValid) return
-      
+
       // Auto-assign icon based on category
-      const autoIcon = this.categoryIconMap[this.formData.category] || (this.isTask ? 'check_circle' : 'device_unknown')
-      
+      const autoIcon =
+        this.categoryIconMap[this.formData.category] ||
+        (this.isTask ? 'check_circle' : 'device_unknown')
+
       const data = {
         id: this.formData.id,
         category: this.formData.category,
@@ -439,13 +467,15 @@ export default {
         description: this.formData.description || '',
         image: this.formData.image || null,
       }
-      
+
       if (this.isTask) {
         // Task-specific fields
         data.title = this.formData.name
         data.points = parseInt(this.formData.points)
         // Use provided CO2 or default based on category
-        data.co2Saved = this.formData.co2Saved ? parseFloat(this.formData.co2Saved) : (this.defaultCO2Values[this.formData.category] || 0.5)
+        data.co2Saved = this.formData.co2Saved
+          ? parseFloat(this.formData.co2Saved)
+          : this.defaultCO2Values[this.formData.category] || 0.5
         data.frequency = this.formData.frequency
         data.difficulty = this.formData.difficulty
       } else {
@@ -453,11 +483,13 @@ export default {
         data.name = this.formData.name
         data.apiType = this.formData.apiType
         // Use provided power consumption or default based on API type
-        data.avgPowerConsumption = this.formData.avgPowerConsumption ? parseInt(this.formData.avgPowerConsumption) : this.defaultPowerConsumption
+        data.avgPowerConsumption = this.formData.avgPowerConsumption
+          ? parseInt(this.formData.avgPowerConsumption)
+          : this.defaultPowerConsumption
         data.avgUsageHoursPerDay = 1 // Default 1 hour, will be specified during actual usage tracking
         data.co2PerKwh = 0.233 // Standard CO2 per kWh for Portugal
       }
-      
+
       console.log('Saving item data:', data)
       this.$emit('save', data)
       this.$emit('close')
