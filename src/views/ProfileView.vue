@@ -177,7 +177,7 @@
               <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
                   <h2
-                    class="text-3xl md:text-4xl font-bold text-(--text-body-titles) mb-1 tracking-tight"
+                    class="text-3xl md:text-4xl font-bold text-(--text-body-titles) mb-4 tracking-tight"
                   >
                     {{ currentProfile?.name || 'Utilizador' }}
                   </h2>
@@ -212,7 +212,7 @@
                       class="text-[10px] text-(--text-body-sub-titles) uppercase font-bold tracking-wider"
                       >Pontos</span
                     >
-                    <div class="flex items-center gap-1 text-(--text-body-titles)">
+                    <div class="flex items-center gap- text-(--text-body-titles)">
                       <span class="material-symbols-outlined text-base text-orange-500">bolt</span>
                       <span class="text-xl font-black">{{ currentProfile?.points || 0 }}</span>
                     </div>
