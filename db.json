@@ -625,7 +625,7 @@
           "id": "demo-1",
           "name": "Família Demo",
           "age": 30,
-          "avatarUrl": "https://api.dicebear.com/7.x/avataaars/svg?seed=Demo",
+          "avatarUrl": "https://api.dicebear.com/7.x/avataaars/svg?seed=user1235489",
           "isAdmin": true,
           "birthDate": "1994-01-01",
           "createdAt": "2024-01-01T00:00:00Z",
