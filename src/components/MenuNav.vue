@@ -129,7 +129,12 @@
       <!-- Mobile Menu Button -->
       <button
         @click="mobileMenuOpen = true"
-        class="lg:hidden p-2 text-(--text-headings) hover:bg-(--system-border) rounded-lg transition-colors"
+        :class="[
+          'lg:hidden p-2 rounded-lg transition-colors',
+          landing
+            ? 'text-(--system-ring) hover:bg-white/10'
+            : 'text-(--text-headings) hover:bg-(--system-border)',
+        ]"
       >
         <span class="material-symbols-outlined text-3xl">menu</span>
       </button>

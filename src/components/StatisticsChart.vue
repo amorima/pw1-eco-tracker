@@ -92,7 +92,7 @@ export default {
       if (this.showCo2) {
         series.push({
           name: 'CO2 Poupado (kg)',
-          data: this.data.map((d) => d.co2Saved),
+          data: this.data.map((d) => Math.round(d.co2Saved)),
         })
       }
 

@@ -23,6 +23,7 @@
   <ProfileEditModal
     :isOpen="showProfileModal"
     :profile="selectedProfile"
+    :showPasswordFields="selectedProfile?.isAdmin"
     @close="showProfileModal = false"
     @save="saveProfile"
   />
@@ -136,9 +137,49 @@
           title="Gestão de utilizadores"
           v-model="cardOpenStates.users"
         >
+          <!-- Admin Section -->
+          <div
+            v-if="adminProfile"
+            class="mb-6 p-4 bg-(--system-background) border border-(--system-border) rounded-xl"
+          >
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-4">
+                <div class="relative">
+                  <img
+                    :src="
+                      adminProfile.avatarUrl ||
+                      'https://api.dicebear.com/7.x/avataaars/svg?seed=Admin'
+                    "
+                    class="w-16 h-16 rounded-full object-cover border-2 border-(--system-ring)"
+                    alt="Admin Avatar"
+                  />
+                  <div
+                    class="absolute -bottom-1 -right-1 bg-(--system-ring) text-white rounded-full w-6 h-6 flex items-center justify-center"
+                  >
+                    <span class="material-symbols-outlined text-xs">verified_user</span>
+                  </div>
+                </div>
+                <div>
+                  <h4 class="font-bold text-lg text-(--text-body-titles)">
+                    {{ adminProfile.name }} (Administrador)
+                  </h4>
+                  <p class="text-sm text-(--text-body-sub-titles)">
+                    {{ userStore.currentUser?.email || 'Sem email definido' }}
+                  </p>
+                </div>
+              </div>
+              <button
+                @click="editProfile(adminProfile)"
+                class="px-4 py-2 text-sm font-medium text-(--system-ring) hover:bg-(--system-ring) hover:text-white border border-(--system-ring) rounded-lg transition-colors"
+              >
+                Editar Dados
+              </button>
+            </div>
+          </div>
+
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
             <UserCard
-              v-for="profile in profiles"
+              v-for="profile in memberProfiles"
               :key="profile.id"
               :user="{
                 name: profile.name,
@@ -158,7 +199,7 @@
           </div>
           <div class="flex flex-col sm:flex-row gap-4 items-center justify-between">
             <div class="flex flex-col gap-2 text-base text-(--text-body-titles)">
-              <p>Nº membros: {{ profiles.length }}</p>
+              <p>Nº membros: {{ memberProfiles.length }} (+1 Admin)</p>
               <p>Nº vagas: {{ maxProfiles - profiles.length }}</p>
             </div>
             <div class="flex gap-2.5">
@@ -671,6 +712,12 @@ export default {
     profiles() {
       return this.userStore.profiles || []
     },
+    adminProfile() {
+      return this.profiles.find((p) => p.isAdmin)
+    },
+    memberProfiles() {
+      return this.profiles.filter((p) => !p.isAdmin)
+    },
     maxProfiles() {
       return this.userStore.maxProfiles || 4
     },
@@ -932,13 +979,67 @@ export default {
       return profile ? `${profile.rank}º` : '-'
     },
     editProfile(profile) {
-      this.selectedProfile = profile
+      if (profile.isAdmin) {
+        // Se for admin, injeta o email da conta raiz para edição
+        this.selectedProfile = {
+          ...profile,
+          email: this.userStore.currentUser?.email || '',
+        }
+      } else {
+        this.selectedProfile = profile
+      }
       this.showProfileModal = true
     },
     async saveProfile(profileData) {
+      if (this.userStore.currentUser?.email === 'demo@bgreen.pt') {
+        this.showNotification('Modo Demo: Ação não permitida', 'warning')
+        return
+      }
+
       try {
+        // Se for admin, atualiza as credenciais na raiz do utilizador (db.json/users/ID)
+        if (profileData.isAdmin) {
+          const userId = this.userStore.currentUser?.id
+
+          if (!userId) {
+            this.showNotification('Erro: Utilizador não identificado', 'error')
+            return
+          }
+
+          if (userId) {
+            const rootUpdates = {}
+            if (profileData.email) rootUpdates.email = profileData.email
+            if (profileData.password) rootUpdates.password = profileData.password
+
+            if (Object.keys(rootUpdates).length > 0) {
+              // Atualização direta ao json-server para a raiz do user
+              const response = await fetch(`http://localhost:3000/users/${userId}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(rootUpdates),
+              })
+
+              if (!response.ok) {
+                throw new Error('Erro ao atualizar credenciais de administrador')
+              }
+
+              // Atualiza o estado local da store para refletir a mudança imediatamente
+              if (this.userStore.currentUser && profileData.email) {
+                this.userStore.currentUser.email = profileData.email
+              }
+              if (this.userStore.currentUser && profileData.password) {
+                this.userStore.currentUser.password = profileData.password
+              }
+            }
+          }
+        }
+
         if (profileData.id) {
-          await this.userStore.updateProfile(profileData.id, profileData)
+          // Remove email e password do payload do perfil para não sujar a estrutura do perfil no JSON
+          // eslint-disable-next-line no-unused-vars
+          const { email, password, confirmPassword, ...profilePayload } = profileData
+
+          await this.userStore.updateProfile(profileData.id, profilePayload)
           this.showNotification('Perfil atualizado com sucesso')
         }
       } catch (error) {
@@ -947,6 +1048,11 @@ export default {
       }
     },
     confirmDeleteProfile(profileId) {
+      if (this.userStore.currentUser?.email === 'demo@bgreen.pt') {
+        this.showNotification('Modo Demo: Ação não permitida', 'warning')
+        return
+      }
+
       this.confirmData = {
         title: 'Eliminar Perfil',
         message: 'Tem a certeza que deseja eliminar este perfil? Esta ação não pode ser revertida.',
@@ -966,6 +1072,11 @@ export default {
       }
     },
     async increaseMaxProfiles() {
+      if (this.userStore.currentUser?.email === 'demo@bgreen.pt') {
+        this.showNotification('Modo Demo: Ação não permitida', 'warning')
+        return
+      }
+
       try {
         await this.userStore.updateMaxProfiles(this.maxProfiles + 1)
         this.showNotification('Limite de perfis aumentado')
@@ -975,6 +1086,11 @@ export default {
       }
     },
     async decreaseMaxProfiles() {
+      if (this.userStore.currentUser?.email === 'demo@bgreen.pt') {
+        this.showNotification('Modo Demo: Ação não permitida', 'warning')
+        return
+      }
+
       if (this.maxProfiles <= this.profiles.length) return
       try {
         await this.userStore.updateMaxProfiles(this.maxProfiles - 1)
@@ -999,6 +1115,11 @@ export default {
       this.showRewardModal = true
     },
     async saveReward(rewardData) {
+      if (this.userStore.currentUser?.email === 'demo@bgreen.pt') {
+        this.showNotification('Modo Demo: Ação não permitida', 'warning')
+        return
+      }
+
       try {
         // Check if this is an update or create operation
         if (
@@ -1023,6 +1144,11 @@ export default {
       }
     },
     confirmDeleteReward(rewardId) {
+      if (this.userStore.currentUser?.email === 'demo@bgreen.pt') {
+        this.showNotification('Modo Demo: Ação não permitida', 'warning')
+        return
+      }
+
       this.confirmData = {
         title: 'Eliminar Recompensa',
         message: 'Tem a certeza que deseja eliminar esta recompensa?',
@@ -1067,6 +1193,11 @@ export default {
       return date.toLocaleDateString('pt-PT')
     },
     async confirmRedeemedReward(redeemed) {
+      if (this.userStore.currentUser?.email === 'demo@bgreen.pt') {
+        this.showNotification('Modo Demo: Ação não permitida', 'warning')
+        return
+      }
+
       try {
         await this.userStore.completeReward(redeemed.profileId, redeemed.id)
         this.showNotification('Recompensa confirmada')
@@ -1076,6 +1207,11 @@ export default {
       }
     },
     async rejectRedeemedReward(redeemed) {
+      if (this.userStore.currentUser?.email === 'demo@bgreen.pt') {
+        this.showNotification('Modo Demo: Ação não permitida', 'warning')
+        return
+      }
+
       try {
         await this.userStore.cancelReward(redeemed.profileId, redeemed.id)
         this.showNotification('Recompensa rejeitada')
@@ -1098,6 +1234,11 @@ export default {
       this.showItemModal = true
     },
     async saveItem(itemData) {
+      if (this.userStore.currentUser?.email === 'demo@bgreen.pt') {
+        this.showNotification('Modo Demo: Ação não permitida', 'warning')
+        return
+      }
+
       try {
         console.log('AdminDashboard saveItem received:', itemData)
         if (this.itemModalType === 'appliance') {
@@ -1140,6 +1281,11 @@ export default {
       }
     },
     confirmDeleteAppliance(applianceId) {
+      if (this.userStore.currentUser?.email === 'demo@bgreen.pt') {
+        this.showNotification('Modo Demo: Ação não permitida', 'warning')
+        return
+      }
+
       this.confirmData = {
         title: 'Eliminar Consumo',
         message: 'Tem a certeza que deseja eliminar este consumo?',
@@ -1172,6 +1318,11 @@ export default {
       this.showItemModal = true
     },
     confirmDeleteTask(taskId) {
+      if (this.userStore.currentUser?.email === 'demo@bgreen.pt') {
+        this.showNotification('Modo Demo: Ação não permitida', 'warning')
+        return
+      }
+
       this.confirmData = {
         title: 'Eliminar Tarefa',
         message: 'Tem a certeza que deseja eliminar esta tarefa?',
@@ -1264,6 +1415,11 @@ export default {
       }
     },
     async saveChallenge() {
+      if (this.userStore.currentUser?.email === 'demo@bgreen.pt') {
+        this.showNotification('Modo Demo: Ação não permitida', 'warning')
+        return
+      }
+
       try {
         // Get task to derive category
         const task = this.getTaskById(this.challengeFormData.taskId)
@@ -1301,6 +1457,11 @@ export default {
       }
     },
     confirmDeleteChallenge(challengeId) {
+      if (this.userStore.currentUser?.email === 'demo@bgreen.pt') {
+        this.showNotification('Modo Demo: Ação não permitida', 'warning')
+        return
+      }
+
       // Don't allow deleting default challenges
       const challenge = this.challenges.find((c) => c.id === challengeId)
       if (challenge?.isDefault) {

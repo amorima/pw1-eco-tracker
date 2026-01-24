@@ -2,8 +2,8 @@
   "users": [
     {
       "id": "1",
-      "email": "mario@example.com",
-      "password": "123456",
+      "email": "mario@mario.com",
+      "password": "456789",
       "createdAt": "2024-01-15T10:00:00Z",
       "maxProfiles": 7,
       "appliances": [
@@ -30,14 +30,14 @@
       "profiles": [
         {
           "id": "101",
-          "name": "Mário Pires",
-          "age": 35,
-          "avatarUrl": "https://i.pravatar.cc/150?img=12",
+          "name": "Mário Piress",
+          "age": 36,
+          "avatarUrl": "https://plus.unsplash.com/premium_photo-1664298528358-790433ba0815?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
           "isAdmin": true,
           "birthDate": "1989-05-15",
           "createdAt": "2024-01-15T10:05:00Z",
-          "xp": 1030,
-          "streak": 1,
+          "xp": 1315,
+          "streak": 2,
           "settings": {
             "pin": null,
             "notification": true,
@@ -157,6 +157,111 @@
               "completedAt": "2026-01-23T23:29:20.448Z",
               "pointsEarned": 15,
               "co2saved": 7.5
+            },
+            {
+              "id": "1769221918303",
+              "task_id": "2",
+              "completedAt": "2026-01-24T02:31:58.303Z",
+              "pointsEarned": 15,
+              "co2saved": 7.5
+            },
+            {
+              "id": "1769221920338",
+              "task_id": "1",
+              "completedAt": "2026-01-24T02:32:00.338Z",
+              "pointsEarned": 20,
+              "co2saved": 10
+            },
+            {
+              "id": "1769221920869",
+              "task_id": "3",
+              "completedAt": "2026-01-24T02:32:00.869Z",
+              "pointsEarned": 10,
+              "co2saved": 0.5
+            },
+            {
+              "id": "1769221921563",
+              "task_id": "9",
+              "completedAt": "2026-01-24T02:32:01.563Z",
+              "pointsEarned": 20,
+              "co2saved": 3
+            },
+            {
+              "id": "1769221922419",
+              "task_id": "9",
+              "completedAt": "2026-01-24T02:32:02.419Z",
+              "pointsEarned": 20,
+              "co2saved": 3
+            },
+            {
+              "id": "1769221922609",
+              "task_id": "9",
+              "completedAt": "2026-01-24T02:32:02.609Z",
+              "pointsEarned": 20,
+              "co2saved": 3
+            },
+            {
+              "id": "1769221922737",
+              "task_id": "9",
+              "completedAt": "2026-01-24T02:32:02.737Z",
+              "pointsEarned": 20,
+              "co2saved": 3
+            },
+            {
+              "id": "1769221923041",
+              "task_id": "9",
+              "completedAt": "2026-01-24T02:32:03.041Z",
+              "pointsEarned": 20,
+              "co2saved": 3
+            },
+            {
+              "id": "1769221923195",
+              "task_id": "9",
+              "completedAt": "2026-01-24T02:32:03.195Z",
+              "pointsEarned": 20,
+              "co2saved": 3
+            },
+            {
+              "id": "1769221923344",
+              "task_id": "9",
+              "completedAt": "2026-01-24T02:32:03.344Z",
+              "pointsEarned": 20,
+              "co2saved": 3
+            },
+            {
+              "id": "1769221932819",
+              "task_id": "9",
+              "completedAt": "2026-01-24T02:32:12.819Z",
+              "pointsEarned": 20,
+              "co2saved": 3
+            },
+            {
+              "id": "1769221933418",
+              "task_id": "9",
+              "completedAt": "2026-01-24T02:32:13.418Z",
+              "pointsEarned": 20,
+              "co2saved": 3
+            },
+            {
+              "id": "1769221936481",
+              "task_id": "9",
+              "completedAt": "2026-01-24T02:32:16.481Z",
+              "pointsEarned": 20,
+              "co2saved": 3
+            },
+            {
+              "id": "1769221936685",
+              "task_id": "9",
+              "completedAt": "2026-01-24T02:32:16.685Z",
+              "pointsEarned": 20,
+              "co2saved": 3
+            },
+            {
+              "id": "1769221936919",
+              "task_id": "9",
+              "completedAt": "2026-01-24T02:32:16.919Z",
+              "pointsEarned": 20,
+              "co2saved": 3
             }
           ],
           "appliance_history": [
@@ -191,6 +296,30 @@
               "duration": 120,
               "energy_consumed": 0.4,
               "co2emited": 0.0752
+            },
+            {
+              "id": "1769221963740",
+              "appliance_id": "6",
+              "usedAt": "2026-01-24T02:32:43.740Z",
+              "duration": 300,
+              "energy_consumed": 0.5,
+              "co2emited": 0.094
+            },
+            {
+              "id": "1769221969077",
+              "appliance_id": "11",
+              "usedAt": "2026-01-24T02:32:49.077Z",
+              "duration": 300,
+              "energy_consumed": 1,
+              "co2emited": 0.188
+            },
+            {
+              "id": "1769221988647",
+              "appliance_id": "11",
+              "usedAt": "2026-01-24T02:33:08.647Z",
+              "duration": 3000,
+              "energy_consumed": 10,
+              "co2emited": 1.88
             }
           ],
           "rewards_history": [
@@ -255,19 +384,19 @@
               "earnedAt": "2026-01-23T23:11:10.346Z"
             }
           ],
-          "lastActivitie": "2026-01-23T23:08:53.733Z",
-          "points": 75
+          "lastActivitie": "2026-01-24T02:31:58.310Z",
+          "points": 360
         },
         {
           "id": "102",
           "name": "Ana Pires",
-          "age": 32,
+          "age": 33,
           "avatarUrl": "https://i.pravatar.cc/150?img=5",
           "isAdmin": false,
           "birthDate": "1992-08-20",
           "createdAt": "2024-01-16T14:20:00Z",
-          "xp": 320,
-          "streak": 8,
+          "xp": 490,
+          "streak": 1,
           "settings": {
             "pin": "1234",
             "notification": true,
@@ -288,12 +417,44 @@
               "completedAt": "2025-12-31T13:00:00Z",
               "pointsEarned": 12,
               "co2saved": 1.5
+            },
+            {
+              "id": "1769255351140",
+              "task_id": "1",
+              "completedAt": "2026-01-24T11:49:11.140Z",
+              "pointsEarned": 20,
+              "co2saved": 10
             }
           ],
           "appliance_history": [],
           "rewards_history": [],
-          "badges": [],
-          "lastActivitie": "2025-12-31T13:00:00Z"
+          "badges": [
+            {
+              "id_badge": "early_adopter",
+              "title": "Early Adopter",
+              "description": "Primeiro perfil criado",
+              "icon": "star",
+              "earnedAt": "2026-01-24T11:49:11.146Z"
+            },
+            {
+              "id_badge": "eco_warrior",
+              "title": "Eco Warrior",
+              "description": "Poupou 10kg de CO2",
+              "icon": "eco",
+              "earnedAt": "2026-01-24T11:49:11.148Z"
+            },
+            {
+              "id_badge": "level_5",
+              "title": "Nível 5",
+              "description": "Alcançou o nível 5",
+              "icon": "emoji_events",
+              "earnedAt": "2026-01-24T11:49:11.149Z"
+            }
+          ],
+          "lastActivitie": "2026-01-24T11:49:11.144Z",
+          "birthdate": "1992-11-11",
+          "email": "ana.pires@pires.pt",
+          "points": 20
         },
         {
           "id": "103",
@@ -343,6 +504,7 @@
           "id": "201",
           "name": "José Maria",
           "age": 28,
+          "email": null,
           "avatarUrl": "https://i.pravatar.cc/150?img=13",
           "isAdmin": true,
           "birthDate": "1996-11-05",
@@ -411,6 +573,7 @@
           "id": "301",
           "name": "Manuel Sá",
           "age": 42,
+          "email": null,
           "avatarUrl": "https://i.pravatar.cc/150?img=14",
           "isAdmin": true,
           "birthDate": "1982-07-22",
@@ -438,6 +601,80 @@
           ],
           "badges": [],
           "lastActivitie": "2025-12-29T19:00:00Z"
+        }
+      ]
+    },
+    {
+      "id": "demo",
+      "email": "demo@bgreen.pt",
+      "password": "demo",
+      "createdAt": "2024-01-01T00:00:00Z",
+      "maxProfiles": 4,
+      "appliances": [
+        "1",
+        "6",
+        "11"
+      ],
+      "tasks": [
+        "1",
+        "2",
+        "3"
+      ],
+      "profiles": [
+        {
+          "id": "demo-1",
+          "name": "Família Demo",
+          "age": 30,
+          "avatarUrl": "https://api.dicebear.com/7.x/avataaars/svg?seed=user1235489",
+          "isAdmin": true,
+          "birthDate": "1994-01-01",
+          "createdAt": "2024-01-01T00:00:00Z",
+          "xp": 615,
+          "streak": 1,
+          "points": 165,
+          "settings": {
+            "pin": null,
+            "notification": true,
+            "deviceDefault": false,
+            "header_background": "default"
+          },
+          "activity_history": [
+            {
+              "id": "1769256288700",
+              "task_id": "2",
+              "completedAt": "2026-01-24T12:04:48.700Z",
+              "pointsEarned": 15,
+              "co2saved": 7.5
+            }
+          ],
+          "appliance_history": [
+            {
+              "id": "1769256286244",
+              "appliance_id": "1",
+              "usedAt": "2026-01-24T12:04:46.244Z",
+              "duration": 300,
+              "energy_consumed": 0.75,
+              "co2emited": 0.14100000000000001
+            }
+          ],
+          "rewards_history": [],
+          "badges": [
+            {
+              "id_badge": "early_adopter",
+              "title": "Early Adopter",
+              "description": "Primeiro perfil criado",
+              "icon": "star",
+              "earnedAt": "2026-01-24T12:04:46.247Z"
+            },
+            {
+              "id_badge": "level_5",
+              "title": "Nível 5",
+              "description": "Alcançou o nível 5",
+              "icon": "emoji_events",
+              "earnedAt": "2026-01-24T12:04:46.248Z"
+            }
+          ],
+          "lastActivitie": "2026-01-24T12:04:46.246Z"
         }
       ]
     }

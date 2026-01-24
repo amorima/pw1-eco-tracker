@@ -2,7 +2,7 @@
   <div class="snap-container" ref="scrollContainer" @scroll="handleScroll">
     <!-- Hero Section with Diagonal Cut -->
     <section
-      class="snap-section relative pb-20 bg-(--system-foreground) hero-clip flex flex-col justify-center"
+      class="snap-section relative pb-20 bg-(--system-foreground) hero-clip flex flex-col justify-start"
     >
       <!-- Navigation -->
       <MenuNav :landing="true" />
@@ -40,7 +40,7 @@
                   >keyboard_arrow_right</span
                 ></ActionButton
               >
-              <ActionButton variant="secondary">Ver demo </ActionButton>
+              <ActionButton @click="handleDemoLogin" variant="secondary">Ver demo </ActionButton>
             </div>
 
             <div class="grid grid-cols-3 gap-8 pt-4">
@@ -72,13 +72,13 @@
         </div>
 
         <!-- Center Button -->
-        <div class="absolute bottom-10 lg:bottom-20 left-1/2 transform -translate-x-1/2 z-20">
-          <a
-            href="#carrosel"
-            class="bounce-animation bg-(--system-ring) border-[0.5px] py-1.5 border-(--system-popover-foreground) rounded-full w-[35px] h-[59px] flex items-center justify-center hover:bg-(--system-popover-foreground) hover:scale-110 transition-all duration-300"
+        <div class="hidden lg:block absolute bottom-20 left-1/2 transform -translate-x-1/2 z-20">
+          <div
+            @click="scrollToCarousel"
+            class="cursor-pointer bounce-animation bg-(--system-ring) border-[0.5px] py-1.5 border-(--system-popover-foreground) rounded-full w-[35px] h-[59px] flex items-center justify-center hover:bg-(--system-popover-foreground) hover:scale-110 transition-all duration-300"
           >
             <span class="material-symbols-outlined pulse-icon">keyboard_double_arrow_down</span>
-          </a>
+          </div>
         </div>
       </div>
     </section>
@@ -221,7 +221,7 @@
               Começar agora
               <span class="material-symbols-outlined text-base ml-2">keyboard_arrow_right</span>
             </ActionButton>
-            <ActionButton variant="secondary">Ver demo</ActionButton>
+            <ActionButton @click="handleDemoLogin" variant="secondary">Ver demo</ActionButton>
           </div>
         </div>
       </div>
@@ -552,6 +552,7 @@ import FeatureCarousel from '@/components/FeatureCarousel.vue'
 import FAQItem from '@/components/FAQItem.vue'
 import FooterSection from '@/components/FooterSection.vue'
 import VueApexCharts from 'vue3-apexcharts'
+import { useUserStore } from '@/stores/userStore'
 
 export default {
   name: 'LandingPageView',
@@ -568,6 +569,8 @@ export default {
       showScrollButton: false,
       isHovered: false,
       currentChartType: 'bar',
+      lastScrollTop: 0,
+      isAutoScrolling: false,
     }
   },
   computed: {
@@ -638,24 +641,72 @@ export default {
       }
     },
   },
+  mounted() {
+    window.addEventListener('scroll', this.handleScroll)
+  },
+  beforeUnmount() {
+    window.removeEventListener('scroll', this.handleScroll)
+  },
   methods: {
     handleScroll() {
       const container = this.$refs.scrollContainer
-      if (container) {
-        this.showScrollButton = container.scrollTop > window.innerHeight
+      const scrollTop =
+        container?.scrollTop || window.scrollY || document.documentElement.scrollTop || 0
+
+      this.showScrollButton = scrollTop > window.innerHeight
+
+      // Auto-scroll to top when scrolling up into Hero Section
+      if (!this.isAutoScrolling && scrollTop < this.lastScrollTop) {
+        // If we are in the hero section (first 80% of viewport) and not at top
+        if (scrollTop < window.innerHeight * 0.8 && scrollTop > 50) {
+          this.scrollToTop()
+        }
       }
+
+      this.lastScrollTop = scrollTop <= 0 ? 0 : scrollTop
     },
     scrollToTop() {
       const container = this.$refs.scrollContainer
+      this.isAutoScrolling = true
+
       if (container) {
         container.scrollTo({
           top: 0,
           behavior: 'smooth',
         })
       }
+
+      // Ensure window scroll is also reset (for mobile)
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      })
+
+      // Reset auto-scroll lock after animation
+      setTimeout(() => {
+        this.isAutoScrolling = false
+      }, 1000)
+    },
+    scrollToCarousel() {
+      const element = document.getElementById('carrosel')
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' })
+      }
     },
     setChartType(type) {
       this.currentChartType = type
+    },
+    async handleDemoLogin() {
+      const userStore = useUserStore()
+      try {
+        const result = await userStore.login({ email: 'demo@bgreen.pt', password: 'demo' })
+        if (result.success) {
+          // Redireciona para a seleção de perfil ou home
+          this.$router.push({ name: 'profile-selection' })
+        }
+      } catch (error) {
+        console.error('Erro ao iniciar demo:', error)
+      }
     },
   },
 }

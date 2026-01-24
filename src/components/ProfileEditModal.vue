@@ -1,44 +1,92 @@
 <template>
   <ModalComponent :isOpen="isOpen" :title="title" size="md" @close="$emit('close')">
     <div class="space-y-4">
-      <FormInput v-model="formData.name" label="Nome" placeholder="Nome do perfil" />
+      <!-- Nome -->
       <FormInput
-        v-model="formData.age"
-        label="Idade"
-        placeholder="Idade"
-        type="number"
-        min="1"
-        max="120"
+        v-model="formData.name"
+        label="Nome"
+        placeholder="Nome do perfil"
+        :error="errors.name"
       />
-      
+
+      <!-- Email -->
+      <FormInput
+        v-model="formData.email"
+        label="Email"
+        placeholder="email@exemplo.com"
+        type="email"
+        :error="errors.email"
+      />
+
+      <!-- Password Section (Only if enabled) -->
+      <div v-if="showPasswordFields" class="space-y-4 pt-2 border-t border-(--system-border)">
+        <p class="text-sm font-medium text-(--text-body-titles)">Alterar Password</p>
+        <FormInput
+          v-model="formData.password"
+          label="Nova Password"
+          placeholder="Deixe em branco para manter"
+          type="password"
+        />
+        <FormInput
+          v-if="formData.password"
+          v-model="formData.confirmPassword"
+          label="Confirmar Password"
+          placeholder="Confirme a nova password"
+          type="password"
+          :error="errors.password"
+        />
+      </div>
+
+      <!-- Data de Nascimento -->
+      <div class="space-y-2">
+        <label class="block text-sm font-medium text-(--text-body-sub-titles)">
+          Data de Nascimento
+        </label>
+        <input
+          v-model="formData.birthDate"
+          type="date"
+          :max="maxDate"
+          class="w-full px-4 py-3 bg-(--system-card) border-2 border-(--system-border) rounded-lg text-(--text-body) outline-none focus:border-(--system-ring) transition-colors"
+        />
+        <p v-if="calculatedAge" class="text-xs text-(--text-body-sub-titles)">
+          Idade: {{ calculatedAge }} anos
+        </p>
+      </div>
+
       <!-- Image Upload Section -->
       <div class="space-y-2">
         <label class="block text-sm font-medium text-(--text-body-sub-titles)">
-          Avatar
+          Foto de Perfil
         </label>
         <div class="flex items-center gap-4">
           <!-- Preview -->
-          <div class="w-20 h-20 rounded-full overflow-hidden bg-(--system-border) flex items-center justify-center">
-            <img 
-              v-if="formData.avatar" 
-              :src="formData.avatar" 
-              alt="Avatar" 
+          <div
+            class="w-20 h-20 rounded-full overflow-hidden bg-(--system-border) flex items-center justify-center ring-2 ring-(--system-ring) ring-opacity-20"
+          >
+            <img
+              v-if="formData.avatarUrl"
+              :src="formData.avatarUrl"
+              alt="Avatar"
               class="w-full h-full object-cover"
             />
-            <span v-else class="material-symbols-outlined text-3xl text-(--text-disabled)">person</span>
+            <span v-else class="material-symbols-outlined text-3xl text-(--text-disabled)"
+              >person</span
+            >
           </div>
-          
+
           <!-- Upload Button -->
           <div class="flex-1">
-            <label 
-              class="flex items-center gap-2 px-4 py-2 bg-(--system-border) rounded-lg cursor-pointer hover:bg-(--system-ring) hover:text-white transition-colors"
+            <label
+              class="flex items-center gap-2 px-4 py-2 bg-(--system-card) border-2 border-(--system-border) rounded-lg cursor-pointer hover:border-(--system-ring) hover:bg-(--system-ring) hover:text-white transition-all font-medium"
               :class="{ 'opacity-50 cursor-not-allowed': isUploading }"
             >
-              <span class="material-symbols-outlined">{{ isUploading ? 'hourglass_empty' : 'cloud_upload' }}</span>
-              <span>{{ isUploading ? 'A carregar...' : 'Carregar imagem' }}</span>
-              <input 
-                type="file" 
-                accept="image/*" 
+              <span class="material-symbols-outlined text-xl">{{
+                isUploading ? 'hourglass_empty' : 'cloud_upload'
+              }}</span>
+              <span class="text-sm">{{ isUploading ? 'A carregar...' : 'Carregar imagem' }}</span>
+              <input
+                type="file"
+                accept="image/*"
                 class="hidden"
                 :disabled="isUploading"
                 @change="handleImageUpload"
@@ -47,19 +95,17 @@
             <p class="text-xs text-(--text-disabled) mt-1">PNG, JPG até 5MB</p>
           </div>
         </div>
-        
+
         <!-- URL Input as alternative -->
-        <FormInput 
-          v-model="formData.avatar" 
-          placeholder="ou insira o URL da imagem" 
+        <FormInput
+          v-model="formData.avatarUrl"
+          placeholder="ou insira o URL da imagem"
           class="mt-2"
         />
       </div>
-      
-      <div v-if="formData.id" class="space-y-2">
-        <label class="block text-sm font-medium text-(--text-body-sub-titles)">
-          Permissões
-        </label>
+
+      <div v-if="formData.id && showAdminToggle" class="space-y-2">
+        <label class="block text-sm font-medium text-(--text-body-sub-titles)"> Permissões </label>
         <CheckboxInput v-model="formData.isAdmin" label="Administrador" />
       </div>
     </div>
@@ -74,7 +120,7 @@
       <button
         @click="handleSave"
         :disabled="!isValid || isUploading"
-        class="px-4 py-2 bg-(--system-ring) text-white rounded-lg font-semibold hover:opacity-80 transition-opacity disabled:opacity-50"
+        class="px-4 py-2 bg-(--system-ring) text-white rounded-lg font-semibold hover:opacity-80 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {{ profile?.id ? 'Guardar' : 'Criar' }}
       </button>
@@ -104,6 +150,14 @@ export default {
       type: Object,
       default: null,
     },
+    showAdminToggle: {
+      type: Boolean,
+      default: false,
+    },
+    showPasswordFields: {
+      type: Boolean,
+      default: false,
+    },
   },
   emits: ['close', 'save'],
   data() {
@@ -112,9 +166,17 @@ export default {
       formData: {
         id: null,
         name: '',
-        age: '',
-        avatar: '',
+        email: '',
+        password: '',
+        confirmPassword: '',
+        birthDate: '',
+        avatarUrl: '',
         isAdmin: false,
+      },
+      errors: {
+        name: '',
+        email: '',
+        password: '',
       },
     }
   },
@@ -123,7 +185,28 @@ export default {
       return this.profile?.id ? 'Editar Perfil' : 'Criar Perfil'
     },
     isValid() {
-      return this.formData.name.trim()
+      return (
+        this.formData.name.trim() && this.isEmailValid && !this.errors.name && !this.errors.password
+      )
+    },
+    isEmailValid() {
+      if (!this.formData.email) return true
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+      return emailRegex.test(this.formData.email)
+    },
+    calculatedAge() {
+      if (!this.formData.birthDate) return null
+      const birthDate = new Date(this.formData.birthDate)
+      const today = new Date()
+      let age = today.getFullYear() - birthDate.getFullYear()
+      const monthDiff = today.getMonth() - birthDate.getMonth()
+      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+        age--
+      }
+      return age
+    },
+    maxDate() {
+      return new Date().toISOString().split('T')[0]
     },
   },
   watch: {
@@ -140,6 +223,34 @@ export default {
       },
       deep: true,
     },
+    'formData.name'(newVal) {
+      if (!newVal.trim()) {
+        this.errors.name = 'Nome é obrigatório'
+      } else {
+        this.errors.name = ''
+      }
+    },
+    'formData.email'(newVal) {
+      if (newVal && !this.isEmailValid) {
+        this.errors.email = 'Email inválido'
+      } else {
+        this.errors.email = ''
+      }
+    },
+    'formData.password'(newVal) {
+      if (this.formData.confirmPassword && newVal !== this.formData.confirmPassword) {
+        this.errors.password = 'As passwords não coincidem'
+      } else {
+        this.errors.password = ''
+      }
+    },
+    'formData.confirmPassword'(newVal) {
+      if (this.formData.password && newVal !== this.formData.password) {
+        this.errors.password = 'As passwords não coincidem'
+      } else {
+        this.errors.password = ''
+      }
+    },
   },
   methods: {
     initForm() {
@@ -147,53 +258,72 @@ export default {
         this.formData = {
           id: this.profile.id,
           name: this.profile.name || '',
-          age: this.profile.age || '',
-          avatar: this.profile.avatarUrl || this.profile.avatar || '',
+          email: this.profile.email || '',
+          password: '',
+          confirmPassword: '',
+          birthDate: this.profile.birthDate || '',
+          avatarUrl: this.profile.avatarUrl || this.profile.avatar || '',
           isAdmin: this.profile.isAdmin || false,
         }
       } else {
         this.formData = {
           id: null,
           name: '',
-          age: '',
-          avatar: '',
+          email: '',
+          password: '',
+          confirmPassword: '',
+          birthDate: '',
+          avatarUrl: '',
           isAdmin: false,
         }
       }
+      this.errors = { name: '', email: '', password: '' }
     },
     async handleImageUpload(event) {
       const file = event.target.files[0]
       if (!file) return
-      
+
       if (!file.type.startsWith('image/')) {
+        this.errors.avatar = 'Por favor selecione uma imagem válida'
         return
       }
-      
+
       if (file.size > 5 * 1024 * 1024) {
+        this.errors.avatar = 'A imagem não pode exceder 5MB'
         return
       }
-      
+
       this.isUploading = true
-      
+
       try {
         const result = await uploadImage(file, { folder: 'bgreen/profiles' })
-        
+
         if (result.success) {
-          this.formData.avatar = result.url
+          this.formData.avatarUrl = result.url
+        } else {
+          this.errors.avatar = 'Erro ao carregar imagem'
         }
       } catch (error) {
-        console.error('Error uploading image:', error)
+        console.error('Erro ao carregar imagem:', error)
+        this.errors.avatar = 'Erro ao carregar imagem'
       } finally {
         this.isUploading = false
       }
     },
     handleSave() {
       if (!this.isValid) return
-      this.$emit('save', {
+
+      const dataToSave = {
         ...this.formData,
-        age: parseInt(this.formData.age) || null,
-        avatar: this.formData.avatar || null,
-      })
+        age: this.calculatedAge,
+      }
+
+      if (!dataToSave.password) {
+        delete dataToSave.password
+        delete dataToSave.confirmPassword
+      }
+
+      this.$emit('save', dataToSave)
       this.$emit('close')
     },
   },
