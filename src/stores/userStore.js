@@ -633,7 +633,7 @@ export const useUserStore = defineStore('userStore', {
         age: profileData.age || null,
         avatarUrl: profileData.avatar || null,
         isAdmin: false,
-        birthDate: null,
+        birthDate: profileData.birthDate || null,
         createdAt: new Date().toISOString(),
         xp: 0,
         points: 0,
