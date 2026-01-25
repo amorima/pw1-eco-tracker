@@ -227,7 +227,6 @@
                   :showEffectiveCo2="true"
                   :showSavedCo2="true"
                   :showPoints="true"
-                  co2Label="CO₂ (kg)"
                   pointsColor="var(--semantic-warning-default)"
                 />
               </div>

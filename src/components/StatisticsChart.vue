@@ -3,32 +3,33 @@
     <div class="flex justify-end">
       <div class="flex bg-(--system-border) rounded-lg p-1 gap-1">
         <button
-          @click="setChartType('bar')"
+          @click="setChartType('radar')"
           :class="[
             'px-3 py-1.5 rounded-md text-sm font-medium transition-colors',
-            currentChartType === 'bar'
+            currentChartType === 'radar'
               ? 'bg-(--system-background) text-(--system-ring) shadow-sm'
               : 'text-(--text-body-sub-titles) hover:text-(--text-body)',
           ]"
         >
-          Barras
+          Radar
         </button>
         <button
-          @click="setChartType('line')"
+          @click="setChartType('area')"
           :class="[
             'px-3 py-1.5 rounded-md text-sm font-medium transition-colors',
-            currentChartType === 'line'
+            currentChartType === 'area'
               ? 'bg-(--system-background) text-(--system-ring) shadow-sm'
               : 'text-(--text-body-sub-titles) hover:text-(--text-body)',
           ]"
         >
-          Linha
+          Área
         </button>
       </div>
     </div>
     <div class="w-full h-[300px]">
       <apexchart
-        v-if="chartOptions.series.length > 0"
+        v-if="chartSeries.length > 0"
+        :key="currentChartType"
         :type="currentChartType"
         :options="chartOptions"
         :series="chartSeries"
@@ -86,7 +87,7 @@ export default {
   },
   data() {
     return {
-      currentChartType: 'bar',
+      currentChartType: 'area',
       observer: null,
     }
   },
@@ -113,31 +114,20 @@ export default {
     chartSeries() {
       const series = []
 
+      // Standardize logic: Show Emitted vs Saved for both Area and Radar
+      // This avoids confusing "Effective" (negative) values and matches summary cards
+      if (this.showCo2) {
+        series.push({
+          name: 'CO₂ Emitido',
+          data: this.data.map((d) => Number((d.co2Emitted || 0).toFixed(2))),
+        })
+      }
+
       if (this.showSavedCo2) {
         series.push({
           name: 'CO₂ Poupado (kg)',
           data: this.data.map((d) => Number((d.co2Saved || 0).toFixed(2))),
         })
-      }
-
-      if (this.showCo2) {
-        if (this.showEffectiveCo2) {
-          // Effective CO2: Emitted - Saved (positive = net emissions, negative = net savings)
-          series.push({
-            name: this.co2Label || 'CO₂ (kg)',
-            data: this.data.map((d) => {
-              const emitted = d.co2Emitted || 0
-              const saved = d.co2Saved || 0
-              // Negative means net savings (good), positive means net emissions (bad)
-              return Math.round((emitted - saved) * 100) / 100
-            }),
-          })
-        } else if (!this.showSavedCo2) {
-          series.push({
-            name: this.co2Label || 'CO₂ (kg)',
-            data: this.data.map((d) => Math.round(d.co2Saved || 0)),
-          })
-        }
       }
 
       if (this.showPoints) {
@@ -154,14 +144,15 @@ export default {
       const gridColor = this.isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)'
       const tooltipBg = this.isDark ? '#292524' : '#ffffff'
       const borderColor = this.isDark ? '#44403c' : '#e7e5e4'
+      const isRadar = this.currentChartType === 'radar'
 
       const colors = []
-      if (this.showSavedCo2) colors.push(this.savedCo2Color)
-      if (this.showCo2) colors.push(this.primaryColor)
-      if (this.showPoints) colors.push(this.secondaryColor)
+      // Order matches chartSeries: Emitted (Orange), Saved (Green), Points (Blue/Primary)
+      if (this.showCo2) colors.push(this.secondaryColor) // Emitted
+      if (this.showSavedCo2) colors.push(this.savedCo2Color) // Saved
+      if (this.showPoints) colors.push(this.primaryColor) // Points (changed to primary for contrast)
 
       return {
-        series: this.chartSeries,
         chart: {
           type: this.currentChartType,
           toolbar: {
@@ -177,6 +168,7 @@ export default {
         plotOptions: {
           bar: {
             borderRadius: 4,
+            borderRadiusApplication: 'end',
             columnWidth: '60%',
           },
         },
@@ -185,14 +177,25 @@ export default {
         },
         stroke: {
           curve: 'smooth',
-          width: this.currentChartType === 'line' ? 4 : 0,
+          width: isRadar ? 2 : 3,
         },
         fill: {
-          opacity: 1,
+          opacity: isRadar ? 0.2 : 1,
           type: 'solid',
+          opacity: this.currentChartType === 'area' || isRadar ? 0.5 : 1,
+          type: this.currentChartType === 'area' ? 'gradient' : 'solid', // Radar uses solid fill
+          gradient: {
+            shade: this.isDark ? 'dark' : 'light',
+            type: 'vertical',
+            shadeIntensity: 0.5,
+            inverseColors: false,
+            opacityFrom: 0.6,
+            opacityTo: 0.1,
+            stops: [0, 90, 100],
+          },
         },
         markers: {
-          size: this.currentChartType === 'line' ? 5 : 0,
+          size: 4,
           strokeWidth: 2,
           hover: {
             size: 7,
@@ -212,14 +215,12 @@ export default {
             show: false,
           },
         },
-        yaxis: this.getDynamicYAxis(textColor),
+        yaxis: isRadar ? { show: false } : this.getDynamicYAxis(textColor),
         grid: {
           borderColor: gridColor,
           strokeDashArray: 0,
           xaxis: {
-            lines: {
-              show: false,
-            },
+            lines: { show: !isRadar },
           },
         },
         legend: {
@@ -314,12 +315,8 @@ export default {
         this.data.forEach((d) => {
           const saved = d.co2Saved || 0
           const emitted = d.co2Emitted || 0
-          const effective = emitted - saved
 
-          if (this.showEffectiveCo2) {
-            maxCo2 = Math.max(maxCo2, effective)
-            minCo2 = Math.min(minCo2, effective)
-          }
+          if (this.showCo2) maxCo2 = Math.max(maxCo2, emitted)
           if (this.showSavedCo2) {
             maxCo2 = Math.max(maxCo2, saved)
           }
@@ -327,13 +324,13 @@ export default {
 
         // Adicionar margem (10%) e garantir que não é zero
         maxCo2 = maxCo2 > 0 ? maxCo2 * 1.1 : 1
-        minCo2 = minCo2 < 0 ? minCo2 * 1.1 : 0
+        minCo2 = 0 // Always start at 0 for absolute values
       }
 
-      // 1. Effective CO2 Axis (Left)
-      if (this.showCo2) {
+      // 1. CO2 Axis (Left) - Shared for Emitted and Saved
+      if (this.showCo2 || this.showSavedCo2) {
         yaxis.push({
-          seriesName: this.co2Label || 'CO₂ (kg)',
+          seriesName: this.showCo2 ? 'CO₂ Emitido' : 'CO₂ Poupado (kg)',
           min: minCo2,
           max: maxCo2,
           title: {
@@ -345,17 +342,17 @@ export default {
             formatter: (val) => val.toFixed(1),
           },
         })
-      }
 
-      // 2. Saved CO2 Axis (Left, hidden but synced)
-      if (this.showSavedCo2) {
-        yaxis.push({
-          seriesName: 'CO₂ Poupado (kg)',
-          min: minCo2,
-          max: maxCo2,
-          show: false, // Esconder etiquetas para não duplicar, mas manter escala
-          labels: { style: { colors: textColor } },
-        })
+        // Se mostrarmos ambos, precisamos de um segundo eixo para o Poupado
+        // para garantir que partilha a mesma escala (min/max) e não salta para o eixo dos Pontos
+        if (this.showCo2 && this.showSavedCo2) {
+          yaxis.push({
+            seriesName: 'CO₂ Poupado (kg)',
+            min: minCo2,
+            max: maxCo2,
+            show: false, // Ocultar para não duplicar etiquetas
+          })
+        }
       }
 
       // 3. Points Axis (Right)
