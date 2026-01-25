@@ -114,7 +114,10 @@
         ghost-class="ghost-card"
       >
         <template #item="{ element }">
-          <div :class="{ 'col-span-full': element === 'statistics' && gridColumns > 1 }">
+          <div
+            :class="{ 'col-span-full': element === 'statistics' && gridColumns > 1 }"
+            :id="'section-' + element"
+          >
             <!-- Wrapper div to handle col-span logic if needed, e.g. Statistics always full width -->
             <CollapsibleCard
               v-if="element === 'statistics'"
@@ -150,7 +153,8 @@
                             : 'text-red-600 dark:text-red-400',
                         ]"
                       >
-                        {{ statistics.totalEffectiveCo2 <= 0 ? '+' : '' }}{{ Math.abs(statistics.totalEffectiveCo2).toFixed(1) }}
+                        {{ statistics.totalEffectiveCo2 <= 0 ? '+' : ''
+                        }}{{ Math.abs(statistics.totalEffectiveCo2).toFixed(1) }}
                       </p>
                       <p class="text-xs text-(--text-body-sub-titles) uppercase font-semibold">
                         kg CO₂ efetivo
@@ -312,7 +316,7 @@
                   ]"
                 >
                   <h3 class="font-bold text-base text-(--text-body-titles) text-center">
-                    Estimativa de emissão
+                    Transporte Pessoal
                   </h3>
 
                   <div class="space-y-6">
@@ -321,57 +325,67 @@
                       <label class="block text-[10px] font-medium text-(--text-disabled)">
                         Distância percorrida (Km)
                       </label>
-                      <FormInput v-model="calculator.distance" placeholder="50km" type="number" />
+                      <FormInput v-model="tools.car.amount" placeholder="50" type="number" />
                     </div>
 
-                    <!-- Fuel Consumption Slider -->
-                    <div class="space-y-2">
-                      <label class="block text-[10px] font-medium text-(--text-disabled)">
-                        Consumo médio (L/100Km) :
-                      </label>
-                      <div class="flex items-center gap-2">
-                        <span class="text-[10px] text-(--text-disabled)">0</span>
-                        <input
-                          v-model="calculator.consumption"
-                          type="range"
-                          min="0"
-                          max="10"
-                          step="0.1"
-                          class="flex-1 h-2 bg-[#e3e3e3] rounded-full appearance-none cursor-pointer accent-(--system-ring)"
-                        />
-                        <span class="text-[10px] text-(--text-disabled)">10</span>
-                      </div>
-                    </div>
-
-                    <!-- Fuel Type Checkboxes -->
+                    <!-- Fuel Type Radio Buttons -->
                     <div class="space-y-2">
                       <label class="block text-[10px] font-medium text-(--text-disabled)">
                         Tipo de Combustível
                       </label>
-                      <div class="grid grid-cols-2 gap-4">
-                        <CheckboxInput v-model="calculator.fuelTypes.gasoline" label="Gasolina" />
-                        <CheckboxInput v-model="calculator.fuelTypes.diesel" label="Gasóleo" />
-                        <CheckboxInput v-model="calculator.fuelTypes.electric" label="Elétrico" />
-                        <CheckboxInput v-model="calculator.fuelTypes.gas" label="Gás" />
+                      <div class="flex flex-col gap-2">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                          <input
+                            type="radio"
+                            v-model="tools.car.type"
+                            value="car_gasoline"
+                            class="accent-(--system-ring) w-4 h-4"
+                          />
+                          <span class="text-sm text-(--text-body)">Gasolina</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer">
+                          <input
+                            type="radio"
+                            v-model="tools.car.type"
+                            value="car_diesel"
+                            class="accent-(--system-ring) w-4 h-4"
+                          />
+                          <span class="text-sm text-(--text-body)">Gasóleo</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer">
+                          <input
+                            type="radio"
+                            v-model="tools.car.type"
+                            value="car_electric"
+                            class="accent-(--system-ring) w-4 h-4"
+                          />
+                          <span class="text-sm text-(--text-body)">Elétrico</span>
+                        </label>
                       </div>
                     </div>
                   </div>
 
                   <!-- Calculate Button -->
-                  <ActionButton @click="calculateEmissions"> Calcular </ActionButton>
+                  <ActionButton @click="calculateTool('car')" :disabled="tools.car.loading">
+                    {{ tools.car.loading ? 'A calcular...' : 'Calcular' }}
+                  </ActionButton>
 
                   <!-- Result -->
                   <div class="flex items-center gap-2 justify-center font-semibold text-[20px]">
                     <span
                       :class="
-                        calculator.result > 0 ? 'text-(--system-ring)' : 'text-(--text-disabled)'
+                        tools.car.result !== null
+                          ? 'text-(--system-ring)'
+                          : 'text-(--text-disabled)'
                       "
                     >
-                      {{ calculator.result }}
+                      {{ tools.car.result !== null ? tools.car.result : '0.00' }}
                     </span>
                     <span
                       :class="
-                        calculator.result > 0 ? 'text-(--system-ring)' : 'text-(--text-disabled)'
+                        tools.car.result !== null
+                          ? 'text-(--system-ring)'
+                          : 'text-(--text-disabled)'
                       "
                     >
                       Kg CO2
@@ -379,54 +393,157 @@
                   </div>
                 </div>
 
-                <!-- Quick Task Complete Tool -->
+                <!-- Food Impact Tool -->
                 <div
                   :class="[
-                    'bg-(--system-background) border-2 border-(--system-border) rounded-[14px] shrink-0 p-6 flex flex-col gap-4',
+                    'bg-(--system-background) border-2 border-(--system-border) rounded-[14px] shrink-0 p-6 flex flex-col gap-6',
                     gridColumns === 1 ? 'w-full lg:w-[280px]' : 'w-full',
                   ]"
                 >
                   <h3 class="font-bold text-base text-(--text-body-titles) text-center">
-                    Tarefa Rápida
+                    Impacto Alimentar
                   </h3>
 
-                  <div class="flex-1 space-y-3 max-h-[300px] overflow-y-auto">
-                    <button
-                      v-for="task in quickTasks"
-                      :key="task.id"
-                      @click="completeTask(task)"
-                      class="w-full flex items-center gap-3 p-3 bg-(--system-card) border border-(--system-border) rounded-lg hover:border-(--system-ring) transition-colors"
-                    >
-                      <span class="material-symbols-outlined text-(--system-ring)">{{
-                        task.icon
-                      }}</span>
-                      <div class="flex-1 text-left">
-                        <p class="text-sm font-medium text-(--text-body-titles)">
-                          {{ task.title }}
-                        </p>
-                        <p class="text-xs text-(--semantic-success-default)">
-                          +{{ task.points }} pts
-                        </p>
+                  <div class="space-y-6">
+                    <!-- Meals Input -->
+                    <div class="space-y-2">
+                      <label class="block text-[10px] font-medium text-(--text-disabled)">
+                        Número de refeições
+                      </label>
+                      <FormInput v-model="tools.food.amount" placeholder="1" type="number" />
+                    </div>
+
+                    <!-- Diet Type Radio Buttons -->
+                    <div class="space-y-2">
+                      <label class="block text-[10px] font-medium text-(--text-disabled)">
+                        Tipo de Refeição
+                      </label>
+                      <div class="flex flex-col gap-2">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                          <input
+                            type="radio"
+                            v-model="tools.food.type"
+                            value="meal_meat"
+                            class="accent-(--system-ring) w-4 h-4"
+                          />
+                          <span class="text-sm text-(--text-body)">Com Carne</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer">
+                          <input
+                            type="radio"
+                            v-model="tools.food.type"
+                            value="meal_vegetarian"
+                            class="accent-(--system-ring) w-4 h-4"
+                          />
+                          <span class="text-sm text-(--text-body)">Vegetariana</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer">
+                          <input
+                            type="radio"
+                            v-model="tools.food.type"
+                            value="meal_vegan"
+                            class="accent-(--system-ring) w-4 h-4"
+                          />
+                          <span class="text-sm text-(--text-body)">Vegan</span>
+                        </label>
                       </div>
-                      <span class="material-symbols-outlined text-(--text-disabled)"
-                        >add_circle</span
-                      >
-                    </button>
+                    </div>
+                  </div>
+
+                  <!-- Calculate Button -->
+                  <ActionButton @click="calculateTool('food')" :disabled="tools.food.loading">
+                    {{ tools.food.loading ? 'A calcular...' : 'Calcular' }}
+                  </ActionButton>
+
+                  <!-- Result -->
+                  <div class="flex items-center gap-2 justify-center font-semibold text-[20px]">
+                    <span
+                      :class="
+                        tools.food.result !== null
+                          ? 'text-(--system-ring)'
+                          : 'text-(--text-disabled)'
+                      "
+                    >
+                      {{ tools.food.result !== null ? tools.food.result : '0.00' }}
+                    </span>
+                    <span
+                      :class="
+                        tools.food.result !== null
+                          ? 'text-(--system-ring)'
+                          : 'text-(--text-disabled)'
+                      "
+                    >
+                      Kg CO2
+                    </span>
                   </div>
                 </div>
 
-                <!-- Placeholder Card -->
+                <!-- General Calculator Tool -->
                 <div
                   :class="[
-                    'border-2 border-(--system-border) rounded-[14px] shrink-0 h-[431px] items-center justify-center',
-                    gridColumns === 1 ? 'w-full lg:w-[280px] hidden lg:flex' : 'hidden',
+                    'bg-(--system-background) border-2 border-(--system-border) rounded-[14px] shrink-0 p-6 flex flex-col gap-6',
+                    gridColumns === 1 ? 'w-full lg:w-[280px]' : 'w-full',
                   ]"
                 >
-                  <span
-                    class="material-symbols-outlined text-(--system-ring)"
-                    style="font-size: 56px"
-                    >add</span
-                  >
+                  <h3 class="font-bold text-base text-(--text-body-titles) text-center">
+                    Calculadora Geral
+                  </h3>
+
+                  <div class="space-y-6">
+                    <!-- Type Select -->
+                    <div class="space-y-2">
+                      <label class="block text-[10px] font-medium text-(--text-disabled)">
+                        Tipo de Emissão
+                      </label>
+                      <select
+                        v-model="tools.general.type"
+                        class="w-full px-4 py-3 bg-(--system-card) border-2 border-(--system-border) rounded-lg text-(--text-body) outline-none focus:border-(--system-ring)"
+                      >
+                        <option v-for="opt in generalOptions" :key="opt.value" :value="opt.value">
+                          {{ opt.label }}
+                        </option>
+                      </select>
+                    </div>
+
+                    <!-- Amount Input -->
+                    <div class="space-y-2">
+                      <label class="block text-[10px] font-medium text-(--text-disabled)">
+                        Quantidade ({{ currentGeneralUnit }})
+                      </label>
+                      <FormInput
+                        v-model="tools.general.amount"
+                        :placeholder="currentGeneralUnit"
+                        type="number"
+                      />
+                    </div>
+                  </div>
+
+                  <!-- Calculate Button -->
+                  <ActionButton @click="calculateTool('general')" :disabled="tools.general.loading">
+                    {{ tools.general.loading ? 'A calcular...' : 'Calcular' }}
+                  </ActionButton>
+
+                  <!-- Result -->
+                  <div class="flex items-center gap-2 justify-center font-semibold text-[20px]">
+                    <span
+                      :class="
+                        tools.general.result !== null
+                          ? 'text-(--system-ring)'
+                          : 'text-(--text-disabled)'
+                      "
+                    >
+                      {{ tools.general.result !== null ? tools.general.result : '0.00' }}
+                    </span>
+                    <span
+                      :class="
+                        tools.general.result !== null
+                          ? 'text-(--system-ring)'
+                          : 'text-(--text-disabled)'
+                      "
+                    >
+                      Kg CO2
+                    </span>
+                  </div>
                 </div>
               </div>
             </CollapsibleCard>
@@ -440,7 +557,7 @@
 
 <script>
 import { useUserStore } from '@/stores/userStore'
-import { calculateApplianceEmissions } from '@/services/carbonApiService'
+import { calculateApplianceEmissions, calculateEmissions } from '@/services/carbonApiService'
 import draggable from 'vuedraggable'
 import MenuNav from '@/components/MenuNav.vue'
 import CollapsibleCard from '@/components/CollapsibleCard.vue'
@@ -491,18 +608,38 @@ export default {
       consumptionHours: '',
       calculatedEmissions: null,
 
-      // Calculator
-      calculator: {
-        distance: '',
-        consumption: 5,
-        fuelTypes: {
-          gasoline: false,
-          diesel: false,
-          electric: false,
-          gas: false,
+      // Tools Data
+      tools: {
+        car: {
+          amount: '',
+          type: 'car_gasoline',
+          result: null,
+          loading: false,
         },
-        result: 0,
+        food: {
+          amount: '',
+          type: 'meal_meat',
+          result: null,
+          loading: false,
+        },
+        general: {
+          amount: '',
+          type: 'electricity',
+          result: null,
+          loading: false,
+        },
       },
+      generalOptions: [
+        { value: 'bus', label: 'Autocarro', unit: 'Km' },
+        { value: 'train', label: 'Comboio', unit: 'Km' },
+        { value: 'plane_short', label: 'Avião (Curta Dist.)', unit: 'Km' },
+        { value: 'plane_long', label: 'Avião (Longa Dist.)', unit: 'Km' },
+        { value: 'electricity', label: 'Eletricidade', unit: 'kWh' },
+        { value: 'natural_gas', label: 'Gás Natural', unit: 'kWh' },
+        { value: 'waste_general', label: 'Lixo Indiferenciado', unit: 'Kg' },
+        { value: 'waste_recycled', label: 'Lixo Reciclado', unit: 'Kg' },
+        { value: 'water', label: 'Água', unit: 'm³' },
+      ],
 
       // Appliance images mapping
       applianceImages: {
@@ -590,6 +727,10 @@ export default {
         tools: { id: 'tools', title: 'FERRAMENTAS', component: 'tools' },
       }
       return this.cardOrder.map((id) => cards[id])
+    },
+    currentGeneralUnit() {
+      const option = this.generalOptions.find((o) => o.value === this.tools.general.type)
+      return option ? option.unit : 'Unidades'
     },
   },
   watch: {
@@ -746,33 +887,30 @@ export default {
       localStorage.setItem('homeGridColumns', this.gridColumns.toString())
     },
 
-    async calculateEmissions() {
-      const distance = parseFloat(this.calculator.distance) || 0
-      const consumption = parseFloat(this.calculator.consumption) || 0
+    async calculateTool(toolName) {
+      const tool = this.tools[toolName]
+      const amount = parseFloat(tool.amount)
 
-      if (distance <= 0) {
-        this.showNotification('Introduza uma distância válida', 'error')
+      if (!amount || amount <= 0) {
+        this.showNotification('Introduza um valor válido', 'error')
         return
       }
 
-      // Determine fuel type
-      let emissionFactor = 2.31 // Default gasoline kg CO2 per liter
+      tool.loading = true
+      try {
+        const result = await calculateEmissions(tool.type, amount)
 
-      if (this.calculator.fuelTypes.diesel) {
-        emissionFactor = 2.68 // Diesel
-      } else if (this.calculator.fuelTypes.electric) {
-        // For electric, use kWh consumption instead
-        const kWhPer100km = 18 // Average electric car
-        const kWhUsed = (distance * kWhPer100km) / 100
-        this.calculator.result = (kWhUsed * 0.188).toFixed(2) // Portugal grid factor
-        return
-      } else if (this.calculator.fuelTypes.gas) {
-        emissionFactor = 1.86 // LPG/Gas
+        if (result.success) {
+          tool.result = result.data.carbon_kg_co2
+        } else {
+          this.showNotification(result.message || 'Erro ao calcular', 'error')
+        }
+      } catch (error) {
+        console.error('Erro no cálculo:', error)
+        this.showNotification('Erro de conexão', 'error')
+      } finally {
+        tool.loading = false
       }
-
-      // Calculate: (distance * consumption / 100) * emission factor
-      const fuelUsed = (distance * consumption) / 100
-      this.calculator.result = (fuelUsed * emissionFactor).toFixed(2)
     },
   },
   watch: {

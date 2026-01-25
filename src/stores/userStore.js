@@ -17,19 +17,19 @@ export const useUserStore = defineStore('userStore', {
     // Available appliances and tasks for selection
     availableAppliances: [],
     availableTasks: [],
-    
+
     // System badges (all available badges)
     availableBadges: [],
-    
+
     // Household rewards (set by admin)
     householdRewards: [],
-    
+
     // Household challenges (set by admin)
     householdChallenges: [],
   }),
   persist: {
     storage: localStorage,
-    pick: ['currentUser','currentProfile']
+    pick: ['currentUser', 'currentProfile'],
   },
 
   getters: {
@@ -52,10 +52,10 @@ export const useUserStore = defineStore('userStore', {
     householdAppliances: (state) => {
       if (!state.currentUser?.appliances) return []
       return state.availableAppliances
-        .filter((app) => state.currentUser.appliances.some(id => String(id) === String(app.id)))
-        .map(app => ({
+        .filter((app) => state.currentUser.appliances.some((id) => String(id) === String(app.id)))
+        .map((app) => ({
           ...app,
-          icon: getApplianceIcon(app.category)
+          icon: getApplianceIcon(app.category),
         }))
     },
 
@@ -63,10 +63,10 @@ export const useUserStore = defineStore('userStore', {
     householdTasks: (state) => {
       if (!state.currentUser?.tasks) return []
       return state.availableTasks
-        .filter((task) => state.currentUser.tasks.some(id => String(id) === String(task.id)))
-        .map(task => ({
+        .filter((task) => state.currentUser.tasks.some((id) => String(id) === String(task.id)))
+        .map((task) => ({
           ...task,
-          icon: getTaskIcon(task.category)
+          icon: getTaskIcon(task.category),
         }))
     },
 
@@ -89,18 +89,18 @@ export const useUserStore = defineStore('userStore', {
     currentProfileBadges: (state) => {
       return state.currentProfile?.badges || []
     },
-    
+
     // Calculate level from XP: level = Math.floor(xp / 100) + 1
     currentProfileLevel: (state) => {
       const xp = state.currentProfile?.xp || 0
       return Math.floor(xp / 100) + 1
     },
-    
+
     // Get current profile's points (stored value)
     currentProfilePoints: (state) => {
       return state.currentProfile?.points || 0
     },
-    
+
     // Calculate total CO2 saved from activity history
     currentProfileCo2Saved: (state) => {
       const activities = state.currentProfile?.activity_history || []
@@ -135,8 +135,8 @@ export const useUserStore = defineStore('userStore', {
     // Get leaderboard for household profiles
     householdLeaderboard: (state) => {
       if (!state.currentUser?.profiles) return []
-      
-      const profilesWithPoints = state.currentUser.profiles.map(profile => {
+
+      const profilesWithPoints = state.currentUser.profiles.map((profile) => {
         return {
           ...profile,
           points: profile.points || 0,
@@ -144,7 +144,7 @@ export const useUserStore = defineStore('userStore', {
           avatar: profile.avatarUrl,
         }
       })
-      
+
       return profilesWithPoints
         .sort((a, b) => b.points - a.points)
         .map((profile, index) => ({
@@ -177,14 +177,14 @@ export const useUserStore = defineStore('userStore', {
           rank: index + 1,
         }))
     },
-    
+
     // Get all badges with earned status for current profile
     allBadgesWithStatus: (state) => {
       const profileBadges = state.currentProfile?.badges || []
-      const profileBadgeIds = profileBadges.map(b => b.id_badge)
-      
-      return state.availableBadges.map(badge => {
-        const earnedBadge = profileBadges.find(b => b.id_badge === badge.id)
+      const profileBadgeIds = profileBadges.map((b) => b.id_badge)
+
+      return state.availableBadges.map((badge) => {
+        const earnedBadge = profileBadges.find((b) => b.id_badge === badge.id)
         return {
           ...badge,
           earned: profileBadgeIds.includes(badge.id),
@@ -192,32 +192,34 @@ export const useUserStore = defineStore('userStore', {
         }
       })
     },
-    
+
     // Get available rewards for household
     availableRewardsForHousehold: (state) => {
       return state.householdRewards
     },
-    
+
     // Get current profile's redeemed rewards with status
     currentProfileRedeemedRewards: (state) => {
       return state.currentProfile?.rewards_history || []
     },
-    
+
     // Get current profile's challenges progress
     currentProfileChallenges: (state) => {
       if (!state.householdChallenges.length) return []
-      
+
       const activities = state.currentProfile?.activity_history || []
-      
-      return state.householdChallenges.map(challenge => {
+
+      return state.householdChallenges.map((challenge) => {
         let progress = 0
-        
+
         if (challenge.type === 'completions' && challenge.task_id) {
-          progress = activities.filter(a => String(a.task_id) === String(challenge.task_id)).length
+          progress = activities.filter(
+            (a) => String(a.task_id) === String(challenge.task_id),
+          ).length
         } else if (challenge.type === 'streak') {
           progress = state.currentProfile?.streak || 0
         }
-        
+
         return {
           ...challenge,
           progress: Math.min((progress / challenge.target) * 100, 100),
@@ -226,96 +228,96 @@ export const useUserStore = defineStore('userStore', {
         }
       })
     },
-    
+
     // Get last N unique appliance usages
-    recentApplianceUsages: (state) => (limit = 5) => {
-      const usages = state.currentProfile?.appliance_history || []
-      const seen = new Set()
-      const unique = []
-      
-      const sorted = [...usages].sort((a, b) => 
-        new Date(b.usedAt) - new Date(a.usedAt)
-      )
-      
-      for (const usage of sorted) {
-        if (!seen.has(usage.appliance_id) && unique.length < limit) {
-          seen.add(usage.appliance_id)
-          const appliance = state.availableAppliances.find(
-            a => String(a.id) === String(usage.appliance_id)
-          )
-          if (appliance) {
-            unique.push({
-              ...usage,
-              appliance: {
-                ...appliance,
-                icon: getApplianceIcon(appliance.category)
-              },
-            })
+    recentApplianceUsages:
+      (state) =>
+      (limit = 5) => {
+        const usages = state.currentProfile?.appliance_history || []
+        const seen = new Set()
+        const unique = []
+
+        const sorted = [...usages].sort((a, b) => new Date(b.usedAt) - new Date(a.usedAt))
+
+        for (const usage of sorted) {
+          if (!seen.has(usage.appliance_id) && unique.length < limit) {
+            seen.add(usage.appliance_id)
+            const appliance = state.availableAppliances.find(
+              (a) => String(a.id) === String(usage.appliance_id),
+            )
+            if (appliance) {
+              unique.push({
+                ...usage,
+                appliance: {
+                  ...appliance,
+                  icon: getApplianceIcon(appliance.category),
+                },
+              })
+            }
           }
         }
-      }
-      
-      return unique
-    },
-    
+
+        return unique
+      },
+
     // Get last N unique completed tasks
-    recentTaskCompletions: (state) => (limit = 5) => {
-      const activities = state.currentProfile?.activity_history || []
-      const seen = new Set()
-      const unique = []
-      
-      const sorted = [...activities].sort((a, b) => 
-        new Date(b.completedAt) - new Date(a.completedAt)
-      )
-      
-      for (const activity of sorted) {
-        if (!seen.has(activity.task_id) && unique.length < limit) {
-          seen.add(activity.task_id)
-          const task = state.availableTasks.find(
-            t => String(t.id) === String(activity.task_id)
-          )
-          if (task) {
-            unique.push({
-              ...activity,
-              task: {
-                ...task,
-                icon: getTaskIcon(task.category)
-              },
-            })
+    recentTaskCompletions:
+      (state) =>
+      (limit = 5) => {
+        const activities = state.currentProfile?.activity_history || []
+        const seen = new Set()
+        const unique = []
+
+        const sorted = [...activities].sort(
+          (a, b) => new Date(b.completedAt) - new Date(a.completedAt),
+        )
+
+        for (const activity of sorted) {
+          if (!seen.has(activity.task_id) && unique.length < limit) {
+            seen.add(activity.task_id)
+            const task = state.availableTasks.find((t) => String(t.id) === String(activity.task_id))
+            if (task) {
+              unique.push({
+                ...activity,
+                task: {
+                  ...task,
+                  icon: getTaskIcon(task.category),
+                },
+              })
+            }
           }
         }
-      }
-      
-      return unique
-    },
-    
+
+        return unique
+      },
+
     // Get week days for streak visualization
     weekDaysStreak: (state) => {
       const today = new Date()
       const dayOfWeek = today.getDay()
       const streak = state.currentProfile?.streak || 0
-      
+
       const result = []
       const mondayFirst = ['S', 'T', 'Q', 'Q', 'S', 'S', 'D']
       const todayIndex = dayOfWeek === 0 ? 6 : dayOfWeek - 1
-      
+
       for (let i = 0; i <= 6; i++) {
         result.push({
           label: mondayFirst[i],
-          completed: i <= todayIndex && streak > (todayIndex - i),
+          completed: i <= todayIndex && streak > todayIndex - i,
         })
       }
-      
+
       return result
     },
-    
+
     // Calculate XP needed for next level
     xpForNextLevel: (state) => {
       const xp = state.currentProfile?.xp || 0
       const level = Math.floor(xp / 100) + 1
       return level * 100
     },
-    
+
     // Calculate XP progress percentage
     xpProgressPercentage: (state) => {
       const xp = state.currentProfile?.xp || 0
@@ -342,11 +344,13 @@ export const useUserStore = defineStore('userStore', {
         if (badgesRes.ok) this.availableBadges = await badgesRes.json()
         if (rewardsRes.ok) {
           const rewards = await rewardsRes.json()
-          const validRewards = rewards.filter(r => r.id !== null && r.id !== undefined && r.id !== 'null')
+          const validRewards = rewards.filter(
+            (r) => r.id !== null && r.id !== undefined && r.id !== 'null',
+          )
           this.householdRewards = validRewards
         }
         if (challengesRes.ok) this.householdChallenges = await challengesRes.json()
-        
+
         if (this.currentUser?.email) {
           await ensureApiKey(this.currentUser.email)
         }
@@ -376,15 +380,41 @@ export const useUserStore = defineStore('userStore', {
           return { success: false, message: 'As passwords não coincidem' }
         }
 
+        const firstProfile = {
+          id: String(Date.now()),
+          name: userData.name,
+          age: null,
+          avatarUrl: null,
+          isAdmin: true,
+          birthDate: null,
+          createdAt: new Date().toISOString(),
+          xp: 0,
+          points: 0,
+          streak: 0,
+          settings: {
+            pin: null,
+            notification: true,
+            deviceDefault: true,
+            header_background: 'bg-gradient-to-r from-green-400 to-emerald-500',
+          },
+          activity_history: [],
+          appliance_history: [],
+          rewards_history: [],
+          badges: [],
+          lastActivitie: null,
+          needsQuickStart: true,
+        }
+
         const newUser = {
           id: String(Date.now()),
+          name: userData.name,
           email: userData.email,
           password: userData.password,
           createdAt: new Date().toISOString(),
           maxProfiles: 4,
           appliances: [],
           tasks: [],
-          profiles: [],
+          profiles: [firstProfile],
         }
 
         const createResponse = await fetch('http://localhost:3000/users', {
@@ -419,9 +449,16 @@ export const useUserStore = defineStore('userStore', {
         }
 
         const user = users[0]
-        this.currentUser = user
 
-        if (!user.profiles || user.profiles.length === 0) {
+        // Forçar atualização completa do currentUser
+        this.currentUser = null
+        this.$patch({ currentUser: user })
+
+        console.log('Login - User profiles:', user.profiles)
+        console.log('Login - First profile needsQuickStart:', user.profiles?.[0]?.needsQuickStart)
+
+        if (!user.profiles || user.profiles.length === 0 || user.profiles[0].needsQuickStart) {
+          console.log('Login - Redirecting to QuickStart')
           return {
             success: true,
             requiresSetup: true,
@@ -431,7 +468,9 @@ export const useUserStore = defineStore('userStore', {
 
         const defaultProfileId = localStorage.getItem(`defaultProfile_${user.id}`)
         if (defaultProfileId) {
-          const defaultProfile = user.profiles.find((p) => String(p.id) === String(defaultProfileId))
+          const defaultProfile = user.profiles.find(
+            (p) => String(p.id) === String(defaultProfileId),
+          )
           if (defaultProfile) {
             this.currentProfile = defaultProfile
             return {
@@ -470,42 +509,69 @@ export const useUserStore = defineStore('userStore', {
       this.currentUser.appliances = setupData.appliances.map(String)
       this.currentUser.tasks = setupData.activities.map(String)
 
-      const adminProfile = {
-        id: String(Date.now()),
-        name: setupData.adminProfile.name,
-        age: setupData.adminProfile.age || null,
-        avatarUrl: setupData.adminProfile.avatar || null,
-        isAdmin: true,
-        birthDate: null,
-        createdAt: new Date().toISOString(),
-        xp: 0,
-        points: 0,
-        streak: 0,
-        settings: {
-          pin: setupData.adminProfile.pin || null,
-          notification: true,
-          deviceDefault: true,
-          header_background: 'bg-gradient-to-r from-green-400 to-emerald-500',
-        },
-        activity_history: [],
-        appliance_history: [],
-        rewards_history: [],
-        badges: [
-          {
-            id_badge: 'early_adopter',
-            title: 'Early Adopter',
-            description: 'Primeiro perfil criado',
-            icon: 'star',
-            earnedAt: new Date().toISOString(),
+      if (!this.currentUser.profiles || this.currentUser.profiles.length === 0) {
+        const adminProfile = {
+          id: String(Date.now()),
+          name: setupData.adminProfile.name,
+          age: null,
+          avatarUrl: setupData.adminProfile.avatar || null,
+          isAdmin: true,
+          birthDate: setupData.adminProfile.birthDate || null,
+          createdAt: new Date().toISOString(),
+          xp: 0,
+          points: 0,
+          streak: 0,
+          settings: {
+            pin: setupData.adminProfile.pin || null,
+            notification: true,
+            deviceDefault: true,
+            header_background: 'bg-gradient-to-r from-green-400 to-emerald-500',
           },
-        ],
-        lastActivitie: null,
+          activity_history: [],
+          appliance_history: [],
+          rewards_history: [],
+          badges: [
+            {
+              id_badge: 'early_adopter',
+              title: 'Early Adopter',
+              description: 'Primeiro perfil criado',
+              icon: 'star',
+              earnedAt: new Date().toISOString(),
+            },
+          ],
+          lastActivitie: null,
+        }
+        this.currentUser.profiles = [adminProfile]
+        this.currentProfile = adminProfile
+      } else {
+        const existingProfile = this.currentUser.profiles[0]
+        existingProfile.name = setupData.adminProfile.name
+        existingProfile.birthDate = setupData.adminProfile.birthDate || null
+        existingProfile.avatarUrl = setupData.adminProfile.avatar || null
+        existingProfile.settings = existingProfile.settings || {}
+        existingProfile.settings.pin = setupData.adminProfile.pin || null
+        existingProfile.isAdmin = true
+        delete existingProfile.needsQuickStart
+
+        if (!existingProfile.badges || existingProfile.badges.length === 0) {
+          existingProfile.badges = [
+            {
+              id_badge: 'early_adopter',
+              title: 'Early Adopter',
+              description: 'Primeiro perfil criado',
+              icon: 'star',
+              earnedAt: new Date().toISOString(),
+            },
+          ]
+        }
+
+        this.currentProfile = existingProfile
       }
 
-      this.currentUser.profiles = [adminProfile]
-      this.currentProfile = adminProfile
-
-      localStorage.setItem(`defaultProfile_${this.currentUser.id}`, adminProfile.id.toString())
+      localStorage.setItem(
+        `defaultProfile_${this.currentUser.id}`,
+        this.currentProfile.id.toString(),
+      )
 
       try {
         await fetch(`http://localhost:3000/users/${this.currentUser.id}`, {
@@ -530,7 +596,7 @@ export const useUserStore = defineStore('userStore', {
 
       this.currentProfile = profile
       localStorage.setItem(`defaultProfile_${this.currentUser.id}`, profile.id.toString())
-      
+
       return true
     },
 
@@ -547,10 +613,17 @@ export const useUserStore = defineStore('userStore', {
       }
 
       if (this.currentUser.profiles.length >= this.currentUser.maxProfiles) {
-        return { success: false, message: `Limite de ${this.currentUser.maxProfiles} perfis atingido` }
+        return {
+          success: false,
+          message: `Limite de ${this.currentUser.maxProfiles} perfis atingido`,
+        }
       }
 
-      if (this.currentUser.profiles.find(p => p.name.toLowerCase() === profileData.name.toLowerCase())) {
+      if (
+        this.currentUser.profiles.find(
+          (p) => p.name.toLowerCase() === profileData.name.toLowerCase(),
+        )
+      ) {
         return { success: false, message: 'Já existe um perfil com este nome' }
       }
 
@@ -560,7 +633,7 @@ export const useUserStore = defineStore('userStore', {
         age: profileData.age || null,
         avatarUrl: profileData.avatar || null,
         isAdmin: false,
-        birthDate: null,
+        birthDate: profileData.birthDate || null,
         createdAt: new Date().toISOString(),
         xp: 0,
         points: 0,
@@ -602,7 +675,9 @@ export const useUserStore = defineStore('userStore', {
         return { success: false, message: 'Nenhum utilizador autenticado' }
       }
 
-      const profileIndex = this.currentUser.profiles.findIndex((p) => String(p.id) === String(profileId))
+      const profileIndex = this.currentUser.profiles.findIndex(
+        (p) => String(p.id) === String(profileId),
+      )
       if (profileIndex === -1) {
         return { success: false, message: 'Perfil não encontrado' }
       }
@@ -639,7 +714,9 @@ export const useUserStore = defineStore('userStore', {
         return { success: false, message: 'Nenhum utilizador autenticado' }
       }
 
-      const profileIndex = this.currentUser.profiles.findIndex((p) => String(p.id) === String(profileId))
+      const profileIndex = this.currentUser.profiles.findIndex(
+        (p) => String(p.id) === String(profileId),
+      )
       if (profileIndex === -1) {
         return { success: false, message: 'Perfil não encontrado' }
       }
@@ -702,7 +779,7 @@ export const useUserStore = defineStore('userStore', {
       if (!this.currentProfile.activity_history) {
         this.currentProfile.activity_history = []
       }
-      
+
       this.currentProfile.activity_history.push(activity)
       this.currentProfile.xp = (this.currentProfile.xp || 0) + task.points
       this.currentProfile.points = (this.currentProfile.points || 0) + task.points
@@ -773,7 +850,7 @@ export const useUserStore = defineStore('userStore', {
         this.currentProfile.rewards_history = []
       }
       this.currentProfile.rewards_history.push(redemption)
-      
+
       // Subtract points for the reward
       this.currentProfile.points = (this.currentProfile.points || 0) - reward.points_cost
 
@@ -798,7 +875,7 @@ export const useUserStore = defineStore('userStore', {
         return { success: false, message: 'Erro ao resgatar recompensa.' }
       }
     },
-    
+
     /**
      * Cancel a pending reward and return points (Admin action)
      */
@@ -806,26 +883,28 @@ export const useUserStore = defineStore('userStore', {
       if (!this.currentUser?.profiles) {
         return { success: false, message: 'Nenhum utilizador autenticado' }
       }
-      
+
       if (!this.currentProfile?.isAdmin) {
         return { success: false, message: 'Apenas administradores podem cancelar recompensas' }
       }
 
-      const targetProfile = this.currentUser.profiles.find((p) => String(p.id) === String(profileId))
+      const targetProfile = this.currentUser.profiles.find(
+        (p) => String(p.id) === String(profileId),
+      )
       if (!targetProfile) {
         return { success: false, message: 'Perfil não encontrado' }
       }
 
       const rewardIndex = (targetProfile.rewards_history || []).findIndex(
-        (r) => String(r.id) === String(redemptionId)
+        (r) => String(r.id) === String(redemptionId),
       )
-      
+
       if (rewardIndex === -1) {
         return { success: false, message: 'Recompensa não encontrada' }
       }
-      
+
       const reward = targetProfile.rewards_history[rewardIndex]
-      
+
       if (reward.status !== 'pendente' && reward.status !== 'pending') {
         return { success: false, message: 'Apenas recompensas pendentes podem ser canceladas' }
       }
@@ -833,7 +912,7 @@ export const useUserStore = defineStore('userStore', {
       const profilesBackup = JSON.parse(JSON.stringify(this.currentUser.profiles))
 
       targetProfile.rewards_history[rewardIndex].status = 'cancelado'
-      
+
       // Return points to the profile
       targetProfile.points = (targetProfile.points || 0) + reward.points_cost
 
@@ -858,7 +937,7 @@ export const useUserStore = defineStore('userStore', {
         return { success: false, message: 'Erro ao cancelar recompensa.' }
       }
     },
-    
+
     /**
      * Complete a reward (admin action)
      */
@@ -866,20 +945,22 @@ export const useUserStore = defineStore('userStore', {
       if (!this.currentUser?.profiles) {
         return { success: false, message: 'Nenhum utilizador autenticado' }
       }
-      
+
       if (!this.currentProfile?.isAdmin) {
         return { success: false, message: 'Apenas administradores podem completar recompensas' }
       }
 
-      const targetProfile = this.currentUser.profiles.find((p) => String(p.id) === String(profileId))
+      const targetProfile = this.currentUser.profiles.find(
+        (p) => String(p.id) === String(profileId),
+      )
       if (!targetProfile) {
         return { success: false, message: 'Perfil não encontrado' }
       }
-      
+
       const rewardIndex = (targetProfile.rewards_history || []).findIndex(
-        (r) => String(r.id) === String(redemptionId)
+        (r) => String(r.id) === String(redemptionId),
       )
-      
+
       if (rewardIndex === -1) {
         return { success: false, message: 'Recompensa não encontrada' }
       }
@@ -905,7 +986,7 @@ export const useUserStore = defineStore('userStore', {
         return { success: false, message: 'Erro ao completar recompensa.' }
       }
     },
-    
+
     /**
      * Update daily streak
      */
@@ -915,27 +996,31 @@ export const useUserStore = defineStore('userStore', {
       }
 
       const today = new Date().toISOString().split('T')[0]
-      const lastActivity = this.currentProfile.lastActivitie 
+      const lastActivity = this.currentProfile.lastActivitie
         ? new Date(this.currentProfile.lastActivitie).toISOString().split('T')[0]
         : null
-      
+
       const profileBackup = JSON.parse(JSON.stringify(this.currentProfile))
       const profilesBackup = JSON.parse(JSON.stringify(this.currentUser.profiles))
-      
+
       if (lastActivity === today) {
-        return { success: true, message: 'Streak já atualizado hoje', streak: this.currentProfile.streak }
+        return {
+          success: true,
+          message: 'Streak já atualizado hoje',
+          streak: this.currentProfile.streak,
+        }
       }
-      
+
       const yesterday = new Date()
       yesterday.setDate(yesterday.getDate() - 1)
       const yesterdayStr = yesterday.toISOString().split('T')[0]
-      
+
       if (lastActivity === yesterdayStr) {
         this.currentProfile.streak = (this.currentProfile.streak || 0) + 1
       } else {
         this.currentProfile.streak = 1
       }
-      
+
       this.currentProfile.lastActivitie = new Date().toISOString()
 
       const profileIndex = this.currentUser.profiles.findIndex(
@@ -965,7 +1050,7 @@ export const useUserStore = defineStore('userStore', {
         return { success: false, message: 'Erro ao atualizar streak.' }
       }
     },
-    
+
     /**
      * Check and award badges based on current profile stats
      */
@@ -975,14 +1060,14 @@ export const useUserStore = defineStore('userStore', {
       }
 
       const newBadges = []
-      const currentBadgeIds = (this.currentProfile.badges || []).map(b => b.id_badge)
-      
+      const currentBadgeIds = (this.currentProfile.badges || []).map((b) => b.id_badge)
+
       for (const badge of this.availableBadges) {
         if (currentBadgeIds.includes(badge.id)) continue
-        
+
         let earned = false
         const req = badge.requirements
-        
+
         switch (req?.type) {
           case 'streak':
             earned = (this.currentProfile.streak || 0) >= req.value
@@ -994,13 +1079,13 @@ export const useUserStore = defineStore('userStore', {
             earned = this.currentProfileLevel >= req.value
             break
           case 'rewards_redeemed':
-            earned = (this.currentProfile.rewards_history || []).filter(
-              r => r.status === 'completo'
-            ).length >= req.value
+            earned =
+              (this.currentProfile.rewards_history || []).filter((r) => r.status === 'completo')
+                .length >= req.value
             break
           case 'task_category_count': {
-            const categoryTasks = (this.currentProfile.activity_history || []).filter(a => {
-              const task = this.availableTasks.find(t => String(t.id) === String(a.task_id))
+            const categoryTasks = (this.currentProfile.activity_history || []).filter((a) => {
+              const task = this.availableTasks.find((t) => String(t.id) === String(a.task_id))
               return task?.category === req.category
             })
             earned = categoryTasks.length >= req.value
@@ -1010,7 +1095,7 @@ export const useUserStore = defineStore('userStore', {
             earned = true
             break
         }
-        
+
         if (earned) {
           const newBadge = {
             id_badge: badge.id,
@@ -1019,18 +1104,18 @@ export const useUserStore = defineStore('userStore', {
             icon: badge.icon,
             earnedAt: new Date().toISOString(),
           }
-          
+
           if (!this.currentProfile.badges) {
             this.currentProfile.badges = []
           }
-          
+
           this.currentProfile.badges.push(newBadge)
           newBadges.push(newBadge)
-          
+
           this.currentProfile.xp = (this.currentProfile.xp || 0) + 50
         }
       }
-      
+
       if (newBadges.length > 0) {
         const profileIndex = this.currentUser.profiles.findIndex(
           (p) => String(p.id) === String(this.currentProfile.id),
@@ -1039,10 +1124,10 @@ export const useUserStore = defineStore('userStore', {
           this.currentUser.profiles[profileIndex] = { ...this.currentProfile }
         }
       }
-      
+
       return { success: true, newBadges }
     },
-    
+
     /**
      * Track appliance usage with full API response data
      */
@@ -1050,24 +1135,22 @@ export const useUserStore = defineStore('userStore', {
       if (!this.currentProfile) {
         return { success: false, message: 'Nenhum perfil selecionado' }
       }
-      
-      const appliance = this.availableAppliances.find(
-        a => String(a.id) === String(applianceId)
-      )
-      
+
+      const appliance = this.availableAppliances.find((a) => String(a.id) === String(applianceId))
+
       if (!appliance) {
         return { success: false, message: 'Aparelho não encontrado' }
       }
 
       const profileBackup = JSON.parse(JSON.stringify(this.currentProfile))
       const profilesBackup = JSON.parse(JSON.stringify(this.currentUser.profiles))
-      
+
       let usageData = apiData
       if (!usageData) {
         try {
           const { calculateApplianceEmissions } = await import('@/services/carbonApiService')
           const apiResult = await calculateApplianceEmissions(appliance, hoursUsed)
-          
+
           if (apiResult.success && apiResult.data) {
             usageData = apiResult.data
           }
@@ -1075,13 +1158,13 @@ export const useUserStore = defineStore('userStore', {
           console.warn('API calculation failed, using fallback:', error)
         }
       }
-      
+
       if (!usageData) {
         const powerWatts = appliance.powerWatts || 200
         const minutes = Math.round(hoursUsed * 60)
         const kwh = (powerWatts * hoursUsed) / 1000
         const co2 = kwh * 0.188
-        
+
         usageData = {
           type: appliance.type || 'electricity',
           carbon_kg_co2: co2,
@@ -1090,7 +1173,7 @@ export const useUserStore = defineStore('userStore', {
           device_power_watts: powerWatts,
         }
       }
-      
+
       const usage = {
         id: String(Date.now()),
         appliance_id: String(applianceId),
@@ -1099,11 +1182,11 @@ export const useUserStore = defineStore('userStore', {
         energy_consumed: usageData.kwh,
         co2emited: usageData.carbon_kg_co2,
       }
-      
+
       if (!this.currentProfile.appliance_history) {
         this.currentProfile.appliance_history = []
       }
-      
+
       this.currentProfile.appliance_history.push(usage)
 
       const profileIndex = this.currentUser.profiles.findIndex(
@@ -1133,53 +1216,49 @@ export const useUserStore = defineStore('userStore', {
         return { success: false, message: 'Erro ao registar consumo.' }
       }
     },
-    
+
     /**
      * Get pending rewards for admin approval
      */
     getPendingRewardsForApproval() {
       if (!this.currentUser?.profiles) return []
-      
+
       const pending = []
-      
+
       for (const profile of this.currentUser.profiles) {
         const profilePending = (profile.rewards_history || [])
-          .filter(r => r.status === 'pendente' || r.status === 'pending')
-          .map(r => ({
+          .filter((r) => r.status === 'pendente' || r.status === 'pending')
+          .map((r) => ({
             ...r,
             profileId: profile.id,
             profileName: profile.name,
             profileAvatar: profile.avatarUrl,
           }))
-        
+
         pending.push(...profilePending)
       }
-      
+
       return pending.sort((a, b) => new Date(b.redemedAt) - new Date(a.redemedAt))
     },
-    
+
     /**
      * Get statistics for current profile
      */
     getProfileStatistics() {
       if (!this.currentProfile) return null
-      
+
       const activities = this.currentProfile.activity_history || []
       const usages = this.currentProfile.appliance_history || []
-      
+
       const last7Days = []
       for (let i = 6; i >= 0; i--) {
         const date = new Date()
         date.setDate(date.getDate() - i)
         const dateStr = date.toISOString().split('T')[0]
-        
-        const dayActivities = activities.filter(a => 
-          a.completedAt.split('T')[0] === dateStr
-        )
-        const dayUsages = usages.filter(u => 
-          u.usedAt.split('T')[0] === dateStr
-        )
-        
+
+        const dayActivities = activities.filter((a) => a.completedAt.split('T')[0] === dateStr)
+        const dayUsages = usages.filter((u) => u.usedAt.split('T')[0] === dateStr)
+
         last7Days.push({
           date: dateStr,
           label: date.toLocaleDateString('pt-PT', { weekday: 'short' }),
@@ -1189,7 +1268,7 @@ export const useUserStore = defineStore('userStore', {
           tasksCompleted: dayActivities.length,
         })
       }
-      
+
       return {
         totalPoints: this.currentProfilePoints,
         totalCo2Saved: this.currentProfileCo2Saved,
@@ -1203,58 +1282,60 @@ export const useUserStore = defineStore('userStore', {
         totalUsages: usages.length,
       }
     },
-    
+
     // Profile Management
     async updateProfile(profileId, updates) {
       try {
-        const profileIndex = this.currentUser.profiles.findIndex(p => String(p.id) === String(profileId))
+        const profileIndex = this.currentUser.profiles.findIndex(
+          (p) => String(p.id) === String(profileId),
+        )
         if (profileIndex === -1) throw new Error('Profile not found')
-        
+
         // Map avatar to avatarUrl if needed
         if (updates.avatar && !updates.avatarUrl) {
           updates.avatarUrl = updates.avatar
           delete updates.avatar
         }
-        
+
         this.currentUser.profiles[profileIndex] = {
           ...this.currentUser.profiles[profileIndex],
           ...updates,
         }
-        
+
         await fetch(`http://localhost:3000/users/${this.currentUser.id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(this.currentUser),
         })
-        
+
         if (String(this.currentProfile?.id) === String(profileId)) {
           this.currentProfile = this.currentUser.profiles[profileIndex]
         }
-        
+
         return { success: true }
       } catch (error) {
         console.error('Error updating profile:', error)
         throw error
       }
     },
-    
+
     async updateMaxProfiles(newMax) {
       try {
         this.currentUser.maxProfiles = newMax
-        
+
         await fetch(`http://localhost:3000/users/${this.currentUser.id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(this.currentUser),
         })
-        
+
         return { success: true }
       } catch (error) {
         console.error('Error updating max profiles:', error)
         throw error
       }
     },
-    
+
     // Rewards Management
     async createReward(rewardData) {
       try {
@@ -1265,32 +1346,34 @@ export const useUserStore = defineStore('userStore', {
           points_cost: rewardData.points_cost || rewardData.points,
           imgUrl: rewardData.imgUrl || rewardData.image || null,
         }
-        
+
         const response = await fetch('http://localhost:3000/rewards', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(newReward),
         })
-        
+
         const created = await response.json()
         this.householdRewards.push(created)
-        
+
         return { success: true }
       } catch (error) {
         console.error('Error creating reward:', error)
         throw error
       }
     },
-    
+
     async updateReward(rewardId, updates) {
       try {
         if (!rewardId || rewardId === null) {
           throw new Error('Invalid reward ID')
         }
-        
-        const rewardIndex = this.householdRewards.findIndex(r => String(r.id) === String(rewardId))
+
+        const rewardIndex = this.householdRewards.findIndex(
+          (r) => String(r.id) === String(rewardId),
+        )
         if (rewardIndex === -1) throw new Error('Reward not found')
-        
+
         const updated = {
           ...this.householdRewards[rewardIndex],
           title: updates.title,
@@ -1299,44 +1382,46 @@ export const useUserStore = defineStore('userStore', {
           imgUrl: updates.imgUrl || updates.image || null,
           id: rewardId,
         }
-        
+
         const response = await fetch(`http://localhost:3000/rewards/${rewardId}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(updated),
         })
-        
+
         if (!response.ok) throw new Error('Failed to update reward')
-        
+
         const serverUpdated = await response.json()
         this.householdRewards[rewardIndex] = serverUpdated
-        
+
         return { success: true }
       } catch (error) {
         console.error('Error updating reward:', error)
         throw error
       }
     },
-    
+
     async deleteReward(rewardId) {
       try {
         if (!rewardId) throw new Error('Invalid reward ID')
-        
+
         const response = await fetch(`http://localhost:3000/rewards/${rewardId}`, {
           method: 'DELETE',
         })
-        
+
         if (!response.ok) throw new Error('Failed to delete reward')
-        
-        this.householdRewards = this.householdRewards.filter(r => String(r.id) !== String(rewardId))
-        
+
+        this.householdRewards = this.householdRewards.filter(
+          (r) => String(r.id) !== String(rewardId),
+        )
+
         return { success: true }
       } catch (error) {
         console.error('Error deleting reward:', error)
         throw error
       }
     },
-    
+
     // Appliances Management
     async createAppliance(applianceData) {
       try {
@@ -1350,17 +1435,17 @@ export const useUserStore = defineStore('userStore', {
           imgUrl: applianceData.imgUrl || applianceData.image || null,
           isDefault: false,
         }
-        
+
         const response = await fetch('http://localhost:3000/appliances', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(newAppliance),
         })
-        
+
         const created = await response.json()
         this.availableAppliances.push(created)
-        
-        if (!this.currentUser.appliances.some(id => String(id) === String(created.id))) {
+
+        if (!this.currentUser.appliances.some((id) => String(id) === String(created.id))) {
           this.currentUser.appliances.push(created.id)
           await fetch(`http://localhost:3000/users/${this.currentUser.id}`, {
             method: 'PUT',
@@ -1368,67 +1453,73 @@ export const useUserStore = defineStore('userStore', {
             body: JSON.stringify(this.currentUser),
           })
         }
-        
+
         return { success: true }
       } catch (error) {
         console.error('Error creating appliance:', error)
         throw error
       }
     },
-    
+
     async updateAppliance(applianceId, updates) {
       try {
-        const applianceIndex = this.availableAppliances.findIndex(a => String(a.id) === String(applianceId))
+        const applianceIndex = this.availableAppliances.findIndex(
+          (a) => String(a.id) === String(applianceId),
+        )
         if (applianceIndex === -1) throw new Error('Appliance not found')
-        
+
         const updated = {
           ...this.availableAppliances[applianceIndex],
           ...updates,
           id: applianceId,
         }
-        
+
         const response = await fetch(`http://localhost:3000/appliances/${applianceId}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(updated),
         })
-        
+
         if (!response.ok) throw new Error('Failed to update appliance')
-        
+
         const serverUpdated = await response.json()
         this.availableAppliances[applianceIndex] = serverUpdated
-        
+
         return { success: true }
       } catch (error) {
         console.error('Error updating appliance:', error)
         throw error
       }
     },
-    
+
     async deleteAppliance(applianceId) {
       try {
         const response = await fetch(`http://localhost:3000/appliances/${applianceId}`, {
           method: 'DELETE',
         })
-        
+
         if (!response.ok) throw new Error('Failed to delete appliance')
-        
-        this.availableAppliances = this.availableAppliances.filter(a => String(a.id) !== String(applianceId))
-        
-        this.currentUser.appliances = this.currentUser.appliances.filter(id => String(id) !== String(applianceId))
+
+        this.availableAppliances = this.availableAppliances.filter(
+          (a) => String(a.id) !== String(applianceId),
+        )
+
+        this.currentUser.appliances = this.currentUser.appliances.filter(
+          (id) => String(id) !== String(applianceId),
+        )
         await fetch(`http://localhost:3000/users/${this.currentUser.id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(this.currentUser),
         })
-        
+
         return { success: true }
       } catch (error) {
         console.error('Error deleting appliance:', error)
         throw error
       }
     },
-    
+
     // Tasks Management
     async createTask(taskData) {
       try {
@@ -1442,17 +1533,17 @@ export const useUserStore = defineStore('userStore', {
           co2saved: taskData.co2saved || taskData.points * 0.5,
           isDefault: false,
         }
-        
+
         const response = await fetch('http://localhost:3000/tasks', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(newTask),
         })
-        
+
         const created = await response.json()
         this.availableTasks.push(created)
-        
-        if (!this.currentUser.tasks.some(id => String(id) === String(created.id))) {
+
+        if (!this.currentUser.tasks.some((id) => String(id) === String(created.id))) {
           this.currentUser.tasks.push(created.id)
           await fetch(`http://localhost:3000/users/${this.currentUser.id}`, {
             method: 'PUT',
@@ -1460,61 +1551,63 @@ export const useUserStore = defineStore('userStore', {
             body: JSON.stringify(this.currentUser),
           })
         }
-        
+
         return { success: true }
       } catch (error) {
         console.error('Error creating task:', error)
         throw error
       }
     },
-    
+
     async updateTask(taskId, updates) {
       try {
-        const taskIndex = this.availableTasks.findIndex(t => String(t.id) === String(taskId))
+        const taskIndex = this.availableTasks.findIndex((t) => String(t.id) === String(taskId))
         if (taskIndex === -1) throw new Error('Task not found')
-        
+
         const updated = {
           ...this.availableTasks[taskIndex],
           ...updates,
           co2saved: updates.co2saved || updates.points * 0.5,
           id: taskId,
         }
-        
+
         const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(updated),
         })
-        
+
         if (!response.ok) throw new Error('Failed to update task')
-        
+
         const serverUpdated = await response.json()
         this.availableTasks[taskIndex] = serverUpdated
-        
+
         return { success: true }
       } catch (error) {
         console.error('Error updating task:', error)
         throw error
       }
     },
-    
+
     async deleteTask(taskId) {
       try {
         const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
           method: 'DELETE',
         })
-        
+
         if (!response.ok) throw new Error('Failed to delete task')
-        
-        this.availableTasks = this.availableTasks.filter(t => String(t.id) !== String(taskId))
-        
-        this.currentUser.tasks = this.currentUser.tasks.filter(id => String(id) !== String(taskId))
+
+        this.availableTasks = this.availableTasks.filter((t) => String(t.id) !== String(taskId))
+
+        this.currentUser.tasks = this.currentUser.tasks.filter(
+          (id) => String(id) !== String(taskId),
+        )
         await fetch(`http://localhost:3000/users/${this.currentUser.id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(this.currentUser),
         })
-        
+
         return { success: true }
       } catch (error) {
         console.error('Error deleting task:', error)
@@ -1536,28 +1629,30 @@ export const useUserStore = defineStore('userStore', {
           isDefault: false,
           createdAt: new Date().toISOString(),
         }
-        
+
         const response = await fetch('http://localhost:3000/challenges', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(newChallenge),
         })
-        
+
         const created = await response.json()
         this.householdChallenges.push(created)
-        
+
         return { success: true }
       } catch (error) {
         console.error('Error creating challenge:', error)
         throw error
       }
     },
-    
+
     async updateChallenge(challengeId, updates) {
       try {
-        const challengeIndex = this.householdChallenges.findIndex(c => String(c.id) === String(challengeId))
+        const challengeIndex = this.householdChallenges.findIndex(
+          (c) => String(c.id) === String(challengeId),
+        )
         if (challengeIndex === -1) throw new Error('Challenge not found')
-        
+
         const updated = {
           ...this.householdChallenges[challengeIndex],
           target: updates.target || 1,
@@ -1567,30 +1662,32 @@ export const useUserStore = defineStore('userStore', {
           title: updates.title,
           description: updates.description,
         }
-        
+
         await fetch(`http://localhost:3000/challenges/${challengeId}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(updated),
         })
-        
+
         this.householdChallenges[challengeIndex] = updated
-        
+
         return { success: true }
       } catch (error) {
         console.error('Error updating challenge:', error)
         throw error
       }
     },
-    
+
     async deleteChallenge(challengeId) {
       try {
         await fetch(`http://localhost:3000/challenges/${challengeId}`, {
           method: 'DELETE',
         })
-        
-        this.householdChallenges = this.householdChallenges.filter(c => String(c.id) !== String(challengeId))
-        
+
+        this.householdChallenges = this.householdChallenges.filter(
+          (c) => String(c.id) !== String(challengeId),
+        )
+
         return { success: true }
       } catch (error) {
         console.error('Error deleting challenge:', error)

@@ -4,7 +4,9 @@
  * API Base URL: https://www.antonioamorim.pt/api
  */
 
-const API_BASE_URL = import.meta.env.VITE_CARBON_API_BASE_URL || 'https://www.antonioamorim.pt/api'
+const API_BASE_URL = import.meta.env.DEV
+  ? '/api/carbon'
+  : import.meta.env.VITE_CARBON_API_BASE_URL || 'https://www.antonioamorim.pt/api'
 
 // Storage key for API key (fallback)
 const API_KEY_STORAGE = 'bgreen_api_key'
@@ -18,7 +20,7 @@ export function getStoredApiKey() {
   if (envKey && envKey !== 'your_api_key_here') {
     return envKey
   }
-  
+
   // Fallback to localStorage
   return localStorage.getItem(API_KEY_STORAGE)
 }
@@ -113,11 +115,14 @@ export async function calculateEmissions(type, amount, isDevice = false) {
   try {
     const body = isDevice ? { type, minutes: amount } : { type, amount }
 
+    // Higienizar a API key para remover aspas ou caracteres invisíveis que causam erro de protocolo
+    const cleanKey = apiKey.replace(/[^a-zA-Z0-9_]/g, '')
+
     const response = await fetch(`${API_BASE_URL}/calculate`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-API-Key': apiKey,
+        'X-API-Key': cleanKey,
       },
       body: JSON.stringify(body),
     })
@@ -191,32 +196,33 @@ export async function getApiInfo() {
  * Map appliance names to API device types
  */
 export const applianceToApiType = {
-  'Frigorífico': { type: 'refrigerator', isDevice: true },
+  Frigorífico: { type: 'refrigerator', isDevice: true },
   'Máquina de lavar roupa': { type: 'washing_machine', isDevice: true },
   'Máquina de lavar loiça': { type: 'dishwasher', isDevice: true },
-  'Forno': { type: 'electricity', isDevice: false, factor: 2.4 }, // 2.4 kWh per hour
+  Forno: { type: 'electricity', isDevice: false, factor: 2.4 }, // 2.4 kWh per hour
   'Micro-ondas': { type: 'electricity', isDevice: false, factor: 1.0 },
-  'Televisão': { type: 'television', isDevice: true },
+  Televisão: { type: 'television', isDevice: true },
   'Ar condicionado': { type: 'air_conditioner', isDevice: true },
-  'Aspirador': { type: 'electricity', isDevice: false, factor: 1.4 },
+  Aspirador: { type: 'electricity', isDevice: false, factor: 1.4 },
   'Ferro de engomar': { type: 'electricity', isDevice: false, factor: 2.0 },
   'Secador de cabelo': { type: 'electricity', isDevice: false, factor: 1.5 },
-  'Computador': { type: 'desktop', isDevice: true },
+  Computador: { type: 'desktop', isDevice: true },
   'Consola de jogos': { type: 'electricity', isDevice: false, factor: 0.15 },
   'Carregador de telemóvel': { type: 'electricity', isDevice: false, factor: 0.005 },
   'Router Wi-Fi': { type: 'electricity', isDevice: false, factor: 0.01 },
-  'Cafeteira': { type: 'electricity', isDevice: false, factor: 1.0 },
+  Cafeteira: { type: 'electricity', isDevice: false, factor: 1.0 },
 }
 
 /**
  * Calculate emissions for an appliance usage
  * API expects: type (required), time (defaults to 60min), watts (default depends on type)
  * API returns: { success, message, data: { type, carbon_kg_co2, unit, factor, minutes, kwh, device_power_watts } }
- * 
+ * For 'electricity' type, API expects: amount (kWh)
+ *
  * New data structure uses:
  * - appliance.type: API device type (laptop, desktop, television, etc.)
  * - appliance.powerWatts: Power consumption in watts
- * 
+ *
  * @param {object} appliance - Appliance object with type and powerWatts
  * @param {number} hoursUsed - Hours used
  * @returns {Promise<{success: boolean, data?: object, message?: string}>}
@@ -224,56 +230,86 @@ export const applianceToApiType = {
 export async function calculateApplianceEmissions(appliance, hoursUsed) {
   const apiKey = getStoredApiKey()
 
-  if (!apiKey) {
-    return {
-      success: false,
-      message: 'API key não encontrada. Por favor, configure a API primeiro.',
-    }
-  }
+  // Valid device types that accept minutes/watts in the API
+  const deviceTypes = [
+    'refrigerator',
+    'washing_machine',
+    'dishwasher',
+    'television',
+    'air_conditioner',
+    'desktop',
+    'laptop',
+  ]
 
-  // Valid device types for the API
-  const validTypes = ['refrigerator', 'washing_machine', 'dishwasher', 'television', 
-                      'air_conditioner', 'desktop', 'laptop', 'electricity']
-  
   // Use the type directly from the appliance (new data structure)
   // Fallback to 'electricity' for generic calculations
   const deviceType = appliance.type || 'electricity'
-  const type = validTypes.includes(deviceType) ? deviceType : 'electricity'
-  
+  const isDevice = deviceTypes.includes(deviceType)
+  const type = isDevice ? deviceType : 'electricity'
+
   // Convert hours to minutes for the API
   const minutes = Math.round(hoursUsed * 60)
-  
-  // Prepare request body - API expects type, time (minutes), and optionally watts
-  const body = {
-    type: type,
-    minutes: minutes,
+  const powerWatts = appliance.powerWatts || (isDevice ? 0 : 200) // 0 lets API use default for devices
+
+  // Fallback calculation (local)
+  const calculateLocal = () => {
+    const watts = powerWatts || 200
+    const powerKW = watts / 1000
+    const kWh = hoursUsed * powerKW
+    const co2 = kWh * 0.188 // Portugal grid factor
+
+    return {
+      success: true,
+      data: {
+        type: type,
+        carbon_kg_co2: co2,
+        unit: 'kg CO2e',
+        factor: 0.188,
+        minutes: minutes,
+        kwh: kWh,
+        device_power_watts: watts,
+      },
+    }
   }
-  
-  // If appliance has custom power consumption (powerWatts) and it's generic electricity type, include watts
-  if (appliance.powerWatts && type === 'electricity') {
-    body.watts = appliance.powerWatts
+
+  if (!apiKey) {
+    console.warn('API key não encontrada. Usando cálculo local.')
+    return calculateLocal()
   }
+
+  // Prepare request body based on type
+  const body = { type }
+
+  if (isDevice) {
+    // API expects minutes for devices
+    body.minutes = minutes
+    // API expects 'power_watts' (not 'watts') if overriding
+    if (powerWatts > 0) {
+      body.power_watts = powerWatts
+    }
+  } else {
+    // For 'electricity', API expects 'amount' in kWh
+    // We must calculate kWh here because API doesn't take minutes/watts for 'electricity' type
+    const watts = powerWatts || 200
+    const kwh = (watts * hoursUsed) / 1000
+    body.amount = kwh
+  }
+
+  // Higienizar a API key
+  const cleanKey = apiKey.replace(/[^a-zA-Z0-9_]/g, '')
 
   try {
     const response = await fetch(`${API_BASE_URL}/calculate`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-API-Key': apiKey,
+        'X-API-Key': cleanKey,
       },
       body: JSON.stringify(body),
     })
 
-    if (response.status === 401) {
-      return { success: false, message: 'API key inválida ou em falta' }
-    }
-
-    if (response.status === 403) {
-      return { success: false, message: 'API key bloqueada' }
-    }
-
-    if (response.status === 429) {
-      return { success: false, message: 'Limite de pedidos excedido. Aguarde alguns minutos.' }
+    if (!response.ok) {
+      throw new Error(`API Error: ${response.status}`)
     }
 
     const data = await response.json()
@@ -286,9 +322,9 @@ export async function calculateApplianceEmissions(appliance, hoursUsed) {
           carbon_kg_co2: data.data.carbon_kg_co2,
           unit: data.data.unit,
           factor: data.data.factor,
-          minutes: data.data.minutes,
-          kwh: data.data.kwh,
-          device_power_watts: data.data.device_power_watts,
+          minutes: data.data.minutes || minutes,
+          kwh: data.data.kwh || data.data.amount,
+          device_power_watts: data.data.device_power_watts || powerWatts,
         },
       }
     }
@@ -299,26 +335,7 @@ export async function calculateApplianceEmissions(appliance, hoursUsed) {
     }
   } catch (error) {
     console.error('Error calculating appliance emissions:', error)
-    
-    // Fallback calculation if API fails
-    // Use powerWatts from new data structure
-    const powerWatts = appliance.powerWatts || 200
-    const powerKW = powerWatts / 1000
-    const kWh = hoursUsed * powerKW
-    const co2 = kWh * 0.188 // Portugal grid factor
-    
-    return {
-      success: true,
-      data: {
-        type: type,
-        carbon_kg_co2: co2,
-        unit: 'kg CO2e',
-        factor: 0.188,
-        minutes: minutes,
-        kwh: kWh,
-        device_power_watts: powerWatts,
-      },
-    }
+    return calculateLocal()
   }
 }
 
@@ -326,18 +343,18 @@ export async function calculateApplianceEmissions(appliance, hoursUsed) {
  * Map task categories to API types for estimation
  */
 export const taskCategoryToApiType = {
-  'Mobilidade': {
+  Mobilidade: {
     'Usar transporte público': { type: 'bus', amount: 10 }, // 10km estimate
     'Andar de bicicleta': { type: 'train', amount: 0 }, // No emissions
   },
-  'Alimentação': {
+  Alimentação: {
     'Refeição vegetariana': { type: 'meal_vegetarian', amount: 1 },
   },
-  'Reciclagem': {
+  Reciclagem: {
     'Reciclar plástico': { type: 'waste_recycled', amount: 1 },
     'Compostar resíduos orgânicos': { type: 'waste_recycled', amount: 2 },
   },
-  'Água': {
+  Água: {
     'Duche de 5 minutos': { type: 'water', amount: 40 }, // 40L saved estimate
   },
 }

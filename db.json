@@ -679,6 +679,91 @@
           "lastActivitie": "2026-01-24T12:04:46.246Z"
         }
       ]
+    },
+    {
+      "id": "1769336197166",
+      "name": "Antonio Amorim",
+      "email": "work@antonioamorim.pt",
+      "password": "antonio1",
+      "createdAt": "2026-01-25T10:16:37.166Z",
+      "maxProfiles": "5",
+      "appliances": [
+        "1",
+        "2",
+        "4",
+        "5",
+        "6",
+        "8",
+        "9"
+      ],
+      "tasks": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "8",
+        "7",
+        "10"
+      ],
+      "profiles": [
+        {
+          "id": "1769336197166",
+          "name": "Antonio Amorim",
+          "age": null,
+          "avatarUrl": null,
+          "isAdmin": true,
+          "birthDate": "1989-05-06",
+          "createdAt": "2026-01-25T10:16:37.166Z",
+          "xp": 70,
+          "points": 20,
+          "streak": 1,
+          "settings": {
+            "pin": "1234",
+            "notification": true,
+            "deviceDefault": true,
+            "header_background": "bg-gradient-to-r from-green-400 to-emerald-500"
+          },
+          "activity_history": [
+            {
+              "id": "1769336964425",
+              "task_id": "1",
+              "completedAt": "2026-01-25T10:29:24.425Z",
+              "pointsEarned": 20,
+              "co2saved": 10
+            }
+          ],
+          "appliance_history": [
+            {
+              "id": "1769336942067",
+              "appliance_id": "1",
+              "usedAt": "2026-01-25T10:29:02.067Z",
+              "duration": 1440,
+              "energy_consumed": 3.5999999999999996,
+              "co2emited": 0.6768
+            }
+          ],
+          "rewards_history": [],
+          "badges": [
+            {
+              "id_badge": "early_adopter",
+              "title": "Early Adopter",
+              "description": "Primeiro perfil criado",
+              "icon": "star",
+              "earnedAt": "2026-01-25T10:21:39.160Z"
+            },
+            {
+              "id_badge": "eco_warrior",
+              "title": "Eco Warrior",
+              "description": "Poupou 10kg de CO2",
+              "icon": "eco",
+              "earnedAt": "2026-01-25T10:29:24.485Z"
+            }
+          ],
+          "lastActivitie": "2026-01-25T10:29:02.069Z"
+        }
+      ]
     }
   ],
   "appliances": [

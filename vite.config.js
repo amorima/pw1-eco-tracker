@@ -31,6 +31,12 @@ export default defineConfig({
           ),
         secure: false,
       },
+      '/api/carbon': {
+        target: 'https://www.antonioamorim.pt',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/carbon/, '/api'),
+        secure: false,
+      },
     },
   },
 })

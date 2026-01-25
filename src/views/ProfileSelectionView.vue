@@ -91,9 +91,9 @@
 
         <div>
           <label class="block text-sm font-medium text-(--text-body-sub-titles) mb-2">
-            Idade (opcional)
+            Data de nascimento (opcional)
           </label>
-          <FormInput v-model.number="newProfile.age" placeholder="Idade" type="number" />
+          <FormInput v-model="newProfile.birthDate" type="date" />
         </div>
 
         <div>
@@ -205,7 +205,7 @@ export default {
       isUploading: false,
       newProfile: {
         name: '',
-        age: null,
+        birthDate: '',
         avatar: null,
         avatarPreview: null,
       },
@@ -336,10 +336,23 @@ export default {
 
       this.isLoading = true
 
+      // Calcular idade a partir da data de nascimento
+      let age = null
+      if (this.newProfile.birthDate) {
+        const birthDate = new Date(this.newProfile.birthDate)
+        const today = new Date()
+        age = today.getFullYear() - birthDate.getFullYear()
+        const m = today.getMonth() - birthDate.getMonth()
+        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+          age--
+        }
+      }
+
       try {
         const result = await this.userStore.createProfile({
           name: this.newProfile.name,
-          age: this.newProfile.age,
+          age: age,
+          birthDate: this.newProfile.birthDate,
           avatar: this.newProfile.avatar,
         })
 
@@ -359,7 +372,7 @@ export default {
       this.showAddProfileModal = false
       this.newProfile = {
         name: '',
-        age: null,
+        birthDate: '',
         avatar: null,
         avatarPreview: null,
       }
