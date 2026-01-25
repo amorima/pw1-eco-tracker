@@ -151,14 +151,19 @@ router.beforeEach((to, from, next) => {
     return
   }
 
-  // Check if first-time user needs to complete quick start
-  if (userStore.isLoggedIn && userStore.isFirstUse && to.name !== 'quick-start') {
+  // Check if user needs to complete quick start (first use OR needsQuickStart flag)
+  const needsQuickStart =
+    userStore.isLoggedIn &&
+    (userStore.isFirstUse || userStore.currentUser?.profiles?.[0]?.needsQuickStart)
+
+  if (needsQuickStart && to.name !== 'quick-start') {
+    console.log('Router - Redirecting to QuickStart')
     next('/quick-start')
     return
   }
 
-  // Prevent access to quick-start if not first use
-  if (to.meta.requiresFirstUse && !userStore.isFirstUse) {
+  // Prevent access to quick-start if not needed
+  if (to.meta.requiresFirstUse && !needsQuickStart) {
     next('/home')
     return
   }

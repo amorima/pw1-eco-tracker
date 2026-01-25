@@ -8,17 +8,19 @@
     </div>
   </Transition>
 
-  <div class="min-h-screen py-8 flex justify-center">
-    <div class="w-[930px] space-y-6">
+  <div class="min-h-screen py-4 md:py-8 flex justify-center px-4 sm:px-6 lg:px-8">
+    <div class="w-full max-w-[930px] space-y-4 md:space-y-6">
       <!-- Header -->
       <div class="text-center space-y-2">
         <h1
-          class="text-[48px] font-bold text-(--text-body-titles)"
+          class="text-3xl sm:text-4xl lg:text-[48px] font-bold text-(--text-body-titles)"
           style="font-family: 'Clash Grotesk', sans-serif"
         >
           Bem-vindo ao b.green!
         </h1>
-        <p class="text-lg text-(--text-body-sub-titles)">Configure sua conta em 4 passos</p>
+        <p class="text-base sm:text-lg text-(--text-body-sub-titles)">
+          Configure sua conta em 4 passos
+        </p>
       </div>
 
       <!-- Progress Indicator -->
@@ -41,7 +43,11 @@
           <FormInput v-model="adminProfile.name" placeholder="Seu nome *" type="text" />
 
           <div class="flex">
-            <FormInput v-model="adminProfile.age" placeholder="Idade (opcional)" type="number" />
+            <FormInput
+              v-model="adminProfile.birthDate"
+              placeholder="Data de nascimento (opcional)"
+              type="date"
+            />
           </div>
 
           <div>
@@ -98,31 +104,33 @@
             Adicione os eletrodomésticos que você deseja monitorar (opcional).
           </p>
 
-          <div class="grid grid-cols-2 gap-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
             <div
-              v-for="appliance in availableAppliances"
+              v-for="appliance in appliancesWithIcons"
               :key="appliance.id"
               @click="toggleAppliance(appliance.id)"
-              class="border-2 rounded-lg p-4 cursor-pointer transition-all"
+              class="border-2 rounded-lg p-3 md:p-4 cursor-pointer transition-all"
               :class="
                 selectedAppliances.includes(appliance.id)
                   ? 'border-(--system-ring) bg-[#f7fee7]'
                   : 'border-(--system-border) bg-white hover:border-(--system-ring)'
               "
             >
-              <div class="flex items-center gap-3">
-                <span class="material-symbols-outlined text-2xl text-(--text-body-titles)">
+              <div class="flex items-center gap-2 md:gap-3">
+                <span
+                  class="material-symbols-outlined text-xl md:text-2xl text-(--text-body-titles)"
+                >
                   {{ appliance.icon }}
                 </span>
-                <div>
-                  <p class="font-semibold text-(--text-body-titles)">{{ appliance.name }}</p>
-                  <p class="text-xs text-(--text-body-sub-titles)">
-                    {{ appliance.powerWatts }}W
+                <div class="flex-1 min-w-0">
+                  <p class="font-semibold text-(--text-body-titles) text-sm md:text-base truncate">
+                    {{ appliance.name }}
                   </p>
+                  <p class="text-xs text-(--text-body-sub-titles)">{{ appliance.powerWatts }}W</p>
                 </div>
                 <span
                   v-if="selectedAppliances.includes(appliance.id)"
-                  class="material-symbols-outlined text-(--system-ring) ml-auto"
+                  class="material-symbols-outlined text-(--system-ring) flex-shrink-0 text-xl md:text-2xl"
                 >
                   check_circle
                 </span>
@@ -139,29 +147,33 @@
             Selecione as atividades ecológicas que você mais pratica (opcional).
           </p>
 
-          <div class="grid grid-cols-2 gap-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
             <div
-              v-for="activity in availableTasks"
+              v-for="activity in tasksWithIcons"
               :key="activity.id"
               @click="toggleActivity(activity.id)"
-              class="border-2 rounded-lg p-4 cursor-pointer transition-all"
+              class="border-2 rounded-lg p-3 md:p-4 cursor-pointer transition-all"
               :class="
                 selectedTasks.includes(activity.id)
                   ? 'border-(--system-ring) bg-[#f7fee7]'
                   : 'border-(--system-border) bg-white hover:border-(--system-ring)'
               "
             >
-              <div class="flex items-center gap-3">
-                <span class="material-symbols-outlined text-2xl text-(--text-body-titles)">
+              <div class="flex items-center gap-2 md:gap-3">
+                <span
+                  class="material-symbols-outlined text-xl md:text-2xl text-(--text-body-titles)"
+                >
                   {{ activity.icon }}
                 </span>
-                <div>
-                  <p class="font-semibold text-(--text-body-titles)">{{ activity.title }}</p>
+                <div class="flex-1 min-w-0">
+                  <p class="font-semibold text-(--text-body-titles) text-sm md:text-base truncate">
+                    {{ activity.title }}
+                  </p>
                   <p class="text-xs text-(--text-body-sub-titles)">+{{ activity.points }} pontos</p>
                 </div>
                 <span
                   v-if="selectedTasks.includes(activity.id)"
-                  class="material-symbols-outlined text-(--system-ring) ml-auto"
+                  class="material-symbols-outlined text-(--system-ring) flex-shrink-0 text-xl md:text-2xl"
                 >
                   check_circle
                 </span>
@@ -170,8 +182,10 @@
           </div>
         </div>
       </CollapsibleCard>
-      <div class="flex justify-end mt-4">
-        <ActionButton @click="completeSetup"> Finalizar configuração </ActionButton>
+      <div class="flex justify-center sm:justify-end mt-4 md:mt-6">
+        <ActionButton @click="completeSetup" class="w-full sm:w-auto">
+          Finalizar configuração
+        </ActionButton>
       </div>
       <!-- Success Message -->
       <div
@@ -194,6 +208,7 @@ import ActionButton from '@/components/ActionButton.vue'
 import ToastNotification from '@/components/ToastNotification.vue'
 import { useUserStore } from '@/stores/userStore'
 import { mapState } from 'pinia'
+import { getApplianceIcon, getTaskIcon } from '@/data/categoryIcons'
 
 export default {
   name: 'QuickStartView',
@@ -211,7 +226,7 @@ export default {
       adminProfile: {
         name: '',
         email: '',
-        age: '',
+        birthDate: '',
         avatar: '',
         pin: '',
       },
@@ -229,15 +244,32 @@ export default {
   },
   computed: {
     ...mapState(useUserStore, ['availableAppliances', 'availableTasks']),
+    appliancesWithIcons() {
+      return this.availableAppliances.map((appliance) => ({
+        ...appliance,
+        icon: getApplianceIcon(appliance.category),
+      }))
+    },
+    tasksWithIcons() {
+      return this.availableTasks.map((task) => ({
+        ...task,
+        icon: getTaskIcon(task.category),
+      }))
+    },
   },
   async mounted() {
     const userStore = useUserStore()
 
-    // Fetch real data from API
     await userStore.fetchResources()
 
-    if (userStore.currentUser && userStore.currentUser.name) {
-      this.adminProfile.name = userStore.currentUser.name
+    if (
+      userStore.currentUser &&
+      userStore.currentUser.profiles &&
+      userStore.currentUser.profiles.length > 0
+    ) {
+      const firstProfile = userStore.currentUser.profiles[0]
+      this.adminProfile.name = firstProfile.name || ''
+      this.adminProfile.birthDate = firstProfile.birthDate || ''
     }
   },
   methods: {

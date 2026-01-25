@@ -235,9 +235,19 @@ export default {
 
       if (result.success) {
         this.showNotification('Conta criada com sucesso!', 'success')
-        setTimeout(() => {
-          this.$router.push({ name: 'login' })
-        }, 1500)
+
+        setTimeout(async () => {
+          const loginResult = await this.store.login({
+            email: this.formData.email,
+            password: this.formData.password,
+          })
+
+          if (loginResult.success && loginResult.requiresSetup) {
+            this.$router.push({ name: 'quick-start' })
+          } else {
+            this.$router.push({ name: 'login' })
+          }
+        }, 1000)
       } else {
         this.showNotification(result.message || 'Erro ao criar conta', 'error')
       }
