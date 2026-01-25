@@ -18,6 +18,7 @@ describe('LandingPage', () => {
           FeatureCarousel: true, // nao carrega MenuNav para mais eficiencia
           FAQItem: true, // nao carrega ChatBot para mais eficiencia
           draggable: true,
+          Teleport: true,
         },
         mocks: {
           $router: routerMock,
