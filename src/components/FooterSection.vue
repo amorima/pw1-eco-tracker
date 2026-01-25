@@ -42,11 +42,19 @@
             <!-- Funcionalidades -->
             <div class="flex flex-col gap-4">
               <h3 class="font-bold text-lg">Funcionalidades</h3>
-              <a href="#como-funciona" class="hover:text-(--system-ring) transition-colors"
+              <a
+                @click.prevent="scrollToSection('carrosel')"
+                class="hover:text-(--system-ring) transition-colors cursor-pointer"
                 >Como funciona</a
               >
-              <a href="#impacto" class="hover:text-(--system-ring) transition-colors">Impacto</a>
-              <a href="#testemunhos" class="hover:text-(--system-ring) transition-colors"
+              <a
+                @click.prevent="scrollToSection('impacto')"
+                class="hover:text-(--system-ring) transition-colors cursor-pointer"
+                >Impacto</a
+              >
+              <a
+                @click.prevent="scrollToSection('testemunhos')"
+                class="hover:text-(--system-ring) transition-colors cursor-pointer"
                 >Testemunhos</a
               >
             </div>
@@ -54,7 +62,11 @@
             <!-- Ajuda -->
             <div class="flex flex-col gap-4">
               <h3 class="font-bold text-lg">Ajuda</h3>
-              <a href="#faqs" class="hover:text-(--system-ring) transition-colors">FAQ</a>
+              <a
+                @click.prevent="scrollToSection('faqs')"
+                class="hover:text-(--system-ring) transition-colors cursor-pointer"
+                >FAQ</a
+              >
               <a
                 @click.prevent="$router.push({ name: 'about' })"
                 class="hover:text-(--system-ring) transition-colors cursor-pointer"
@@ -165,5 +177,29 @@
 <script>
 export default {
   name: 'FooterSection',
+  methods: {
+    scrollToSection(sectionId) {
+      const scroll = () => {
+        const el = document.getElementById(sectionId)
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' })
+        }
+      }
+
+      // Always navigate to landing first to guarantee the section exists
+      if (this.$route.name !== 'landing') {
+        this.$router.push({ name: 'landing' }).then(() => {
+          setTimeout(() => {
+            scroll()
+          }, 300)
+        })
+      } else {
+        // Already on landing, just scroll
+        this.$nextTick(() => {
+          scroll()
+        })
+      }
+    },
+  },
 }
 </script>
