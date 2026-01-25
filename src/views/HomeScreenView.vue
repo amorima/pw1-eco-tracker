@@ -38,9 +38,7 @@
     <div class="flex flex-col gap-4">
       <div class="flex items-center gap-4">
         <div class="w-16 h-16 bg-(--system-ring) rounded-lg flex items-center justify-center">
-          <span class="material-symbols-outlined text-white text-3xl">
-            {{ selectedAppliance?.icon || 'electrical_services' }}
-          </span>
+          <i :class="[selectedAppliance?.icon || 'fa-solid fa-plug', 'text-white text-3xl']"></i>
         </div>
         <div>
           <h4 class="font-semibold text-(--text-body-titles)">{{ selectedAppliance?.name }}</h4>
@@ -140,9 +138,7 @@
                           : 'bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400',
                       ]"
                     >
-                      <span class="material-symbols-outlined">
-                        {{ statistics.totalEffectiveCo2 <= 0 ? 'eco' : 'cloud' }}
-                      </span>
+                      <i :class="statistics.totalEffectiveCo2 <= 0 ? 'fa-solid fa-leaf' : 'fa-solid fa-cloud'"></i>
                     </div>
                     <div class="text-center">
                       <p
@@ -169,7 +165,7 @@
                     <div
                       class="w-10 h-10 rounded-full bg-yellow-100 dark:bg-yellow-900/30 flex items-center justify-center text-yellow-600 dark:text-yellow-400"
                     >
-                      <span class="material-symbols-outlined">emoji_events</span>
+                      <i class="fa-solid fa-trophy"></i>
                     </div>
                     <div class="text-center">
                       <p class="text-2xl font-bold text-(--text-body-titles)">
@@ -188,7 +184,7 @@
                     <div
                       class="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400"
                     >
-                      <span class="material-symbols-outlined">task_alt</span>
+                      <i class="fa-solid fa-circle-check"></i>
                     </div>
                     <div class="text-center">
                       <p class="text-2xl font-bold text-(--text-body-titles)">
@@ -207,7 +203,7 @@
                     <div
                       class="w-10 h-10 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center text-orange-600 dark:text-orange-400"
                     >
-                      <span class="material-symbols-outlined">local_fire_department</span>
+                      <i class="fa-solid fa-fire"></i>
                     </div>
                     <div class="text-center">
                       <p class="text-2xl font-bold text-(--text-body-titles)">
@@ -235,9 +231,7 @@
                 class="w-full h-[260px] flex items-center justify-center text-(--text-body-sub-titles)"
               >
                 <div class="text-center">
-                  <span class="material-symbols-outlined text-6xl mb-4 text-(--system-border)">
-                    show_chart
-                  </span>
+                  <i class="fa-solid fa-chart-line text-6xl mb-4 text-(--system-border)"></i>
                   <p>A carregar estatísticas...</p>
                 </div>
               </div>
@@ -260,7 +254,9 @@
                     v-for="usage in recentApplianceUsages"
                     :key="usage.id"
                     :label="usage.appliance.name"
-                    :image="usage.appliance.image || getApplianceImage(usage.appliance)"
+                    :image="usage.appliance.imgUrl"
+                    :icon="usage.appliance.icon"
+                    :category="usage.appliance.category"
                     :energyConsumed="usage.energy_consumed"
                     :powerWatts="usage.device_power_watts || usage.appliance.powerWatts"
                     unit="hr"
@@ -288,7 +284,7 @@
                     v-for="activity in recentTaskCompletions"
                     :key="activity.id"
                     :label="activity.task.title"
-                    :image="activity.task.image || getTaskImage(activity.task)"
+                    :image="activity.task.imgUrl"
                     @click="completeTask(activity.task)"
                   />
                   <AddCard @click="openAddTaskModal" />
@@ -779,17 +775,11 @@ export default {
     },
 
     getApplianceImage(appliance) {
-      return (
-        this.applianceImages[appliance.name] ||
-        'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&h=200&fit=crop'
-      )
+      return appliance.imgUrl || null
     },
 
     getTaskImage(task) {
-      return (
-        this.taskImages[task.category] ||
-        'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=300&h=250&fit=crop'
-      )
+      return task.imgUrl || null
     },
 
     openAddConsumptionModal() {

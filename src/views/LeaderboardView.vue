@@ -24,9 +24,7 @@
             :style="{ backgroundColor: currentProfile?.color }"
           >
             <img v-if="currentProfile?.avatarUrl" :src="currentProfile.avatarUrl" class="w-full h-full object-cover" />
-            <span v-else class="material-symbols-outlined text-white text-4xl">
-              person
-            </span>
+            <i v-else class="fa-solid fa-user text-white text-4xl"></i>
           </div>
           <div class="flex-1">
             <h2 class="text-2xl font-bold text-gray-800">{{ currentProfile?.name }}</h2>

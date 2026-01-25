@@ -25,9 +25,7 @@
             @click="handleClose"
             class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-(--system-input-background) transition-colors"
           >
-            <span class="material-symbols-outlined text-(--text-body-titles)">
-              close
-            </span>
+            <i class="fa-solid fa-xmark text-(--text-body-titles) text-xl"></i>
           </button>
         </div>
 

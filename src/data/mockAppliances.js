@@ -1,5 +1,24 @@
 import { getApplianceIcon } from './categoryIcons'
 
+// Unsplash images for appliances (free to use)
+const applianceImages = {
+  '1': 'https://images.unsplash.com/photo-1584568694244-14fbdf83bd30?w=400&h=300&fit=crop', // Frigorífico
+  '2': 'https://images.unsplash.com/photo-1604335399105-a0c585fd81a1?w=400&h=300&fit=crop', // Máquina de lavar roupa
+  '3': 'https://images.unsplash.com/photo-1556910096-6f5e72db6803?w=400&h=300&fit=crop', // Máquina de lavar loiça
+  '4': 'https://images.unsplash.com/photo-1590794056226-79ef3a8147e1?w=400&h=300&fit=crop', // Forno
+  '5': 'https://images.unsplash.com/photo-1574269909862-7e1d70bb8078?w=400&h=300&fit=crop', // Micro-ondas
+  '6': 'https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=400&h=300&fit=crop', // Televisão
+  '7': 'https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=400&h=300&fit=crop', // Ar condicionado
+  '8': 'https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=400&h=300&fit=crop', // Aspirador
+  '9': 'https://images.unsplash.com/photo-1610557892470-55d9e80c0bce?w=400&h=300&fit=crop', // Ferro de engomar
+  '10': 'https://images.unsplash.com/photo-1522338140262-f46f5913618a?w=400&h=300&fit=crop', // Secador de cabelo
+  '11': 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=400&h=300&fit=crop', // Computador
+  '12': 'https://images.unsplash.com/photo-1486401899868-0e435ed85128?w=400&h=300&fit=crop', // Consola de jogos
+  '13': 'https://images.unsplash.com/photo-1609692814858-f7cd2f0afa4f?w=400&h=300&fit=crop', // Carregador de telemóvel
+  '14': 'https://images.unsplash.com/photo-1606904825846-647eb07f5be2?w=400&h=300&fit=crop', // Router Wi-Fi
+  '15': 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=400&h=300&fit=crop', // Cafeteira
+}
+
 export const mockAppliances = [
   {
     id: '1',
@@ -8,9 +27,9 @@ export const mockAppliances = [
     powerWatts: 150,
     category: 'Cozinha',
     description: 'Frigorífico de casa',
-    imgUrl: null,
+    imgUrl: applianceImages['1'],
     isDefault: true,
-    get icon() { return getApplianceIcon(this.category) }
+    get icon() { return getApplianceIcon(this) }
   },
   {
     id: '2',
@@ -19,9 +38,9 @@ export const mockAppliances = [
     powerWatts: 2000,
     category: 'Lavandaria',
     description: 'Máquina de lavar roupa',
-    imgUrl: null,
+    imgUrl: applianceImages['2'],
     isDefault: true,
-    get icon() { return getApplianceIcon(this.category) }
+    get icon() { return getApplianceIcon(this) }
   },
   {
     id: '3',
@@ -30,9 +49,9 @@ export const mockAppliances = [
     powerWatts: 1800,
     category: 'Cozinha',
     description: 'Máquina de lavar loiça',
-    imgUrl: null,
+    imgUrl: applianceImages['3'],
     isDefault: true,
-    get icon() { return getApplianceIcon(this.category) }
+    get icon() { return getApplianceIcon(this) }
   },
   {
     id: '4',
@@ -41,9 +60,9 @@ export const mockAppliances = [
     powerWatts: 2400,
     category: 'Cozinha',
     description: 'Forno elétrico',
-    imgUrl: null,
+    imgUrl: applianceImages['4'],
     isDefault: true,
-    get icon() { return getApplianceIcon(this.category) }
+    get icon() { return getApplianceIcon(this) }
   },
   {
     id: '5',
@@ -52,9 +71,9 @@ export const mockAppliances = [
     powerWatts: 1000,
     category: 'Cozinha',
     description: 'Micro-ondas',
-    imgUrl: null,
+    imgUrl: applianceImages['5'],
     isDefault: true,
-    get icon() { return getApplianceIcon(this.category) }
+    get icon() { return getApplianceIcon(this) }
   },
   {
     id: '6',
@@ -63,9 +82,9 @@ export const mockAppliances = [
     powerWatts: 100,
     category: 'Entretenimento',
     description: 'Televisão da sala',
-    imgUrl: null,
+    imgUrl: applianceImages['6'],
     isDefault: true,
-    get icon() { return getApplianceIcon(this.category) }
+    get icon() { return getApplianceIcon(this) }
   },
   {
     id: '7',
@@ -74,9 +93,9 @@ export const mockAppliances = [
     powerWatts: 3500,
     category: 'Climatização',
     description: 'Ar condicionado',
-    imgUrl: null,
+    imgUrl: applianceImages['7'],
     isDefault: true,
-    get icon() { return getApplianceIcon(this.category) }
+    get icon() { return getApplianceIcon(this) }
   },
   {
     id: '8',
@@ -85,9 +104,9 @@ export const mockAppliances = [
     powerWatts: 1400,
     category: 'Limpeza',
     description: 'Aspirador de pó',
-    imgUrl: null,
+    imgUrl: applianceImages['8'],
     isDefault: true,
-    get icon() { return getApplianceIcon(this.category) }
+    get icon() { return getApplianceIcon(this) }
   },
   {
     id: '9',
@@ -96,9 +115,9 @@ export const mockAppliances = [
     powerWatts: 2000,
     category: 'Lavandaria',
     description: 'Ferro de engomar',
-    imgUrl: null,
+    imgUrl: applianceImages['9'],
     isDefault: true,
-    get icon() { return getApplianceIcon(this.category) }
+    get icon() { return getApplianceIcon(this) }
   },
   {
     id: '10',
@@ -107,9 +126,9 @@ export const mockAppliances = [
     powerWatts: 1500,
     category: 'Cuidados pessoais',
     description: 'Secador de cabelo',
-    imgUrl: null,
+    imgUrl: applianceImages['10'],
     isDefault: true,
-    get icon() { return getApplianceIcon(this.category) }
+    get icon() { return getApplianceIcon(this) }
   },
   {
     id: '11',
@@ -118,9 +137,9 @@ export const mockAppliances = [
     powerWatts: 200,
     category: 'Tecnologia',
     description: 'Computador de secretária',
-    imgUrl: null,
+    imgUrl: applianceImages['11'],
     isDefault: true,
-    get icon() { return getApplianceIcon(this.category) }
+    get icon() { return getApplianceIcon(this) }
   },
   {
     id: '12',
@@ -129,9 +148,9 @@ export const mockAppliances = [
     powerWatts: 150,
     category: 'Entretenimento',
     description: 'Consola de jogos',
-    imgUrl: null,
+    imgUrl: applianceImages['12'],
     isDefault: true,
-    get icon() { return getApplianceIcon(this.category) }
+    get icon() { return getApplianceIcon(this) }
   },
   {
     id: '13',
@@ -140,9 +159,9 @@ export const mockAppliances = [
     powerWatts: 5,
     category: 'Tecnologia',
     description: 'Carregador de telemóvel',
-    imgUrl: null,
+    imgUrl: applianceImages['13'],
     isDefault: true,
-    get icon() { return getApplianceIcon(this.category) }
+    get icon() { return getApplianceIcon(this) }
   },
   {
     id: '14',
@@ -151,9 +170,9 @@ export const mockAppliances = [
     powerWatts: 10,
     category: 'Tecnologia',
     description: 'Router Wi-Fi',
-    imgUrl: null,
+    imgUrl: applianceImages['14'],
     isDefault: true,
-    get icon() { return getApplianceIcon(this.category) }
+    get icon() { return getApplianceIcon(this) }
   },
   {
     id: '15',
@@ -162,8 +181,8 @@ export const mockAppliances = [
     powerWatts: 1000,
     category: 'Cozinha',
     description: 'Cafeteira/Máquina de café',
-    imgUrl: null,
+    imgUrl: applianceImages['15'],
     isDefault: true,
-    get icon() { return getApplianceIcon(this.category) }
+    get icon() { return getApplianceIcon(this) }
   }
 ]

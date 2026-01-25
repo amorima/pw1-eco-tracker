@@ -8,13 +8,9 @@
           :alt="user.name"
           class="w-full h-full object-cover"
         />
-        <span v-else class="material-symbols-outlined text-5xl text-(--accent-muted-foreground)">
-          person
-        </span>
+        <i v-else class="fa-solid fa-user text-5xl text-(--accent-muted-foreground)"></i>
       </template>
-      <span v-else class="material-symbols-outlined text-5xl text-(--accent-muted-foreground)">
-        person_add
-      </span>
+      <i v-else class="fa-solid fa-user-plus text-5xl text-(--accent-muted-foreground)"></i>
     </div>
 
     <div class="flex flex-col gap-0 flex-1 min-w-0 w-60">

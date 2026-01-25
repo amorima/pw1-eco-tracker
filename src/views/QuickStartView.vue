@@ -117,23 +117,19 @@
               "
             >
               <div class="flex items-center gap-2 md:gap-3">
-                <span
-                  class="material-symbols-outlined text-xl md:text-2xl text-(--text-body-titles)"
-                >
-                  {{ appliance.icon }}
-                </span>
+                <i
+                  :class="[appliance.icon, 'text-xl md:text-2xl text-(--text-body-titles)']"
+                ></i>
                 <div class="flex-1 min-w-0">
                   <p class="font-semibold text-(--text-body-titles) text-sm md:text-base truncate">
                     {{ appliance.name }}
                   </p>
                   <p class="text-xs text-(--text-body-sub-titles)">{{ appliance.powerWatts }}W</p>
                 </div>
-                <span
+                <i
                   v-if="selectedAppliances.includes(appliance.id)"
-                  class="material-symbols-outlined text-(--system-ring) flex-shrink-0 text-xl md:text-2xl"
-                >
-                  check_circle
-                </span>
+                  class="fa-solid fa-circle-check text-(--system-ring) flex-shrink-0 text-xl md:text-2xl"
+                ></i>
               </div>
             </div>
           </div>
@@ -160,23 +156,19 @@
               "
             >
               <div class="flex items-center gap-2 md:gap-3">
-                <span
-                  class="material-symbols-outlined text-xl md:text-2xl text-(--text-body-titles)"
-                >
-                  {{ activity.icon }}
-                </span>
+                <i
+                  :class="[activity.icon, 'text-xl md:text-2xl text-(--text-body-titles)']"
+                ></i>
                 <div class="flex-1 min-w-0">
                   <p class="font-semibold text-(--text-body-titles) text-sm md:text-base truncate">
                     {{ activity.title }}
                   </p>
                   <p class="text-xs text-(--text-body-sub-titles)">+{{ activity.points }} pontos</p>
                 </div>
-                <span
+                <i
                   v-if="selectedTasks.includes(activity.id)"
-                  class="material-symbols-outlined text-(--system-ring) flex-shrink-0 text-xl md:text-2xl"
-                >
-                  check_circle
-                </span>
+                  class="fa-solid fa-circle-check text-(--system-ring) flex-shrink-0 text-xl md:text-2xl"
+                ></i>
               </div>
             </div>
           </div>
@@ -192,7 +184,7 @@
         v-if="showSuccess"
         class="bg-[#f0fdf4] border-2 border-[#8cb161] rounded-lg p-6 text-center"
       >
-        <span class="material-symbols-outlined text-5xl text-[#8cb161] mb-2">check_circle</span>
+        <i class="fa-solid fa-circle-check text-5xl text-[#8cb161] mb-2"></i>
         <h2 class="text-2xl font-bold text-(--text-body-titles) mb-2">Configuração concluída!</h2>
         <p class="text-(--text-body-sub-titles) mb-4">Redirecionando para o painel...</p>
       </div>
@@ -247,13 +239,13 @@ export default {
     appliancesWithIcons() {
       return this.availableAppliances.map((appliance) => ({
         ...appliance,
-        icon: getApplianceIcon(appliance.category),
+        icon: getApplianceIcon(appliance),
       }))
     },
     tasksWithIcons() {
       return this.availableTasks.map((task) => ({
         ...task,
-        icon: getTaskIcon(task.category),
+        icon: getTaskIcon(task),
       }))
     },
   },

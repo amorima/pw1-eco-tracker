@@ -1,5 +1,24 @@
 import { getTaskIcon } from './categoryIcons'
 
+// Unsplash images for tasks (free to use)
+const taskImages = {
+  '1': 'https://images.unsplash.com/photo-1565814329452-e1efa11c5b89?w=400&h=300&fit=crop', // Desligar luzes
+  '2': 'https://images.unsplash.com/photo-1570125909232-eb263c188f7e?w=400&h=300&fit=crop', // Transporte público
+  '3': 'https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=400&h=300&fit=crop', // Reciclar plástico
+  '4': 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop', // Duche rápido
+  '5': 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop', // Desligar standby
+  '6': 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=300&fit=crop', // Refeição vegetariana
+  '7': 'https://images.unsplash.com/photo-1604719312566-8912e9227c6a?w=400&h=300&fit=crop', // Saco reutilizável
+  '8': 'https://images.unsplash.com/photo-1582735689369-4fe89db7114c?w=400&h=300&fit=crop', // Lavar roupa frio
+  '9': 'https://images.unsplash.com/photo-1485965120184-e220f721d03e?w=400&h=300&fit=crop', // Andar de bicicleta
+  '10': 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=400&h=300&fit=crop', // Compostagem
+  '11': 'https://images.unsplash.com/photo-1517677208171-0bc6725a3e60?w=400&h=300&fit=crop', // Secar roupa ao ar
+  '12': 'https://images.unsplash.com/photo-1488459716781-31db52582fe9?w=400&h=300&fit=crop', // Produtos locais
+  '13': 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=400&h=300&fit=crop', // Plantar árvore
+  '14': 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=400&h=300&fit=crop', // Reparar objetos
+  '15': 'https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=400&h=300&fit=crop', // Limpeza comunitária
+}
+
 export const mockTasks = [
   {
     id: '1',

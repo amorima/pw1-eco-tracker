@@ -13,9 +13,7 @@
     @click="$emit('click', $event)"
     :type="type"
   >
-    <span class="material-symbols-outlined text-2xl">
-      {{ iconName }}
-    </span>
+    <i :class="[iconName, 'text-xl']"></i>
   </button>
 </template>
 
@@ -36,9 +34,9 @@ export default {
   computed: {
     iconName() {
       const icons = {
-        confirm: 'check',
-        delete: 'delete',
-        edit: 'edit',
+        confirm: 'fa-solid fa-check',
+        delete: 'fa-solid fa-trash',
+        edit: 'fa-solid fa-pen',
       }
       return icons[this.variant] || icons.edit
     },

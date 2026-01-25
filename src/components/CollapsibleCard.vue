@@ -6,7 +6,7 @@
       <div class="flex items-center gap-2">
         <!-- Icon Slot - Drag Handle -->
         <div class="w-8 h-8 flex items-center justify-center drag-handle cursor-move hover:text-(--system-ring) transition-colors">
-          <span class="material-symbols-outlined text-(--text-body-titles)">drag_indicator</span>
+          <i class="fa-solid fa-grip-vertical text-(--text-body-titles)"></i>
         </div>
         <!-- Title -->
         <p class="font-bold text-base text-(--text-body-titles) whitespace-nowrap">
@@ -16,9 +16,7 @@
 
       <!-- Toggle Icon -->
       <div class="w-8 h-8 flex items-center justify-center">
-        <span class="material-symbols-outlined text-(--text-body-titles)">{{
-          isOpen ? 'collapse_all' : 'expand_all'
-        }}</span>
+        <i :class="[isOpen ? 'fa-solid fa-chevron-up' : 'fa-solid fa-chevron-down', 'text-(--text-body-titles)']"></i>
       </div>
     </button>
 
