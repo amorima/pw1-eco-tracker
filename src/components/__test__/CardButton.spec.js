@@ -1,3 +1,10 @@
+/**
+ * Testes unitários para o componente CardButton.
+ * Valida a renderização do botão e as suas variantes (edit, delete, confirm),
+ * verificando os ícones e cores correspondentes a cada variante.
+ * Testa também a emissão de eventos de clique.
+ */
+
 import { describe, it, expect, beforeEach } from 'vitest'
 import { mount } from '@vue/test-utils'
 import CardButton from '@/components/CardButton.vue'

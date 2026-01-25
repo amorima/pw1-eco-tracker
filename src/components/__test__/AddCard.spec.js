@@ -1,3 +1,9 @@
+/**
+ * Testes unitários para o componente AddCard integrado na HomeScreenView.
+ * Valida a renderização do componente e verifica se os modais de consumo
+ * e de tarefas abrem corretamente quando os respectivos AddCards são clicados.
+ */
+
 import { describe, it, expect, beforeEach } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'

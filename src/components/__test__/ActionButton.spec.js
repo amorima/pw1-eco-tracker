@@ -1,3 +1,9 @@
+/**
+ * Testes unitários para o componente ActionButton integrado na LandingPageView.
+ * Valida que o componente renderiza corretamente e que o clique no botão de ação
+ * redireciona o utilizador para a página de registo.
+ */
+
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'

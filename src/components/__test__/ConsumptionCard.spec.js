@@ -1,3 +1,10 @@
+/**
+ * Testes unitários para o componente ConsumptionCard.
+ * Valida a renderização do cartão de consumo com etiqueta, imagem, unidade
+ * e energia consumida. Testa a exibição condicional do badge de energia
+ * e a personalização do placeholder do input.
+ */
+
 import { describe, it, expect, beforeEach } from 'vitest'
 import { mount } from '@vue/test-utils'
 import ConsumptionCard from '@/components/ConsumptionCard.vue'

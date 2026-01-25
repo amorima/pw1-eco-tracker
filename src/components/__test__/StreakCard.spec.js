@@ -1,3 +1,10 @@
+/**
+ * Testes unitários para o componente StreakCard.
+ * Valida a renderização do cartão de streak com o número de dias consecutivos.
+ * Testa o valor por defeito da prop, a aceitação de diferentes valores
+ * e a actualização dinâmica da prop.
+ */
+
 import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
 import StreakCard from '@/components/StreakCard.vue'

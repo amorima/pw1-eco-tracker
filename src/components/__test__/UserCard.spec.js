@@ -1,3 +1,10 @@
+/**
+ * Testes unitários para o componente UserCard.
+ * Valida a renderização do cartão de utilizador nos estados vazio e preenchido.
+ * Testa a exibição do nome, ranking, avatar e ícones de fallback, bem como
+ * os estilos visuais e botões de acção (CTA).
+ */
+
 import { describe, it, expect, beforeEach } from 'vitest'
 import { mount } from '@vue/test-utils'
 import UserCard from '@/components/UserCard.vue'

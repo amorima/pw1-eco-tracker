@@ -1,3 +1,10 @@
+/**
+ * Testes unitários para o componente CollapsibleCard.
+ * Valida a renderização do cartão colapsável com título e conteúdo via slot.
+ * Testa o comportamento de expandir e colapsar, os ícones de estado e os
+ * estilos visuais do componente.
+ */
+
 import { describe, it, expect, beforeEach } from 'vitest'
 import { mount } from '@vue/test-utils'
 import CollapsibleCard from '@/components/CollapsibleCard.vue'

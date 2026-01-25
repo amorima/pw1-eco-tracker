@@ -1,3 +1,10 @@
+/**
+ * Testes unitários para o componente ToastNotification.
+ * Valida a renderização da notificação toast com mensagem e ícone. Testa as
+ * variantes "success" e "error", verificando os estilos de fundo e ícones
+ * correspondentes a cada variante.
+ */
+
 import { describe, it, expect, beforeEach } from 'vitest'
 import { mount } from '@vue/test-utils'
 import ToastNotification from '@/components/ToastNotification.vue'

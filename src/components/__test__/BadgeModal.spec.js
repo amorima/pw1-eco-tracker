@@ -1,3 +1,10 @@
+/**
+ * Testes unitários para o componente BadgeModal.
+ * Valida a renderização do modal com os detalhes da badge, incluindo título,
+ * descrição, ícone e data de conquista. Testa os estados de badge conquistada
+ * e por conquistar, bem como a formatação de datas e requisitos.
+ */
+
 import { describe, it, expect, beforeEach } from 'vitest'
 import { mount } from '@vue/test-utils'
 import BadgeModal from '@/components/BadgeModal.vue'
