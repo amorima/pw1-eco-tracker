@@ -1,3 +1,10 @@
+/**
+ * Testes unitários para o componente FAQItem.
+ * Valida a renderização do item de FAQ com pergunta e resposta. Testa o estado
+ * inicial (aberto ou fechado), a interactividade ao clicar para expandir ou
+ * colapsar, e a rotação do ícone indicador.
+ */
+
 import { describe, it, expect, beforeEach } from 'vitest'
 import { mount } from '@vue/test-utils'
 import FAQItem from '@/components/FAQItem.vue'

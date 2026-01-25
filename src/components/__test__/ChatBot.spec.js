@@ -1,3 +1,10 @@
+/**
+ * Testes unitários para o componente ChatBot.
+ * Valida a renderização do assistente virtual, o comportamento de abrir e fechar
+ * a janela de chat, o envio de mensagens e as acções rápidas disponíveis.
+ * Utiliza mocks para simular respostas da API de streaming.
+ */
+
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
@@ -12,11 +19,12 @@ const mockStreamResponse = (text) => {
     ok: true,
     body: {
       getReader: () => ({
-        read: vi.fn()
+        read: vi
+          .fn()
           .mockResolvedValueOnce({ done: false, value: data })
-          .mockResolvedValueOnce({ done: true, value: undefined })
-      })
-    }
+          .mockResolvedValueOnce({ done: true, value: undefined }),
+      }),
+    },
   }
 }
 

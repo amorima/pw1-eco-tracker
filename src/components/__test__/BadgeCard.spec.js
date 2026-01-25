@@ -1,3 +1,9 @@
+/**
+ * Testes unitários para o componente BadgeCard.
+ * Valida a renderização do título, ícone e estilos visuais consoante o estado
+ * da badge (desbloqueada ou bloqueada). Testa também a emissão de eventos de clique.
+ */
+
 import { describe, it, expect, beforeEach } from 'vitest'
 import { mount } from '@vue/test-utils'
 import BadgeCard from '@/components/BadgeCard.vue'

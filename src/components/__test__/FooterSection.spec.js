@@ -1,3 +1,10 @@
+/**
+ * Testes unitários para o componente FooterSection.
+ * Valida a renderização do rodapé com logótipo, texto de copyright e links
+ * de navegação. Testa a navegação para as páginas de login, registo, sobre
+ * e contactos, bem como os links de redes sociais e métodos de pagamento.
+ */
+
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
 import FooterSection from '@/components/FooterSection.vue'

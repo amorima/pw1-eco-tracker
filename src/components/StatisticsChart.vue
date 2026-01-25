@@ -262,7 +262,7 @@ export default {
           style: {
             fontSize: '12px',
           },
-          custom: ({ series, seriesIndex, dataPointIndex, w }) => {
+          custom: ({ series, _seriesIndex, dataPointIndex, w }) => {
             const label = w.globals.labels[dataPointIndex]
             let content = `<div class="apex-tooltip" style="background: ${tooltipBg}; border: 1px solid ${borderColor}; padding: 8px; border-radius: 4px;">`
             content += `<div style="color: ${textColor}; font-weight: 600; margin-bottom: 4px;">${label}</div>`

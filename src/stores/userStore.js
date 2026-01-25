@@ -465,9 +465,6 @@ export const useUserStore = defineStore('userStore', {
         this.currentUser = null
         this.$patch({ currentUser: user })
 
-        console.log('Login - User profiles:', user.profiles)
-        console.log('Login - First profile needsQuickStart:', user.profiles?.[0]?.needsQuickStart)
-
         if (!user.profiles || user.profiles.length === 0 || user.profiles[0].needsQuickStart) {
           console.log('Login - Redirecting to QuickStart')
           return {

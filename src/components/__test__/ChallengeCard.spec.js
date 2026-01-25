@@ -1,3 +1,10 @@
+/**
+ * Testes unitários para o componente ChallengeCard.
+ * Valida a renderização do cartão de desafio com título, descrição e pontos XP.
+ * Testa os estados activo e inactivo do desafio, bem como os estilos visuais
+ * associados a cada estado.
+ */
+
 import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import { mount } from '@vue/test-utils'
 import ChallengeCard from '@/components/ChallengeCard.vue'
@@ -26,30 +33,30 @@ describe('ChallengeCard', () => {
 
   describe('render', () => {
     it('should render component', () => {
-      const wrapper = mount(ChallengeCard, { 
+      const wrapper = mount(ChallengeCard, {
         props: defaultProps,
         attachTo: document.body,
         global: {
           stubs: {
             Teleport: true,
-            ModalComponent: true
-          }
-        }
+            ModalComponent: true,
+          },
+        },
       })
       expect(wrapper.exists()).toBe(true)
       wrapper.unmount()
     })
 
     it('should have title and description', () => {
-      const wrapper = mount(ChallengeCard, { 
+      const wrapper = mount(ChallengeCard, {
         props: defaultProps,
         attachTo: document.body,
         global: {
           stubs: {
             Teleport: true,
-            ModalComponent: true
-          }
-        }
+            ModalComponent: true,
+          },
+        },
       })
       expect(wrapper.text()).toContain('Desafio Eco')
       expect(wrapper.text()).toContain('Poupe 50kg de CO2')
@@ -57,15 +64,15 @@ describe('ChallengeCard', () => {
     })
 
     it('should have xp when unlocked', () => {
-      const wrapper = mount(ChallengeCard, { 
+      const wrapper = mount(ChallengeCard, {
         props: defaultProps,
         attachTo: document.body,
         global: {
           stubs: {
             Teleport: true,
-            ModalComponent: true
-          }
-        }
+            ModalComponent: true,
+          },
+        },
       })
       expect(wrapper.text()).toContain('100 xp')
       wrapper.unmount()
@@ -85,10 +92,10 @@ describe('ChallengeCard', () => {
             ModalComponent: true,
             apexchart: {
               name: 'apexchart',
-              template: '<div class="apexchart-stub"></div>'
-            }
-          }
-        }
+              template: '<div class="apexchart-stub"></div>',
+            },
+          },
+        },
       })
     })
 
@@ -125,9 +132,9 @@ describe('ChallengeCard', () => {
         global: {
           stubs: {
             Teleport: true,
-            ModalComponent: true
-          }
-        }
+            ModalComponent: true,
+          },
+        },
       })
     })
 
@@ -166,10 +173,10 @@ describe('ChallengeCard', () => {
             ModalComponent: true,
             apexchart: {
               name: 'apexchart',
-              template: '<div class="apexchart-stub"></div>'
-            }
-          }
-        }
+              template: '<div class="apexchart-stub"></div>',
+            },
+          },
+        },
       })
       expect(wrapper.vm.chartSeries[0].data[0]).toBe(80) // verifica se progresso esta certo
       wrapper.unmount()
@@ -182,9 +189,9 @@ describe('ChallengeCard', () => {
         global: {
           stubs: {
             Teleport: true,
-            ModalComponent: true
-          }
-        }
+            ModalComponent: true,
+          },
+        },
       })
       expect(wrapper.text()).toContain('200 xp') // verifica se xp esta certo
       wrapper.unmount()
@@ -200,10 +207,10 @@ describe('ChallengeCard', () => {
             ModalComponent: true,
             apexchart: {
               name: 'apexchart',
-              template: '<div class="apexchart-stub"></div>'
-            }
-          }
-        }
+              template: '<div class="apexchart-stub"></div>',
+            },
+          },
+        },
       })
 
       expect(wrapper.findComponent({ name: 'apexchart' }).exists()).toBe(true) // verifica se barra de progresso existe
