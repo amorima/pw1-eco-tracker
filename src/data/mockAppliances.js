@@ -2,14 +2,14 @@ import { getApplianceIcon } from './categoryIcons'
 
 // Unsplash images for appliances (free to use)
 const applianceImages = {
-  '1': 'https://images.unsplash.com/photo-1571175443880-49e1d25b2bc5?w=400&h=300&fit=crop', // Frigorífico
-  '2': 'https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?w=400&h=300&fit=crop', // Máquina de lavar roupa
-  '3': 'https://images.unsplash.com/photo-1585659722983-3a675dabf23d?w=400&h=300&fit=crop', // Máquina de lavar loiça
-  '4': 'https://images.unsplash.com/photo-1574269909862-7e1d70bb8078?w=400&h=300&fit=crop', // Forno
-  '5': 'https://images.unsplash.com/photo-1585659722983-3a675dabf23d?w=400&h=300&fit=crop', // Micro-ondas
+  '1': 'https://images.unsplash.com/photo-1584568694244-14fbdf83bd30?w=400&h=300&fit=crop', // Frigorífico
+  '2': 'https://images.unsplash.com/photo-1604335399105-a0c585fd81a1?w=400&h=300&fit=crop', // Máquina de lavar roupa
+  '3': 'https://images.unsplash.com/photo-1556910096-6f5e72db6803?w=400&h=300&fit=crop', // Máquina de lavar loiça
+  '4': 'https://images.unsplash.com/photo-1590794056226-79ef3a8147e1?w=400&h=300&fit=crop', // Forno
+  '5': 'https://images.unsplash.com/photo-1574269909862-7e1d70bb8078?w=400&h=300&fit=crop', // Micro-ondas
   '6': 'https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=400&h=300&fit=crop', // Televisão
-  '7': 'https://images.unsplash.com/photo-1631545806609-054520f7d5fc?w=400&h=300&fit=crop', // Ar condicionado
-  '8': 'https://images.unsplash.com/photo-1558317374-067fb5f30001?w=400&h=300&fit=crop', // Aspirador
+  '7': 'https://images.unsplash.com/photo-1585338107529-13afc5f02586?w=400&h=300&fit=crop', // Ar condicionado
+  '8': 'https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=400&h=300&fit=crop', // Aspirador
   '9': 'https://images.unsplash.com/photo-1610557892470-55d9e80c0bce?w=400&h=300&fit=crop', // Ferro de engomar
   '10': 'https://images.unsplash.com/photo-1522338140262-f46f5913618a?w=400&h=300&fit=crop', // Secador de cabelo
   '11': 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=400&h=300&fit=crop', // Computador

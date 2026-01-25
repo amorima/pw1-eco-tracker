@@ -152,13 +152,17 @@
                 class="w-32 h-32 md:w-40 md:h-40 rounded-full border-4 border-(--system-ring) shadow-xl overflow-hidden bg-(--system-background) ring-4 ring-(--system-ring) ring-opacity-20 transition-all duration-300 group-hover:ring-opacity-40 group-hover:shadow-2xl"
               >
                 <img
-                  :src="
-                    currentProfile?.avatarUrl ||
-                    'https://api.dicebear.com/7.x/avataaars/svg?seed=User'
-                  "
+                  v-if="currentProfile?.avatarUrl"
+                  :src="currentProfile.avatarUrl"
                   alt="User avatar"
                   class="w-full h-full object-cover transition-all duration-300 group-hover:brightness-75"
                 />
+                <div
+                  v-else
+                  class="w-full h-full flex items-center justify-center bg-(--system-foreground)/10"
+                >
+                  <i class="fa-solid fa-user text-5xl md:text-6xl text-(--text-body-titles)"></i>
+                </div>
               </div>
               <!-- Edit Icon Overlay -->
               <div

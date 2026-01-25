@@ -13,9 +13,7 @@
         v-if="isAddButton"
         class="w-full h-full flex items-center justify-center"
       >
-        <span class="material-symbols-outlined text-6xl text-(--system-border) group-hover:text-(--system-ring) transition-colors">
-          add_circle
-        </span>
+        <i class="fa-solid fa-circle-plus text-6xl text-(--system-border) group-hover:text-(--system-ring) transition-colors"></i>
       </div>
 
       <!-- Profile Image -->
@@ -32,9 +30,7 @@
         v-else
         class="w-full h-full flex items-center justify-center bg-(--system-input-background)"
       >
-        <span class="material-symbols-outlined text-6xl text-(--text-body-sub-titles)">
-          person
-        </span>
+        <i class="fa-solid fa-user text-6xl text-(--text-body-sub-titles)"></i>
       </div>
     </div>
 

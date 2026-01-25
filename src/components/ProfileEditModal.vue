@@ -69,9 +69,7 @@
               alt="Avatar"
               class="w-full h-full object-cover"
             />
-            <span v-else class="material-symbols-outlined text-3xl text-(--text-disabled)"
-              >person</span
-            >
+            <i v-else class="fa-solid fa-user text-3xl text-(--text-disabled)"></i>
           </div>
 
           <!-- Upload Button -->

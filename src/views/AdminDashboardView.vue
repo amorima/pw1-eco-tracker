@@ -167,13 +167,17 @@
               <div class="flex items-center gap-4">
                 <div class="relative">
                   <img
-                    :src="
-                      adminProfile.avatarUrl ||
-                      'https://api.dicebear.com/7.x/avataaars/svg?seed=Admin'
-                    "
+                    v-if="adminProfile.avatarUrl"
+                    :src="adminProfile.avatarUrl"
                     class="w-16 h-16 rounded-full object-cover border-2 border-(--system-ring)"
                     alt="Admin Avatar"
                   />
+                  <div
+                    v-else
+                    class="w-16 h-16 rounded-full flex items-center justify-center border-2 border-(--system-ring) bg-(--system-foreground)/10"
+                  >
+                    <i class="fa-solid fa-user text-2xl text-(--system-ring)"></i>
+                  </div>
                   <div
                     class="absolute -bottom-1 -right-1 bg-(--system-ring) text-white rounded-full w-6 h-6 flex items-center justify-center"
                   >
