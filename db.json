@@ -863,12 +863,12 @@
       "powerWatts": 150,
       "category": "Cozinha",
       "description": "Frigorífico de casa",
-      "imgUrl": null,
+      "imgUrl": "https://res.cloudinary.com/djijtdbxk/image/upload/v1769374897/bgreen/appliances/cmnepttwf6yv10ydekq6.jpg",
       "isDefault": true,
-      "icon": "fa-solid fa-temperature-empty",
+      "icon": "fa-solid fa-kitchen-set",
       "apiType": "refrigerator",
       "avgPowerConsumption": 150,
-      "avgUsageHoursPerDay": 24,
+      "avgUsageHoursPerDay": 1,
       "co2PerKwh": 0.233
     },
     {
@@ -878,7 +878,7 @@
       "powerWatts": 2000,
       "category": "Lavandaria",
       "description": "Máquina de lavar roupa",
-      "imgUrl": null,
+      "imgUrl": "https://res.cloudinary.com/djijtdbxk/image/upload/v1769374963/bgreen/appliances/irnzpnatssn1jpg1hksn.jpg",
       "isDefault": true,
       "icon": "fa-solid fa-shirt",
       "apiType": "washing_machine",
@@ -938,12 +938,13 @@
       "powerWatts": 100,
       "category": "Entretenimento",
       "description": "Televisão da sala",
-      "imgUrl": null,
+      "imgUrl": "https://res.cloudinary.com/djijtdbxk/image/upload/v1769375114/bgreen/appliances/j1tblkd98ia9z9gwm9ci.jpg",
       "isDefault": true,
       "icon": "fa-solid fa-tv",
       "apiType": "television",
-      "avgUsageHoursPerDay": 4,
-      "co2PerKwh": 0.233
+      "avgUsageHoursPerDay": 1,
+      "co2PerKwh": 0.233,
+      "avgPowerConsumption": 150
     },
     {
       "id": "7",
@@ -952,12 +953,13 @@
       "powerWatts": 3500,
       "category": "Climatização",
       "description": "Ar condicionado",
-      "imgUrl": null,
+      "imgUrl": "https://res.cloudinary.com/djijtdbxk/image/upload/v1769375362/bgreen/appliances/e3l21qzmqpv7u4aommqg.jpg",
       "isDefault": true,
       "icon": "fa-solid fa-temperature-low",
       "apiType": "air_conditioner",
       "avgUsageHoursPerDay": 1,
-      "co2PerKwh": 0.233
+      "co2PerKwh": 0.233,
+      "avgPowerConsumption": 3500
     },
     {
       "id": "8",
@@ -1007,11 +1009,13 @@
       "powerWatts": 200,
       "category": "Tecnologia",
       "description": "Computador de secretária",
-      "imgUrl": null,
+      "imgUrl": "https://res.cloudinary.com/djijtdbxk/image/upload/v1769375853/bgreen/appliances/tk1sbmnydqlvsyhswpp1.jpg",
       "isDefault": true,
-      "icon": "fa-solid fa-desktop",
+      "icon": "fa-solid fa-laptop",
       "apiType": "desktop",
-      "co2PerKwh": 0.233
+      "co2PerKwh": 0.233,
+      "avgPowerConsumption": 200,
+      "avgUsageHoursPerDay": 1
     },
     {
       "id": "12",
@@ -1020,10 +1024,13 @@
       "powerWatts": 150,
       "category": "Entretenimento",
       "description": "Consola de jogos",
-      "imgUrl": null,
+      "imgUrl": "https://res.cloudinary.com/djijtdbxk/image/upload/v1769375584/bgreen/appliances/fsnqghzwosrm32ge8vir.jpg",
       "isDefault": true,
-      "icon": "fa-solid fa-gamepad",
-      "apiType": "television"
+      "icon": "fa-solid fa-tv",
+      "apiType": "television",
+      "avgPowerConsumption": 150,
+      "avgUsageHoursPerDay": 1,
+      "co2PerKwh": 0.233
     },
     {
       "id": "13",
@@ -1032,10 +1039,13 @@
       "powerWatts": 5,
       "category": "Tecnologia",
       "description": "Carregador de telemóvel",
-      "imgUrl": null,
+      "imgUrl": "https://res.cloudinary.com/djijtdbxk/image/upload/v1769374907/bgreen/appliances/lyqdnwxgnu7anfwrcj1n.jpg",
       "isDefault": true,
-      "icon": "fa-solid fa-mobile-screen",
-      "apiType": "laptop"
+      "icon": "fa-solid fa-laptop",
+      "apiType": "laptop",
+      "avgPowerConsumption": 50,
+      "avgUsageHoursPerDay": 1,
+      "co2PerKwh": 0.233
     },
     {
       "id": "14",
@@ -1093,9 +1103,13 @@
       "category": "Energia",
       "points": 20,
       "description": "Desligar todas as luzes quando sair de uma divisão",
-      "imgUrl": null,
+      "imgUrl": "https://res.cloudinary.com/djijtdbxk/image/upload/v1769377700/bgreen/tasks/ftjhsexghphgzubhdhb8.jpg",
       "co2saved": 0.1,
-      "isDefault": true
+      "isDefault": true,
+      "icon": "fa-solid fa-bolt",
+      "co2Saved": 0.1,
+      "frequency": "daily",
+      "difficulty": "easy"
     },
     {
       "id": "2",
@@ -1103,9 +1117,13 @@
       "category": "Mobilidade",
       "points": 15,
       "description": "Usar transporte público em vez de carro próprio",
-      "imgUrl": null,
+      "imgUrl": "https://res.cloudinary.com/djijtdbxk/image/upload/v1769377787/bgreen/tasks/ccrkxkrevsuonkfufyel.jpg",
       "co2saved": 0.8,
-      "isDefault": true
+      "isDefault": true,
+      "icon": "fa-solid fa-bus",
+      "co2Saved": 0.8,
+      "frequency": "daily",
+      "difficulty": "easy"
     },
     {
       "id": "3",
@@ -1113,9 +1131,13 @@
       "category": "Reciclagem",
       "points": 10,
       "description": "Separar e reciclar embalagens de plástico",
-      "imgUrl": null,
+      "imgUrl": "https://res.cloudinary.com/djijtdbxk/image/upload/v1769378992/bgreen/tasks/mnhisvjscafdsl7pbdoc.jpg",
       "co2saved": 0.2,
-      "isDefault": true
+      "isDefault": true,
+      "icon": "fa-solid fa-recycle",
+      "co2Saved": 0.2,
+      "frequency": "daily",
+      "difficulty": "easy"
     },
     {
       "id": "4",
@@ -1123,9 +1145,13 @@
       "category": "Água",
       "points": 8,
       "description": "Tomar duches rápidos para poupar água e energia",
-      "imgUrl": null,
+      "imgUrl": "https://res.cloudinary.com/djijtdbxk/image/upload/v1769377578/bgreen/tasks/eattuhyhg61sglhrywnk.jpg",
       "co2saved": 0.1,
-      "isDefault": true
+      "isDefault": true,
+      "icon": "fa-solid fa-droplet",
+      "co2Saved": 0.1,
+      "frequency": "daily",
+      "difficulty": "easy"
     },
     {
       "id": "5",
@@ -1133,9 +1159,13 @@
       "category": "Energia",
       "points": 7,
       "description": "Desligar completamente aparelhos eletrónicos",
-      "imgUrl": null,
+      "imgUrl": "https://res.cloudinary.com/djijtdbxk/image/upload/v1769378916/bgreen/tasks/e0padbamulknfhnhczmj.jpg",
       "co2saved": 0.1,
-      "isDefault": true
+      "isDefault": true,
+      "icon": "fa-solid fa-bolt",
+      "co2Saved": 0.1,
+      "frequency": "daily",
+      "difficulty": "easy"
     },
     {
       "id": "6",
@@ -1143,9 +1173,13 @@
       "category": "Alimentação",
       "points": 12,
       "description": "Fazer uma refeição sem carne",
-      "imgUrl": null,
+      "imgUrl": "https://res.cloudinary.com/djijtdbxk/image/upload/v1769377258/bgreen/tasks/dyd1kvknmdcjdztdxwj5.jpg",
       "co2saved": 0.8,
-      "isDefault": true
+      "isDefault": true,
+      "icon": "fa-solid fa-utensils",
+      "co2Saved": 0.8,
+      "frequency": "daily",
+      "difficulty": "easy"
     },
     {
       "id": "7",
@@ -1173,9 +1207,13 @@
       "category": "Mobilidade",
       "points": 20,
       "description": "Usar bicicleta para deslocações curtas",
-      "imgUrl": null,
+      "imgUrl": "https://res.cloudinary.com/djijtdbxk/image/upload/v1769377356/bgreen/tasks/g408d3zougbvgdttgnvu.png",
       "co2saved": 0.8,
-      "isDefault": true
+      "isDefault": true,
+      "icon": "fa-solid fa-bus",
+      "co2Saved": 0.8,
+      "frequency": "daily",
+      "difficulty": "easy"
     },
     {
       "id": "10",
@@ -1381,44 +1419,44 @@
     {
       "id": "1",
       "title": "Escolher filme na noite de cinema",
-      "description": "Escolha o filme para a próxima noite de cinema em família",
+      "description": "",
       "points_cost": 50,
-      "imgUrl": null
+      "imgUrl": "https://res.cloudinary.com/djijtdbxk/image/upload/v1769376994/bgreen/rewards/sm3yfkexii40kbphgvxl.jpg"
     },
     {
       "id": "2",
       "title": "Jantar fora",
-      "description": "Um jantar no restaurante da sua escolha",
+      "description": "",
       "points_cost": 120,
-      "imgUrl": null
+      "imgUrl": "https://res.cloudinary.com/djijtdbxk/image/upload/v1769377034/bgreen/rewards/xvb8e7emwe5qapmzhcqi.jpg"
     },
     {
       "id": "3",
       "title": "Dia sem tarefas domésticas",
-      "description": "Dispensa de todas as tarefas domésticas por um dia",
+      "description": "",
       "points_cost": 80,
-      "imgUrl": null
+      "imgUrl": "https://res.cloudinary.com/djijtdbxk/image/upload/v1769378519/bgreen/rewards/v86gnrggkqjryapnmuvz.jpg"
     },
     {
       "id": "4",
       "title": "Escolher a música no carro",
-      "description": "Controle total do rádio durante uma viagem",
+      "description": "",
       "points_cost": 20,
-      "imgUrl": null
+      "imgUrl": "https://res.cloudinary.com/djijtdbxk/image/upload/v1769376347/bgreen/rewards/f9rxr8cdsxdfuhwayb7s.png"
     },
     {
       "id": "5",
       "title": "Sobremesa extra",
-      "description": "Uma sobremesa extra à sua escolha",
+      "description": "",
       "points_cost": 30,
-      "imgUrl": null
+      "imgUrl": "https://res.cloudinary.com/djijtdbxk/image/upload/v1769376620/bgreen/rewards/saq3j5uaexulcw86nans.jpg"
     },
     {
       "id": "6",
       "title": "Tempo extra de jogos",
-      "description": "30 minutos extra de tempo de jogos",
+      "description": "",
       "points_cost": 40,
-      "imgUrl": null
+      "imgUrl": "https://res.cloudinary.com/djijtdbxk/image/upload/v1769376895/bgreen/rewards/r94l48fshfpgvqzlbe2t.jpg"
     }
   ]
 }
