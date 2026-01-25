@@ -72,12 +72,12 @@
       <CollapsibleCard title="2. Configurações da conta">
         <div class="space-y-4">
           <p class="text-(--text-body-sub-titles) mb-4">
-            Defina o número máximo de usuários para sua conta.
+            Defina o número máximo de utilizadores para sua conta.
           </p>
 
           <div>
             <label class="block text-sm font-medium text-(--text-body-sub-titles) mb-2">
-              Número máximo de usuários *
+              Número máximo de utilizadores *
             </label>
             <FormInput
               v-model="accountSettings.maxUsers"
