@@ -4,7 +4,9 @@
  * API Base URL: https://www.antonioamorim.pt/api
  */
 
-const API_BASE_URL = import.meta.env.VITE_CARBON_API_BASE_URL || 'https://www.antonioamorim.pt/api'
+const API_BASE_URL = import.meta.env.DEV
+  ? '/api/carbon'
+  : import.meta.env.VITE_CARBON_API_BASE_URL || 'https://www.antonioamorim.pt/api'
 
 // Storage key for API key (fallback)
 const API_KEY_STORAGE = 'bgreen_api_key'
@@ -21,6 +23,10 @@ export function getStoredApiKey() {
 
   // Fallback to localStorage
   return localStorage.getItem(API_KEY_STORAGE)
+  // Fallback to localStorage or Hardcoded key for debugging
+  return (
+    localStorage.getItem(API_KEY_STORAGE) || 'bgk_9f62387710f0cbda50032b4d51756b0c6b5832728bb82019'
+  )
 }
 
 /**
@@ -113,11 +119,21 @@ export async function calculateEmissions(type, amount, isDevice = false) {
   try {
     const body = isDevice ? { type, minutes: amount } : { type, amount }
 
+    // Higienizar a API key para remover aspas ou caracteres invisíveis que causam erro de protocolo
+    const cleanKey = apiKey.replace(/[^a-zA-Z0-9_]/g, '')
+
+    console.log('API Request [Emissions]:', {
+      url: `${API_BASE_URL}/calculate`,
+      method: 'POST',
+      key: cleanKey,
+      body,
+    })
+
     const response = await fetch(`${API_BASE_URL}/calculate`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-API-Key': apiKey,
+        'X-API-Key': cleanKey,
       },
       body: JSON.stringify(body),
     })
@@ -290,12 +306,22 @@ export async function calculateApplianceEmissions(appliance, hoursUsed) {
     body.amount = kwh
   }
 
+  // Higienizar a API key
+  const cleanKey = apiKey.replace(/[^a-zA-Z0-9_]/g, '')
+
+  console.log('API Request [Appliance]:', {
+    url: `${API_BASE_URL}/calculate`,
+    method: 'POST',
+    key: cleanKey,
+    body,
+  })
+
   try {
     const response = await fetch(`${API_BASE_URL}/calculate`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-API-Key': apiKey.trim(), // Trim to avoid protocol errors
+        'X-API-Key': cleanKey,
       },
       body: JSON.stringify(body),
     })

@@ -150,7 +150,8 @@
                             : 'text-red-600 dark:text-red-400',
                         ]"
                       >
-                        {{ statistics.totalEffectiveCo2 <= 0 ? '+' : '' }}{{ Math.abs(statistics.totalEffectiveCo2).toFixed(1) }}
+                        {{ statistics.totalEffectiveCo2 <= 0 ? '+' : ''
+                        }}{{ Math.abs(statistics.totalEffectiveCo2).toFixed(1) }}
                       </p>
                       <p class="text-xs text-(--text-body-sub-titles) uppercase font-semibold">
                         kg CO₂ efetivo
@@ -324,35 +325,39 @@
                       <FormInput v-model="calculator.distance" placeholder="50km" type="number" />
                     </div>
 
-                    <!-- Fuel Consumption Slider -->
-                    <div class="space-y-2">
-                      <label class="block text-[10px] font-medium text-(--text-disabled)">
-                        Consumo médio (L/100Km) :
-                      </label>
-                      <div class="flex items-center gap-2">
-                        <span class="text-[10px] text-(--text-disabled)">0</span>
-                        <input
-                          v-model="calculator.consumption"
-                          type="range"
-                          min="0"
-                          max="10"
-                          step="0.1"
-                          class="flex-1 h-2 bg-[#e3e3e3] rounded-full appearance-none cursor-pointer accent-(--system-ring)"
-                        />
-                        <span class="text-[10px] text-(--text-disabled)">10</span>
-                      </div>
-                    </div>
-
-                    <!-- Fuel Type Checkboxes -->
+                    <!-- Fuel Type Radio Buttons -->
                     <div class="space-y-2">
                       <label class="block text-[10px] font-medium text-(--text-disabled)">
                         Tipo de Combustível
                       </label>
-                      <div class="grid grid-cols-2 gap-4">
-                        <CheckboxInput v-model="calculator.fuelTypes.gasoline" label="Gasolina" />
-                        <CheckboxInput v-model="calculator.fuelTypes.diesel" label="Gasóleo" />
-                        <CheckboxInput v-model="calculator.fuelTypes.electric" label="Elétrico" />
-                        <CheckboxInput v-model="calculator.fuelTypes.gas" label="Gás" />
+                      <div class="flex flex-col gap-2">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                          <input
+                            type="radio"
+                            v-model="calculator.fuelType"
+                            value="car_gasoline"
+                            class="accent-(--system-ring) w-4 h-4"
+                          />
+                          <span class="text-sm text-(--text-body)">Gasolina</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer">
+                          <input
+                            type="radio"
+                            v-model="calculator.fuelType"
+                            value="car_diesel"
+                            class="accent-(--system-ring) w-4 h-4"
+                          />
+                          <span class="text-sm text-(--text-body)">Gasóleo</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer">
+                          <input
+                            type="radio"
+                            v-model="calculator.fuelType"
+                            value="car_electric"
+                            class="accent-(--system-ring) w-4 h-4"
+                          />
+                          <span class="text-sm text-(--text-body)">Elétrico</span>
+                        </label>
                       </div>
                     </div>
                   </div>
@@ -440,7 +445,7 @@
 
 <script>
 import { useUserStore } from '@/stores/userStore'
-import { calculateApplianceEmissions } from '@/services/carbonApiService'
+import { calculateApplianceEmissions, calculateEmissions } from '@/services/carbonApiService'
 import draggable from 'vuedraggable'
 import MenuNav from '@/components/MenuNav.vue'
 import CollapsibleCard from '@/components/CollapsibleCard.vue'
@@ -494,13 +499,7 @@ export default {
       // Calculator
       calculator: {
         distance: '',
-        consumption: 5,
-        fuelTypes: {
-          gasoline: false,
-          diesel: false,
-          electric: false,
-          gas: false,
-        },
+        fuelType: 'car_gasoline',
         result: 0,
       },
 
@@ -748,31 +747,28 @@ export default {
 
     async calculateEmissions() {
       const distance = parseFloat(this.calculator.distance) || 0
-      const consumption = parseFloat(this.calculator.consumption) || 0
 
       if (distance <= 0) {
         this.showNotification('Introduza uma distância válida', 'error')
         return
       }
 
-      // Determine fuel type
-      let emissionFactor = 2.31 // Default gasoline kg CO2 per liter
+      const type = this.calculator.fuelType
+      console.log('Pedido de cálculo enviado:', { type, amount: distance })
 
-      if (this.calculator.fuelTypes.diesel) {
-        emissionFactor = 2.68 // Diesel
-      } else if (this.calculator.fuelTypes.electric) {
-        // For electric, use kWh consumption instead
-        const kWhPer100km = 18 // Average electric car
-        const kWhUsed = (distance * kWhPer100km) / 100
-        this.calculator.result = (kWhUsed * 0.188).toFixed(2) // Portugal grid factor
-        return
-      } else if (this.calculator.fuelTypes.gas) {
-        emissionFactor = 1.86 // LPG/Gas
+      try {
+        const result = await calculateEmissions(type, distance)
+        console.log('Resposta do cálculo recebida:', result)
+
+        if (result.success) {
+          this.calculator.result = result.data.carbon_kg_co2
+        } else {
+          this.showNotification(result.message || 'Erro ao calcular', 'error')
+        }
+      } catch (error) {
+        console.error('Erro no cálculo:', error)
+        this.showNotification('Erro de conexão', 'error')
       }
-
-      // Calculate: (distance * consumption / 100) * emission factor
-      const fuelUsed = (distance * consumption) / 100
-      this.calculator.result = (fuelUsed * emissionFactor).toFixed(2)
     },
   },
   watch: {
