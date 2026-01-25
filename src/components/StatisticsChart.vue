@@ -63,6 +63,22 @@ export default {
       type: String,
       default: null,
     },
+    /**
+     * When true, shows "Effective CO2" which is CO2 Emitted - CO2 Saved.
+     * The data should include co2Emitted and co2Saved properties.
+     * Positive values mean net emissions, negative values mean net savings.
+     */
+    showEffectiveCo2: {
+      type: Boolean,
+      default: false,
+    },
+    /**
+     * Custom label for CO2 series
+     */
+    co2Label: {
+      type: String,
+      default: null,
+    },
   },
   data() {
     return {
@@ -90,16 +106,29 @@ export default {
       const series = []
 
       if (this.showCo2) {
-        series.push({
-          name: 'CO2 Poupado (kg)',
-          data: this.data.map((d) => Math.round(d.co2Saved)),
-        })
+        if (this.showEffectiveCo2) {
+          // Effective CO2: Emitted - Saved (positive = net emissions, negative = net savings)
+          series.push({
+            name: this.co2Label || 'CO₂ Efetivo (kg)',
+            data: this.data.map((d) => {
+              const emitted = d.co2Emitted || 0
+              const saved = d.co2Saved || 0
+              // Negative means net savings (good), positive means net emissions (bad)
+              return Math.round((emitted - saved) * 100) / 100
+            }),
+          })
+        } else {
+          series.push({
+            name: this.co2Label || 'CO₂ Poupado (kg)',
+            data: this.data.map((d) => Math.round(d.co2Saved || 0)),
+          })
+        }
       }
 
       if (this.showPoints) {
         series.push({
           name: 'Pontos',
-          data: this.data.map((d) => d.points),
+          data: this.data.map((d) => d.points || 0),
         })
       }
 
@@ -172,7 +201,7 @@ export default {
             ? [
                 {
                   title: {
-                    text: 'CO2 Poupado (kg)',
+                    text: this.co2Label || (this.showEffectiveCo2 ? 'CO₂ Efetivo (kg)' : 'CO₂ Poupado (kg)'),
                     style: {
                       color: textColor,
                     },
