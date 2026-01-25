@@ -1388,17 +1388,17 @@ export default {
       // Support old format (category) and new format (taskId)
       if (challenge.category) {
         const iconMap = {
-          Energia: 'bolt',
-          Mobilidade: 'directions_bike',
-          Reciclagem: 'recycling',
-          Água: 'water_drop',
-          Alimentação: 'restaurant',
-          Ambiente: 'eco',
+          Energia: 'fa-solid fa-bolt',
+          Mobilidade: 'fa-solid fa-bicycle',
+          Reciclagem: 'fa-solid fa-recycle',
+          Água: 'fa-solid fa-droplet',
+          Alimentação: 'fa-solid fa-utensils',
+          Ambiente: 'fa-solid fa-leaf',
         }
-        return iconMap[challenge.category] || 'emoji_events'
+        return iconMap[challenge.category] || 'fa-solid fa-trophy'
       }
       const task = this.getTaskById(challenge.taskId)
-      return task?.icon || 'emoji_events'
+      return task?.icon || 'fa-solid fa-trophy'
     },
 
     // Challenge CRUD methods
