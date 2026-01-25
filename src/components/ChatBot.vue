@@ -28,7 +28,7 @@
           @click="toggleChat"
           class="w-8 h-8 flex items-center justify-center cursor-pointer hover:opacity-80 transition-opacity"
         >
-          <span class="material-symbols-outlined text-2xl text-(--text-body-titles)">close</span>
+          <i class="fa-solid fa-xmark text-2xl text-(--text-body-titles)"></i>
         </button>
       </div>
 
@@ -97,7 +97,7 @@
             class="w-14 h-14 flex items-center justify-center bg-(--system-ring) rounded-lg cursor-pointer hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
             :disabled="!currentMessage.trim() || isLoading"
           >
-            <span class="material-symbols-outlined text-3xl text-white">send</span>
+            <i class="fa-solid fa-paper-plane text-2xl text-white"></i>
           </button>
         </div>
       </div>
@@ -109,7 +109,7 @@
       @click="toggleChat"
       class="w-16 h-16 bg-(--system-ring) rounded-full flex items-center justify-center cursor-pointer hover:opacity-90 shadow-lg transition-opacity"
     >
-      <span class="material-symbols-outlined text-5xl text-white">support_agent</span>
+      <i class="fa-solid fa-headset text-4xl text-white"></i>
     </button>
   </div>
 </template>

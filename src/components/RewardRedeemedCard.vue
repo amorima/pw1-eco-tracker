@@ -8,9 +8,7 @@
           :alt="reward.title"
           class="w-full h-full object-cover"
         />
-        <span v-else class="material-symbols-outlined text-5xl text-(--accent-muted-foreground)">
-          card_giftcard
-        </span>
+        <i v-else class="fa-solid fa-gift text-5xl text-(--accent-muted-foreground)"></i>
       </div>
     </div>
 

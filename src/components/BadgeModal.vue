@@ -13,15 +13,13 @@
           badge?.earned ? 'bg-(--system-ring)' : 'bg-(--system-border)',
         ]"
       >
-        <span
+        <i
           :class="[
-            'material-symbols-outlined',
+            badge?.icon || 'fa-solid fa-trophy',
             badge?.earned ? 'text-white' : 'text-(--text-disabled)',
           ]"
           style="font-size: 48px"
-        >
-          {{ badge?.icon || 'emoji_events' }}
-        </span>
+        ></i>
       </div>
 
       <!-- Badge Title -->
@@ -42,7 +40,7 @@
       <!-- Earned Status -->
       <div v-if="badge?.earned" class="flex flex-col items-center gap-2">
         <div class="flex items-center gap-2 text-(--semantic-success-default)">
-          <span class="material-symbols-outlined text-xl">verified</span>
+          <i class="fa-solid fa-circle-check text-xl"></i>
           <span class="font-semibold">Conquistado!</span>
         </div>
         <p class="text-(--text-disabled) text-sm">
@@ -53,7 +51,7 @@
       <!-- Locked Status -->
       <div v-else class="flex flex-col items-center gap-2">
         <div class="flex items-center gap-2 text-(--text-disabled)">
-          <span class="material-symbols-outlined text-xl">lock</span>
+          <i class="fa-solid fa-lock text-xl"></i>
           <span class="font-semibold">Por conquistar</span>
         </div>
         <p class="text-(--text-disabled) text-sm text-center">

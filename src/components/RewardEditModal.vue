@@ -24,7 +24,7 @@
               alt="Reward" 
               class="w-full h-full object-cover"
             />
-            <span v-else class="material-symbols-outlined text-3xl text-(--text-disabled)">card_giftcard</span>
+            <i v-else class="fa-solid fa-gift text-3xl text-(--text-disabled)"></i>
           </div>
           
           <!-- Upload Button -->
@@ -33,7 +33,7 @@
               class="flex items-center gap-2 px-4 py-2 bg-(--system-border) rounded-lg cursor-pointer hover:bg-(--system-ring) hover:text-white transition-colors"
               :class="{ 'opacity-50 cursor-not-allowed': isUploading }"
             >
-              <span class="material-symbols-outlined">{{ isUploading ? 'hourglass_empty' : 'cloud_upload' }}</span>
+              <i :class="isUploading ? 'fa-solid fa-hourglass' : 'fa-solid fa-cloud-arrow-up'"></i>
               <span>{{ isUploading ? 'A carregar...' : 'Carregar imagem' }}</span>
               <input 
                 type="file" 

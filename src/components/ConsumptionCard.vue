@@ -11,9 +11,7 @@
         v-else
         class="w-full h-full bg-(--system-input-background) flex items-center justify-center"
       >
-        <span class="material-symbols-outlined text-4xl text-(--text-disabled)"
-          >electrical_services</span
-        >
+        <i class="fa-solid fa-plug text-4xl text-(--text-disabled)"></i>
       </div>
 
       <!-- Label Badge -->
@@ -76,11 +74,9 @@
         class="bg-(--system-input-background) border border-(--system-border) rounded-[11px] w-10 h-10 flex items-center justify-center hover:bg-(--system-ring) hover:border-(--system-ring) transition-colors group"
         :disabled="!inputValue"
       >
-        <span
-          class="material-symbols-outlined text-[21px] text-(--text-body-titles) group-hover:text-white transition-colors"
-        >
-          arrow_forward_ios
-        </span>
+        <i
+          class="fa-solid fa-chevron-right text-[18px] text-(--text-body-titles) group-hover:text-white transition-colors"
+        ></i>
       </button>
     </div>
   </div>

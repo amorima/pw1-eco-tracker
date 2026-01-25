@@ -774,7 +774,7 @@
       "powerWatts": 150,
       "category": "Cozinha",
       "description": "Frigorífico de casa",
-      "imgUrl": null,
+      "imgUrl": "https://images.unsplash.com/photo-1571175443880-49e1d25b2bc5?w=400&h=300&fit=crop",
       "isDefault": true
     },
     {
@@ -784,7 +784,7 @@
       "powerWatts": 2000,
       "category": "Lavandaria",
       "description": "Máquina de lavar roupa",
-      "imgUrl": null,
+      "imgUrl": "https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?w=400&h=300&fit=crop",
       "isDefault": true
     },
     {
@@ -794,7 +794,7 @@
       "powerWatts": 1800,
       "category": "Cozinha",
       "description": "Máquina de lavar loiça",
-      "imgUrl": null,
+      "imgUrl": "https://images.unsplash.com/photo-1585659722983-3a675dabf23d?w=400&h=300&fit=crop",
       "isDefault": true
     },
     {
@@ -804,7 +804,7 @@
       "powerWatts": 2400,
       "category": "Cozinha",
       "description": "Forno elétrico",
-      "imgUrl": null,
+      "imgUrl": "https://images.unsplash.com/photo-1574269909862-7e1d70bb8078?w=400&h=300&fit=crop",
       "isDefault": true
     },
     {
@@ -814,7 +814,7 @@
       "powerWatts": 1000,
       "category": "Cozinha",
       "description": "Micro-ondas",
-      "imgUrl": null,
+      "imgUrl": "https://images.unsplash.com/photo-1585659722983-3a675dabf23d?w=400&h=300&fit=crop",
       "isDefault": true
     },
     {
@@ -824,7 +824,7 @@
       "powerWatts": 100,
       "category": "Entretenimento",
       "description": "Televisão da sala",
-      "imgUrl": null,
+      "imgUrl": "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=400&h=300&fit=crop",
       "isDefault": true
     },
     {
@@ -834,7 +834,7 @@
       "powerWatts": 3500,
       "category": "Climatização",
       "description": "Ar condicionado",
-      "imgUrl": null,
+      "imgUrl": "https://images.unsplash.com/photo-1631545806609-054520f7d5fc?w=400&h=300&fit=crop",
       "isDefault": true
     },
     {
@@ -844,7 +844,7 @@
       "powerWatts": 1400,
       "category": "Limpeza",
       "description": "Aspirador de pó",
-      "imgUrl": null,
+      "imgUrl": "https://images.unsplash.com/photo-1558317374-067fb5f30001?w=400&h=300&fit=crop",
       "isDefault": true
     },
     {
@@ -854,7 +854,7 @@
       "powerWatts": 2000,
       "category": "Lavandaria",
       "description": "Ferro de engomar",
-      "imgUrl": null,
+      "imgUrl": "https://images.unsplash.com/photo-1610557892470-55d9e80c0bce?w=400&h=300&fit=crop",
       "isDefault": true
     },
     {
@@ -864,7 +864,7 @@
       "powerWatts": 1500,
       "category": "Cuidados pessoais",
       "description": "Secador de cabelo",
-      "imgUrl": null,
+      "imgUrl": "https://images.unsplash.com/photo-1522338140262-f46f5913618a?w=400&h=300&fit=crop",
       "isDefault": true
     },
     {
@@ -874,7 +874,7 @@
       "powerWatts": 200,
       "category": "Tecnologia",
       "description": "Computador de secretária",
-      "imgUrl": null,
+      "imgUrl": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=400&h=300&fit=crop",
       "isDefault": true
     },
     {
@@ -884,7 +884,7 @@
       "powerWatts": 150,
       "category": "Entretenimento",
       "description": "Consola de jogos",
-      "imgUrl": null,
+      "imgUrl": "https://images.unsplash.com/photo-1486401899868-0e435ed85128?w=400&h=300&fit=crop",
       "isDefault": true
     },
     {
@@ -894,7 +894,7 @@
       "powerWatts": 5,
       "category": "Tecnologia",
       "description": "Carregador de telemóvel",
-      "imgUrl": null,
+      "imgUrl": "https://images.unsplash.com/photo-1609692814858-f7cd2f0afa4f?w=400&h=300&fit=crop",
       "isDefault": true
     },
     {
@@ -904,7 +904,7 @@
       "powerWatts": 10,
       "category": "Tecnologia",
       "description": "Router Wi-Fi",
-      "imgUrl": null,
+      "imgUrl": "https://images.unsplash.com/photo-1606904825846-647eb07f5be2?w=400&h=300&fit=crop",
       "isDefault": true
     },
     {
@@ -914,7 +914,7 @@
       "powerWatts": 1000,
       "category": "Cozinha",
       "description": "Cafeteira/Máquina de café",
-      "imgUrl": null,
+      "imgUrl": "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=400&h=300&fit=crop",
       "isDefault": true
     }
   ],
@@ -925,7 +925,7 @@
       "category": "Energia",
       "points": 20,
       "description": "Desligar todas as luzes quando sair de uma divisão",
-      "imgUrl": null,
+      "imgUrl": "https://images.unsplash.com/photo-1565814329452-e1efa11c5b89?w=400&h=300&fit=crop",
       "co2saved": 10,
       "isDefault": true
     },
@@ -935,7 +935,7 @@
       "category": "Mobilidade",
       "points": 15,
       "description": "Usar transporte público em vez de carro próprio",
-      "imgUrl": null,
+      "imgUrl": "https://images.unsplash.com/photo-1570125909232-eb263c188f7e?w=400&h=300&fit=crop",
       "co2saved": 7.5,
       "isDefault": true
     },
@@ -945,7 +945,7 @@
       "category": "Reciclagem",
       "points": 10,
       "description": "Separar e reciclar embalagens de plástico",
-      "imgUrl": null,
+      "imgUrl": "https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=400&h=300&fit=crop",
       "co2saved": 0.5,
       "isDefault": true
     },
@@ -955,7 +955,7 @@
       "category": "Água",
       "points": 8,
       "description": "Tomar duches rápidos para poupar água e energia",
-      "imgUrl": null,
+      "imgUrl": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop",
       "co2saved": 0.3,
       "isDefault": true
     },
@@ -965,7 +965,7 @@
       "category": "Energia",
       "points": 7,
       "description": "Desligar completamente aparelhos eletrónicos",
-      "imgUrl": null,
+      "imgUrl": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop",
       "co2saved": 0.2,
       "isDefault": true
     },
@@ -975,7 +975,7 @@
       "category": "Alimentação",
       "points": 12,
       "description": "Fazer uma refeição sem carne",
-      "imgUrl": null,
+      "imgUrl": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=300&fit=crop",
       "co2saved": 1.5,
       "isDefault": true
     },
@@ -985,7 +985,7 @@
       "category": "Consumo",
       "points": 5,
       "description": "Levar saco próprio às compras",
-      "imgUrl": null,
+      "imgUrl": "https://images.unsplash.com/photo-1604719312566-8912e9227c6a?w=400&h=300&fit=crop",
       "co2saved": 0.1,
       "isDefault": true
     },
@@ -995,7 +995,7 @@
       "category": "Energia",
       "points": 10,
       "description": "Lavar roupa com água fria (máx 30°C)",
-      "imgUrl": null,
+      "imgUrl": "https://images.unsplash.com/photo-1582735689369-4fe89db7114c?w=400&h=300&fit=crop",
       "co2saved": 0.6,
       "isDefault": true
     },
@@ -1005,7 +1005,7 @@
       "category": "Mobilidade",
       "points": 20,
       "description": "Usar bicicleta para deslocações curtas",
-      "imgUrl": null,
+      "imgUrl": "https://images.unsplash.com/photo-1485965120184-e220f721d03e?w=400&h=300&fit=crop",
       "co2saved": 3,
       "isDefault": true
     },
@@ -1015,7 +1015,7 @@
       "category": "Reciclagem",
       "points": 15,
       "description": "Fazer compostagem com restos de comida",
-      "imgUrl": null,
+      "imgUrl": "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=400&h=300&fit=crop",
       "co2saved": 1,
       "isDefault": true
     },
@@ -1025,7 +1025,7 @@
       "category": "Energia",
       "points": 12,
       "description": "Secar roupa naturalmente em vez de usar secadora",
-      "imgUrl": null,
+      "imgUrl": "https://images.unsplash.com/photo-1517677208171-0bc6725a3e60?w=400&h=300&fit=crop",
       "co2saved": 0.8,
       "isDefault": true
     },
@@ -1035,7 +1035,7 @@
       "category": "Consumo",
       "points": 18,
       "description": "Comprar alimentos produzidos localmente",
-      "imgUrl": null,
+      "imgUrl": "https://images.unsplash.com/photo-1488459716781-31db52582fe9?w=400&h=300&fit=crop",
       "co2saved": 1.2,
       "isDefault": true
     },
@@ -1045,7 +1045,7 @@
       "category": "Ambiente",
       "points": 50,
       "description": "Plantar uma árvore ou planta",
-      "imgUrl": null,
+      "imgUrl": "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=400&h=300&fit=crop",
       "co2saved": 21,
       "isDefault": true
     },
@@ -1055,7 +1055,7 @@
       "category": "Consumo",
       "points": 25,
       "description": "Reparar um objeto em vez de comprar novo",
-      "imgUrl": null,
+      "imgUrl": "https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=400&h=300&fit=crop",
       "co2saved": 5,
       "isDefault": true
     },
@@ -1065,7 +1065,7 @@
       "category": "Ambiente",
       "points": 30,
       "description": "Participar numa ação de limpeza local",
-      "imgUrl": null,
+      "imgUrl": "https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=400&h=300&fit=crop",
       "co2saved": 2,
       "isDefault": true
     }
@@ -1074,7 +1074,7 @@
     {
       "id": "early_adopter",
       "title": "Early Adopter",
-      "icon": "star",
+      "icon": "fa-solid fa-star",
       "description": "Primeiro perfil criado",
       "requirements": {
         "type": "profile_created",
@@ -1084,7 +1084,7 @@
     {
       "id": "week_warrior",
       "title": "Week Warrior",
-      "icon": "local_fire_department",
+      "icon": "fa-solid fa-fire",
       "description": "7 dias de streak",
       "requirements": {
         "type": "streak",
@@ -1094,7 +1094,7 @@
     {
       "id": "eco_warrior",
       "title": "Eco Warrior",
-      "icon": "eco",
+      "icon": "fa-solid fa-leaf",
       "description": "Poupou 10kg de CO2",
       "requirements": {
         "type": "co2_saved",
@@ -1104,7 +1104,7 @@
     {
       "id": "level_5",
       "title": "Nível 5",
-      "icon": "emoji_events",
+      "icon": "fa-solid fa-trophy",
       "description": "Alcançou o nível 5",
       "requirements": {
         "type": "level",
@@ -1114,7 +1114,7 @@
     {
       "id": "level_10",
       "title": "Nível 10",
-      "icon": "military_tech",
+      "icon": "fa-solid fa-medal",
       "description": "Alcançou o nível 10",
       "requirements": {
         "type": "level",
@@ -1124,7 +1124,7 @@
     {
       "id": "first_reward",
       "title": "Primeira Recompensa",
-      "icon": "card_giftcard",
+      "icon": "fa-solid fa-gift",
       "description": "Resgatou a primeira recompensa",
       "requirements": {
         "type": "rewards_redeemed",
@@ -1134,7 +1134,7 @@
     {
       "id": "energy_saver",
       "title": "Poupador de Energia",
-      "icon": "bolt",
+      "icon": "fa-solid fa-bolt",
       "description": "Completou 10 tarefas de energia",
       "requirements": {
         "type": "task_category_count",
@@ -1145,7 +1145,7 @@
     {
       "id": "recycler",
       "title": "Reciclador",
-      "icon": "recycling",
+      "icon": "fa-solid fa-recycle",
       "description": "Completou 10 tarefas de reciclagem",
       "requirements": {
         "type": "task_category_count",
@@ -1156,7 +1156,7 @@
     {
       "id": "two_week_streak",
       "title": "Duas Semanas",
-      "icon": "whatshot",
+      "icon": "fa-solid fa-fire-flame-curved",
       "description": "14 dias de streak",
       "requirements": {
         "type": "streak",
@@ -1166,7 +1166,7 @@
     {
       "id": "month_streak",
       "title": "Mês Completo",
-      "icon": "calendar_month",
+      "icon": "fa-solid fa-calendar-check",
       "description": "30 dias de streak",
       "requirements": {
         "type": "streak",
@@ -1215,42 +1215,42 @@
       "title": "Escolher filme na noite de cinema",
       "description": "Escolha o filme para a próxima noite de cinema em família",
       "points_cost": 50,
-      "imgUrl": null
+      "imgUrl": "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=400&h=300&fit=crop"
     },
     {
       "id": "2",
       "title": "Jantar fora",
       "description": "Um jantar no restaurante da sua escolha",
       "points_cost": 120,
-      "imgUrl": null
+      "imgUrl": "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&h=300&fit=crop"
     },
     {
       "id": "3",
       "title": "Dia sem tarefas domésticas",
       "description": "Dispensa de todas as tarefas domésticas por um dia",
       "points_cost": 80,
-      "imgUrl": null
+      "imgUrl": "https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=400&h=300&fit=crop"
     },
     {
       "id": "4",
       "title": "Escolher a música no carro",
       "description": "Controle total do rádio durante uma viagem",
       "points_cost": 20,
-      "imgUrl": null
+      "imgUrl": "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=300&fit=crop"
     },
     {
       "id": "5",
       "title": "Sobremesa extra",
       "description": "Uma sobremesa extra à sua escolha",
       "points_cost": 30,
-      "imgUrl": null
+      "imgUrl": "https://images.unsplash.com/photo-1551024601-bec78aea704b?w=400&h=300&fit=crop"
     },
     {
       "id": "6",
       "title": "Tempo extra de jogos",
       "description": "30 minutos extra de tempo de jogos",
       "points_cost": 40,
-      "imgUrl": null
+      "imgUrl": "https://images.unsplash.com/photo-1493711662062-fa541f7f55a4?w=400&h=300&fit=crop"
     }
   ]
 }

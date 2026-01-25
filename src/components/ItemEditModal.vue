@@ -165,9 +165,7 @@
               alt="Preview"
               class="w-full h-full object-cover"
             />
-            <span v-else class="material-symbols-outlined text-3xl text-(--text-disabled)">
-              {{ isTask ? 'task_alt' : 'electrical_services' }}
-            </span>
+            <i v-else :class="[isTask ? 'fa-solid fa-circle-check' : 'fa-solid fa-plug', 'text-3xl text-(--text-disabled)']"></i>
           </div>
 
           <!-- Upload Button -->
@@ -176,9 +174,7 @@
               class="flex items-center gap-2 px-4 py-2 bg-(--system-border) rounded-lg cursor-pointer hover:bg-(--system-ring) hover:text-white transition-colors text-sm"
               :class="{ 'opacity-50 cursor-not-allowed': isUploading }"
             >
-              <span class="material-symbols-outlined text-lg">{{
-                isUploading ? 'hourglass_empty' : 'cloud_upload'
-              }}</span>
+              <i :class="[isUploading ? 'fa-solid fa-hourglass' : 'fa-solid fa-cloud-arrow-up', 'text-lg']"></i>
               <span>{{ isUploading ? 'A carregar...' : 'Carregar' }}</span>
               <input
                 type="file"
