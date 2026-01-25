@@ -23,10 +23,6 @@ export function getStoredApiKey() {
 
   // Fallback to localStorage
   return localStorage.getItem(API_KEY_STORAGE)
-  // Fallback to localStorage or Hardcoded key for debugging
-  return (
-    localStorage.getItem(API_KEY_STORAGE) || 'bgk_9f62387710f0cbda50032b4d51756b0c6b5832728bb82019'
-  )
 }
 
 /**
@@ -121,13 +117,6 @@ export async function calculateEmissions(type, amount, isDevice = false) {
 
     // Higienizar a API key para remover aspas ou caracteres invisíveis que causam erro de protocolo
     const cleanKey = apiKey.replace(/[^a-zA-Z0-9_]/g, '')
-
-    console.log('API Request [Emissions]:', {
-      url: `${API_BASE_URL}/calculate`,
-      method: 'POST',
-      key: cleanKey,
-      body,
-    })
 
     const response = await fetch(`${API_BASE_URL}/calculate`, {
       method: 'POST',
@@ -308,13 +297,6 @@ export async function calculateApplianceEmissions(appliance, hoursUsed) {
 
   // Higienizar a API key
   const cleanKey = apiKey.replace(/[^a-zA-Z0-9_]/g, '')
-
-  console.log('API Request [Appliance]:', {
-    url: `${API_BASE_URL}/calculate`,
-    method: 'POST',
-    key: cleanKey,
-    body,
-  })
 
   try {
     const response = await fetch(`${API_BASE_URL}/calculate`, {
