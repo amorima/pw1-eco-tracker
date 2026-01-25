@@ -1069,7 +1069,6 @@ export default {
               let lastDate = null
 
               for (const activity of taskActivities) {
-                const activityDate = new Date(activity.completedAt).toDateString()
 
                 if (!lastDate) {
                   currentStreak = 1

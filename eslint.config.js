@@ -11,7 +11,6 @@ export default defineConfig([
   },
 
   globalIgnores(['**/dist/**', '**/dist-ssr/**', '**/coverage/**']),
-
   {
     languageOptions: {
       globals: {
@@ -19,8 +18,12 @@ export default defineConfig([
       },
     },
   },
-
   js.configs.recommended,
   ...pluginVue.configs['flat/essential'],
   skipFormatting,
+  {
+    rules: {
+      'no-unused-vars': ['error', { varsIgnorePattern: '^_', argsIgnorePattern: '^_' }],
+    },
+  },
 ])

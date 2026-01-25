@@ -117,9 +117,7 @@
               "
             >
               <div class="flex items-center gap-2 md:gap-3">
-                <i
-                  :class="[appliance.icon, 'text-xl md:text-2xl text-(--text-body-titles)']"
-                ></i>
+                <i :class="[appliance.icon, 'text-xl md:text-2xl text-(--text-body-titles)']"></i>
                 <div class="flex-1 min-w-0">
                   <p class="font-semibold text-(--text-body-titles) text-sm md:text-base truncate">
                     {{ appliance.name }}
@@ -156,9 +154,7 @@
               "
             >
               <div class="flex items-center gap-2 md:gap-3">
-                <i
-                  :class="[activity.icon, 'text-xl md:text-2xl text-(--text-body-titles)']"
-                ></i>
+                <i :class="[activity.icon, 'text-xl md:text-2xl text-(--text-body-titles)']"></i>
                 <div class="flex-1 min-w-0">
                   <p class="font-semibold text-(--text-body-titles) text-sm md:text-base truncate">
                     {{ activity.title }}
@@ -325,7 +321,7 @@ export default {
         } else {
           this.showNotification(result.message || 'Erro ao guardar configurações.', 'error')
         }
-      } catch (error) {
+      } catch {
         this.showNotification('Erro inesperado.', 'error')
       } finally {
         this.isLoading = false

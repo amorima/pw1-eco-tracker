@@ -586,7 +586,6 @@ import ConfirmModal from '@/components/ConfirmModal.vue'
 import ProfileEditModal from '@/components/ProfileEditModal.vue'
 import RewardEditModal from '@/components/RewardEditModal.vue'
 import ItemEditModal from '@/components/ItemEditModal.vue'
-import ChallengeCard from '@/components/ChallengeCard.vue'
 import ModalComponent from '@/components/ModalComponent.vue'
 import StatisticsChart from '@/components/StatisticsChart.vue'
 
@@ -1135,7 +1134,7 @@ export default {
           this.showNotification('Recompensa atualizada')
         } else {
           // Remove any invalid ID before creating
-          const { id, ...createData } = rewardData
+          const { _id, ...createData } = rewardData
           await this.userStore.createReward(createData)
           this.showNotification('Recompensa criada')
         }
@@ -1255,7 +1254,7 @@ export default {
             this.showNotification('Consumo atualizado')
           } else {
             // Remove any invalid ID before creating
-            const { id, ...createData } = itemData
+            const { _id, ...createData } = itemData
             console.log('Creating appliance with data:', createData)
             await this.userStore.createAppliance(createData)
             this.showNotification('Consumo criado')
@@ -1271,7 +1270,7 @@ export default {
             this.showNotification('Tarefa atualizada')
           } else {
             // Remove any invalid ID before creating
-            const { id, ...createData } = itemData
+            const { _id, ...createData } = itemData
             await this.userStore.createTask(createData)
             this.showNotification('Tarefa criada')
           }
