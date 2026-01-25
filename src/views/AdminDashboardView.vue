@@ -101,7 +101,7 @@
               <div
                 class="w-12 h-12 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center text-orange-600 dark:text-orange-400 shrink-0"
               >
-                <span class="material-symbols-outlined text-2xl">bolt</span>
+                <i class="fa-solid fa-bolt text-2xl"></i>
               </div>
               <div>
                 <p class="text-sm text-(--text-body-sub-titles) font-medium">Consumo Total</p>
@@ -119,7 +119,7 @@
               <div
                 class="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400 shrink-0"
               >
-                <span class="material-symbols-outlined text-2xl">group</span>
+                <i class="fa-solid fa-users text-2xl"></i>
               </div>
               <div>
                 <p class="text-sm text-(--text-body-sub-titles) font-medium">Média por Membro</p>
@@ -181,7 +181,7 @@
                   <div
                     class="absolute -bottom-1 -right-1 bg-(--system-ring) text-white rounded-full w-6 h-6 flex items-center justify-center"
                   >
-                    <span class="material-symbols-outlined text-xs">verified_user</span>
+                    <i class="fa-solid fa-shield-halved text-xs"></i>
                   </div>
                 </div>
                 <div>
@@ -233,17 +233,13 @@
                 :disabled="maxProfiles <= profiles.length"
                 class="w-14 h-14 rounded-lg bg-(--system-border) flex items-center justify-center hover:bg-(--system-ring) transition-colors disabled:opacity-30"
               >
-                <span class="material-symbols-outlined text-[30px] text-(--text-body-titles)"
-                  >remove</span
-                >
+                <i class="fa-solid fa-minus text-[30px] text-(--text-body-titles)"></i>
               </button>
               <button
                 @click="increaseMaxProfiles"
                 class="w-14 h-14 rounded-lg bg-(--system-border) flex items-center justify-center hover:bg-(--system-ring) transition-colors"
               >
-                <span class="material-symbols-outlined text-[30px] text-(--text-body-titles)"
-                  >add</span
-                >
+                <i class="fa-solid fa-plus text-[30px] text-(--text-body-titles)"></i>
               </button>
             </div>
           </div>
@@ -262,16 +258,13 @@
                 placeholder="Pesquisar . . ."
                 class="w-full h-10 px-3 pl-10 bg-(--system-background) border-2 border-(--system-border) rounded-lg text-(--text-headings) placeholder:text-(--accent-muted-foreground)"
               />
-              <span
-                class="material-symbols-outlined absolute left-3 top-2 text-(--accent-muted-foreground)"
-                >search</span
-              >
+              <i class="fa-solid fa-magnifying-glass absolute left-3 top-2 text-(--accent-muted-foreground)"></i>
             </div>
             <button
               @click="openCreateReward"
               class="px-4 h-10 bg-(--system-ring) rounded-lg flex items-center justify-center gap-1 text-white font-bold hover:opacity-90 transition-opacity shrink-0"
             >
-              <span class="material-symbols-outlined text-[23px]">add</span>
+              <i class="fa-solid fa-plus text-[20px]"></i>
               <span>Adicionar</span>
             </button>
           </div>
@@ -295,7 +288,7 @@
             class="flex items-center gap-1 mx-auto text-(--system-ring) text-lg hover:opacity-80 transition-opacity"
           >
             <span>Ver mais</span>
-            <span class="material-symbols-outlined">keyboard_arrow_down</span>
+            <i class="fa-solid fa-chevron-down"></i>
           </button>
 
           <h3 class="text-lg text-(--text-headings) mt-6 mb-4">Recompensas Resgatadas</h3>
@@ -322,7 +315,7 @@
             class="flex items-center gap-1 mx-auto text-(--system-ring) text-lg mt-4 hover:opacity-80 transition-opacity"
           >
             <span>Ver mais</span>
-            <span class="material-symbols-outlined">keyboard_arrow_down</span>
+            <i class="fa-solid fa-chevron-down"></i>
           </button>
         </CollapsibleCard>
 
@@ -339,16 +332,13 @@
                 placeholder="Pesquisar . . ."
                 class="w-full h-10 px-3 pl-10 bg-(--system-background) border-2 border-(--system-border) rounded-lg text-(--text-headings) placeholder:text-(--accent-muted-foreground)"
               />
-              <span
-                class="material-symbols-outlined absolute left-3 top-2 text-(--accent-muted-foreground)"
-                >search</span
-              >
+              <i class="fa-solid fa-magnifying-glass absolute left-3 top-2 text-(--accent-muted-foreground)"></i>
             </div>
             <button
               @click="openCreateAppliance"
               class="px-4 h-10 bg-(--system-ring) rounded-lg flex items-center justify-center gap-1 text-white font-bold hover:opacity-90 transition-opacity shrink-0"
             >
-              <span class="material-symbols-outlined text-[23px]">add</span>
+              <i class="fa-solid fa-plus text-[20px]"></i>
               <span>Adicionar</span>
             </button>
           </div>
@@ -374,7 +364,7 @@
             class="flex items-center gap-1 mx-auto text-(--system-ring) text-lg mt-4 hover:opacity-80 transition-opacity"
           >
             <span>Ver mais</span>
-            <span class="material-symbols-outlined">keyboard_arrow_down</span>
+            <i class="fa-solid fa-chevron-down"></i>
           </button>
         </CollapsibleCard>
 
@@ -391,16 +381,13 @@
                 placeholder="Pesquisar . . ."
                 class="w-full h-10 px-3 pl-10 bg-(--system-background) border-2 border-(--system-border) rounded-lg text-(--text-headings) placeholder:text-(--accent-muted-foreground)"
               />
-              <span
-                class="material-symbols-outlined absolute left-3 top-2 text-(--accent-muted-foreground)"
-                >search</span
-              >
+              <i class="fa-solid fa-magnifying-glass absolute left-3 top-2 text-(--accent-muted-foreground)"></i>
             </div>
             <button
               @click="openCreateTask"
               class="px-4 h-10 bg-(--system-ring) rounded-lg flex items-center justify-center gap-1 text-white font-bold hover:opacity-90 transition-opacity shrink-0"
             >
-              <span class="material-symbols-outlined text-[23px]">add</span>
+              <i class="fa-solid fa-plus text-[20px]"></i>
               <span>Adicionar</span>
             </button>
           </div>
@@ -427,7 +414,7 @@
             class="flex items-center gap-1 mx-auto text-(--system-ring) text-lg mt-4 hover:opacity-80 transition-opacity"
           >
             <span>Ver mais</span>
-            <span class="material-symbols-outlined">keyboard_arrow_down</span>
+            <i class="fa-solid fa-chevron-down"></i>
           </button>
         </CollapsibleCard>
 
@@ -444,17 +431,13 @@
                 placeholder="Pesquisar desafios..."
                 class="w-full px-4 py-2 pl-10 bg-(--system-input-background) border border-(--system-border) rounded-lg text-(--system-foreground) placeholder:text-(--text-disabled) outline-none focus:border-(--system-ring)"
               />
-              <span
-                class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-(--text-disabled)"
-              >
-                search
-              </span>
+              <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-(--text-disabled)"></i>
             </div>
             <button
               @click="createChallenge"
               class="flex items-center justify-center gap-2 px-4 py-2 bg-(--system-ring) text-white rounded-lg hover:opacity-90 transition-opacity shrink-0"
             >
-              <span class="material-symbols-outlined text-[23px]">add</span>
+              <i class="fa-solid fa-plus text-[20px]"></i>
               <span>Adicionar</span>
             </button>
           </div>
@@ -475,7 +458,7 @@
           </div>
 
           <div v-if="challenges.length === 0" class="text-center py-8 text-(--text-disabled)">
-            <span class="material-symbols-outlined text-4xl mb-2">emoji_events</span>
+            <i class="fa-solid fa-trophy text-4xl mb-2"></i>
             <p>Nenhum desafio definido</p>
             <p class="text-sm">Clique em "Adicionar" para criar um desafio</p>
           </div>
@@ -486,7 +469,7 @@
             class="flex items-center gap-1 mx-auto text-(--system-ring) text-lg mt-4 hover:opacity-80 transition-opacity"
           >
             <span>Ver mais</span>
-            <span class="material-symbols-outlined">keyboard_arrow_down</span>
+            <i class="fa-solid fa-chevron-down"></i>
           </button>
         </CollapsibleCard>
       </template>

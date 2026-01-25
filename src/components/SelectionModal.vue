@@ -14,9 +14,7 @@
           :placeholder="searchPlaceholder"
           class="w-full px-4 py-3 pr-10 bg-(--system-card) border-2 border-(--system-border) rounded-lg text-(--text-body) placeholder:text-(--text-disabled) outline-none focus:border-(--system-ring)"
         />
-        <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-(--text-disabled)">
-          search
-        </span>
+        <i class="fa-solid fa-magnifying-glass absolute right-3 top-1/2 -translate-y-1/2 text-(--text-disabled)"></i>
       </div>
     </div>
     
@@ -58,9 +56,7 @@
       >
         <!-- Icon -->
         <div class="w-12 h-12 bg-(--system-ring) rounded-lg flex items-center justify-center">
-          <span class="material-symbols-outlined text-white text-2xl">
-            {{ item.icon || 'category' }}
-          </span>
+          <i :class="[item.icon || 'fa-solid fa-tag', 'text-white text-2xl']"></i>
         </div>
         
         <!-- Info -->
@@ -90,16 +86,12 @@
         </div>
         
         <!-- Select Arrow -->
-        <span class="material-symbols-outlined text-(--system-ring)">
-          chevron_right
-        </span>
+        <i class="fa-solid fa-chevron-right text-(--system-ring)"></i>
       </div>
       
       <!-- Empty State -->
       <div v-if="filteredItems.length === 0" class="text-center py-8">
-        <span class="material-symbols-outlined text-5xl text-(--text-disabled)">
-          search_off
-        </span>
+        <i class="fa-solid fa-magnifying-glass-minus text-5xl text-(--text-disabled)"></i>
         <p class="mt-2 text-(--text-disabled)">Nenhum item encontrado</p>
       </div>
     </div>
