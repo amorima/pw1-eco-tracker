@@ -54,15 +54,16 @@ Este projeto foi construído com uma arquitetura moderna baseada em componentes,
 
 ### Core
 
-- **Vue.js 3:** A nossa framework de eleição pela sua reatividade e ecossistema robusto.
+- **Vue.js 3:** A framework leciona em PW1 pela sua reatividade e ecossistema robusto.
 - **Vite:** Build tool para um ambiente de desenvolvimento extremamente rápido.
-- **Pinia:** Para a gestão de estado global (User Store, Tasks Store, etc.), substituindo o Vuex pela sua simplicidade e suporte a TypeScript/Intellisense.
+- **Pinia:** Para a gestão de estado global (User Store, Tasks Store, etc.).
 - **Vue Router 4:** Gestão de rotas e navegação, incluindo _Navigation Guards_ para proteger áreas de administração.
 
 ### UI & Estilo
 
 - **Tailwind CSS:** Utility-first CSS para estilização rápida e responsiva.
 - **Material Symbols:** Iconografia consistente da Google.
+- **FontAwesome:** Iconografia complementar.
 - **ApexCharts (vue3-apexcharts):** Para visualização de dados e gráficos de consumo.
 - **Vuedraggable:** Para funcionalidades de _drag-and-drop_ no dashboard.
 
@@ -77,7 +78,6 @@ Este projeto foi construído com uma arquitetura moderna baseada em componentes,
 
 - **IAEDU API:** Motor de inteligência artificial para o nosso Chatbot.
 - **Unsplash Source:** Geração dinâmica de imagens para tarefas e recompensas.
-- **DiceBear API:** Geração de avatares divertidos para os perfis de utilizador.
 - **Cloudinary:** Upload e gestão de imagens personalizadas pelos utilizadores.
 
 ---
@@ -186,7 +186,7 @@ Optámos pelo Pinia em vez de _props drilling_ excessivo. Como temos dados parti
 
 ### 3. Sistema de Imagens Híbrido
 
-Para evitar que a app parecesse "vazia", implementámos o `imageService.js`. Se o utilizador não carregar uma foto, o sistema vai buscar automaticamente uma imagem de alta qualidade ao Unsplash baseada na categoria da tarefa/aparelho, ou gera um avatar com as iniciais via UI Avatars.
+Para evitar que a app parecesse "vazia", implementámos o `imageService.js`. Se o utilizador não carregar uma foto, o sistema vai buscar automaticamente um icon ao FontAwesome baseada na categoria da tarefa/aparelho.
 
 ---
 
