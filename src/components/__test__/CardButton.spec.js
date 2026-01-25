@@ -24,13 +24,13 @@ describe('CardButton', () => {
     })
 
     it('should have edit icon', () => {
-      const icon = wrapper.find('.material-symbols-outlined')
-      expect(icon.text()).toBe('edit') // verifica se ícone é edit
+      const icon = wrapper.find('i')
+      expect(icon.classes()).toContain('fa-pen') // verifica se ícone é edit
     })
 
     it('should have info text', () => {
-      const icon = wrapper.find('.material-symbols-outlined') // seleciona o ícone
-      expect(icon.classes()).toContain('text-(--semantic-info-default)') // verifica se a classe de cor é info
+      const button = wrapper.find('button') // seleciona o botão
+      expect(button.classes()).toContain('text-(--semantic-info-default)') // verifica se a classe de cor é info
     })
   })
 
@@ -44,13 +44,13 @@ describe('CardButton', () => {
     })
 
     it('should have delete icon', () => {
-      const icon = wrapper.find('.material-symbols-outlined')
-      expect(icon.text()).toBe('delete') // verifica se ícone é delete
+      const icon = wrapper.find('i')
+      expect(icon.classes()).toContain('fa-trash') // verifica se ícone é delete
     })
 
     it('should have error colour text', () => {
-      const icon = wrapper.find('.material-symbols-outlined')
-      expect(icon.classes()).toContain('text-(--semantic-error-default)') // verifica se a classe de cor é error
+      const button = wrapper.find('button')
+      expect(button.classes()).toContain('text-(--semantic-error-default)') // verifica se a classe de cor é error
     })
   })
 
@@ -64,13 +64,13 @@ describe('CardButton', () => {
     })
 
     it('should have check icon', () => {
-      const icon = wrapper.find('.material-symbols-outlined')
-      expect(icon.text()).toBe('check') // verifica se ícone é check
+      const icon = wrapper.find('i')
+      expect(icon.classes()).toContain('fa-check') // verifica se ícone é check
     })
 
     it('should have success colour text', () => {
-      const icon = wrapper.find('.material-symbols-outlined')
-      expect(icon.classes()).toContain('text-(--semantic-success-default)') // verifica se a classe de cor é success
+      const button = wrapper.find('button')
+      expect(button.classes()).toContain('text-(--semantic-success-default)') // verifica se a classe de cor é success
     })
   })
 

@@ -30,8 +30,8 @@ describe('UserCard', () => {
     })
 
     it('should render icon person_add', () => {
-      const icons = wrapper.findAll('.material-symbols-outlined')
-      expect(icons[0].text()).toBe('person_add') // verifica se icone de adicionar pessoa aparece
+      const icon = wrapper.find('i.fa-user-plus')
+      expect(icon.exists()).toBe(true) // verifica se icone de adicionar pessoa aparece
     })
 
     it('shouldnt render CTA', () => {
@@ -79,8 +79,8 @@ describe('UserCard', () => {
           isEmpty: false,
         },
       })
-      const icon = wrapperNoAvatar.find('.material-symbols-outlined')
-      expect(icon.text()).toBe('person') // verifica icone padrao quando nao tem avatar
+      const icon = wrapperNoAvatar.find('i.fa-user')
+      expect(icon.exists()).toBe(true) // verifica icone padrao quando nao tem avatar
     })
 
     it('should have text headings colour', () => {

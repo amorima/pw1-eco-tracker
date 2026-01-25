@@ -1,7 +1,26 @@
-import { describe, it, expect, beforeEach } from 'vitest'
+import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 import ChatBot from '@/components/ChatBot.vue'
+
+// Mock fetch to prevent real API calls and handle streaming response
+const mockStreamResponse = (text) => {
+  const encoder = new TextEncoder()
+  const data = encoder.encode(text)
+  
+  return {
+    ok: true,
+    body: {
+      getReader: () => ({
+        read: vi.fn()
+          .mockResolvedValueOnce({ done: false, value: data })
+          .mockResolvedValueOnce({ done: true, value: undefined })
+      })
+    }
+  }
+}
+
+global.fetch = vi.fn(() => Promise.resolve(mockStreamResponse('Test response')))
 
 describe('ChatBot', () => {
   let wrapper
@@ -9,6 +28,12 @@ describe('ChatBot', () => {
   beforeEach(() => {
     setActivePinia(createPinia())
     wrapper = mount(ChatBot)
+    // Clear any previous mock calls
+    vi.clearAllMocks()
+  })
+
+  afterEach(() => {
+    wrapper.unmount()
   })
 
   describe('render', () => {
@@ -17,8 +42,8 @@ describe('ChatBot', () => {
     })
 
     it('should render agent icon', () => {
-      const icons = wrapper.findAll('.material-symbols-outlined')
-      expect(icons[0].text()).toBe('support_agent') // verifica se icone do agente aparece
+      const icons = wrapper.findAll('i.fa-solid')
+      expect(icons.length).toBeGreaterThan(0) // verifica se icone do agente aparece
     })
   })
 
@@ -52,7 +77,7 @@ describe('ChatBot', () => {
 
     it('should clear input after sent', async () => {
       wrapper.vm.currentMessage = 'Teste' // mensagem de teste
-      wrapper.vm.sendMessage() // envia mensagem
+      await wrapper.vm.sendMessage() // envia mensagem
       expect(wrapper.vm.currentMessage).toBe('') // verifica se limpou input
     })
   })

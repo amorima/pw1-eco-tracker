@@ -37,9 +37,9 @@ describe('BadgeModal', () => {
       expect(wrapper.text()).toContain('Eco Warrior') // verifica se é o titulo certo
       expect(wrapper.text()).toContain('Salvou 100kg de CO2') // verifica se é a descrição certa
 
-      const icons = wrapper.findAll('.material-symbols-outlined')
+      const icons = wrapper.findAll('i')
       const badgeIcon = icons.find((icon) => icon.attributes('style')?.includes('font-size: 48px'))
-      expect(badgeIcon.text()).toBe('eco') // veririca se é o certo
+      expect(badgeIcon.classes()).toContain(earnedBadge.icon) // veririca se é o certo
     })
   })
 
@@ -55,8 +55,8 @@ describe('BadgeModal', () => {
     it('should have "Consquitado!" when unlocked', () => {
       expect(wrapper.text()).toContain('Conquistado!') // verifica se tem o texto certo
 
-      const icons = wrapper.findAll('.material-symbols-outlined') // cria um array com os icones
-      const hasVerified = icons.some((icon) => icon.text() === 'verified')
+      const icons = wrapper.findAll('i') // cria um array com os icones
+      const hasVerified = icons.some((icon) => icon.classes().includes('fa-circle-check'))
       expect(hasVerified).toBe(true) // veririca se tem o icon certo
     })
 
@@ -82,8 +82,8 @@ describe('BadgeModal', () => {
     it('should have "Por conquistar" ann locked icon', () => {
       expect(wrapper.text()).toContain('Por conquistar') // verifica se tem o texto certo
 
-      const icons = wrapper.findAll('.material-symbols-outlined') // cria um array com os icones
-      const hasLock = icons.some((icon) => icon.text() === 'lock') //
+      const icons = wrapper.findAll('i') // cria um array com os icones
+      const hasLock = icons.some((icon) => icon.classes().includes('fa-lock')) //
       expect(hasLock).toBe(true) // veririca se tem o icon certo
     })
 

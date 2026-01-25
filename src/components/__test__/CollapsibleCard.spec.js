@@ -30,8 +30,8 @@ describe('CollapsibleCard', () => {
     })
 
     it('should have drag icon', () => {
-      const dragIcon = wrapper.find('.drag-handle .material-symbols-outlined')
-      expect(dragIcon.text()).toBe('drag_indicator') // verifica se icone de drag aparece
+      const dragIcon = wrapper.find('.drag-handle i')
+      expect(dragIcon.classes()).toContain('fa-grip-vertical') // verifica se icone de drag aparece
     })
   })
 
@@ -41,16 +41,16 @@ describe('CollapsibleCard', () => {
     })
 
     it('should render collapse icon when open', () => {
-      const icons = wrapper.findAll('.material-symbols-outlined')
+      const icons = wrapper.findAll('i')
       const toggleIcon = icons[icons.length - 1]
-      expect(toggleIcon.text()).toBe('collapse_all') // verifica se icone de colapsar aparece
+      expect(toggleIcon.classes()).toContain('fa-chevron-up') // verifica se icone de colapsar aparece
     })
 
     it('should render expand when closed', async () => {
       await wrapper.setProps({ modelValue: false })
-      const icons = wrapper.findAll('.material-symbols-outlined') // pega todos os icones
+      const icons = wrapper.findAll('i') // pega todos os icones
       const toggleIcon = icons[icons.length - 1] // pega o ultimo icone toggle
-      expect(toggleIcon.text()).toBe('expand_all') // verifica se icone de expandir aparece
+      expect(toggleIcon.classes()).toContain('fa-chevron-down') // verifica se icone de expandir aparece
     })
 
     it('should render content when open', () => {

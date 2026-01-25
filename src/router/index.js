@@ -49,30 +49,6 @@ const router = createRouter({
       component: () => import('../views/ProfileView.vue'),
       meta: { requiresLogin: true },
     },
-    /*  {
-      path: '/activities',
-      name: 'activities',
-      component: () => import('../views/ActivitiesView.vue'),
-      meta: { requiresLogin: true }
-    },
-    {
-      path: '/appliances',
-      name: 'appliances',
-      component: () => import('../views/ApliancesView.vue'),
-      meta: { requiresLogin: true }
-    },
-    {
-      path: '/statistics',
-      name: 'statistics',
-      component: () => import('../views/StatisticsView.vue'),
-      meta: { requiresLogin: true }
-    }, */
-    {
-      path: '/leaderboard',
-      name: 'leaderboard',
-      component: () => import('../views/LeaderboardView.vue'),
-      meta: { requiresLogin: true },
-    },
     {
       path: '/admin',
       name: 'admin',

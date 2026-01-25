@@ -9,3 +9,12 @@ const localStorageMock = {
 }
 
 global.localStorage = localStorageMock
+
+// Mock ApexCharts to prevent "Element not found" errors
+vi.mock('vue3-apexcharts', () => ({
+  default: {
+    name: 'apexchart',
+    template: '<div class="apexchart-mock"></div>',
+    props: ['type', 'options', 'series', 'height', 'width']
+  }
+}))
