@@ -8,7 +8,7 @@ const applianceImages = {
   '4': 'https://images.unsplash.com/photo-1590794056226-79ef3a8147e1?w=400&h=300&fit=crop', // Forno
   '5': 'https://images.unsplash.com/photo-1574269909862-7e1d70bb8078?w=400&h=300&fit=crop', // Micro-ondas
   '6': 'https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=400&h=300&fit=crop', // Televisão
-  '7': 'https://images.unsplash.com/photo-1582719366915-cb531b055a48?w=400&h=300&fit=crop', // Ar condicionado
+  '7': 'https://images.unsplash.com/photo-1635274343801-66d868c4c02d?w=400&h=300&fit=crop', // Ar condicionado
   '8': 'https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=400&h=300&fit=crop', // Aspirador
   '9': 'https://images.unsplash.com/photo-1610557892470-55d9e80c0bce?w=400&h=300&fit=crop', // Ferro de engomar
   '10': 'https://images.unsplash.com/photo-1522338140262-f46f5913618a?w=400&h=300&fit=crop', // Secador de cabelo
