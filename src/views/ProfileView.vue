@@ -125,12 +125,12 @@
       <div class="w-full max-w-[930px] space-y-6">
         <!-- Profile Header -->
         <div
-          class="relative w-full overflow-hidden bg-(--system-card) border border-(--system-border) rounded-3xl shadow-sm"
+          class="relative w-full z-20 bg-(--system-card) border border-(--system-border) rounded-3xl shadow-sm"
         >
           <!-- Decorative Background Pattern -->
           <div
             :class="[
-              'absolute top-0 left-0 w-full h-32 transition-colors duration-500',
+              'absolute top-0 left-0 w-full h-32 transition-colors duration-500 rounded-t-[23px]',
               currentBackgroundClass,
             ]"
           >
@@ -185,12 +185,32 @@
                   >
                     {{ currentProfile?.name || 'Utilizador' }}
                   </h2>
-                  <p
-                    class="text-(--system-ring) font-medium mb-4 flex items-center justify-center md:justify-start gap-2"
+                  <div
+                    class="relative group text-(--system-ring) font-medium mb-4 flex items-center justify-center md:justify-start gap-2 w-fit mx-auto md:mx-0 cursor-help"
                   >
                     <span class="material-symbols-outlined text-xl">verified</span>
                     {{ getProfileTitle(currentProfile?.level || 1) }}
-                  </p>
+
+                    <!-- Tooltip Levels -->
+                    <div
+                      class="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-4 py-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none shadow-lg z-50 w-max text-left"
+                    >
+                      <p class="font-bold mb-2 border-b border-gray-600 pb-1">Níveis & Títulos</p>
+                      <div class="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1">
+                        <span class="text-gray-400">Lvl 50+</span> <span>Lenda Ecológica</span>
+                        <span class="text-gray-400">Lvl 30+</span> <span>Guardião do Planeta</span>
+                        <span class="text-gray-400">Lvl 20+</span>
+                        <span>Mestre da Sustentabilidade</span>
+                        <span class="text-gray-400">Lvl 10+</span> <span>Eco Warrior</span>
+                        <span class="text-gray-400">Lvl 5+</span> <span>Explorador Verde</span>
+                        <span class="text-gray-400">Lvl 1+</span> <span>Iniciante</span>
+                      </div>
+                      <!-- Arrow -->
+                      <div
+                        class="absolute bottom-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-b-gray-800"
+                      ></div>
+                    </div>
+                  </div>
                 </div>
 
                 <!-- Gamification Stats (Mini) -->
@@ -1553,7 +1573,7 @@ export default {
       if (level >= 20) return 'Mestre da Sustentabilidade'
       if (level >= 10) return 'Eco Warrior'
       if (level >= 5) return 'Explorador Verde'
-      return 'Iniciado'
+      return 'Iniciante'
     },
 
     scrollToSettings() {

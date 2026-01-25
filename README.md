@@ -130,13 +130,17 @@ A aplicação ficará disponível em `http://localhost:5173`.
 Para garantir a estabilidade e a qualidade do código deste projeto, utilizamos ferramentas de análise estática e testes unitários.
 
 ### Linting (ESLint)
+
 Para verificar a conformidade do código com as regras de estilo definidas e detetar potenciais erros:
+
 ```bash
 npm run lint
 ```
 
 ### Testes Unitários
+
 Para executar a suite de testes unitários dos componentes e stores:
+
 ```bash
 npm run test
 ```
@@ -196,6 +200,7 @@ Se tivéssemos mais tempo ou para uma versão 2.0, gostaríamos de implementar:
 
 - **Integração IoT:** Ler consumos reais de tomadas inteligentes em vez de inserção manual.
 - **UI:** Melhorar alguns aspetos de UX/UI.
+- **Notificações:** Terminar de implementar o sistema de notificações.
 
 ---
 
