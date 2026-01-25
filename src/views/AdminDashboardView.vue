@@ -62,19 +62,33 @@
           v-model="cardOpenStates.analysis"
         >
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
-            <!-- CO2 Card -->
+            <!-- CO2 Efetivo Card -->
             <div
               class="bg-(--system-card) border border-(--system-border) rounded-xl p-6 flex items-center gap-4 transition-all hover:border-(--system-ring)"
             >
               <div
-                class="w-12 h-12 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-green-600 dark:text-green-400 shrink-0"
+                :class="[
+                  'w-12 h-12 rounded-full flex items-center justify-center shrink-0',
+                  (householdStats.totalCo2Emitted - householdStats.totalCo2) <= 0
+                    ? 'bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400'
+                    : 'bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400',
+                ]"
               >
-                <span class="material-symbols-outlined text-2xl">eco</span>
+                <span class="material-symbols-outlined text-2xl">
+                  {{ (householdStats.totalCo2Emitted - householdStats.totalCo2) <= 0 ? 'eco' : 'cloud' }}
+                </span>
               </div>
               <div>
-                <p class="text-sm text-(--text-body-sub-titles) font-medium">CO2 Evitado</p>
-                <p class="text-2xl font-bold text-(--text-body-titles)">
-                  {{ householdStats.totalCo2.toFixed(1) }}
+                <p class="text-sm text-(--text-body-sub-titles) font-medium">CO₂ Efetivo</p>
+                <p
+                  :class="[
+                    'text-2xl font-bold',
+                    (householdStats.totalCo2Emitted - householdStats.totalCo2) <= 0
+                      ? 'text-(--system-ring)'
+                      : 'text-red-600 dark:text-red-400',
+                  ]"
+                >
+                  {{ (householdStats.totalCo2Emitted - householdStats.totalCo2) <= 0 ? '+' : '' }}{{ Math.abs(householdStats.totalCo2Emitted - householdStats.totalCo2).toFixed(1) }}
                   <span class="text-sm font-normal text-(--text-body-sub-titles)">kg</span>
                 </p>
               </div>
@@ -123,7 +137,14 @@
           title="Consumos de energia diários"
           v-model="cardOpenStates.consumption"
         >
-          <StatisticsChart v-if="dailyStats" :data="dailyStats.last7Days" />
+          <StatisticsChart
+            v-if="dailyStats"
+            :data="dailyStats.last7Days"
+            :showCo2="true"
+            :showEffectiveCo2="true"
+            :showPoints="true"
+            co2Label="CO₂ Efetivo (kg)"
+          />
           <div
             v-else
             class="h-[259px] w-full flex items-center justify-center bg-(--system-input-background) rounded-lg"
@@ -757,6 +778,7 @@ export default {
       const stats = {
         last7Days: [],
         totalCo2Saved: 0,
+        totalCo2Emitted: 0,
         totalPoints: 0,
         totalTasks: 0,
         streak: 0,
@@ -771,7 +793,8 @@ export default {
         const dayLabel = days[date.getDay()]
         const dateString = date.toISOString().split('T')[0]
 
-        let dayCo2 = 0
+        let dayCo2Saved = 0
+        let dayCo2Emitted = 0
         let dayPoints = 0
 
         this.profiles.forEach((profile) => {
@@ -780,7 +803,7 @@ export default {
           activities.forEach((activity) => {
             const activityDate = activity.completedAt ? activity.completedAt.split('T')[0] : null
             if (activityDate === dateString) {
-              dayCo2 += activity.co2saved || 0
+              dayCo2Saved += activity.co2saved || 0
               dayPoints += activity.pointsEarned || 0
             }
           })
@@ -790,19 +813,21 @@ export default {
           usages.forEach((usage) => {
             const usageDate = usage.usedAt ? usage.usedAt.split('T')[0] : null
             if (usageDate === dateString) {
-              // For consumption, we track CO2 emitted (negative impact)
-              dayCo2 -= usage.co2emited || 0
+              // For consumption, we track CO2 emitted
+              dayCo2Emitted += usage.co2emited || 0
             }
           })
         })
 
         stats.last7Days.push({
           label: dayLabel,
-          co2Saved: Math.max(0, dayCo2),
+          co2Saved: dayCo2Saved,
+          co2Emitted: dayCo2Emitted,
           points: dayPoints,
         })
 
-        stats.totalCo2Saved += Math.max(0, dayCo2)
+        stats.totalCo2Saved += dayCo2Saved
+        stats.totalCo2Emitted += dayCo2Emitted
         stats.totalPoints += dayPoints
       }
 

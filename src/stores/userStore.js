@@ -107,6 +107,21 @@ export const useUserStore = defineStore('userStore', {
       return activities.reduce((sum, a) => sum + (a.co2saved || 0), 0)
     },
 
+    // Calculate total CO2 emitted from appliance usage history
+    currentProfileCo2Emitted: (state) => {
+      const usages = state.currentProfile?.appliance_history || []
+      return usages.reduce((sum, u) => sum + (u.co2emited || 0), 0)
+    },
+
+    // Calculate effective CO2 (emitted - saved)
+    currentProfileEffectiveCo2: (state) => {
+      const activities = state.currentProfile?.activity_history || []
+      const usages = state.currentProfile?.appliance_history || []
+      const saved = activities.reduce((sum, a) => sum + (a.co2saved || 0), 0)
+      const emitted = usages.reduce((sum, u) => sum + (u.co2emited || 0), 0)
+      return emitted - saved
+    },
+
     // Calculate total household CO2 saved
     householdTotalCo2Saved: (state) => {
       if (!state.currentUser?.profiles) return 0
@@ -1178,6 +1193,8 @@ export const useUserStore = defineStore('userStore', {
       return {
         totalPoints: this.currentProfilePoints,
         totalCo2Saved: this.currentProfileCo2Saved,
+        totalCo2Emitted: this.currentProfileCo2Emitted,
+        totalEffectiveCo2: this.currentProfileEffectiveCo2,
         streak: this.currentProfile.streak || 0,
         level: this.currentProfileLevel,
         xp: this.currentProfile.xp || 0,

@@ -125,21 +125,35 @@
               <div v-if="statistics" class="flex flex-col gap-6">
                 <!-- Summary Grid -->
                 <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                  <!-- CO2 Card -->
+                  <!-- CO2 Efetivo Card -->
                   <div
                     class="bg-(--system-card) border border-(--system-border) rounded-xl p-4 flex flex-col items-center justify-center gap-2 transition-all hover:border-(--system-ring)"
                   >
                     <div
-                      class="w-10 h-10 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-green-600 dark:text-green-400"
+                      :class="[
+                        'w-10 h-10 rounded-full flex items-center justify-center',
+                        statistics.totalEffectiveCo2 <= 0
+                          ? 'bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400'
+                          : 'bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400',
+                      ]"
                     >
-                      <span class="material-symbols-outlined">eco</span>
+                      <span class="material-symbols-outlined">
+                        {{ statistics.totalEffectiveCo2 <= 0 ? 'eco' : 'cloud' }}
+                      </span>
                     </div>
                     <div class="text-center">
-                      <p class="text-2xl font-bold text-(--text-body-titles)">
-                        {{ statistics.totalCo2Saved.toFixed(1) }}
+                      <p
+                        :class="[
+                          'text-2xl font-bold',
+                          statistics.totalEffectiveCo2 <= 0
+                            ? 'text-green-600 dark:text-green-400'
+                            : 'text-red-600 dark:text-red-400',
+                        ]"
+                      >
+                        {{ statistics.totalEffectiveCo2 <= 0 ? '+' : '' }}{{ Math.abs(statistics.totalEffectiveCo2).toFixed(1) }}
                       </p>
                       <p class="text-xs text-(--text-body-sub-titles) uppercase font-semibold">
-                        kg CO₂
+                        kg CO₂ efetivo
                       </p>
                     </div>
                   </div>
@@ -205,8 +219,11 @@
                 <!-- Chart Container -->
                 <StatisticsChart
                   :data="statistics.last7Days"
-                  :showCo2="false"
-                  pointsColor="var(--system-ring)"
+                  :showCo2="true"
+                  :showEffectiveCo2="true"
+                  :showPoints="true"
+                  co2Label="CO₂ Efetivo (kg)"
+                  pointsColor="var(--semantic-warning-default)"
                 />
               </div>
               <div
