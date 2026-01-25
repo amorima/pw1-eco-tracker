@@ -93,7 +93,7 @@
           <label class="block text-sm font-medium text-(--text-body-sub-titles) mb-2">
             Data de nascimento (opcional)
           </label>
-          <FormInput v-model="newProfile.birthDate" type="date" />
+          <FormInput v-model="newProfile.birthDate" placeholder="Data de nascimento" type="date" />
         </div>
 
         <div>
