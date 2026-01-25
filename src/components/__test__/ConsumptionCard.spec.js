@@ -55,9 +55,9 @@ describe('ConsumptionCard', () => {
     })
 
     it('deve exibir o ícone de seta no botão', () => {
-      const icon = wrapper.find('.material-symbols-outlined')
+      const icon = wrapper.find('button i')
       expect(icon.exists()).toBe(true)
-      expect(icon.text()).toBe('arrow_forward_ios')
+      expect(icon.classes()).toContain('fa-chevron-right')
     })
   })
 })

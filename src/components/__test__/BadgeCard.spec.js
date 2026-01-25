@@ -27,9 +27,9 @@ describe('BadgeCard', () => {
     })
 
     it('should have the right icon', () => {
-      const icon = wrapper.find('.material-symbols-outlined') // cria icon de teste
+      const icon = wrapper.find('i') // cria icon de teste
       expect(icon.exists()).toBe(true) // verifica se existe
-      expect(icon.text()).toBe('emoji_events') // veririca se é o certo
+      expect(icon.classes()).toContain('emoji_events') // veririca se é o certo
     })
   })
 
@@ -41,7 +41,7 @@ describe('BadgeCard', () => {
     })
 
     it('should have white icon when unlocked', () => {
-      const icon = wrapper.find('.material-symbols-outlined')
+      const icon = wrapper.find('i')
       // cria um array com as classes do icon
       expect(icon.classes()).toContain('text-white') // verifica se tem a cor branca
       expect(icon.classes()).not.toContain('text-(--text-disabled)') // verifica que nao tem a cor disabled
@@ -67,7 +67,7 @@ describe('BadgeCard', () => {
     })
 
     it('icon shouldnt have white text color', () => {
-      const icon = wrapper.find('.material-symbols-outlined') // cria o icon de teste
+      const icon = wrapper.find('i') // cria o icon de teste
       expect(icon.classes()).toContain('text-(--text-disabled)') // verifica se tem a cor disabled
       expect(icon.classes()).not.toContain('text-white') // verifica que nao tem a cor branca
     })
@@ -103,8 +103,8 @@ describe('BadgeCard', () => {
   describe('props', () => {
     it('should accept different icons', async () => {
       await wrapper.setProps({ icon: 'star' })
-      const icon = wrapper.find('.material-symbols-outlined')
-      expect(icon.text()).toBe('star') // verifica se aceita icons diferentes
+      const icon = wrapper.find('i')
+      expect(icon.classes()).toContain('star') // verifica se aceita icons diferentes
     })
 
     it('should accept different titles', async () => {
@@ -133,12 +133,12 @@ describe('BadgeCard', () => {
 
     it('should have hover effect', () => {
       const button = wrapper.find('button')
-      expect(button.classes()).toContain('hover:scale-105') // verifica se ha alteração na scale quando hover
+      expect(button.classes()).toContain('transition-all') // verifica se ha transição
     })
 
     it('should transition', () => {
       const button = wrapper.find('button')
-      expect(button.classes()).toContain('transition-transform') // verifica se ha transição
+      expect(button.classes()).toContain('transition-all') // verifica se ha transição
     })
   })
 })

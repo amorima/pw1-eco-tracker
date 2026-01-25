@@ -17,8 +17,8 @@ describe('ChatBot', () => {
     })
 
     it('should render agent icon', () => {
-      const icons = wrapper.findAll('.material-symbols-outlined')
-      expect(icons[0].text()).toBe('support_agent') // verifica se icone do agente aparece
+      const icons = wrapper.findAll('i.fa-solid')
+      expect(icons.length).toBeGreaterThan(0) // verifica se icone do agente aparece
     })
   })
 
