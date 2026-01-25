@@ -113,27 +113,45 @@ export default {
     },
     chartSeries() {
       const series = []
+      const isRadar = this.currentChartType === 'radar'
+
+      // Calcular máximos para normalização no Radar (para que todos fiquem visíveis)
+      let maxEmitted = 1
+      let maxSaved = 1
+      let maxPoints = 1
+
+      if (isRadar) {
+        maxEmitted = Math.max(...this.data.map((d) => d.co2Emitted || 0)) || 1
+        maxSaved = Math.max(...this.data.map((d) => d.co2Saved || 0)) || 1
+        maxPoints = Math.max(...this.data.map((d) => d.points || 0)) || 1
+      }
 
       // Standardize logic: Show Emitted vs Saved for both Area and Radar
       // This avoids confusing "Effective" (negative) values and matches summary cards
       if (this.showCo2) {
+        const rawData = this.data.map((d) => Number((d.co2Emitted || 0).toFixed(2)))
         series.push({
           name: 'CO₂ Emitido',
-          data: this.data.map((d) => Number((d.co2Emitted || 0).toFixed(2))),
+          data: isRadar ? rawData.map((v) => (v / maxEmitted) * 100) : rawData,
+          originalData: rawData, // Guardar valor real para tooltip
         })
       }
 
       if (this.showSavedCo2) {
+        const rawData = this.data.map((d) => Number((d.co2Saved || 0).toFixed(2)))
         series.push({
           name: 'CO₂ Poupado (kg)',
-          data: this.data.map((d) => Number((d.co2Saved || 0).toFixed(2))),
+          data: isRadar ? rawData.map((v) => (v / maxSaved) * 100) : rawData,
+          originalData: rawData,
         })
       }
 
       if (this.showPoints) {
+        const rawData = this.data.map((d) => d.points || 0)
         series.push({
           name: 'Pontos',
-          data: this.data.map((d) => d.points || 0),
+          data: isRadar ? rawData.map((v) => (v / maxPoints) * 100) : rawData,
+          originalData: rawData,
         })
       }
 
@@ -251,13 +269,25 @@ export default {
             let content = `<div class="apex-tooltip" style="background: ${tooltipBg}; border: 1px solid ${borderColor}; padding: 8px; border-radius: 4px;">`
             content += `<div style="color: ${textColor}; font-weight: 600; margin-bottom: 4px;">${label}</div>`
 
-            series.forEach((s, i) => {
-              const name = w.globals.seriesNames[i]
-              const value = s[dataPointIndex]
+            w.config.series.forEach((s, i) => {
+              const name = s.name
               const color = w.globals.colors[i]
+
+              // Usar dados originais se existirem (Radar), caso contrário usar o valor plotado
+              let value = s.originalData
+                ? s.originalData[dataPointIndex]
+                : series[i][dataPointIndex]
+
+              let formattedValue = value
+              if (typeof value === 'number') {
+                formattedValue = name.toLowerCase().includes('pontos')
+                  ? Math.round(value)
+                  : value.toFixed(2)
+              }
+
               content += `<div style="color: ${textColor}; display: flex; align-items: center; gap: 6px;">`
               content += `<span style="width: 8px; height: 8px; background: ${color}; border-radius: 50%; display: inline-block;"></span>`
-              content += `<span>${name}: ${value}</span>`
+              content += `<span>${name}: ${formattedValue}</span>`
               content += `</div>`
             })
 
