@@ -1,5 +1,6 @@
 import { mount } from '@vue/test-utils';
 import MenuNav from '@/components/MenuNav.vue';
+import { describe, it, expect } from 'vitest';
 
 describe('MenuNav.vue', () => {
     it('Renders Correct Menu Passed as Prop', async () => {

@@ -138,7 +138,13 @@
                           : 'bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400',
                       ]"
                     >
-                      <i :class="statistics.totalEffectiveCo2 <= 0 ? 'fa-solid fa-leaf' : 'fa-solid fa-cloud'"></i>
+                      <i
+                        :class="
+                          statistics.totalEffectiveCo2 <= 0
+                            ? 'fa-solid fa-leaf'
+                            : 'fa-solid fa-cloud'
+                        "
+                      ></i>
                     </div>
                     <div class="text-center">
                       <p
@@ -581,7 +587,6 @@ export default {
     TaskCard,
     AddCard,
     FormInput,
-    CheckboxInput,
     ActionButton,
     ChatBot,
     ToastNotification,
@@ -747,6 +752,9 @@ export default {
         }
       },
     },
+    gridColumns() {
+      this.saveGridPreference()
+    },
   },
   async created() {
     await this.userStore.fetchResources()
@@ -904,12 +912,6 @@ export default {
         tool.loading = false
       }
     },
-  },
-  watch: {
-    gridColumns() {
-      this.saveGridPreference()
-    },
-    // ... existing watchers
   },
 }
 </script>

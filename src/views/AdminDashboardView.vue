@@ -606,7 +606,6 @@ export default {
     ProfileEditModal,
     RewardEditModal,
     ItemEditModal,
-    ChallengeCard,
     ModalComponent,
     StatisticsChart,
   },

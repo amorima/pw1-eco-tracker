@@ -7,7 +7,7 @@ import ChatBot from '@/components/ChatBot.vue'
 const mockStreamResponse = (text) => {
   const encoder = new TextEncoder()
   const data = encoder.encode(text)
-  
+
   return {
     ok: true,
     body: {
@@ -20,7 +20,7 @@ const mockStreamResponse = (text) => {
   }
 }
 
-global.fetch = vi.fn(() => Promise.resolve(mockStreamResponse('Test response')))
+globalThis.fetch = vi.fn(() => Promise.resolve(mockStreamResponse('Test response')))
 
 describe('ChatBot', () => {
   let wrapper

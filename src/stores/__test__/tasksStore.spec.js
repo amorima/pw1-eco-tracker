@@ -4,7 +4,7 @@ import { useTasksStore } from '@/stores/tasksStore'
 
 // Mock fetch globally
 const mockFetch = vi.fn()
-global.fetch = mockFetch
+globalThis.fetch = mockFetch
 
 describe('TasksStore', () => {
   let store
@@ -82,7 +82,7 @@ describe('TasksStore', () => {
     })
 
     it('should set loading state during fetch', async () => {
-      mockFetch.mockImplementation(() => 
+      mockFetch.mockImplementation(() =>
         new Promise(resolve => setTimeout(() => resolve({
           ok: true,
           json: () => Promise.resolve(mockTasks),
@@ -91,7 +91,7 @@ describe('TasksStore', () => {
 
       const fetchPromise = store.fetchTasks()
       expect(store.isLoading).toBe(true)
-      
+
       await fetchPromise
       expect(store.isLoading).toBe(false)
     })
@@ -133,9 +133,9 @@ describe('TasksStore', () => {
 
       mockFetch.mockResolvedValueOnce({
         ok: true,
-        json: () => Promise.resolve({ 
-          ...newTask, 
-          id: '999', 
+        json: () => Promise.resolve({
+          ...newTask,
+          id: '999',
           co2saved: 10, // points * 0.5
           isDefault: false,
           imgUrl: null,
@@ -391,7 +391,7 @@ describe('TasksStore', () => {
       const stats = store.getActivityStats(activities, 7)
 
       expect(stats.byTask.length).toBe(2)
-      
+
       const task1 = stats.byTask.find(t => t.id === '1')
       expect(task1.co2saved).toBeCloseTo(20)
       expect(task1.count).toBe(2)
@@ -407,10 +407,10 @@ describe('TasksStore', () => {
       const stats = store.getActivityStats(activities, 7)
 
       expect(stats.byCategory.length).toBe(2)
-      
+
       const energia = stats.byCategory.find(c => c.category === 'Energia')
       expect(energia.co2saved).toBe(10)
-      
+
       const mobilidade = stats.byCategory.find(c => c.category === 'Mobilidade')
       expect(mobilidade.co2saved).toBe(7.5)
     })
@@ -419,7 +419,7 @@ describe('TasksStore', () => {
       const today = new Date().toISOString()
       const tenDaysAgo = new Date()
       tenDaysAgo.setDate(tenDaysAgo.getDate() - 10)
-      
+
       const activities = [
         { task_id: '1', completedAt: today, co2saved: 10, pointsEarned: 20 },
         { task_id: '1', completedAt: tenDaysAgo.toISOString(), co2saved: 10, pointsEarned: 20 },

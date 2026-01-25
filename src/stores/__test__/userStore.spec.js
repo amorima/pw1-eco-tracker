@@ -4,7 +4,7 @@ import { useUserStore } from '@/stores/userStore'
 
 // Mock fetch globally
 const mockFetch = vi.fn()
-global.fetch = mockFetch
+globalThis.fetch = mockFetch
 
 // Mock localStorage
 const localStorageMock = {
@@ -13,7 +13,7 @@ const localStorageMock = {
   removeItem: vi.fn(),
   clear: vi.fn(),
 }
-global.localStorage = localStorageMock
+globalThis.localStorage = localStorageMock
 
 describe('UserStore', () => {
   let store
@@ -257,7 +257,7 @@ describe('UserStore', () => {
 
         expect(result.success).toBe(true)
         expect(store.currentUser.profiles.length).toBe(2)
-        
+
         const newProfile = store.currentUser.profiles[1]
         expect(newProfile.name).toBe('New Profile')
         expect(newProfile.age).toBe(25)
@@ -290,7 +290,7 @@ describe('UserStore', () => {
         mockFetch.mockResolvedValueOnce({ ok: true })
 
         await store.createProfile({ name: 'Default Test' })
-        
+
         const newProfile = store.currentUser.profiles[1]
         expect(newProfile.xp).toBe(0)
         expect(newProfile.points).toBe(0)

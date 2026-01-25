@@ -8,7 +8,7 @@ const localStorageMock = {
   clear: vi.fn(),
 }
 
-global.localStorage = localStorageMock
+globalThis.localStorage = localStorageMock
 
 // Mock ApexCharts to prevent "Element not found" errors
 vi.mock('vue3-apexcharts', () => ({

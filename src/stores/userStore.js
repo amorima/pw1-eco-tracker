@@ -1546,8 +1546,6 @@ export const useUserStore = defineStore('userStore', {
             taskData.co2Saved ||
             defaultTaskCO2[taskData.category] ||
             taskData.points * 0.05,
-          imgUrl: taskData.imgUrl || null,
-          co2saved: taskData.co2saved || taskData.points * 0.5,
           isDefault: false,
         }
 

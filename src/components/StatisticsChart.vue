@@ -198,8 +198,6 @@ export default {
           width: isRadar ? 2 : 3,
         },
         fill: {
-          opacity: isRadar ? 0.2 : 1,
-          type: 'solid',
           opacity: this.currentChartType === 'area' || isRadar ? 0.5 : 1,
           type: this.currentChartType === 'area' ? 'gradient' : 'solid', // Radar uses solid fill
           gradient: {

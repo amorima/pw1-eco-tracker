@@ -117,7 +117,7 @@ router.beforeEach((to, from, next) => {
         sessionStorage.removeItem('landingPrevDarkMode')
       }
     }
-  } catch (e) {
+  } catch {
     // ignore storage errors
   }
 

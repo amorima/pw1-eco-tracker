@@ -4,7 +4,7 @@ import { useAppliancesStore } from '@/stores/appliencesStore'
 
 // Mock fetch globally
 const mockFetch = vi.fn()
-global.fetch = mockFetch
+globalThis.fetch = mockFetch
 
 // Mock the carbon API service
 vi.mock('@/services/carbonApiService', () => ({
@@ -96,7 +96,7 @@ describe('AppliancesStore', () => {
     })
 
     it('should set loading state during fetch', async () => {
-      mockFetch.mockImplementation(() => 
+      mockFetch.mockImplementation(() =>
         new Promise(resolve => setTimeout(() => resolve({
           ok: true,
           json: () => Promise.resolve(mockAppliances),
@@ -105,7 +105,7 @@ describe('AppliancesStore', () => {
 
       const fetchPromise = store.fetchAppliances()
       expect(store.isLoading).toBe(true)
-      
+
       await fetchPromise
       expect(store.isLoading).toBe(false)
     })
@@ -140,7 +140,7 @@ describe('AppliancesStore', () => {
     it('should set default values for optional fields', async () => {
       mockFetch.mockResolvedValueOnce({
         ok: true,
-        json: () => Promise.resolve({ 
+        json: () => Promise.resolve({
           id: '999',
           name: 'Minimal',
           type: 'electricity',
@@ -335,7 +335,7 @@ describe('AppliancesStore', () => {
     describe('isValidApiType', () => {
       it('should return valid API device types', () => {
         const validTypes = store.validApiDeviceTypes
-        
+
         expect(validTypes.length).toBe(8)
         expect(validTypes.some(t => t.value === 'refrigerator')).toBe(true)
         expect(validTypes.some(t => t.value === 'television')).toBe(true)
@@ -429,7 +429,7 @@ describe('AppliancesStore', () => {
       const stats = store.getConsumptionStats(usage, 7)
 
       expect(stats.byAppliance.length).toBe(2)
-      
+
       const fridge = stats.byAppliance.find(a => a.id === '1')
       expect(fridge.co2).toBeCloseTo(0.25)
       expect(fridge.count).toBe(2)
@@ -439,7 +439,7 @@ describe('AppliancesStore', () => {
       const today = new Date().toISOString()
       const tenDaysAgo = new Date()
       tenDaysAgo.setDate(tenDaysAgo.getDate() - 10)
-      
+
       const usage = [
         { appliance_id: '1', usedAt: today, co2emited: 0.1, energy_consumed: 0.5 },
         { appliance_id: '1', usedAt: tenDaysAgo.toISOString(), co2emited: 0.5, energy_consumed: 2 },
