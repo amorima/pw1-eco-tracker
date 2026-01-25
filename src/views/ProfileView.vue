@@ -226,7 +226,7 @@
                   class="relative group flex items-center gap-2 bg-(--system-background) px-4 py-2 rounded-xl border border-(--system-border) text-sm font-medium text-(--text-body-sub-titles) cursor-help"
                 >
                   <span class="material-symbols-outlined text-lg text-green-500">eco</span>
-                  {{ userStore.currentProfileCo2Saved || 0 }} kg CO₂
+                  {{ (userStore.currentProfileCo2Saved || 0).toFixed(2) }} kg CO₂
                   <!-- Custom Tooltip -->
                   <div
                     class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1.5 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap shadow-lg z-50"
