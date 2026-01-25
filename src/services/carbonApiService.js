@@ -39,6 +39,12 @@ export function storeApiKey(key) {
  */
 export async function requestApiKey(email) {
   try {
+    console.log('Carbon API Request:', {
+      url: `${API_BASE_URL}/request-key`,
+      method: 'POST',
+      body: { email },
+    })
+
     const response = await fetch(`${API_BASE_URL}/request-key`, {
       method: 'POST',
       headers: {
@@ -47,7 +53,9 @@ export async function requestApiKey(email) {
       body: JSON.stringify({ email }),
     })
 
+    console.log('Carbon API Response Status:', response.status)
     const data = await response.json()
+    console.log('Carbon API Response Data:', data)
 
     if (data.success && data.data?.key) {
       storeApiKey(data.data.key)
@@ -118,6 +126,12 @@ export async function calculateEmissions(type, amount, isDevice = false) {
     // Higienizar a API key para remover aspas ou caracteres invisíveis que causam erro de protocolo
     const cleanKey = apiKey.replace(/[^a-zA-Z0-9_]/g, '')
 
+    console.log('Carbon API Request:', {
+      url: `${API_BASE_URL}/calculate`,
+      method: 'POST',
+      body,
+    })
+
     const response = await fetch(`${API_BASE_URL}/calculate`, {
       method: 'POST',
       headers: {
@@ -126,6 +140,8 @@ export async function calculateEmissions(type, amount, isDevice = false) {
       },
       body: JSON.stringify(body),
     })
+
+    console.log('Carbon API Response Status:', response.status)
 
     if (response.status === 401) {
       return {
@@ -149,6 +165,7 @@ export async function calculateEmissions(type, amount, isDevice = false) {
     }
 
     const data = await response.json()
+    console.log('Carbon API Response Data:', data)
 
     if (data.success) {
       return {
@@ -176,8 +193,11 @@ export async function calculateEmissions(type, amount, isDevice = false) {
  */
 export async function getApiInfo() {
   try {
+    console.log('Carbon API Request:', { url: `${API_BASE_URL}/info`, method: 'GET' })
     const response = await fetch(`${API_BASE_URL}/info`)
+    console.log('Carbon API Response Status:', response.status)
     const data = await response.json()
+    console.log('Carbon API Response Data:', data)
 
     return {
       success: true,
@@ -298,6 +318,12 @@ export async function calculateApplianceEmissions(appliance, hoursUsed) {
   // Higienizar a API key
   const cleanKey = apiKey.replace(/[^a-zA-Z0-9_]/g, '')
 
+  console.log('Carbon API Request:', {
+    url: `${API_BASE_URL}/calculate`,
+    method: 'POST',
+    body,
+  })
+
   try {
     const response = await fetch(`${API_BASE_URL}/calculate`, {
       method: 'POST',
@@ -308,11 +334,14 @@ export async function calculateApplianceEmissions(appliance, hoursUsed) {
       body: JSON.stringify(body),
     })
 
+    console.log('Carbon API Response Status:', response.status)
+
     if (!response.ok) {
       throw new Error(`API Error: ${response.status}`)
     }
 
     const data = await response.json()
+    console.log('Carbon API Response Data:', data)
 
     if (data.success) {
       return {

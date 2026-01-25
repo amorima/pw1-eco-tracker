@@ -226,7 +226,7 @@
                   class="relative group flex items-center gap-2 bg-(--system-background) px-4 py-2 rounded-xl border border-(--system-border) text-sm font-medium text-(--text-body-sub-titles) cursor-help"
                 >
                   <span class="material-symbols-outlined text-lg text-green-500">eco</span>
-                  {{ userStore.currentProfileCo2Saved || 0 }} kg CO₂
+                  {{ (userStore.currentProfileCo2Saved || 0).toFixed(2) }} kg CO₂
                   <!-- Custom Tooltip -->
                   <div
                     class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1.5 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap shadow-lg z-50"
@@ -242,13 +242,13 @@
                   class="flex items-center gap-2 bg-(--system-background) px-4 py-2 rounded-xl border border-(--system-border) text-sm font-medium text-(--text-body-sub-titles)"
                 >
                   <span class="material-symbols-outlined text-lg text-orange-500">mail</span>
-                  {{ currentProfile?.email || 'Sem email' }}
+                  {{ displayEmail }}
                 </div>
                 <div
                   class="flex items-center gap-2 bg-(--system-background) px-4 py-2 rounded-xl border border-(--system-border) text-sm font-medium text-(--text-body-sub-titles)"
                 >
                   <span class="material-symbols-outlined text-lg text-purple-500">cake</span>
-                  {{ currentProfile?.age || '-' }} anos
+                  {{ displayAge }} anos
                 </div>
               </div>
             </div>
@@ -273,6 +273,7 @@
             <!-- Chart Container -->
             <div class="relative w-40 h-40 shrink-0">
               <apexchart
+                v-if="chartReady"
                 :key="themeKey"
                 type="radialBar"
                 :options="levelChartOptions"
@@ -430,7 +431,7 @@
                     :class="[
                       'flex items-center gap-2 px-3 py-2 rounded-lg transition-colors',
                       sortCompletedFirst
-                        ? 'bg-(--system-ring) text-white'
+                        ? 'bg-(--system-ring) border-2 border-(--system-ring) text-white'
                         : 'bg-(--system-card) border-2 border-(--system-border) text-(--text-body-sub-titles)',
                     ]"
                   >
@@ -715,6 +716,7 @@ export default {
       pinConfirmInput: '',
       pinError: '',
 
+      chartReady: false,
       // Rewards
       rewardTab: 'redeem',
       rewardSearch: '',
@@ -867,6 +869,25 @@ export default {
     currentProfile() {
       return this.userStore.currentProfile
     },
+    displayEmail() {
+      if (this.currentProfile?.isAdmin) {
+        return this.userStore.currentUser?.email || 'Sem email'
+      }
+      return this.currentProfile?.email || 'Sem email'
+    },
+    displayAge() {
+      if (this.currentProfile?.birthDate) {
+        const birthDate = new Date(this.currentProfile.birthDate)
+        const today = new Date()
+        let age = today.getFullYear() - birthDate.getFullYear()
+        const m = today.getMonth() - birthDate.getMonth()
+        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+          age--
+        }
+        return age
+      }
+      return this.currentProfile?.age || '-'
+    },
     allBadgesWithStatus() {
       return this.userStore.allBadgesWithStatus
     },
@@ -891,8 +912,8 @@ export default {
     },
     levelChartOptions() {
       const isDark = document.documentElement.classList.contains('dark')
-      const primaryColor = '#86efac' // Pastel Green (Green-300)
-      const secondaryColor = '#4ade80' // Soft Green (Green-400)
+      const primaryColor = '#22c55e' // Green-500 (Mais visível)
+      const secondaryColor = '#16a34a' // Green-600 (Mais contraste)
 
       return {
         chart: {
@@ -1239,6 +1260,10 @@ export default {
       attributes: true,
       attributeFilter: ['class'],
     })
+    // Pequeno delay para garantir que o elemento DOM existe antes de renderizar o gráfico
+    setTimeout(() => {
+      this.chartReady = true
+    }, 100)
   },
   beforeUnmount() {
     window

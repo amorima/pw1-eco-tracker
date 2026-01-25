@@ -225,8 +225,8 @@
                   :data="statistics.last7Days"
                   :showCo2="true"
                   :showEffectiveCo2="true"
+                  :showSavedCo2="true"
                   :showPoints="true"
-                  co2Label="CO₂ Efetivo (kg)"
                   pointsColor="var(--semantic-warning-default)"
                 />
               </div>

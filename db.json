@@ -2,19 +2,18 @@
   "users": [
     {
       "id": "1",
-      "email": "mario@mario.com",
-      "password": "456789",
-      "createdAt": "2024-01-15T10:00:00Z",
-      "maxProfiles": 7,
+      "email": "sofia@exemplo.com",
+      "password": "123",
+      "createdAt": "2026-01-01T10:00:00Z",
+      "maxProfiles": 4,
       "appliances": [
         "1",
         "2",
-        "3",
         "6",
+        "7",
         "11",
-        "13",
-        "14",
-        "15"
+        "12",
+        "13"
       ],
       "tasks": [
         "1",
@@ -23,412 +22,330 @@
         "4",
         "5",
         "6",
-        "7",
-        "8",
         "9"
       ],
       "profiles": [
         {
-          "id": "101",
-          "name": "Mário Piress",
-          "age": 36,
-          "avatarUrl": "https://plus.unsplash.com/premium_photo-1664298528358-790433ba0815?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          "id": "p1",
+          "name": "Sofia",
+          "age": 35,
+          "avatarUrl": "https://api.dicebear.com/7.x/avataaars/svg?seed=Sofia",
           "isAdmin": true,
-          "birthDate": "1989-05-15",
-          "createdAt": "2024-01-15T10:05:00Z",
-          "xp": 1315,
-          "streak": 7,
+          "birthDate": "1990-05-15",
+          "createdAt": "2026-01-01T10:05:00Z",
+          "xp": 1250,
+          "points": 450,
+          "streak": 12,
           "settings": {
             "pin": null,
             "notification": true,
             "deviceDefault": true,
-            "header_background": "bg-gradient-to-r from-green-400 to-emerald-500",
-            "headerBackground": "sunset"
+            "header_background": "bg-gradient-to-r from-green-400 to-emerald-500"
           },
           "activity_history": [
             {
-              "id": "1001",
-              "task_id": "3",
-              "completedAt": "2026-01-19T14:00:00Z",
-              "pointsEarned": 10,
-              "co2saved": 0.5
-            },
-            {
-              "id": "1002",
-              "task_id": "5",
-              "completedAt": "2026-01-19T20:00:00Z",
-              "pointsEarned": 7,
-              "co2saved": 0.2
-            },
-            {
-              "id": "1003",
+              "id": "a101",
               "task_id": "1",
-              "completedAt": "2026-01-20T08:00:00Z",
+              "completedAt": "2026-01-25T08:00:00Z",
               "pointsEarned": 20,
-              "co2saved": 10
+              "co2saved": 0.1
             },
             {
-              "id": "1004",
-              "task_id": "9",
-              "completedAt": "2026-01-20T09:30:00Z",
-              "pointsEarned": 20,
-              "co2saved": 3
-            },
-            {
-              "id": "1005",
-              "task_id": "3",
-              "completedAt": "2026-01-21T15:00:00Z",
-              "pointsEarned": 10,
-              "co2saved": 0.5
-            },
-            {
-              "id": "1006",
-              "task_id": "2",
-              "completedAt": "2026-01-22T08:30:00Z",
-              "pointsEarned": 15,
-              "co2saved": 7.5
-            },
-            {
-              "id": "1007",
+              "id": "a102",
               "task_id": "6",
-              "completedAt": "2026-01-22T19:00:00Z",
+              "completedAt": "2026-01-25T13:00:00Z",
               "pointsEarned": 12,
-              "co2saved": 1.5
+              "co2saved": 0.8
             },
             {
-              "id": "1008",
-              "task_id": "4",
-              "completedAt": "2026-01-23T07:00:00Z",
-              "pointsEarned": 8,
-              "co2saved": 0.3
-            },
-            {
-              "id": "1009",
+              "id": "a103",
               "task_id": "1",
               "completedAt": "2026-01-24T08:00:00Z",
               "pointsEarned": 20,
-              "co2saved": 10
+              "co2saved": 0.1
             },
             {
-              "id": "1010",
+              "id": "a104",
               "task_id": "3",
-              "completedAt": "2026-01-24T14:00:00Z",
+              "completedAt": "2026-01-24T18:00:00Z",
               "pointsEarned": 10,
-              "co2saved": 0.5
-            },
-            {
-              "id": "1011",
-              "task_id": "9",
-              "completedAt": "2026-01-24T16:00:00Z",
-              "pointsEarned": 20,
-              "co2saved": 3
-            },
-            {
-              "id": "1012",
-              "task_id": "5",
-              "completedAt": "2026-01-25T09:00:00Z",
-              "pointsEarned": 7,
               "co2saved": 0.2
             },
             {
-              "id": "1013",
-              "task_id": "2",
-              "completedAt": "2026-01-25T10:30:00Z",
-              "pointsEarned": 15,
-              "co2saved": 7.5
+              "id": "a105",
+              "task_id": "1",
+              "completedAt": "2026-01-23T08:00:00Z",
+              "pointsEarned": 20,
+              "co2saved": 0.1
+            },
+            {
+              "id": "a106",
+              "task_id": "6",
+              "completedAt": "2026-01-23T20:00:00Z",
+              "pointsEarned": 12,
+              "co2saved": 0.8
+            },
+            {
+              "id": "a107",
+              "task_id": "1",
+              "completedAt": "2026-01-22T08:00:00Z",
+              "pointsEarned": 20,
+              "co2saved": 0.1
+            },
+            {
+              "id": "a108",
+              "task_id": "3",
+              "completedAt": "2026-01-22T18:00:00Z",
+              "pointsEarned": 10,
+              "co2saved": 0.2
+            },
+            {
+              "id": "a109",
+              "task_id": "1",
+              "completedAt": "2026-01-21T08:00:00Z",
+              "pointsEarned": 20,
+              "co2saved": 0.1
+            },
+            {
+              "id": "a110",
+              "task_id": "6",
+              "completedAt": "2026-01-21T13:00:00Z",
+              "pointsEarned": 12,
+              "co2saved": 0.8
+            },
+            {
+              "id": "a111",
+              "task_id": "1",
+              "completedAt": "2026-01-20T08:00:00Z",
+              "pointsEarned": 20,
+              "co2saved": 0.1
+            },
+            {
+              "id": "a112",
+              "task_id": "3",
+              "completedAt": "2026-01-20T18:00:00Z",
+              "pointsEarned": 10,
+              "co2saved": 0.2
+            },
+            {
+              "id": "a113",
+              "task_id": "1",
+              "completedAt": "2026-01-19T08:00:00Z",
+              "pointsEarned": 20,
+              "co2saved": 0.1
+            },
+            {
+              "id": "a114",
+              "task_id": "6",
+              "completedAt": "2026-01-19T20:00:00Z",
+              "pointsEarned": 12,
+              "co2saved": 0.8
             }
           ],
           "appliance_history": [
             {
-              "id": "2001",
-              "appliance_id": "11",
-              "usedAt": "2026-01-19T09:00:00Z",
-              "duration": 480,
-              "energy_consumed": 1.6,
-              "co2emited": 0.3
+              "id": "u101",
+              "appliance_id": "1",
+              "usedAt": "2026-01-25T00:00:00Z",
+              "duration": 1440,
+              "energy_consumed": 3.6,
+              "co2emited": 0.67
             },
             {
-              "id": "2002",
-              "appliance_id": "6",
-              "usedAt": "2026-01-19T14:00:00Z",
-              "duration": 180,
-              "energy_consumed": 0.3,
-              "co2emited": 0.056
-            },
-            {
-              "id": "2003",
-              "appliance_id": "11",
-              "usedAt": "2026-01-19T20:00:00Z",
-              "duration": 240,
-              "energy_consumed": 0.8,
-              "co2emited": 0.15
-            },
-            {
-              "id": "2004",
-              "appliance_id": "7",
-              "usedAt": "2026-01-19T22:00:00Z",
-              "duration": 120,
-              "energy_consumed": 7,
-              "co2emited": 1.316
-            },
-            {
-              "id": "2005",
-              "appliance_id": "11",
-              "usedAt": "2026-01-20T08:30:00Z",
-              "duration": 300,
-              "energy_consumed": 1,
-              "co2emited": 0.188
-            },
-            {
-              "id": "2006",
-              "appliance_id": "6",
-              "usedAt": "2026-01-20T19:00:00Z",
-              "duration": 240,
-              "energy_consumed": 0.4,
-              "co2emited": 0.075
-            },
-            {
-              "id": "2007",
-              "appliance_id": "11",
-              "usedAt": "2026-01-21T10:00:00Z",
-              "duration": 600,
+              "id": "u102",
+              "appliance_id": "2",
+              "usedAt": "2026-01-25T10:00:00Z",
+              "duration": 60,
               "energy_consumed": 2,
-              "co2emited": 0.376
+              "co2emited": 0.37
             },
             {
-              "id": "2008",
-              "appliance_id": "7",
-              "usedAt": "2026-01-21T15:00:00Z",
-              "duration": 180,
-              "energy_consumed": 10.5,
-              "co2emited": 1.974
+              "id": "u103",
+              "appliance_id": "1",
+              "usedAt": "2026-01-24T00:00:00Z",
+              "duration": 1440,
+              "energy_consumed": 3.6,
+              "co2emited": 0.67
             },
             {
-              "id": "2009",
-              "appliance_id": "6",
-              "usedAt": "2026-01-21T20:00:00Z",
-              "duration": 300,
-              "energy_consumed": 0.5,
-              "co2emited": 0.094
+              "id": "u104",
+              "appliance_id": "1",
+              "usedAt": "2026-01-23T00:00:00Z",
+              "duration": 1440,
+              "energy_consumed": 3.6,
+              "co2emited": 0.67
             },
             {
-              "id": "2010",
+              "id": "u105",
               "appliance_id": "2",
-              "usedAt": "2026-01-21T22:00:00Z",
-              "duration": 90,
-              "energy_consumed": 3,
-              "co2emited": 0.564
+              "usedAt": "2026-01-23T15:00:00Z",
+              "duration": 60,
+              "energy_consumed": 2,
+              "co2emited": 0.37
             },
             {
-              "id": "2011",
-              "appliance_id": "11",
-              "usedAt": "2026-01-22T09:00:00Z",
-              "duration": 360,
-              "energy_consumed": 1.2,
-              "co2emited": 0.226
+              "id": "u106",
+              "appliance_id": "1",
+              "usedAt": "2026-01-22T00:00:00Z",
+              "duration": 1440,
+              "energy_consumed": 3.6,
+              "co2emited": 0.67
             },
             {
-              "id": "2012",
-              "appliance_id": "6",
-              "usedAt": "2026-01-22T14:00:00Z",
-              "duration": 120,
-              "energy_consumed": 0.2,
-              "co2emited": 0.038
+              "id": "u107",
+              "appliance_id": "1",
+              "usedAt": "2026-01-21T00:00:00Z",
+              "duration": 1440,
+              "energy_consumed": 3.6,
+              "co2emited": 0.67
             },
             {
-              "id": "2013",
-              "appliance_id": "11",
-              "usedAt": "2026-01-22T20:00:00Z",
-              "duration": 180,
-              "energy_consumed": 0.6,
-              "co2emited": 0.113
+              "id": "u108",
+              "appliance_id": "1",
+              "usedAt": "2026-01-20T00:00:00Z",
+              "duration": 1440,
+              "energy_consumed": 3.6,
+              "co2emited": 0.67
             },
             {
-              "id": "2014",
-              "appliance_id": "11",
-              "usedAt": "2026-01-23T08:00:00Z",
-              "duration": 420,
-              "energy_consumed": 1.4,
-              "co2emited": 0.263
-            },
-            {
-              "id": "2015",
-              "appliance_id": "7",
-              "usedAt": "2026-01-23T16:00:00Z",
-              "duration": 240,
-              "energy_consumed": 14,
-              "co2emited": 2.632
-            },
-            {
-              "id": "2016",
-              "appliance_id": "6",
-              "usedAt": "2026-01-23T21:00:00Z",
-              "duration": 180,
-              "energy_consumed": 0.3,
-              "co2emited": 0.056
-            },
-            {
-              "id": "2017",
+              "id": "u109",
               "appliance_id": "2",
-              "usedAt": "2026-01-23T23:00:00Z",
-              "duration": 120,
-              "energy_consumed": 4,
-              "co2emited": 0.752
+              "usedAt": "2026-01-20T11:00:00Z",
+              "duration": 60,
+              "energy_consumed": 2,
+              "co2emited": 0.37
             },
             {
-              "id": "2018",
-              "appliance_id": "11",
-              "usedAt": "2026-01-24T09:00:00Z",
-              "duration": 240,
-              "energy_consumed": 0.8,
-              "co2emited": 0.15
-            },
-            {
-              "id": "2019",
-              "appliance_id": "6",
-              "usedAt": "2026-01-24T18:00:00Z",
-              "duration": 240,
-              "energy_consumed": 0.4,
-              "co2emited": 0.075
-            },
-            {
-              "id": "2020",
-              "appliance_id": "11",
-              "usedAt": "2026-01-24T21:00:00Z",
-              "duration": 180,
-              "energy_consumed": 0.6,
-              "co2emited": 0.113
-            },
-            {
-              "id": "2021",
-              "appliance_id": "11",
-              "usedAt": "2026-01-25T08:30:00Z",
-              "duration": 300,
-              "energy_consumed": 1,
-              "co2emited": 0.188
-            },
-            {
-              "id": "2022",
-              "appliance_id": "6",
-              "usedAt": "2026-01-25T13:00:00Z",
-              "duration": 120,
-              "energy_consumed": 0.2,
-              "co2emited": 0.038
-            },
-            {
-              "id": "2023",
-              "appliance_id": "7",
-              "usedAt": "2026-01-25T19:00:00Z",
-              "duration": 180,
-              "energy_consumed": 10.5,
-              "co2emited": 1.974
+              "id": "u110",
+              "appliance_id": "1",
+              "usedAt": "2026-01-19T00:00:00Z",
+              "duration": 1440,
+              "energy_consumed": 3.6,
+              "co2emited": 0.67
             }
           ],
-          "rewards_history": [
-            {
-              "id": "3001",
-              "id_reward": "1",
-              "title": "Escolher a música no carro",
-              "points_cost": 20,
-              "status": "completo",
-              "redemedAt": "2025-12-28T18:00:00Z"
-            },
-            {
-              "id": "1769210923488",
-              "id_reward": "5",
-              "title": "Sobremesa extra",
-              "points_cost": 30,
-              "status": "cancelado",
-              "redemedAt": "2026-01-23T23:28:43.488Z"
-            }
-          ],
+          "rewards_history": [],
           "badges": [
             {
               "id_badge": "early_adopter",
               "title": "Early Adopter",
               "description": "Primeiro perfil criado",
               "icon": "star",
-              "earnedAt": "2024-01-15T10:05:00Z"
+              "earnedAt": "2026-01-01T10:05:00Z"
             },
             {
               "id_badge": "week_warrior",
               "title": "Week Warrior",
               "description": "7 dias de streak",
               "icon": "local_fire_department",
-              "earnedAt": "2024-01-22T23:59:00Z"
+              "earnedAt": "2026-01-25T08:00:00Z"
             },
             {
               "id_badge": "eco_warrior",
               "title": "Eco Warrior",
               "description": "Poupou 10kg de CO2",
               "icon": "eco",
-              "earnedAt": "2026-01-23T23:08:53.734Z"
-            },
-            {
-              "id_badge": "level_5",
-              "title": "Nível 5",
-              "description": "Alcançou o nível 5",
-              "icon": "emoji_events",
-              "earnedAt": "2026-01-23T23:08:53.736Z"
-            },
-            {
-              "id_badge": "first_reward",
-              "title": "Primeira Recompensa",
-              "description": "Resgatou a primeira recompensa",
-              "icon": "card_giftcard",
-              "earnedAt": "2026-01-23T23:08:53.737Z"
+              "earnedAt": "2026-01-20T08:00:00Z"
             },
             {
               "id_badge": "level_10",
               "title": "Nível 10",
               "description": "Alcançou o nível 10",
               "icon": "military_tech",
-              "earnedAt": "2026-01-23T23:11:10.346Z"
+              "earnedAt": "2026-01-15T10:00:00Z"
             }
           ],
-          "lastActivitie": "2026-01-25T10:30:00Z",
-          "points": 164
+          "lastActivitie": "2026-01-25T13:00:00Z"
         },
         {
-          "id": "102",
-          "name": "Ana Pires",
-          "age": 33,
-          "avatarUrl": "https://i.pravatar.cc/150?img=5",
+          "id": "p2",
+          "name": "Miguel",
+          "age": 16,
+          "avatarUrl": "https://api.dicebear.com/7.x/avataaars/svg?seed=Miguel",
           "isAdmin": false,
-          "birthDate": "1992-08-20",
-          "createdAt": "2024-01-16T14:20:00Z",
-          "xp": 490,
-          "streak": 1,
+          "birthDate": "2009-08-20",
+          "createdAt": "2026-01-01T10:10:00Z",
+          "xp": 450,
+          "points": 120,
+          "streak": 3,
           "settings": {
-            "pin": "1234",
+            "pin": null,
             "notification": true,
             "deviceDefault": false,
             "header_background": "bg-gradient-to-r from-blue-400 to-cyan-500"
           },
           "activity_history": [
             {
-              "id": "1004",
-              "task_id": "4",
-              "completedAt": "2025-12-31T07:00:00Z",
-              "pointsEarned": 8,
-              "co2saved": 0.3
+              "id": "a201",
+              "task_id": "5",
+              "completedAt": "2026-01-25T22:00:00Z",
+              "pointsEarned": 7,
+              "co2saved": 0.1
             },
             {
-              "id": "1005",
-              "task_id": "6",
-              "completedAt": "2025-12-31T13:00:00Z",
-              "pointsEarned": 12,
-              "co2saved": 1.5
+              "id": "a202",
+              "task_id": "5",
+              "completedAt": "2026-01-24T23:00:00Z",
+              "pointsEarned": 7,
+              "co2saved": 0.1
             },
             {
-              "id": "1769255351140",
-              "task_id": "1",
-              "completedAt": "2026-01-24T11:49:11.140Z",
-              "pointsEarned": 20,
-              "co2saved": 10
+              "id": "a203",
+              "task_id": "5",
+              "completedAt": "2026-01-23T22:30:00Z",
+              "pointsEarned": 7,
+              "co2saved": 0.1
+            },
+            {
+              "id": "a204",
+              "task_id": "5",
+              "completedAt": "2026-01-21T22:00:00Z",
+              "pointsEarned": 7,
+              "co2saved": 0.1
             }
           ],
-          "appliance_history": [],
+          "appliance_history": [
+            {
+              "id": "u201",
+              "appliance_id": "11",
+              "usedAt": "2026-01-25T14:00:00Z",
+              "duration": 300,
+              "energy_consumed": 1,
+              "co2emited": 0.18
+            },
+            {
+              "id": "u202",
+              "appliance_id": "12",
+              "usedAt": "2026-01-25T19:00:00Z",
+              "duration": 120,
+              "energy_consumed": 0.3,
+              "co2emited": 0.05
+            },
+            {
+              "id": "u203",
+              "appliance_id": "11",
+              "usedAt": "2026-01-24T15:00:00Z",
+              "duration": 360,
+              "energy_consumed": 1.2,
+              "co2emited": 0.22
+            },
+            {
+              "id": "u204",
+              "appliance_id": "11",
+              "usedAt": "2026-01-23T16:00:00Z",
+              "duration": 240,
+              "energy_consumed": 0.8,
+              "co2emited": 0.15
+            },
+            {
+              "id": "1769352059101",
+              "appliance_id": "12",
+              "usedAt": "2026-01-25T14:40:59.101Z",
+              "duration": 60,
+              "energy_consumed": 0.15,
+              "co2emited": 0.028
+            }
+          ],
           "rewards_history": [],
           "badges": [
             {
@@ -436,173 +353,72 @@
               "title": "Early Adopter",
               "description": "Primeiro perfil criado",
               "icon": "star",
-              "earnedAt": "2026-01-24T11:49:11.146Z"
-            },
-            {
-              "id_badge": "eco_warrior",
-              "title": "Eco Warrior",
-              "description": "Poupou 10kg de CO2",
-              "icon": "eco",
-              "earnedAt": "2026-01-24T11:49:11.148Z"
+              "earnedAt": "2026-01-01T10:10:00Z"
             },
             {
               "id_badge": "level_5",
               "title": "Nível 5",
               "description": "Alcançou o nível 5",
               "icon": "emoji_events",
-              "earnedAt": "2026-01-24T11:49:11.149Z"
+              "earnedAt": "2026-01-20T10:00:00Z"
             }
           ],
-          "lastActivitie": "2026-01-24T11:49:11.144Z",
-          "birthdate": "1992-11-11",
-          "email": "ana.pires@pires.pt",
-          "points": 20
+          "lastActivitie": "2026-01-25T22:00:00Z"
         },
         {
-          "id": "103",
-          "name": "Pedro Pires",
+          "id": "p3",
+          "name": "Beatriz",
           "age": 8,
-          "avatarUrl": "https://i.pravatar.cc/150?img=15",
+          "avatarUrl": "https://api.dicebear.com/7.x/avataaars/svg?seed=Beatriz",
           "isAdmin": false,
-          "birthDate": "2016-03-10",
-          "createdAt": "2024-01-16T14:25:00Z",
-          "xp": 200,
-          "streak": 5,
+          "birthDate": "2017-03-10",
+          "createdAt": "2026-01-01T10:15:00Z",
+          "xp": 150,
+          "points": 80,
+          "streak": 1,
           "settings": {
-            "pin": "0000",
+            "pin": null,
             "notification": false,
             "deviceDefault": false,
             "header_background": "bg-gradient-to-r from-purple-400 to-pink-500"
           },
-          "activity_history": [],
-          "appliance_history": [],
-          "rewards_history": [],
-          "badges": [],
-          "lastActivitie": null
-        }
-      ]
-    },
-    {
-      "id": "2",
-      "email": "jose@example.com",
-      "password": "123456",
-      "createdAt": "2024-02-01T09:00:00Z",
-      "maxProfiles": 3,
-      "appliances": [
-        "1",
-        "2",
-        "6",
-        "11"
-      ],
-      "tasks": [
-        "1",
-        "2",
-        "3",
-        "4",
-        "5"
-      ],
-      "profiles": [
-        {
-          "id": "201",
-          "name": "José Maria",
-          "age": 28,
-          "email": null,
-          "avatarUrl": "https://i.pravatar.cc/150?img=13",
-          "isAdmin": true,
-          "birthDate": "1996-11-05",
-          "createdAt": "2024-02-01T09:05:00Z",
-          "xp": 420,
-          "points": 0,
-          "streak": 15,
-          "settings": {
-            "pin": null,
-            "notification": true,
-            "deviceDefault": true,
-            "header_background": "bg-gradient-to-r from-orange-400 to-red-500"
-          },
-          "activity_history": [],
-          "appliance_history": [],
-          "rewards_history": [
+          "activity_history": [
             {
-              "id": "3002",
-              "id_reward": "4",
-              "title": "Tempo extra de lazer",
-              "points_cost": 60,
-              "status": "completo",
-              "redemedAt": "2025-12-30T20:00:00Z"
+              "id": "a301",
+              "task_id": "4",
+              "completedAt": "2026-01-25T19:30:00Z",
+              "pointsEarned": 8,
+              "co2saved": 0.1
+            },
+            {
+              "id": "a302",
+              "task_id": "4",
+              "completedAt": "2026-01-20T19:30:00Z",
+              "pointsEarned": 8,
+              "co2saved": 0.1
             }
           ],
+          "appliance_history": [
+            {
+              "id": "u301",
+              "appliance_id": "6",
+              "usedAt": "2026-01-25T17:00:00Z",
+              "duration": 90,
+              "energy_consumed": 0.15,
+              "co2emited": 0.03
+            }
+          ],
+          "rewards_history": [],
           "badges": [
             {
-              "id_badge": "eco_warrior",
-              "title": "Eco Warrior",
-              "description": "Poupou 10kg de CO2",
-              "icon": "eco",
-              "earnedAt": "2024-02-15T10:00:00Z"
+              "id_badge": "early_adopter",
+              "title": "Early Adopter",
+              "description": "Primeiro perfil criado",
+              "icon": "star",
+              "earnedAt": "2026-01-01T10:15:00Z"
             }
           ],
-          "lastActivitie": "2025-12-30T20:00:00Z"
-        }
-      ]
-    },
-    {
-      "id": "3",
-      "email": "manuel@example.com",
-      "password": "123456",
-      "createdAt": "2024-03-10T11:30:00Z",
-      "maxProfiles": 5,
-      "appliances": [
-        "1",
-        "2",
-        "3",
-        "4",
-        "6",
-        "7",
-        "11"
-      ],
-      "tasks": [
-        "1",
-        "2",
-        "3",
-        "4",
-        "5",
-        "6",
-        "7",
-        "8"
-      ],
-      "profiles": [
-        {
-          "id": "301",
-          "name": "Manuel Sá",
-          "age": 42,
-          "email": null,
-          "avatarUrl": "https://i.pravatar.cc/150?img=14",
-          "isAdmin": true,
-          "birthDate": "1982-07-22",
-          "createdAt": "2024-03-10T11:35:00Z",
-          "xp": 280,
-          "points": 0,
-          "streak": 6,
-          "settings": {
-            "pin": null,
-            "notification": true,
-            "deviceDefault": true,
-            "header_background": "bg-gradient-to-r from-teal-400 to-green-500"
-          },
-          "activity_history": [],
-          "appliance_history": [],
-          "rewards_history": [
-            {
-              "id": "3003",
-              "id_reward": "2",
-              "title": "Jantar fora",
-              "points_cost": 120,
-              "status": "pendente",
-              "redemedAt": "2025-12-29T19:00:00Z"
-            }
-          ],
-          "badges": [],
-          "lastActivitie": "2025-12-29T19:00:00Z"
+          "lastActivitie": "2026-01-25T19:30:00Z"
         }
       ]
     },
@@ -681,43 +497,35 @@
       ]
     },
     {
-      "id": "1769336197166",
+      "id": "1769345606888",
       "name": "Antonio Amorim",
       "email": "work@antonioamorim.pt",
       "password": "antonio1",
-      "createdAt": "2026-01-25T10:16:37.166Z",
+      "createdAt": "2026-01-25T12:53:26.888Z",
       "maxProfiles": "5",
       "appliances": [
         "1",
         "2",
         "4",
-        "5",
-        "6",
-        "8",
-        "9"
+        "3"
       ],
       "tasks": [
         "1",
         "2",
-        "3",
         "4",
-        "5",
-        "6",
-        "8",
-        "7",
-        "10"
+        "3"
       ],
       "profiles": [
         {
-          "id": "1769336197166",
+          "id": "1769345606888",
           "name": "Antonio Amorim",
           "age": null,
           "avatarUrl": null,
           "isAdmin": true,
           "birthDate": "1989-05-06",
-          "createdAt": "2026-01-25T10:16:37.166Z",
-          "xp": 70,
-          "points": 20,
+          "createdAt": "2026-01-25T12:53:26.888Z",
+          "xp": 250,
+          "points": 200,
           "streak": 1,
           "settings": {
             "pin": "1234",
@@ -727,21 +535,100 @@
           },
           "activity_history": [
             {
-              "id": "1769336964425",
+              "id": "1769345638175",
               "task_id": "1",
-              "completedAt": "2026-01-25T10:29:24.425Z",
+              "completedAt": "2026-01-25T12:53:58.175Z",
               "pointsEarned": 20,
-              "co2saved": 10
+              "co2saved": 0.1
+            },
+            {
+              "id": "1769345700811",
+              "task_id": "1",
+              "completedAt": "2026-01-25T12:55:00.811Z",
+              "pointsEarned": 20,
+              "co2saved": 0.1
+            },
+            {
+              "id": "1769345722840",
+              "task_id": "1",
+              "completedAt": "2026-01-25T12:55:22.840Z",
+              "pointsEarned": 20,
+              "co2saved": 0.1
+            },
+            {
+              "id": "1769345722985",
+              "task_id": "1",
+              "completedAt": "2026-01-25T12:55:22.985Z",
+              "pointsEarned": 20,
+              "co2saved": 0.1
+            },
+            {
+              "id": "1769345723121",
+              "task_id": "1",
+              "completedAt": "2026-01-25T12:55:23.121Z",
+              "pointsEarned": 20,
+              "co2saved": 0.1
+            },
+            {
+              "id": "1769345723256",
+              "task_id": "1",
+              "completedAt": "2026-01-25T12:55:23.256Z",
+              "pointsEarned": 20,
+              "co2saved": 0.1
+            },
+            {
+              "id": "1769348651183",
+              "task_id": "1",
+              "completedAt": "2026-01-25T13:44:11.183Z",
+              "pointsEarned": 20,
+              "co2saved": 0.1
+            },
+            {
+              "id": "1769348653835",
+              "task_id": "1",
+              "completedAt": "2026-01-25T13:44:13.835Z",
+              "pointsEarned": 20,
+              "co2saved": 0.1
+            },
+            {
+              "id": "1769348654318",
+              "task_id": "1",
+              "completedAt": "2026-01-25T13:44:14.318Z",
+              "pointsEarned": 20,
+              "co2saved": 0.1
+            },
+            {
+              "id": "1769350269803",
+              "task_id": "1",
+              "completedAt": "2026-01-25T14:11:09.803Z",
+              "pointsEarned": 20,
+              "co2saved": 0.1
             }
           ],
           "appliance_history": [
             {
-              "id": "1769336942067",
+              "id": "1769345635104",
               "appliance_id": "1",
-              "usedAt": "2026-01-25T10:29:02.067Z",
+              "usedAt": "2026-01-25T12:53:55.104Z",
               "duration": 1440,
-              "energy_consumed": 3.5999999999999996,
-              "co2emited": 0.6768
+              "energy_consumed": 3.6,
+              "co2emited": 0.677
+            },
+            {
+              "id": "1769345719889",
+              "appliance_id": "1",
+              "usedAt": "2026-01-25T12:55:19.889Z",
+              "duration": 10680,
+              "energy_consumed": 26.7,
+              "co2emited": 5.02
+            },
+            {
+              "id": "1769350289153",
+              "appliance_id": "1",
+              "usedAt": "2026-01-25T14:11:29.153Z",
+              "duration": 600,
+              "energy_consumed": 1.5,
+              "co2emited": 0.282
             }
           ],
           "rewards_history": [],
@@ -751,17 +638,87 @@
               "title": "Early Adopter",
               "description": "Primeiro perfil criado",
               "icon": "star",
-              "earnedAt": "2026-01-25T10:21:39.160Z"
+              "earnedAt": "2026-01-25T12:53:45.029Z"
             },
             {
-              "id_badge": "eco_warrior",
-              "title": "Eco Warrior",
-              "description": "Poupou 10kg de CO2",
-              "icon": "eco",
-              "earnedAt": "2026-01-25T10:29:24.485Z"
+              "id_badge": "energy_saver",
+              "title": "Poupador de Energia",
+              "description": "Completou 10 tarefas de energia",
+              "icon": "bolt",
+              "earnedAt": "2026-01-25T14:11:09.867Z"
             }
           ],
-          "lastActivitie": "2026-01-25T10:29:02.069Z"
+          "lastActivitie": "2026-01-25T12:53:55.106Z"
+        },
+        {
+          "id": "1769348598532",
+          "name": "aa",
+          "age": 34,
+          "isAdmin": false,
+          "birthDate": "1991-05-05",
+          "createdAt": "2026-01-25T13:43:18.532Z",
+          "xp": 95,
+          "points": 45,
+          "streak": 1,
+          "settings": {
+            "pin": null,
+            "notification": true,
+            "deviceDefault": false,
+            "header_background": "bg-gradient-to-r from-blue-400 to-cyan-500"
+          },
+          "activity_history": [
+            {
+              "id": "1769348617535",
+              "task_id": "2",
+              "completedAt": "2026-01-25T13:43:37.535Z",
+              "pointsEarned": 15,
+              "co2saved": 0.8
+            },
+            {
+              "id": "1769348618955",
+              "task_id": "2",
+              "completedAt": "2026-01-25T13:43:38.955Z",
+              "pointsEarned": 15,
+              "co2saved": 0.8
+            },
+            {
+              "id": "1769348619863",
+              "task_id": "2",
+              "completedAt": "2026-01-25T13:43:39.863Z",
+              "pointsEarned": 15,
+              "co2saved": 0.8
+            }
+          ],
+          "appliance_history": [
+            {
+              "id": "1769348611962",
+              "appliance_id": "2",
+              "usedAt": "2026-01-25T13:43:31.962Z",
+              "duration": 180,
+              "energy_consumed": 6,
+              "co2emited": 1.128
+            },
+            {
+              "id": "1769348738323",
+              "appliance_id": "2",
+              "usedAt": "2026-01-25T13:45:38.323Z",
+              "duration": 3000,
+              "energy_consumed": 100,
+              "co2emited": 18.8
+            }
+          ],
+          "rewards_history": [],
+          "badges": [
+            {
+              "id_badge": "early_adopter",
+              "title": "Early Adopter",
+              "description": "Primeiro perfil criado",
+              "icon": "star",
+              "earnedAt": "2026-01-25T13:43:31.966Z"
+            }
+          ],
+          "lastActivitie": "2026-01-25T13:43:31.965Z",
+          "email": "a@a.pt"
         }
       ]
     }
@@ -926,7 +883,7 @@
       "points": 20,
       "description": "Desligar todas as luzes quando sair de uma divisão",
       "imgUrl": null,
-      "co2saved": 10,
+      "co2saved": 0.1,
       "isDefault": true
     },
     {
@@ -936,7 +893,7 @@
       "points": 15,
       "description": "Usar transporte público em vez de carro próprio",
       "imgUrl": null,
-      "co2saved": 7.5,
+      "co2saved": 0.8,
       "isDefault": true
     },
     {
@@ -946,7 +903,7 @@
       "points": 10,
       "description": "Separar e reciclar embalagens de plástico",
       "imgUrl": null,
-      "co2saved": 0.5,
+      "co2saved": 0.2,
       "isDefault": true
     },
     {
@@ -956,7 +913,7 @@
       "points": 8,
       "description": "Tomar duches rápidos para poupar água e energia",
       "imgUrl": null,
-      "co2saved": 0.3,
+      "co2saved": 0.1,
       "isDefault": true
     },
     {
@@ -966,7 +923,7 @@
       "points": 7,
       "description": "Desligar completamente aparelhos eletrónicos",
       "imgUrl": null,
-      "co2saved": 0.2,
+      "co2saved": 0.1,
       "isDefault": true
     },
     {
@@ -976,7 +933,7 @@
       "points": 12,
       "description": "Fazer uma refeição sem carne",
       "imgUrl": null,
-      "co2saved": 1.5,
+      "co2saved": 0.8,
       "isDefault": true
     },
     {
@@ -986,7 +943,7 @@
       "points": 5,
       "description": "Levar saco próprio às compras",
       "imgUrl": null,
-      "co2saved": 0.1,
+      "co2saved": 0.2,
       "isDefault": true
     },
     {
@@ -996,7 +953,7 @@
       "points": 10,
       "description": "Lavar roupa com água fria (máx 30°C)",
       "imgUrl": null,
-      "co2saved": 0.6,
+      "co2saved": 0.1,
       "isDefault": true
     },
     {
@@ -1006,7 +963,7 @@
       "points": 20,
       "description": "Usar bicicleta para deslocações curtas",
       "imgUrl": null,
-      "co2saved": 3,
+      "co2saved": 0.8,
       "isDefault": true
     },
     {
@@ -1016,7 +973,7 @@
       "points": 15,
       "description": "Fazer compostagem com restos de comida",
       "imgUrl": null,
-      "co2saved": 1,
+      "co2saved": 0.2,
       "isDefault": true
     },
     {
@@ -1026,7 +983,7 @@
       "points": 12,
       "description": "Secar roupa naturalmente em vez de usar secadora",
       "imgUrl": null,
-      "co2saved": 0.8,
+      "co2saved": 0.1,
       "isDefault": true
     },
     {
@@ -1036,7 +993,7 @@
       "points": 18,
       "description": "Comprar alimentos produzidos localmente",
       "imgUrl": null,
-      "co2saved": 1.2,
+      "co2saved": 0.2,
       "isDefault": true
     },
     {
@@ -1046,7 +1003,7 @@
       "points": 50,
       "description": "Plantar uma árvore ou planta",
       "imgUrl": null,
-      "co2saved": 21,
+      "co2saved": 0.2,
       "isDefault": true
     },
     {
@@ -1056,7 +1013,7 @@
       "points": 25,
       "description": "Reparar um objeto em vez de comprar novo",
       "imgUrl": null,
-      "co2saved": 5,
+      "co2saved": 0.2,
       "isDefault": true
     },
     {
@@ -1066,7 +1023,7 @@
       "points": 30,
       "description": "Participar numa ação de limpeza local",
       "imgUrl": null,
-      "co2saved": 2,
+      "co2saved": 0.2,
       "isDefault": true
     }
   ],
