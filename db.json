@@ -708,8 +708,8 @@
           "isAdmin": true,
           "birthDate": "1989-05-06",
           "createdAt": "2026-01-25T12:53:26.888Z",
-          "xp": 180,
-          "points": 180,
+          "xp": 250,
+          "points": 200,
           "streak": 1,
           "settings": {
             "pin": "1234",
@@ -780,6 +780,13 @@
               "completedAt": "2026-01-25T13:44:14.318Z",
               "pointsEarned": 20,
               "co2saved": 0.1
+            },
+            {
+              "id": "1769350269803",
+              "task_id": "1",
+              "completedAt": "2026-01-25T14:11:09.803Z",
+              "pointsEarned": 20,
+              "co2saved": 0.1
             }
           ],
           "appliance_history": [
@@ -798,6 +805,14 @@
               "duration": 10680,
               "energy_consumed": 26.7,
               "co2emited": 5.02
+            },
+            {
+              "id": "1769350289153",
+              "appliance_id": "1",
+              "usedAt": "2026-01-25T14:11:29.153Z",
+              "duration": 600,
+              "energy_consumed": 1.5,
+              "co2emited": 0.282
             }
           ],
           "rewards_history": [],
@@ -808,6 +823,13 @@
               "description": "Primeiro perfil criado",
               "icon": "star",
               "earnedAt": "2026-01-25T12:53:45.029Z"
+            },
+            {
+              "id_badge": "energy_saver",
+              "title": "Poupador de Energia",
+              "description": "Completou 10 tarefas de energia",
+              "icon": "bolt",
+              "earnedAt": "2026-01-25T14:11:09.867Z"
             }
           ],
           "lastActivitie": "2026-01-25T12:53:55.106Z"
