@@ -961,10 +961,10 @@ export default {
   },
   methods: {
     getApplianceImage(appliance) {
-      return appliance.image || appliance.imgUrl || null
+      return appliance.imgUrl || null
     },
     getTaskImage(task) {
-      return task.image || task.imgUrl || null
+      return task.imgUrl || null
     },
     saveCardOrder() {
       localStorage.setItem('adminCardOrder', JSON.stringify(this.cardOrder))
@@ -1114,7 +1114,7 @@ export default {
         id: reward.id,
         title: reward.title,
         points: reward.points_cost,
-        image: reward.imgUrl,
+        imgUrl: reward.imgUrl,
       }
       this.showRewardModal = true
     },
@@ -1190,7 +1190,7 @@ export default {
     },
     getRewardImage(rewardId) {
       const reward = this.availableRewards.find((r) => String(r.id) === String(rewardId))
-      return reward?.image || ''
+      return reward?.imgUrl || ''
     },
     formatDate(dateString) {
       const date = new Date(dateString)

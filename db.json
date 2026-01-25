@@ -788,7 +788,8 @@
         "13",
         "14",
         "15",
-        "1769352834614"
+        "1769352834614",
+        "1769353703776"
       ],
       "tasks": [
         "1",
@@ -850,6 +851,14 @@
               "duration": 120,
               "energy_consumed": 0.2,
               "co2emited": 0.0376
+            },
+            {
+              "id": "1769353717037",
+              "appliance_id": "1769353703776",
+              "usedAt": "2026-01-25T15:08:37.037Z",
+              "duration": 6000,
+              "energy_consumed": 10,
+              "co2emited": 1.88
             }
           ],
           "rewards_history": [],
@@ -878,7 +887,6 @@
       "imgUrl": "https://images.unsplash.com/photo-1584568694244-14fbdf83bd30?w=400&h=300&fit=crop",
       "isDefault": true,
       "icon": "fa-solid fa-temperature-empty",
-      "image": "https://images.unsplash.com/photo-1584568694244-14fbdf83bd30?w=400&h=300&fit=crop",
       "apiType": "refrigerator",
       "avgPowerConsumption": 150,
       "avgUsageHoursPerDay": 24,
@@ -894,7 +902,6 @@
       "imgUrl": "https://images.unsplash.com/photo-1604335399105-a0c585fd81a1?w=400&h=300&fit=crop",
       "isDefault": true,
       "icon": "fa-solid fa-shirt",
-      "image": "https://images.unsplash.com/photo-1604335399105-a0c585fd81a1?w=400&h=300&fit=crop",
       "apiType": "washing_machine",
       "avgPowerConsumption": 2000,
       "avgUsageHoursPerDay": 1,
@@ -910,7 +917,6 @@
       "imgUrl": "https://images.unsplash.com/photo-1556910096-6f5e72db6803?w=400&h=300&fit=crop",
       "isDefault": true,
       "icon": "fa-solid fa-kitchen-set",
-      "image": "https://images.unsplash.com/photo-1556910096-6f5e72db6803?w=400&h=300&fit=crop",
       "apiType": "dishwasher",
       "avgPowerConsumption": 1800,
       "avgUsageHoursPerDay": 1,
@@ -926,7 +932,6 @@
       "imgUrl": "https://images.unsplash.com/photo-1590794056226-79ef3a8147e1?w=400&h=300&fit=crop",
       "isDefault": true,
       "icon": "fa-solid fa-fire-burner",
-      "image": "https://images.unsplash.com/photo-1590794056226-79ef3a8147e1?w=400&h=300&fit=crop",
       "apiType": "dishwasher",
       "avgPowerConsumption": 2400,
       "avgUsageHoursPerDay": 1,
@@ -942,7 +947,6 @@
       "imgUrl": "https://images.unsplash.com/photo-1574269909862-7e1d70bb8078?w=400&h=300&fit=crop",
       "isDefault": true,
       "icon": "fa-solid fa-microwave",
-      "image": "https://images.unsplash.com/photo-1574269909862-7e1d70bb8078?w=400&h=300&fit=crop",
       "apiType": "dishwasher",
       "avgPowerConsumption": 1000,
       "avgUsageHoursPerDay": 0.5,
@@ -958,9 +962,7 @@
       "imgUrl": "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=400&h=300&fit=crop",
       "isDefault": true,
       "icon": "fa-solid fa-tv",
-      "image": "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=400&h=300&fit=crop",
       "apiType": "television",
-      "avgPowerConsumption": 100,
       "avgUsageHoursPerDay": 4,
       "co2PerKwh": 0.233
     },
@@ -974,9 +976,7 @@
       "imgUrl": "https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=400&h=300&fit=crop",
       "isDefault": true,
       "icon": "fa-solid fa-temperature-low",
-      "image": "https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=400&h=300&fit=crop",
       "apiType": "air_conditioner",
-      "avgPowerConsumption": 100,
       "avgUsageHoursPerDay": 1,
       "co2PerKwh": 0.233
     },
@@ -990,9 +990,7 @@
       "imgUrl": "https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=400&h=300&fit=crop",
       "isDefault": true,
       "icon": "fa-solid fa-vacuum",
-      "image": "https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=400&h=300&fit=crop",
       "apiType": "dishwasher",
-      "avgPowerConsumption": 1400,
       "avgUsageHoursPerDay": 0.5,
       "co2PerKwh": 0.233
     },
@@ -1006,9 +1004,7 @@
       "imgUrl": "https://images.unsplash.com/photo-1610557892470-55d9e80c0bce?w=400&h=300&fit=crop",
       "isDefault": true,
       "icon": "fa-solid fa-iron",
-      "image": "https://images.unsplash.com/photo-1610557892470-55d9e80c0bce?w=400&h=300&fit=crop",
       "apiType": "dishwasher",
-      "avgPowerConsumption": 2000,
       "avgUsageHoursPerDay": 0.5,
       "co2PerKwh": 0.233
     },
@@ -1022,10 +1018,7 @@
       "imgUrl": "https://images.unsplash.com/photo-1522338140262-f46f5913618a?w=400&h=300&fit=crop",
       "isDefault": true,
       "icon": "fa-solid fa-wind",
-      "image": "https://images.unsplash.com/photo-1522338140262-f46f5913618a?w=400&h=300&fit=crop",
       "apiType": "dishwasher",
-      "avgPowerConsumption": 1500,
-      "avgUsageHoursPerDay": 0.25,
       "co2PerKwh": 0.233
     },
     {
@@ -1038,10 +1031,7 @@
       "imgUrl": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=400&h=300&fit=crop",
       "isDefault": true,
       "icon": "fa-solid fa-desktop",
-      "image": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=400&h=300&fit=crop",
       "apiType": "desktop",
-      "avgPowerConsumption": 200,
-      "avgUsageHoursPerDay": 8,
       "co2PerKwh": 0.233
     },
     {
@@ -1054,11 +1044,7 @@
       "imgUrl": "https://images.unsplash.com/photo-1486401899868-0e435ed85128?w=400&h=300&fit=crop",
       "isDefault": true,
       "icon": "fa-solid fa-gamepad",
-      "image": "https://images.unsplash.com/photo-1486401899868-0e435ed85128?w=400&h=300&fit=crop",
-      "apiType": "television",
-      "avgPowerConsumption": 150,
-      "avgUsageHoursPerDay": 2,
-      "co2PerKwh": 0.233
+      "apiType": "television"
     },
     {
       "id": "13",
@@ -1070,11 +1056,7 @@
       "imgUrl": "https://images.unsplash.com/photo-1609692814858-f7cd2f0afa4f?w=400&h=300&fit=crop",
       "isDefault": true,
       "icon": "fa-solid fa-mobile-screen",
-      "image": "https://images.unsplash.com/photo-1609692814858-f7cd2f0afa4f?w=400&h=300&fit=crop",
-      "apiType": "laptop",
-      "avgPowerConsumption": 5,
-      "avgUsageHoursPerDay": 2,
-      "co2PerKwh": 0.233
+      "apiType": "laptop"
     },
     {
       "id": "14",
@@ -1086,11 +1068,7 @@
       "imgUrl": "https://images.unsplash.com/photo-1606904825846-647eb07f5be2?w=400&h=300&fit=crop",
       "isDefault": true,
       "icon": "fa-solid fa-wifi",
-      "image": "https://images.unsplash.com/photo-1606904825846-647eb07f5be2?w=400&h=300&fit=crop",
-      "apiType": "laptop",
-      "avgPowerConsumption": 10,
-      "avgUsageHoursPerDay": 24,
-      "co2PerKwh": 0.233
+      "apiType": "laptop"
     },
     {
       "id": "15",
@@ -1102,21 +1080,30 @@
       "imgUrl": "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=400&h=300&fit=crop",
       "isDefault": true,
       "icon": "fa-solid fa-mug-hot",
-      "image": "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=400&h=300&fit=crop",
-      "apiType": "dishwasher",
-      "avgPowerConsumption": 1000,
-      "avgUsageHoursPerDay": 0.5,
-      "co2PerKwh": 0.233
+      "apiType": "dishwasher"
     },
     {
-      "id": "1769352834614",
-      "name": "Frigo Test",
       "type": "electricity",
       "powerWatts": 100,
       "category": "Cozinha",
       "description": "",
       "imgUrl": null,
       "isDefault": false
+    },
+    {
+      "id": "1769353703776",
+      "name": "Frigo Teste",
+      "type": "electricity",
+      "powerWatts": 100,
+      "category": "Cozinha",
+      "description": "",
+      "imgUrl": null,
+      "isDefault": false,
+      "icon": "fa-solid fa-kitchen-set",
+      "apiType": "refrigerator",
+      "avgPowerConsumption": 150,
+      "avgUsageHoursPerDay": 1,
+      "co2PerKwh": 0.233
     }
   ],
   "tasks": [

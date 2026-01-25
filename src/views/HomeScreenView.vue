@@ -254,7 +254,7 @@
                     v-for="usage in recentApplianceUsages"
                     :key="usage.id"
                     :label="usage.appliance.name"
-                    :image="usage.appliance.image || usage.appliance.imgUrl"
+                    :image="usage.appliance.imgUrl"
                     :icon="usage.appliance.icon"
                     :category="usage.appliance.category"
                     :energyConsumed="usage.energy_consumed"
@@ -284,7 +284,7 @@
                     v-for="activity in recentTaskCompletions"
                     :key="activity.id"
                     :label="activity.task.title"
-                    :image="activity.task.image || getTaskImage(activity.task)"
+                    :image="activity.task.imgUrl"
                     @click="completeTask(activity.task)"
                   />
                   <AddCard @click="openAddTaskModal" />
@@ -775,11 +775,11 @@ export default {
     },
 
     getApplianceImage(appliance) {
-      return appliance.image || appliance.imgUrl || null
+      return appliance.imgUrl || null
     },
 
     getTaskImage(task) {
-      return task.image || task.imgUrl || null
+      return task.imgUrl || null
     },
 
     openAddConsumptionModal() {

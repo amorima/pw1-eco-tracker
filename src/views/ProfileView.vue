@@ -1321,7 +1321,7 @@ export default {
     },
     getRewardImage(rewardId) {
       const reward = this.availableRewards.find((r) => String(r.id) === String(rewardId))
-      return reward?.image || 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=400'
+      return reward?.imgUrl || 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=400'
     },
     hasBadge(badgeId) {
       const badge = this.allBadgesWithStatus.find((b) => b.id === badgeId)

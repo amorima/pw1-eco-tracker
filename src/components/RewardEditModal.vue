@@ -19,8 +19,8 @@
           <!-- Preview -->
           <div class="w-32 h-24 rounded-lg overflow-hidden bg-(--system-border) flex items-center justify-center">
             <img 
-              v-if="formData.image" 
-              :src="formData.image" 
+              v-if="formData.imgUrl" 
+              :src="formData.imgUrl" 
               alt="Reward" 
               class="w-full h-full object-cover"
             />
@@ -49,7 +49,7 @@
         
         <!-- URL Input as alternative -->
         <FormInput 
-          v-model="formData.image" 
+          v-model="formData.imgUrl" 
           placeholder="ou insira o URL da imagem" 
           class="mt-2"
         />
@@ -103,7 +103,7 @@ export default {
         id: null,
         title: '',
         points: '',
-        image: '',
+        imgUrl: '',
       },
     }
   },
@@ -137,14 +137,14 @@ export default {
           id: this.reward.id,
           title: this.reward.title || '',
           points: this.reward.points || '',
-          image: this.reward.image || '',
+          imgUrl: this.reward.imgUrl || '',
         }
       } else {
         this.formData = {
           id: null,
           title: '',
           points: '',
-          image: '',
+          imgUrl: '',
         }
       }
     },
@@ -168,7 +168,7 @@ export default {
         const result = await uploadImage(file, { folder: 'bgreen/rewards' })
         
         if (result.success) {
-          this.formData.image = result.url
+          this.formData.imgUrl = result.url
           console.log('Image uploaded successfully:', result.url)
         } else {
           console.error('Upload failed:', result.error)
@@ -184,7 +184,7 @@ export default {
       this.$emit('save', {
         ...this.formData,
         points: parseInt(this.formData.points),
-        image: this.formData.image || null,
+        imgUrl: this.formData.imgUrl || null,
       })
       this.$emit('close')
     },
