@@ -443,7 +443,7 @@
           "id": "demo-1",
           "name": "Família Demo",
           "age": 30,
-          "avatarUrl": "https://api.dicebear.com/7.x/avataaars/svg?seed=user1235489",
+          "avatarUrl": null,
           "isAdmin": true,
           "birthDate": "1994-01-01",
           "createdAt": "2024-01-01T00:00:00Z",
@@ -721,6 +721,116 @@
           "email": "a@a.pt"
         }
       ]
+    },
+    {
+      "id": "1769344487848",
+      "name": "Gabi",
+      "email": "mr.sousapaiva@gmail.com",
+      "password": "123",
+      "createdAt": "2026-01-25T12:34:47.848Z",
+      "maxProfiles": 4,
+      "appliances": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "1769352834614",
+        "1769353703776"
+      ],
+      "tasks": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15"
+      ],
+      "profiles": [
+        {
+          "id": "1769344487848",
+          "name": "Gabi",
+          "age": null,
+          "avatarUrl": null,
+          "isAdmin": true,
+          "birthDate": "1999-01-01",
+          "createdAt": "2026-01-25T12:34:47.848Z",
+          "xp": 0,
+          "points": 0,
+          "streak": 1,
+          "settings": {
+            "pin": "1234",
+            "notification": true,
+            "deviceDefault": true,
+            "header_background": "bg-gradient-to-r from-green-400 to-emerald-500"
+          },
+          "activity_history": [],
+          "appliance_history": [
+            {
+              "id": "1769350667536",
+              "appliance_id": "1",
+              "usedAt": "2026-01-25T14:17:47.536Z",
+              "duration": 120,
+              "energy_consumed": 0.3,
+              "co2emited": 0.0564
+            },
+            {
+              "id": "1769350983337",
+              "appliance_id": "7",
+              "usedAt": "2026-01-25T14:23:03.337Z",
+              "duration": 120,
+              "energy_consumed": 7,
+              "co2emited": 1.316
+            },
+            {
+              "id": "1769352851637",
+              "appliance_id": "1769352834614",
+              "usedAt": "2026-01-25T14:54:11.637Z",
+              "duration": 120,
+              "energy_consumed": 0.2,
+              "co2emited": 0.0376
+            },
+            {
+              "id": "1769353717037",
+              "appliance_id": "1769353703776",
+              "usedAt": "2026-01-25T15:08:37.037Z",
+              "duration": 6000,
+              "energy_consumed": 10,
+              "co2emited": 1.88
+            }
+          ],
+          "rewards_history": [],
+          "badges": [
+            {
+              "id_badge": "early_adopter",
+              "title": "Early Adopter",
+              "description": "Primeiro perfil criado",
+              "icon": "star",
+              "earnedAt": "2026-01-25T12:35:14.974Z"
+            }
+          ],
+          "lastActivitie": "2026-01-25T14:17:47.538Z"
+        }
+      ]
     }
   ],
   "appliances": [
@@ -731,8 +841,13 @@
       "powerWatts": 150,
       "category": "Cozinha",
       "description": "Frigorífico de casa",
-      "imgUrl": null,
-      "isDefault": true
+      "imgUrl": "https://images.unsplash.com/photo-1584568694244-14fbdf83bd30?w=400&h=300&fit=crop",
+      "isDefault": true,
+      "icon": "fa-solid fa-temperature-empty",
+      "apiType": "refrigerator",
+      "avgPowerConsumption": 150,
+      "avgUsageHoursPerDay": 24,
+      "co2PerKwh": 0.233
     },
     {
       "id": "2",
@@ -741,8 +856,13 @@
       "powerWatts": 2000,
       "category": "Lavandaria",
       "description": "Máquina de lavar roupa",
-      "imgUrl": null,
-      "isDefault": true
+      "imgUrl": "https://images.unsplash.com/photo-1604335399105-a0c585fd81a1?w=400&h=300&fit=crop",
+      "isDefault": true,
+      "icon": "fa-solid fa-shirt",
+      "apiType": "washing_machine",
+      "avgPowerConsumption": 2000,
+      "avgUsageHoursPerDay": 1,
+      "co2PerKwh": 0.233
     },
     {
       "id": "3",
@@ -751,8 +871,13 @@
       "powerWatts": 1800,
       "category": "Cozinha",
       "description": "Máquina de lavar loiça",
-      "imgUrl": null,
-      "isDefault": true
+      "imgUrl": "https://images.unsplash.com/photo-1556910096-6f5e72db6803?w=400&h=300&fit=crop",
+      "isDefault": true,
+      "icon": "fa-solid fa-kitchen-set",
+      "apiType": "dishwasher",
+      "avgPowerConsumption": 1800,
+      "avgUsageHoursPerDay": 1,
+      "co2PerKwh": 0.233
     },
     {
       "id": "4",
@@ -761,8 +886,13 @@
       "powerWatts": 2400,
       "category": "Cozinha",
       "description": "Forno elétrico",
-      "imgUrl": null,
-      "isDefault": true
+      "imgUrl": "https://images.unsplash.com/photo-1590794056226-79ef3a8147e1?w=400&h=300&fit=crop",
+      "isDefault": true,
+      "icon": "fa-solid fa-fire-burner",
+      "apiType": "dishwasher",
+      "avgPowerConsumption": 2400,
+      "avgUsageHoursPerDay": 1,
+      "co2PerKwh": 0.233
     },
     {
       "id": "5",
@@ -771,8 +901,13 @@
       "powerWatts": 1000,
       "category": "Cozinha",
       "description": "Micro-ondas",
-      "imgUrl": null,
-      "isDefault": true
+      "imgUrl": "https://images.unsplash.com/photo-1574269909862-7e1d70bb8078?w=400&h=300&fit=crop",
+      "isDefault": true,
+      "icon": "fa-solid fa-microwave",
+      "apiType": "dishwasher",
+      "avgPowerConsumption": 1000,
+      "avgUsageHoursPerDay": 0.5,
+      "co2PerKwh": 0.233
     },
     {
       "id": "6",
@@ -781,8 +916,12 @@
       "powerWatts": 100,
       "category": "Entretenimento",
       "description": "Televisão da sala",
-      "imgUrl": null,
-      "isDefault": true
+      "imgUrl": "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=400&h=300&fit=crop",
+      "isDefault": true,
+      "icon": "fa-solid fa-tv",
+      "apiType": "television",
+      "avgUsageHoursPerDay": 4,
+      "co2PerKwh": 0.233
     },
     {
       "id": "7",
@@ -791,8 +930,12 @@
       "powerWatts": 3500,
       "category": "Climatização",
       "description": "Ar condicionado",
-      "imgUrl": null,
-      "isDefault": true
+      "imgUrl": "https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=400&h=300&fit=crop",
+      "isDefault": true,
+      "icon": "fa-solid fa-temperature-low",
+      "apiType": "air_conditioner",
+      "avgUsageHoursPerDay": 1,
+      "co2PerKwh": 0.233
     },
     {
       "id": "8",
@@ -801,8 +944,12 @@
       "powerWatts": 1400,
       "category": "Limpeza",
       "description": "Aspirador de pó",
-      "imgUrl": null,
-      "isDefault": true
+      "imgUrl": "https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=400&h=300&fit=crop",
+      "isDefault": true,
+      "icon": "fa-solid fa-vacuum",
+      "apiType": "dishwasher",
+      "avgUsageHoursPerDay": 0.5,
+      "co2PerKwh": 0.233
     },
     {
       "id": "9",
@@ -811,8 +958,12 @@
       "powerWatts": 2000,
       "category": "Lavandaria",
       "description": "Ferro de engomar",
-      "imgUrl": null,
-      "isDefault": true
+      "imgUrl": "https://images.unsplash.com/photo-1610557892470-55d9e80c0bce?w=400&h=300&fit=crop",
+      "isDefault": true,
+      "icon": "fa-solid fa-iron",
+      "apiType": "dishwasher",
+      "avgUsageHoursPerDay": 0.5,
+      "co2PerKwh": 0.233
     },
     {
       "id": "10",
@@ -821,8 +972,11 @@
       "powerWatts": 1500,
       "category": "Cuidados pessoais",
       "description": "Secador de cabelo",
-      "imgUrl": null,
-      "isDefault": true
+      "imgUrl": "https://images.unsplash.com/photo-1522338140262-f46f5913618a?w=400&h=300&fit=crop",
+      "isDefault": true,
+      "icon": "fa-solid fa-wind",
+      "apiType": "dishwasher",
+      "co2PerKwh": 0.233
     },
     {
       "id": "11",
@@ -831,8 +985,11 @@
       "powerWatts": 200,
       "category": "Tecnologia",
       "description": "Computador de secretária",
-      "imgUrl": null,
-      "isDefault": true
+      "imgUrl": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=400&h=300&fit=crop",
+      "isDefault": true,
+      "icon": "fa-solid fa-desktop",
+      "apiType": "desktop",
+      "co2PerKwh": 0.233
     },
     {
       "id": "12",
@@ -841,8 +998,10 @@
       "powerWatts": 150,
       "category": "Entretenimento",
       "description": "Consola de jogos",
-      "imgUrl": null,
-      "isDefault": true
+      "imgUrl": "https://images.unsplash.com/photo-1486401899868-0e435ed85128?w=400&h=300&fit=crop",
+      "isDefault": true,
+      "icon": "fa-solid fa-gamepad",
+      "apiType": "television"
     },
     {
       "id": "13",
@@ -851,8 +1010,10 @@
       "powerWatts": 5,
       "category": "Tecnologia",
       "description": "Carregador de telemóvel",
-      "imgUrl": null,
-      "isDefault": true
+      "imgUrl": "https://images.unsplash.com/photo-1609692814858-f7cd2f0afa4f?w=400&h=300&fit=crop",
+      "isDefault": true,
+      "icon": "fa-solid fa-mobile-screen",
+      "apiType": "laptop"
     },
     {
       "id": "14",
@@ -861,8 +1022,10 @@
       "powerWatts": 10,
       "category": "Tecnologia",
       "description": "Router Wi-Fi",
-      "imgUrl": null,
-      "isDefault": true
+      "imgUrl": "https://images.unsplash.com/photo-1606904825846-647eb07f5be2?w=400&h=300&fit=crop",
+      "isDefault": true,
+      "icon": "fa-solid fa-wifi",
+      "apiType": "laptop"
     },
     {
       "id": "15",
@@ -871,8 +1034,33 @@
       "powerWatts": 1000,
       "category": "Cozinha",
       "description": "Cafeteira/Máquina de café",
+      "imgUrl": "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=400&h=300&fit=crop",
+      "isDefault": true,
+      "icon": "fa-solid fa-mug-hot",
+      "apiType": "dishwasher"
+    },
+    {
+      "type": "electricity",
+      "powerWatts": 100,
+      "category": "Cozinha",
+      "description": "",
       "imgUrl": null,
-      "isDefault": true
+      "isDefault": false
+    },
+    {
+      "id": "1769353703776",
+      "name": "Frigo Teste",
+      "type": "electricity",
+      "powerWatts": 100,
+      "category": "Cozinha",
+      "description": "",
+      "imgUrl": null,
+      "isDefault": false,
+      "icon": "fa-solid fa-kitchen-set",
+      "apiType": "refrigerator",
+      "avgPowerConsumption": 150,
+      "avgUsageHoursPerDay": 1,
+      "co2PerKwh": 0.233
     }
   ],
   "tasks": [
@@ -1031,7 +1219,7 @@
     {
       "id": "early_adopter",
       "title": "Early Adopter",
-      "icon": "star",
+      "icon": "fa-solid fa-star",
       "description": "Primeiro perfil criado",
       "requirements": {
         "type": "profile_created",
@@ -1041,7 +1229,7 @@
     {
       "id": "week_warrior",
       "title": "Week Warrior",
-      "icon": "local_fire_department",
+      "icon": "fa-solid fa-fire",
       "description": "7 dias de streak",
       "requirements": {
         "type": "streak",
@@ -1051,7 +1239,7 @@
     {
       "id": "eco_warrior",
       "title": "Eco Warrior",
-      "icon": "eco",
+      "icon": "fa-solid fa-leaf",
       "description": "Poupou 10kg de CO2",
       "requirements": {
         "type": "co2_saved",
@@ -1061,7 +1249,7 @@
     {
       "id": "level_5",
       "title": "Nível 5",
-      "icon": "emoji_events",
+      "icon": "fa-solid fa-trophy",
       "description": "Alcançou o nível 5",
       "requirements": {
         "type": "level",
@@ -1071,7 +1259,7 @@
     {
       "id": "level_10",
       "title": "Nível 10",
-      "icon": "military_tech",
+      "icon": "fa-solid fa-medal",
       "description": "Alcançou o nível 10",
       "requirements": {
         "type": "level",
@@ -1081,7 +1269,7 @@
     {
       "id": "first_reward",
       "title": "Primeira Recompensa",
-      "icon": "card_giftcard",
+      "icon": "fa-solid fa-gift",
       "description": "Resgatou a primeira recompensa",
       "requirements": {
         "type": "rewards_redeemed",
@@ -1091,7 +1279,7 @@
     {
       "id": "energy_saver",
       "title": "Poupador de Energia",
-      "icon": "bolt",
+      "icon": "fa-solid fa-bolt",
       "description": "Completou 10 tarefas de energia",
       "requirements": {
         "type": "task_category_count",
@@ -1102,7 +1290,7 @@
     {
       "id": "recycler",
       "title": "Reciclador",
-      "icon": "recycling",
+      "icon": "fa-solid fa-recycle",
       "description": "Completou 10 tarefas de reciclagem",
       "requirements": {
         "type": "task_category_count",
@@ -1113,7 +1301,7 @@
     {
       "id": "two_week_streak",
       "title": "Duas Semanas",
-      "icon": "whatshot",
+      "icon": "fa-solid fa-fire-flame-curved",
       "description": "14 dias de streak",
       "requirements": {
         "type": "streak",
@@ -1123,7 +1311,7 @@
     {
       "id": "month_streak",
       "title": "Mês Completo",
-      "icon": "calendar_month",
+      "icon": "fa-solid fa-calendar-check",
       "description": "30 dias de streak",
       "requirements": {
         "type": "streak",
@@ -1172,42 +1360,42 @@
       "title": "Escolher filme na noite de cinema",
       "description": "Escolha o filme para a próxima noite de cinema em família",
       "points_cost": 50,
-      "imgUrl": null
+      "imgUrl": "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=400&h=300&fit=crop"
     },
     {
       "id": "2",
       "title": "Jantar fora",
       "description": "Um jantar no restaurante da sua escolha",
       "points_cost": 120,
-      "imgUrl": null
+      "imgUrl": "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&h=300&fit=crop"
     },
     {
       "id": "3",
       "title": "Dia sem tarefas domésticas",
       "description": "Dispensa de todas as tarefas domésticas por um dia",
       "points_cost": 80,
-      "imgUrl": null
+      "imgUrl": "https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=400&h=300&fit=crop"
     },
     {
       "id": "4",
       "title": "Escolher a música no carro",
       "description": "Controle total do rádio durante uma viagem",
       "points_cost": 20,
-      "imgUrl": null
+      "imgUrl": "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=300&fit=crop"
     },
     {
       "id": "5",
       "title": "Sobremesa extra",
       "description": "Uma sobremesa extra à sua escolha",
       "points_cost": 30,
-      "imgUrl": null
+      "imgUrl": "https://images.unsplash.com/photo-1551024601-bec78aea704b?w=400&h=300&fit=crop"
     },
     {
       "id": "6",
       "title": "Tempo extra de jogos",
       "description": "30 minutos extra de tempo de jogos",
       "points_cost": 40,
-      "imgUrl": null
+      "imgUrl": "https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf?w=400&h=300&fit=crop"
     }
   ]
 }

@@ -6,9 +6,7 @@
       class="w-full sm:w-[190px] h-[140px] sm:h-[100px] border-[0.724px] border-(--system-border) rounded-[7.692px] overflow-hidden bg-(--system-input-background) flex items-center justify-center shrink-0"
     >
       <img v-if="image" :src="image" :alt="title" class="w-full h-full object-cover" />
-      <span v-else class="material-symbols-outlined text-5xl text-(--text-disabled)">
-        {{ icon || placeholderIcon }}
-      </span>
+      <i v-else :class="[displayIcon, 'text-5xl text-(--accent-muted-foreground)']"></i>
     </div>
 
     <div class="flex flex-col gap-1 flex-1 min-w-0 w-full">
@@ -34,6 +32,7 @@
 
 <script>
 import CardButton from './CardButton.vue'
+import { getApplianceIcon, getTaskIcon } from '@/data/categoryIcons'
 
 export default {
   name: 'ItemCard',
@@ -81,7 +80,20 @@ export default {
   },
   computed: {
     placeholderIcon() {
-      return this.type === 'task' ? 'task_alt' : 'power'
+      return this.type === 'task' ? 'fa-solid fa-circle-check' : 'fa-solid fa-plug'
+    },
+    displayIcon() {
+      // If icon prop is provided and is a Font Awesome icon, use it
+      if (this.icon && this.icon.startsWith('fa-')) {
+        return this.icon
+      }
+      
+      // Otherwise, get category icon based on type
+      if (this.type === 'task') {
+        return getTaskIcon(null, null, this.category)
+      } else {
+        return getApplianceIcon(null, null, this.category)
+      }
     },
   },
 }

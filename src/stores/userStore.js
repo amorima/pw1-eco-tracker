@@ -1355,7 +1355,7 @@ export const useUserStore = defineStore('userStore', {
           title: rewardData.title,
           description: rewardData.description || '',
           points_cost: rewardData.points_cost || rewardData.points,
-          imgUrl: rewardData.imgUrl || rewardData.image || null,
+          imgUrl: rewardData.imgUrl || null,
         }
 
         const response = await fetch('http://localhost:3000/rewards', {
@@ -1390,7 +1390,7 @@ export const useUserStore = defineStore('userStore', {
           title: updates.title,
           description: updates.description || '',
           points_cost: updates.points_cost || updates.points,
-          imgUrl: updates.imgUrl || updates.image || null,
+          imgUrl: updates.imgUrl || null,
           id: rewardId,
         }
 
@@ -1443,7 +1443,7 @@ export const useUserStore = defineStore('userStore', {
           powerWatts: applianceData.powerWatts || 100,
           category: applianceData.category,
           description: applianceData.description || '',
-          imgUrl: applianceData.imgUrl || applianceData.image || null,
+          imgUrl: applianceData.imgUrl || null,
           isDefault: false,
         }
 
@@ -1546,6 +1546,8 @@ export const useUserStore = defineStore('userStore', {
             taskData.co2Saved ||
             defaultTaskCO2[taskData.category] ||
             taskData.points * 0.05,
+          imgUrl: taskData.imgUrl || null,
+          co2saved: taskData.co2saved || taskData.points * 0.5,
           isDefault: false,
         }
 

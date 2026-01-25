@@ -15,18 +15,14 @@
         class="p-1 rounded-md bg-(--system-input-background) hover:bg-(--system-border) transition-colors"
         title="Editar"
       >
-        <span class="material-symbols-outlined text-[18px] text-(--text-body-sub-titles)"
-          >edit</span
-        >
+        <i class="fa-solid fa-pen text-[16px] text-(--text-body-sub-titles)"></i>
       </button>
       <button
         @click.stop="$emit('delete')"
         class="p-1 rounded-md bg-(--system-input-background) hover:bg-(--semantic-danger-hover) transition-colors"
         title="Eliminar"
       >
-        <span class="material-symbols-outlined text-[18px] text-(--semantic-danger-default)"
-          >delete</span
-        >
+        <i class="fa-solid fa-trash text-[16px] text-(--semantic-danger-default)"></i>
       </button>
     </div>
 
@@ -65,7 +61,7 @@
         />
       </div>
       <div v-else class="flex-1 flex items-center gap-1 text-white/90 text-xs font-medium">
-        <span class="material-symbols-outlined text-sm">check_circle</span>
+        <i class="fa-solid fa-circle-check text-sm"></i>
         <span>Concluído</span>
       </div>
 

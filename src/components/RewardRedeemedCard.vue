@@ -3,14 +3,12 @@
     <div class="shrink-0">
       <div class="w-[190.385px] h-[100px] border-[0.724px] border-(--system-border) rounded-[7.692px] overflow-hidden bg-(--system-background) flex items-center justify-center">
         <img 
-          v-if="reward.image" 
-          :src="reward.image" 
+          v-if="reward.imgUrl" 
+          :src="reward.imgUrl" 
           :alt="reward.title"
           class="w-full h-full object-cover"
         />
-        <span v-else class="material-symbols-outlined text-5xl text-(--accent-muted-foreground)">
-          card_giftcard
-        </span>
+        <i v-else class="fa-solid fa-gift text-5xl text-(--accent-muted-foreground)"></i>
       </div>
     </div>
 

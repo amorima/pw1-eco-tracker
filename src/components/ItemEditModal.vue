@@ -163,14 +163,12 @@
             class="w-24 h-20 rounded-lg overflow-hidden bg-(--system-border) flex items-center justify-center"
           >
             <img
-              v-if="formData.image"
-              :src="formData.image"
+              v-if="formData.imgUrl"
+              :src="formData.imgUrl"
               alt="Preview"
               class="w-full h-full object-cover"
             />
-            <span v-else class="material-symbols-outlined text-3xl text-(--text-disabled)">
-              {{ isTask ? 'task_alt' : 'electrical_services' }}
-            </span>
+            <i v-else :class="[isTask ? 'fa-solid fa-circle-check' : 'fa-solid fa-plug', 'text-3xl text-(--text-disabled)']"></i>
           </div>
 
           <!-- Upload Button -->
@@ -179,9 +177,7 @@
               class="flex items-center gap-2 px-4 py-2 bg-(--system-border) rounded-lg cursor-pointer hover:bg-(--system-ring) hover:text-white transition-colors text-sm"
               :class="{ 'opacity-50 cursor-not-allowed': isUploading }"
             >
-              <span class="material-symbols-outlined text-lg">{{
-                isUploading ? 'hourglass_empty' : 'cloud_upload'
-              }}</span>
+              <i :class="[isUploading ? 'fa-solid fa-hourglass' : 'fa-solid fa-cloud-arrow-up', 'text-lg']"></i>
               <span>{{ isUploading ? 'A carregar...' : 'Carregar' }}</span>
               <input
                 type="file"
@@ -197,7 +193,7 @@
 
         <!-- URL Input as alternative -->
         <input
-          v-model="formData.image"
+          v-model="formData.imgUrl"
           type="text"
           placeholder="ou insira o URL da imagem"
           class="w-full px-4 py-2 bg-(--system-card) border-2 border-(--system-border) rounded-lg text-(--text-body) outline-none focus:border-(--system-ring) text-sm"
@@ -255,7 +251,7 @@ export default {
         id: null,
         name: '',
         category: '',
-        image: '',
+        imgUrl: '',
         // Appliance fields
         apiType: '',
         avgPowerConsumption: null,
@@ -390,7 +386,7 @@ export default {
           id: this.item.id,
           name: this.item.title || this.item.name || '',
           category: this.item.category || '',
-          image: this.item.image || '',
+          imgUrl: this.item.imgUrl || '',
           // Appliance fields
           apiType: this.item.apiType || 'electricity', // Default to 'electricity' if not set
           avgPowerConsumption: this.item.avgPowerConsumption || null,
@@ -408,7 +404,7 @@ export default {
           id: null,
           name: '',
           category: '',
-          image: '',
+          imgUrl: '',
           // Appliance fields
           apiType: '',
           avgPowerConsumption: null,
@@ -444,13 +440,13 @@ export default {
         const result = await uploadImage(file, { folder })
 
         if (result.success) {
-          this.formData.image = result.url
+          this.formData.imgUrl = result.url
           console.log('Image uploaded successfully:', result.url)
         } else {
           console.error('Upload failed:', result.error)
         }
       } catch (error) {
-        console.error('Error uploading image:', error)
+        console.error('Error uploading imgUrl:', error)
       } finally {
         this.isUploading = false
       }
@@ -468,7 +464,7 @@ export default {
         category: this.formData.category,
         icon: this.formData.icon || autoIcon,
         description: this.formData.description || '',
-        image: this.formData.image || null,
+        imgUrl: this.formData.imgUrl || null,
       }
 
       if (this.isTask) {

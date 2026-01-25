@@ -8,15 +8,14 @@
         : 'bg-(--system-ring) hover:opacity-90',
     ]"
   >
-    <div class="overflow-hidden relative shrink-0 w-[24px] h-[24px]">
-      <span
+    <div class="overflow-hidden relative shrink-0 w-[24px] h-[24px] flex items-center justify-center">
+      <i
         :class="[
-          'material-symbols-outlined text-[24px]',
+          icon,
+          'text-[24px]',
           locked ? 'text-(--text-disabled)' : 'text-white',
         ]"
-      >
-        {{ icon }}
-      </span>
+      ></i>
     </div>
     <p
       :class="[
@@ -35,7 +34,7 @@ export default {
   props: {
     icon: {
       type: String,
-      default: 'emoji_events',
+      default: 'fa-solid fa-trophy',
     },
     title: {
       type: String,
