@@ -961,18 +961,10 @@ export default {
   },
   methods: {
     getApplianceImage(appliance) {
-      if (appliance.image) return appliance.image
-      return (
-        this.applianceImages[appliance.name] ||
-        'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&h=200&fit=crop'
-      )
+      return appliance.image || appliance.imgUrl || null
     },
     getTaskImage(task) {
-      if (task.image) return task.image
-      return (
-        this.taskImages[task.category] ||
-        'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=300&h=250&fit=crop'
-      )
+      return task.image || task.imgUrl || null
     },
     saveCardOrder() {
       localStorage.setItem('adminCardOrder', JSON.stringify(this.cardOrder))

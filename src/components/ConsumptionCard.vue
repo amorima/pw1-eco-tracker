@@ -11,7 +11,7 @@
         v-else
         class="w-full h-full bg-(--system-input-background) flex items-center justify-center"
       >
-        <i class="fa-solid fa-plug text-4xl text-(--text-disabled)"></i>
+        <i :class="[displayIcon, 'text-4xl text-(--text-disabled)']"></i>
       </div>
 
       <!-- Label Badge -->
@@ -83,6 +83,8 @@
 </template>
 
 <script>
+import { getApplianceIcon } from '@/data/categoryIcons'
+
 export default {
   name: 'ConsumptionCard',
   props: {
@@ -93,6 +95,14 @@ export default {
     image: {
       type: String,
       default: null,
+    },
+    icon: {
+      type: String,
+      default: '',
+    },
+    category: {
+      type: String,
+      default: '',
     },
     unit: {
       type: String,
@@ -116,6 +126,16 @@ export default {
     return {
       inputValue: '',
     }
+  },
+  computed: {
+    displayIcon() {
+      // If icon prop is provided and is a Font Awesome icon, use it
+      if (this.icon && this.icon.startsWith('fa-')) {
+        return this.icon
+      }
+      // Otherwise, get category icon for appliance
+      return getApplianceIcon(null, null, this.category)
+    },
   },
 }
 </script>

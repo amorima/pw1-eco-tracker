@@ -787,7 +787,8 @@
         "12",
         "13",
         "14",
-        "15"
+        "15",
+        "1769352834614"
       ],
       "tasks": [
         "1",
@@ -841,6 +842,14 @@
               "duration": 120,
               "energy_consumed": 7,
               "co2emited": 1.316
+            },
+            {
+              "id": "1769352851637",
+              "appliance_id": "1769352834614",
+              "usedAt": "2026-01-25T14:54:11.637Z",
+              "duration": 120,
+              "energy_consumed": 0.2,
+              "co2emited": 0.0376
             }
           ],
           "rewards_history": [],
@@ -1098,6 +1107,16 @@
       "avgPowerConsumption": 1000,
       "avgUsageHoursPerDay": 0.5,
       "co2PerKwh": 0.233
+    },
+    {
+      "id": "1769352834614",
+      "name": "Frigo Test",
+      "type": "electricity",
+      "powerWatts": 100,
+      "category": "Cozinha",
+      "description": "",
+      "imgUrl": null,
+      "isDefault": false
     }
   ],
   "tasks": [

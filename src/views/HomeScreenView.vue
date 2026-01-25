@@ -254,7 +254,9 @@
                     v-for="usage in recentApplianceUsages"
                     :key="usage.id"
                     :label="usage.appliance.name"
-                    :image="usage.appliance.image || getApplianceImage(usage.appliance)"
+                    :image="usage.appliance.image || usage.appliance.imgUrl"
+                    :icon="usage.appliance.icon"
+                    :category="usage.appliance.category"
                     :energyConsumed="usage.energy_consumed"
                     :powerWatts="usage.device_power_watts || usage.appliance.powerWatts"
                     unit="hr"
@@ -773,17 +775,11 @@ export default {
     },
 
     getApplianceImage(appliance) {
-      return (
-        this.applianceImages[appliance.name] ||
-        'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&h=200&fit=crop'
-      )
+      return appliance.image || appliance.imgUrl || null
     },
 
     getTaskImage(task) {
-      return (
-        this.taskImages[task.category] ||
-        'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=300&h=250&fit=crop'
-      )
+      return task.image || task.imgUrl || null
     },
 
     openAddConsumptionModal() {
