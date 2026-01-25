@@ -11,7 +11,7 @@
       class="absolute inset-0 w-full h-full object-cover"
     />
     <div v-else class="absolute inset-0 bg-(--system-border) flex items-center justify-center">
-      <i :class="[displayIcon, 'text-6xl text-(--text-disabled)']" aria-hidden="true"></i>
+      <i :class="[displayIcon, 'text-6xl text-(--system-ring)']" aria-hidden="true"></i>
     </div>
 
     <!--Overlay on hover -->

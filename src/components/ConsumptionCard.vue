@@ -11,7 +11,7 @@
         v-else
         class="w-full h-full bg-(--system-input-background) flex items-center justify-center"
       >
-        <i :class="[displayIcon, 'text-4xl text-(--text-disabled)']"></i>
+        <i :class="[displayIcon, 'text-4xl text-(--system-ring)']"></i>
       </div>
 
       <!-- Label Badge -->
