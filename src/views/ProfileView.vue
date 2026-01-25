@@ -242,13 +242,13 @@
                   class="flex items-center gap-2 bg-(--system-background) px-4 py-2 rounded-xl border border-(--system-border) text-sm font-medium text-(--text-body-sub-titles)"
                 >
                   <span class="material-symbols-outlined text-lg text-orange-500">mail</span>
-                  {{ currentProfile?.email || 'Sem email' }}
+                  {{ displayEmail }}
                 </div>
                 <div
                   class="flex items-center gap-2 bg-(--system-background) px-4 py-2 rounded-xl border border-(--system-border) text-sm font-medium text-(--text-body-sub-titles)"
                 >
                   <span class="material-symbols-outlined text-lg text-purple-500">cake</span>
-                  {{ currentProfile?.age || '-' }} anos
+                  {{ displayAge }} anos
                 </div>
               </div>
             </div>
@@ -868,6 +868,25 @@ export default {
     },
     currentProfile() {
       return this.userStore.currentProfile
+    },
+    displayEmail() {
+      if (this.currentProfile?.isAdmin) {
+        return this.userStore.currentUser?.email || 'Sem email'
+      }
+      return this.currentProfile?.email || 'Sem email'
+    },
+    displayAge() {
+      if (this.currentProfile?.birthDate) {
+        const birthDate = new Date(this.currentProfile.birthDate)
+        const today = new Date()
+        let age = today.getFullYear() - birthDate.getFullYear()
+        const m = today.getMonth() - birthDate.getMonth()
+        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+          age--
+        }
+        return age
+      }
+      return this.currentProfile?.age || '-'
     },
     allBadgesWithStatus() {
       return this.userStore.allBadgesWithStatus
