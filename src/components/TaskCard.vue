@@ -10,7 +10,9 @@
       :alt="label"
       class="absolute inset-0 w-full h-full object-cover"
     />
-    <div v-else class="absolute inset-0 bg-(--system-border)"></div>
+    <div v-else class="absolute inset-0 bg-(--system-border) flex items-center justify-center">
+      <i :class="[displayIcon, 'text-6xl text-(--text-disabled)']" aria-hidden="true"></i>
+    </div>
 
     <!--Overlay on hover -->
     <div
@@ -29,6 +31,8 @@
 </template>
 
 <script>
+import { getTaskIcon } from '@/data/categoryIcons'
+
 export default {
   name: 'TaskCard',
   props: {
@@ -40,7 +44,25 @@ export default {
       type: String,
       default: null,
     },
+    icon: {
+      type: String,
+      default: null,
+    },
+    category: {
+      type: String,
+      default: null,
+    },
   },
   emits: ['click'],
+  computed: {
+    displayIcon() {
+      // If icon starts with 'fa-', use it directly
+      if (this.icon && this.icon.startsWith('fa-')) {
+        return this.icon
+      }
+      // Otherwise get category icon
+      return getTaskIcon(null, null, this.category)
+    },
+  },
 }
 </script>

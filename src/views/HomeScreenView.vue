@@ -285,6 +285,8 @@
                     :key="activity.id"
                     :label="activity.task.title"
                     :image="activity.task.imgUrl"
+                    :icon="activity.task.icon"
+                    :category="activity.task.category"
                     @click="completeTask(activity.task)"
                   />
                   <AddCard @click="openAddTaskModal" />
