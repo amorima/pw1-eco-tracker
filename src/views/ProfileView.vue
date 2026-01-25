@@ -431,7 +431,7 @@
                     :class="[
                       'flex items-center gap-2 px-3 py-2 rounded-lg transition-colors',
                       sortCompletedFirst
-                        ? 'bg-(--system-ring) text-white'
+                        ? 'bg-(--system-ring) border-2 border-(--system-ring) text-white'
                         : 'bg-(--system-card) border-2 border-(--system-border) text-(--text-body-sub-titles)',
                     ]"
                   >
