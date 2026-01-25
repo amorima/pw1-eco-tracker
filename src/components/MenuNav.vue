@@ -26,10 +26,18 @@
           <ActionButton @click="$router.push({ name: 'register' })">Registar</ActionButton>
         </template>
         <template v-else>
-          <MenuButton :landing="false">Estatisticas</MenuButton>
-          <MenuButton :landing="false">Consumos</MenuButton>
-          <MenuButton :landing="false">Tarefas</MenuButton>
-          <MenuButton :landing="false">Ferramentas</MenuButton>
+          <MenuButton :landing="false" @click="scrollToSection('section-statistics')"
+            >Estatisticas</MenuButton
+          >
+          <MenuButton :landing="false" @click="scrollToSection('section-consumptions')"
+            >Consumos</MenuButton
+          >
+          <MenuButton :landing="false" @click="scrollToSection('section-tasks')"
+            >Tarefas</MenuButton
+          >
+          <MenuButton :landing="false" @click="scrollToSection('section-tools')"
+            >Ferramentas</MenuButton
+          >
           <div class="flex gap-4 text-(--text-body-titles)">
             <span
               @click="toggleDarkMode"
@@ -199,10 +207,26 @@
           <template v-else>
             <!-- App Navigation -->
             <div class="flex flex-col gap-6 text-xl font-medium text-(--text-headings)">
-              <a class="cursor-pointer hover:text-(--system-ring)">Estatisticas</a>
-              <a class="cursor-pointer hover:text-(--system-ring)">Consumos</a>
-              <a class="cursor-pointer hover:text-(--system-ring)">Tarefas</a>
-              <a class="cursor-pointer hover:text-(--system-ring)">Ferramentas</a>
+              <a
+                @click="handleMobileNav('section-statistics')"
+                class="cursor-pointer hover:text-(--system-ring)"
+                >Estatisticas</a
+              >
+              <a
+                @click="handleMobileNav('section-consumptions')"
+                class="cursor-pointer hover:text-(--system-ring)"
+                >Consumos</a
+              >
+              <a
+                @click="handleMobileNav('section-tasks')"
+                class="cursor-pointer hover:text-(--system-ring)"
+                >Tarefas</a
+              >
+              <a
+                @click="handleMobileNav('section-tools')"
+                class="cursor-pointer hover:text-(--system-ring)"
+                >Ferramentas</a
+              >
             </div>
 
             <!-- App Actions -->
@@ -368,6 +392,8 @@ export default {
       this.$router.push({ name: 'landing' })
     },
     scrollToSection(sectionId) {
+      const targetRoute = this.landing ? 'landing' : 'home'
+
       const scroll = () => {
         const el = document.getElementById(sectionId)
         if (el) {
@@ -375,11 +401,12 @@ export default {
         }
       }
 
-      if (this.$route.name !== 'landing') {
-        this.$router.push({ name: 'landing' }).then(() => {
-          this.$nextTick(() => {
+      if (this.$route.name !== targetRoute) {
+        this.$router.push({ name: targetRoute }).then(() => {
+          // Pequeno delay para garantir que os componentes foram renderizados
+          setTimeout(() => {
             scroll()
-          })
+          }, 300)
         })
       } else {
         this.$nextTick(() => {

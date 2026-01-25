@@ -114,7 +114,10 @@
         ghost-class="ghost-card"
       >
         <template #item="{ element }">
-          <div :class="{ 'col-span-full': element === 'statistics' && gridColumns > 1 }">
+          <div
+            :class="{ 'col-span-full': element === 'statistics' && gridColumns > 1 }"
+            :id="'section-' + element"
+          >
             <!-- Wrapper div to handle col-span logic if needed, e.g. Statistics always full width -->
             <CollapsibleCard
               v-if="element === 'statistics'"
