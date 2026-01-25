@@ -681,43 +681,35 @@
       ]
     },
     {
-      "id": "1769336197166",
+      "id": "1769345606888",
       "name": "Antonio Amorim",
       "email": "work@antonioamorim.pt",
       "password": "antonio1",
-      "createdAt": "2026-01-25T10:16:37.166Z",
+      "createdAt": "2026-01-25T12:53:26.888Z",
       "maxProfiles": "5",
       "appliances": [
         "1",
         "2",
         "4",
-        "5",
-        "6",
-        "8",
-        "9"
+        "3"
       ],
       "tasks": [
         "1",
         "2",
-        "3",
         "4",
-        "5",
-        "6",
-        "8",
-        "7",
-        "10"
+        "3"
       ],
       "profiles": [
         {
-          "id": "1769336197166",
+          "id": "1769345606888",
           "name": "Antonio Amorim",
           "age": null,
           "avatarUrl": null,
           "isAdmin": true,
           "birthDate": "1989-05-06",
-          "createdAt": "2026-01-25T10:16:37.166Z",
-          "xp": 70,
-          "points": 20,
+          "createdAt": "2026-01-25T12:53:26.888Z",
+          "xp": 120,
+          "points": 120,
           "streak": 1,
           "settings": {
             "pin": "1234",
@@ -727,21 +719,64 @@
           },
           "activity_history": [
             {
-              "id": "1769336964425",
+              "id": "1769345638175",
               "task_id": "1",
-              "completedAt": "2026-01-25T10:29:24.425Z",
+              "completedAt": "2026-01-25T12:53:58.175Z",
               "pointsEarned": 20,
-              "co2saved": 10
+              "co2saved": 0.1
+            },
+            {
+              "id": "1769345700811",
+              "task_id": "1",
+              "completedAt": "2026-01-25T12:55:00.811Z",
+              "pointsEarned": 20,
+              "co2saved": 0.1
+            },
+            {
+              "id": "1769345722840",
+              "task_id": "1",
+              "completedAt": "2026-01-25T12:55:22.840Z",
+              "pointsEarned": 20,
+              "co2saved": 0.1
+            },
+            {
+              "id": "1769345722985",
+              "task_id": "1",
+              "completedAt": "2026-01-25T12:55:22.985Z",
+              "pointsEarned": 20,
+              "co2saved": 0.1
+            },
+            {
+              "id": "1769345723121",
+              "task_id": "1",
+              "completedAt": "2026-01-25T12:55:23.121Z",
+              "pointsEarned": 20,
+              "co2saved": 0.1
+            },
+            {
+              "id": "1769345723256",
+              "task_id": "1",
+              "completedAt": "2026-01-25T12:55:23.256Z",
+              "pointsEarned": 20,
+              "co2saved": 0.1
             }
           ],
           "appliance_history": [
             {
-              "id": "1769336942067",
+              "id": "1769345635104",
               "appliance_id": "1",
-              "usedAt": "2026-01-25T10:29:02.067Z",
+              "usedAt": "2026-01-25T12:53:55.104Z",
               "duration": 1440,
-              "energy_consumed": 3.5999999999999996,
-              "co2emited": 0.6768
+              "energy_consumed": 3.6,
+              "co2emited": 0.677
+            },
+            {
+              "id": "1769345719889",
+              "appliance_id": "1",
+              "usedAt": "2026-01-25T12:55:19.889Z",
+              "duration": 10680,
+              "energy_consumed": 26.7,
+              "co2emited": 5.02
             }
           ],
           "rewards_history": [],
@@ -751,17 +786,10 @@
               "title": "Early Adopter",
               "description": "Primeiro perfil criado",
               "icon": "star",
-              "earnedAt": "2026-01-25T10:21:39.160Z"
-            },
-            {
-              "id_badge": "eco_warrior",
-              "title": "Eco Warrior",
-              "description": "Poupou 10kg de CO2",
-              "icon": "eco",
-              "earnedAt": "2026-01-25T10:29:24.485Z"
+              "earnedAt": "2026-01-25T12:53:45.029Z"
             }
           ],
-          "lastActivitie": "2026-01-25T10:29:02.069Z"
+          "lastActivitie": "2026-01-25T12:53:55.106Z"
         }
       ]
     }
@@ -926,7 +954,7 @@
       "points": 20,
       "description": "Desligar todas as luzes quando sair de uma divisão",
       "imgUrl": null,
-      "co2saved": 10,
+      "co2saved": 0.1,
       "isDefault": true
     },
     {
@@ -936,7 +964,7 @@
       "points": 15,
       "description": "Usar transporte público em vez de carro próprio",
       "imgUrl": null,
-      "co2saved": 7.5,
+      "co2saved": 0.8,
       "isDefault": true
     },
     {
@@ -946,7 +974,7 @@
       "points": 10,
       "description": "Separar e reciclar embalagens de plástico",
       "imgUrl": null,
-      "co2saved": 0.5,
+      "co2saved": 0.2,
       "isDefault": true
     },
     {
@@ -956,7 +984,7 @@
       "points": 8,
       "description": "Tomar duches rápidos para poupar água e energia",
       "imgUrl": null,
-      "co2saved": 0.3,
+      "co2saved": 0.1,
       "isDefault": true
     },
     {
@@ -966,7 +994,7 @@
       "points": 7,
       "description": "Desligar completamente aparelhos eletrónicos",
       "imgUrl": null,
-      "co2saved": 0.2,
+      "co2saved": 0.1,
       "isDefault": true
     },
     {
@@ -976,7 +1004,7 @@
       "points": 12,
       "description": "Fazer uma refeição sem carne",
       "imgUrl": null,
-      "co2saved": 1.5,
+      "co2saved": 0.8,
       "isDefault": true
     },
     {
@@ -986,7 +1014,7 @@
       "points": 5,
       "description": "Levar saco próprio às compras",
       "imgUrl": null,
-      "co2saved": 0.1,
+      "co2saved": 0.2,
       "isDefault": true
     },
     {
@@ -996,7 +1024,7 @@
       "points": 10,
       "description": "Lavar roupa com água fria (máx 30°C)",
       "imgUrl": null,
-      "co2saved": 0.6,
+      "co2saved": 0.1,
       "isDefault": true
     },
     {
@@ -1006,7 +1034,7 @@
       "points": 20,
       "description": "Usar bicicleta para deslocações curtas",
       "imgUrl": null,
-      "co2saved": 3,
+      "co2saved": 0.8,
       "isDefault": true
     },
     {
@@ -1016,7 +1044,7 @@
       "points": 15,
       "description": "Fazer compostagem com restos de comida",
       "imgUrl": null,
-      "co2saved": 1,
+      "co2saved": 0.2,
       "isDefault": true
     },
     {
@@ -1026,7 +1054,7 @@
       "points": 12,
       "description": "Secar roupa naturalmente em vez de usar secadora",
       "imgUrl": null,
-      "co2saved": 0.8,
+      "co2saved": 0.1,
       "isDefault": true
     },
     {
@@ -1036,7 +1064,7 @@
       "points": 18,
       "description": "Comprar alimentos produzidos localmente",
       "imgUrl": null,
-      "co2saved": 1.2,
+      "co2saved": 0.2,
       "isDefault": true
     },
     {
@@ -1046,7 +1074,7 @@
       "points": 50,
       "description": "Plantar uma árvore ou planta",
       "imgUrl": null,
-      "co2saved": 21,
+      "co2saved": 0.2,
       "isDefault": true
     },
     {
@@ -1056,7 +1084,7 @@
       "points": 25,
       "description": "Reparar um objeto em vez de comprar novo",
       "imgUrl": null,
-      "co2saved": 5,
+      "co2saved": 0.2,
       "isDefault": true
     },
     {
@@ -1066,7 +1094,7 @@
       "points": 30,
       "description": "Participar numa ação de limpeza local",
       "imgUrl": null,
-      "co2saved": 2,
+      "co2saved": 0.2,
       "isDefault": true
     }
   ],
