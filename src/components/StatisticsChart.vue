@@ -70,14 +70,18 @@ export default {
      */
     showEffectiveCo2: {
       type: Boolean,
-      default: false,
+      default: true,
+    },
+    showSavedCo2: {
+      type: Boolean,
+      default: true,
     },
     /**
      * Custom label for CO2 series
      */
     co2Label: {
       type: String,
-      default: null,
+      default: 'CO₂ (kg)',
     },
   },
   data() {
@@ -102,14 +106,25 @@ export default {
       const color = this.resolveColor('var(--semantic-warning-default)')
       return color && color.startsWith('#') ? color : '#e89454'
     },
+    savedCo2Color() {
+      // Darker Green color for saved CO2 for better contrast
+      return '#15803d'
+    },
     chartSeries() {
       const series = []
+
+      if (this.showSavedCo2) {
+        series.push({
+          name: 'CO₂ Poupado (kg)',
+          data: this.data.map((d) => Number((d.co2Saved || 0).toFixed(2))),
+        })
+      }
 
       if (this.showCo2) {
         if (this.showEffectiveCo2) {
           // Effective CO2: Emitted - Saved (positive = net emissions, negative = net savings)
           series.push({
-            name: this.co2Label || 'CO₂ Efetivo (kg)',
+            name: this.co2Label || 'CO₂ (kg)',
             data: this.data.map((d) => {
               const emitted = d.co2Emitted || 0
               const saved = d.co2Saved || 0
@@ -117,9 +132,9 @@ export default {
               return Math.round((emitted - saved) * 100) / 100
             }),
           })
-        } else {
+        } else if (!this.showSavedCo2) {
           series.push({
-            name: this.co2Label || 'CO₂ Poupado (kg)',
+            name: this.co2Label || 'CO₂ (kg)',
             data: this.data.map((d) => Math.round(d.co2Saved || 0)),
           })
         }
@@ -141,6 +156,7 @@ export default {
       const borderColor = this.isDark ? '#44403c' : '#e7e5e4'
 
       const colors = []
+      if (this.showSavedCo2) colors.push(this.savedCo2Color)
       if (this.showCo2) colors.push(this.primaryColor)
       if (this.showPoints) colors.push(this.secondaryColor)
 
@@ -169,17 +185,17 @@ export default {
         },
         stroke: {
           curve: 'smooth',
-          width: this.currentChartType === 'line' ? 3 : 0,
+          width: this.currentChartType === 'line' ? 4 : 0,
         },
         fill: {
-          opacity: this.currentChartType === 'line' ? 0.3 : 1,
-          type: this.currentChartType === 'line' ? 'gradient' : 'solid',
-          gradient: {
-            shade: this.isDark ? 'dark' : 'light',
-            type: 'vertical',
-            opacityFrom: 0.6,
-            opacityTo: 0.2,
-            stops: [0, 90, 100],
+          opacity: 1,
+          type: 'solid',
+        },
+        markers: {
+          size: this.currentChartType === 'line' ? 5 : 0,
+          strokeWidth: 2,
+          hover: {
+            size: 7,
           },
         },
         xaxis: {
@@ -196,44 +212,7 @@ export default {
             show: false,
           },
         },
-        yaxis:
-          this.showCo2 && this.showPoints
-            ? [
-                {
-                  title: {
-                    text: this.co2Label || (this.showEffectiveCo2 ? 'CO₂ Efetivo (kg)' : 'CO₂ Poupado (kg)'),
-                    style: {
-                      color: textColor,
-                    },
-                  },
-                  labels: {
-                    style: {
-                      colors: textColor,
-                    },
-                  },
-                },
-                {
-                  opposite: true,
-                  title: {
-                    text: 'Pontos',
-                    style: {
-                      color: textColor,
-                    },
-                  },
-                  labels: {
-                    style: {
-                      colors: textColor,
-                    },
-                  },
-                },
-              ]
-            : {
-                labels: {
-                  style: {
-                    colors: textColor,
-                  },
-                },
-              },
+        yaxis: this.getDynamicYAxis(textColor),
         grid: {
           borderColor: gridColor,
           strokeDashArray: 0,
@@ -245,6 +224,18 @@ export default {
         },
         legend: {
           position: 'bottom',
+          horizontalAlign: 'center',
+          fontSize: '14px',
+          fontWeight: 500,
+          markers: {
+            width: 12,
+            height: 12,
+            radius: 12,
+          },
+          itemMargin: {
+            horizontal: 15,
+            vertical: 5,
+          },
           labels: {
             colors: textColor,
           },
@@ -311,6 +302,79 @@ export default {
     },
     handleThemeChange() {
       this.$forceUpdate()
+    },
+    getDynamicYAxis(textColor) {
+      const yaxis = []
+
+      // Calcular min/max global para CO2 para sincronizar os eixos
+      let minCo2 = 0
+      let maxCo2 = 0
+
+      if (this.data.length > 0 && (this.showCo2 || this.showSavedCo2)) {
+        this.data.forEach((d) => {
+          const saved = d.co2Saved || 0
+          const emitted = d.co2Emitted || 0
+          const effective = emitted - saved
+
+          if (this.showEffectiveCo2) {
+            maxCo2 = Math.max(maxCo2, effective)
+            minCo2 = Math.min(minCo2, effective)
+          }
+          if (this.showSavedCo2) {
+            maxCo2 = Math.max(maxCo2, saved)
+          }
+        })
+
+        // Adicionar margem (10%) e garantir que não é zero
+        maxCo2 = maxCo2 > 0 ? maxCo2 * 1.1 : 1
+        minCo2 = minCo2 < 0 ? minCo2 * 1.1 : 0
+      }
+
+      // 1. Effective CO2 Axis (Left)
+      if (this.showCo2) {
+        yaxis.push({
+          seriesName: this.co2Label || 'CO₂ (kg)',
+          min: minCo2,
+          max: maxCo2,
+          title: {
+            text: 'CO₂ (kg)',
+            style: { color: textColor },
+          },
+          labels: {
+            style: { colors: textColor },
+            formatter: (val) => val.toFixed(1),
+          },
+        })
+      }
+
+      // 2. Saved CO2 Axis (Left, hidden but synced)
+      if (this.showSavedCo2) {
+        yaxis.push({
+          seriesName: 'CO₂ Poupado (kg)',
+          min: minCo2,
+          max: maxCo2,
+          show: false, // Esconder etiquetas para não duplicar, mas manter escala
+          labels: { style: { colors: textColor } },
+        })
+      }
+
+      // 3. Points Axis (Right)
+      if (this.showPoints) {
+        yaxis.push({
+          seriesName: 'Pontos',
+          opposite: true,
+          title: {
+            text: 'Pontos',
+            style: { color: textColor },
+          },
+          labels: {
+            style: { colors: textColor },
+            formatter: (val) => val.toFixed(0),
+          },
+        })
+      }
+
+      return yaxis.length > 0 ? yaxis : { labels: { style: { colors: textColor } } }
     },
   },
 }

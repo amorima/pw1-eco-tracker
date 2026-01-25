@@ -273,6 +273,7 @@
             <!-- Chart Container -->
             <div class="relative w-40 h-40 shrink-0">
               <apexchart
+                v-if="chartReady"
                 :key="themeKey"
                 type="radialBar"
                 :options="levelChartOptions"
@@ -715,6 +716,7 @@ export default {
       pinConfirmInput: '',
       pinError: '',
 
+      chartReady: false,
       // Rewards
       rewardTab: 'redeem',
       rewardSearch: '',
@@ -891,8 +893,8 @@ export default {
     },
     levelChartOptions() {
       const isDark = document.documentElement.classList.contains('dark')
-      const primaryColor = '#86efac' // Pastel Green (Green-300)
-      const secondaryColor = '#4ade80' // Soft Green (Green-400)
+      const primaryColor = '#22c55e' // Green-500 (Mais visível)
+      const secondaryColor = '#16a34a' // Green-600 (Mais contraste)
 
       return {
         chart: {
@@ -1239,6 +1241,10 @@ export default {
       attributes: true,
       attributeFilter: ['class'],
     })
+    // Pequeno delay para garantir que o elemento DOM existe antes de renderizar o gráfico
+    setTimeout(() => {
+      this.chartReady = true
+    }, 100)
   },
   beforeUnmount() {
     window

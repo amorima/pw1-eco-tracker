@@ -50,8 +50,9 @@ export default {
   },
   props: {
     image: {
-      type: String,
-      required: true,
+      type: [String, null],
+      required: false,
+      default: null,
     },
     title: {
       type: String,

@@ -708,8 +708,8 @@
           "isAdmin": true,
           "birthDate": "1989-05-06",
           "createdAt": "2026-01-25T12:53:26.888Z",
-          "xp": 120,
-          "points": 120,
+          "xp": 180,
+          "points": 180,
           "streak": 1,
           "settings": {
             "pin": "1234",
@@ -759,6 +759,27 @@
               "completedAt": "2026-01-25T12:55:23.256Z",
               "pointsEarned": 20,
               "co2saved": 0.1
+            },
+            {
+              "id": "1769348651183",
+              "task_id": "1",
+              "completedAt": "2026-01-25T13:44:11.183Z",
+              "pointsEarned": 20,
+              "co2saved": 0.1
+            },
+            {
+              "id": "1769348653835",
+              "task_id": "1",
+              "completedAt": "2026-01-25T13:44:13.835Z",
+              "pointsEarned": 20,
+              "co2saved": 0.1
+            },
+            {
+              "id": "1769348654318",
+              "task_id": "1",
+              "completedAt": "2026-01-25T13:44:14.318Z",
+              "pointsEarned": 20,
+              "co2saved": 0.1
             }
           ],
           "appliance_history": [
@@ -790,6 +811,76 @@
             }
           ],
           "lastActivitie": "2026-01-25T12:53:55.106Z"
+        },
+        {
+          "id": "1769348598532",
+          "name": "aa",
+          "age": 34,
+          "isAdmin": false,
+          "birthDate": "1991-05-05",
+          "createdAt": "2026-01-25T13:43:18.532Z",
+          "xp": 95,
+          "points": 45,
+          "streak": 1,
+          "settings": {
+            "pin": null,
+            "notification": true,
+            "deviceDefault": false,
+            "header_background": "bg-gradient-to-r from-blue-400 to-cyan-500"
+          },
+          "activity_history": [
+            {
+              "id": "1769348617535",
+              "task_id": "2",
+              "completedAt": "2026-01-25T13:43:37.535Z",
+              "pointsEarned": 15,
+              "co2saved": 0.8
+            },
+            {
+              "id": "1769348618955",
+              "task_id": "2",
+              "completedAt": "2026-01-25T13:43:38.955Z",
+              "pointsEarned": 15,
+              "co2saved": 0.8
+            },
+            {
+              "id": "1769348619863",
+              "task_id": "2",
+              "completedAt": "2026-01-25T13:43:39.863Z",
+              "pointsEarned": 15,
+              "co2saved": 0.8
+            }
+          ],
+          "appliance_history": [
+            {
+              "id": "1769348611962",
+              "appliance_id": "2",
+              "usedAt": "2026-01-25T13:43:31.962Z",
+              "duration": 180,
+              "energy_consumed": 6,
+              "co2emited": 1.128
+            },
+            {
+              "id": "1769348738323",
+              "appliance_id": "2",
+              "usedAt": "2026-01-25T13:45:38.323Z",
+              "duration": 3000,
+              "energy_consumed": 100,
+              "co2emited": 18.8
+            }
+          ],
+          "rewards_history": [],
+          "badges": [
+            {
+              "id_badge": "early_adopter",
+              "title": "Early Adopter",
+              "description": "Primeiro perfil criado",
+              "icon": "star",
+              "earnedAt": "2026-01-25T13:43:31.966Z"
+            }
+          ],
+          "lastActivitie": "2026-01-25T13:43:31.965Z",
+          "email": "a@a.pt"
         }
       ]
     }
