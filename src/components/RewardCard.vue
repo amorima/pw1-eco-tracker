@@ -6,7 +6,7 @@
       class="w-full sm:w-[100px] h-[140px] sm:h-[100px] rounded-(--border-radius-md) overflow-hidden shrink-0 flex items-center justify-center bg-(--system-input-background)"
     >
       <img v-if="image" :src="image" :alt="title" class="w-full h-full object-cover" />
-      <i v-else class="fa-solid fa-gift text-5xl text-(--text-disabled)"></i>
+      <i v-else class="fa-solid fa-gift text-5xl text-(--accent-muted-foreground)"></i>
     </div>
 
     <div class="flex flex-col gap-1 flex-1 min-w-0 w-full">

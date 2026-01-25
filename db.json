@@ -774,8 +774,8 @@
           "isAdmin": true,
           "birthDate": "1999-01-01",
           "createdAt": "2026-01-25T12:34:47.848Z",
-          "xp": 0,
-          "points": 0,
+          "xp": 65,
+          "points": 65,
           "streak": 1,
           "settings": {
             "pin": "1234",
@@ -783,7 +783,29 @@
             "deviceDefault": true,
             "header_background": "bg-gradient-to-r from-green-400 to-emerald-500"
           },
-          "activity_history": [],
+          "activity_history": [
+            {
+              "id": "1769356794451",
+              "task_id": "1",
+              "completedAt": "2026-01-25T15:59:54.451Z",
+              "pointsEarned": 20,
+              "co2saved": 0.1
+            },
+            {
+              "id": "1769357310052",
+              "task_id": "14",
+              "completedAt": "2026-01-25T16:08:30.052Z",
+              "pointsEarned": 25,
+              "co2saved": 0.2
+            },
+            {
+              "id": "1769357317148",
+              "task_id": "1",
+              "completedAt": "2026-01-25T16:08:37.148Z",
+              "pointsEarned": 20,
+              "co2saved": 0.1
+            }
+          ],
           "appliance_history": [
             {
               "id": "1769350667536",
@@ -841,7 +863,7 @@
       "powerWatts": 150,
       "category": "Cozinha",
       "description": "Frigorífico de casa",
-      "imgUrl": "https://images.unsplash.com/photo-1584568694244-14fbdf83bd30?w=400&h=300&fit=crop",
+      "imgUrl": null,
       "isDefault": true,
       "icon": "fa-solid fa-temperature-empty",
       "apiType": "refrigerator",
@@ -856,7 +878,7 @@
       "powerWatts": 2000,
       "category": "Lavandaria",
       "description": "Máquina de lavar roupa",
-      "imgUrl": "https://images.unsplash.com/photo-1604335399105-a0c585fd81a1?w=400&h=300&fit=crop",
+      "imgUrl": null,
       "isDefault": true,
       "icon": "fa-solid fa-shirt",
       "apiType": "washing_machine",
@@ -871,7 +893,7 @@
       "powerWatts": 1800,
       "category": "Cozinha",
       "description": "Máquina de lavar loiça",
-      "imgUrl": "https://images.unsplash.com/photo-1556910096-6f5e72db6803?w=400&h=300&fit=crop",
+      "imgUrl": null,
       "isDefault": true,
       "icon": "fa-solid fa-kitchen-set",
       "apiType": "dishwasher",
@@ -886,7 +908,7 @@
       "powerWatts": 2400,
       "category": "Cozinha",
       "description": "Forno elétrico",
-      "imgUrl": "https://images.unsplash.com/photo-1590794056226-79ef3a8147e1?w=400&h=300&fit=crop",
+      "imgUrl": null,
       "isDefault": true,
       "icon": "fa-solid fa-fire-burner",
       "apiType": "dishwasher",
@@ -901,7 +923,7 @@
       "powerWatts": 1000,
       "category": "Cozinha",
       "description": "Micro-ondas",
-      "imgUrl": "https://images.unsplash.com/photo-1574269909862-7e1d70bb8078?w=400&h=300&fit=crop",
+      "imgUrl": null,
       "isDefault": true,
       "icon": "fa-solid fa-microwave",
       "apiType": "dishwasher",
@@ -916,7 +938,7 @@
       "powerWatts": 100,
       "category": "Entretenimento",
       "description": "Televisão da sala",
-      "imgUrl": "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=400&h=300&fit=crop",
+      "imgUrl": null,
       "isDefault": true,
       "icon": "fa-solid fa-tv",
       "apiType": "television",
@@ -930,7 +952,7 @@
       "powerWatts": 3500,
       "category": "Climatização",
       "description": "Ar condicionado",
-      "imgUrl": "https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=400&h=300&fit=crop",
+      "imgUrl": null,
       "isDefault": true,
       "icon": "fa-solid fa-temperature-low",
       "apiType": "air_conditioner",
@@ -944,7 +966,7 @@
       "powerWatts": 1400,
       "category": "Limpeza",
       "description": "Aspirador de pó",
-      "imgUrl": "https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=400&h=300&fit=crop",
+      "imgUrl": null,
       "isDefault": true,
       "icon": "fa-solid fa-vacuum",
       "apiType": "dishwasher",
@@ -958,7 +980,7 @@
       "powerWatts": 2000,
       "category": "Lavandaria",
       "description": "Ferro de engomar",
-      "imgUrl": "https://images.unsplash.com/photo-1610557892470-55d9e80c0bce?w=400&h=300&fit=crop",
+      "imgUrl": null,
       "isDefault": true,
       "icon": "fa-solid fa-iron",
       "apiType": "dishwasher",
@@ -972,7 +994,7 @@
       "powerWatts": 1500,
       "category": "Cuidados pessoais",
       "description": "Secador de cabelo",
-      "imgUrl": "https://images.unsplash.com/photo-1522338140262-f46f5913618a?w=400&h=300&fit=crop",
+      "imgUrl": null,
       "isDefault": true,
       "icon": "fa-solid fa-wind",
       "apiType": "dishwasher",
@@ -985,7 +1007,7 @@
       "powerWatts": 200,
       "category": "Tecnologia",
       "description": "Computador de secretária",
-      "imgUrl": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=400&h=300&fit=crop",
+      "imgUrl": null,
       "isDefault": true,
       "icon": "fa-solid fa-desktop",
       "apiType": "desktop",
@@ -998,7 +1020,7 @@
       "powerWatts": 150,
       "category": "Entretenimento",
       "description": "Consola de jogos",
-      "imgUrl": "https://images.unsplash.com/photo-1486401899868-0e435ed85128?w=400&h=300&fit=crop",
+      "imgUrl": null,
       "isDefault": true,
       "icon": "fa-solid fa-gamepad",
       "apiType": "television"
@@ -1010,7 +1032,7 @@
       "powerWatts": 5,
       "category": "Tecnologia",
       "description": "Carregador de telemóvel",
-      "imgUrl": "https://images.unsplash.com/photo-1609692814858-f7cd2f0afa4f?w=400&h=300&fit=crop",
+      "imgUrl": null,
       "isDefault": true,
       "icon": "fa-solid fa-mobile-screen",
       "apiType": "laptop"
@@ -1022,7 +1044,7 @@
       "powerWatts": 10,
       "category": "Tecnologia",
       "description": "Router Wi-Fi",
-      "imgUrl": "https://images.unsplash.com/photo-1606904825846-647eb07f5be2?w=400&h=300&fit=crop",
+      "imgUrl": null,
       "isDefault": true,
       "icon": "fa-solid fa-wifi",
       "apiType": "laptop"
@@ -1034,7 +1056,7 @@
       "powerWatts": 1000,
       "category": "Cozinha",
       "description": "Cafeteira/Máquina de café",
-      "imgUrl": "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=400&h=300&fit=crop",
+      "imgUrl": null,
       "isDefault": true,
       "icon": "fa-solid fa-mug-hot",
       "apiType": "dishwasher"
@@ -1045,7 +1067,8 @@
       "category": "Cozinha",
       "description": "",
       "imgUrl": null,
-      "isDefault": false
+      "isDefault": false,
+      "id": "5d50"
     },
     {
       "id": "1769353703776",
@@ -1360,42 +1383,42 @@
       "title": "Escolher filme na noite de cinema",
       "description": "Escolha o filme para a próxima noite de cinema em família",
       "points_cost": 50,
-      "imgUrl": "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=400&h=300&fit=crop"
+      "imgUrl": null
     },
     {
       "id": "2",
       "title": "Jantar fora",
       "description": "Um jantar no restaurante da sua escolha",
       "points_cost": 120,
-      "imgUrl": "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&h=300&fit=crop"
+      "imgUrl": null
     },
     {
       "id": "3",
       "title": "Dia sem tarefas domésticas",
       "description": "Dispensa de todas as tarefas domésticas por um dia",
       "points_cost": 80,
-      "imgUrl": "https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=400&h=300&fit=crop"
+      "imgUrl": null
     },
     {
       "id": "4",
       "title": "Escolher a música no carro",
       "description": "Controle total do rádio durante uma viagem",
       "points_cost": 20,
-      "imgUrl": "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=300&fit=crop"
+      "imgUrl": null
     },
     {
       "id": "5",
       "title": "Sobremesa extra",
       "description": "Uma sobremesa extra à sua escolha",
       "points_cost": 30,
-      "imgUrl": "https://images.unsplash.com/photo-1551024601-bec78aea704b?w=400&h=300&fit=crop"
+      "imgUrl": null
     },
     {
       "id": "6",
       "title": "Tempo extra de jogos",
       "description": "30 minutos extra de tempo de jogos",
       "points_cost": 40,
-      "imgUrl": "https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf?w=400&h=300&fit=crop"
+      "imgUrl": null
     }
   ]
 }

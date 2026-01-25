@@ -4,9 +4,10 @@
   >
     <!-- Image -->
     <div
-      class="w-full sm:w-[140px] md:w-[190px] h-[120px] sm:h-[100px] relative rounded-[8px] shrink-0 overflow-hidden"
+      class="w-full sm:w-[140px] md:w-[190px] h-[120px] sm:h-[100px] relative rounded-[8px] shrink-0 overflow-hidden flex items-center justify-center bg-(--system-input-background)"
     >
-      <img :src="image" :alt="title" class="w-full h-full object-cover" />
+      <img v-if="image" :src="image" :alt="title" class="w-full h-full object-cover" />
+      <i v-else class="fa-solid fa-gift text-5xl text-(--accent-muted-foreground)"></i>
     </div>
 
     <!-- Content -->
