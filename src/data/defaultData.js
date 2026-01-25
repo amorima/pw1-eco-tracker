@@ -1,4 +1,5 @@
 import { getApplianceIcon, getTaskIcon } from './categoryIcons'
+import imageService from '@/services/imageService'
 
 // Default appliances with the new data structure
 export const defaultAppliances = [
@@ -9,7 +10,7 @@ export const defaultAppliances = [
     powerWatts: 150,
     category: 'Cozinha',
     description: 'Frigorífico de casa',
-    imgUrl: null,
+    imgUrl: imageService.getApplianceImage('Cozinha', 'Frigorífico'),
     isDefault: true,
   },
   {
@@ -19,7 +20,7 @@ export const defaultAppliances = [
     powerWatts: 2000,
     category: 'Lavandaria',
     description: 'Máquina de lavar roupa',
-    imgUrl: null,
+    imgUrl: imageService.getApplianceImage('Lavandaria', 'Máquina de lavar roupa'),
     isDefault: true,
   },
   {
@@ -29,7 +30,7 @@ export const defaultAppliances = [
     powerWatts: 1800,
     category: 'Cozinha',
     description: 'Máquina de lavar loiça',
-    imgUrl: null,
+    imgUrl: imageService.getApplianceImage('Cozinha', 'Máquina de lavar loiça'),
     isDefault: true,
   },
   {
@@ -39,7 +40,7 @@ export const defaultAppliances = [
     powerWatts: 2400,
     category: 'Cozinha',
     description: 'Forno elétrico',
-    imgUrl: null,
+    imgUrl: imageService.getApplianceImage('Cozinha', 'Forno'),
     isDefault: true,
   },
   {
@@ -49,7 +50,7 @@ export const defaultAppliances = [
     powerWatts: 1000,
     category: 'Cozinha',
     description: 'Micro-ondas',
-    imgUrl: null,
+    imgUrl: imageService.getApplianceImage('Cozinha', 'Micro-ondas'),
     isDefault: true,
   },
   {
@@ -59,7 +60,7 @@ export const defaultAppliances = [
     powerWatts: 100,
     category: 'Entretenimento',
     description: 'Televisão da sala',
-    imgUrl: null,
+    imgUrl: imageService.getApplianceImage('Entretenimento', 'Televisão'),
     isDefault: true,
   },
   {
@@ -69,7 +70,7 @@ export const defaultAppliances = [
     powerWatts: 3500,
     category: 'Climatização',
     description: 'Ar condicionado',
-    imgUrl: null,
+    imgUrl: imageService.getApplianceImage('Climatização', 'Ar condicionado'),
     isDefault: true,
   },
   {
@@ -79,7 +80,7 @@ export const defaultAppliances = [
     powerWatts: 1400,
     category: 'Limpeza',
     description: 'Aspirador de pó',
-    imgUrl: null,
+    imgUrl: imageService.getApplianceImage('Limpeza', 'Aspirador'),
     isDefault: true,
   },
   {
@@ -89,7 +90,7 @@ export const defaultAppliances = [
     powerWatts: 2000,
     category: 'Lavandaria',
     description: 'Ferro de engomar',
-    imgUrl: null,
+    imgUrl: imageService.getApplianceImage('Lavandaria', 'Ferro de engomar'),
     isDefault: true,
   },
   {
@@ -99,7 +100,7 @@ export const defaultAppliances = [
     powerWatts: 1500,
     category: 'Cuidados pessoais',
     description: 'Secador de cabelo',
-    imgUrl: null,
+    imgUrl: imageService.getApplianceImage('Cuidados pessoais', 'Secador de cabelo'),
     isDefault: true,
   },
   {
@@ -109,7 +110,7 @@ export const defaultAppliances = [
     powerWatts: 200,
     category: 'Tecnologia',
     description: 'Computador de secretária',
-    imgUrl: null,
+    imgUrl: imageService.getApplianceImage('Tecnologia', 'Computador'),
     isDefault: true,
   },
   {
@@ -119,7 +120,7 @@ export const defaultAppliances = [
     powerWatts: 150,
     category: 'Entretenimento',
     description: 'Consola de jogos',
-    imgUrl: null,
+    imgUrl: imageService.getApplianceImage('Entretenimento', 'Consola de jogos'),
     isDefault: true,
   },
   {
@@ -129,7 +130,7 @@ export const defaultAppliances = [
     powerWatts: 5,
     category: 'Tecnologia',
     description: 'Carregador de telemóvel',
-    imgUrl: null,
+    imgUrl: imageService.getApplianceImage('Tecnologia', 'Carregador de telemóvel'),
     isDefault: true,
   },
   {
@@ -139,7 +140,7 @@ export const defaultAppliances = [
     powerWatts: 10,
     category: 'Tecnologia',
     description: 'Router Wi-Fi',
-    imgUrl: null,
+    imgUrl: imageService.getApplianceImage('Tecnologia', 'Router Wi-Fi'),
     isDefault: true,
   },
   {
@@ -149,9 +150,9 @@ export const defaultAppliances = [
     powerWatts: 1000,
     category: 'Cozinha',
     description: 'Cafeteira/Máquina de café',
-    imgUrl: null,
+    imgUrl: imageService.getApplianceImage('Cozinha', 'Cafeteira'),
     isDefault: true,
-  }
+  },
 ]
 
 // Default tasks with the new data structure
@@ -162,8 +163,8 @@ export const defaultTasks = [
     category: 'Energia',
     points: 20,
     description: 'Desligar todas as luzes quando sair de uma divisão',
-    imgUrl: null,
-    co2saved: 10,
+    imgUrl: imageService.getTaskImage('Energia'),
+    co2saved: 0.1,
     isDefault: true,
   },
   {
@@ -172,8 +173,8 @@ export const defaultTasks = [
     category: 'Mobilidade',
     points: 15,
     description: 'Usar transporte público em vez de carro próprio',
-    imgUrl: null,
-    co2saved: 7.5,
+    imgUrl: imageService.getTaskImage('Mobilidade'),
+    co2saved: 0.8,
     isDefault: true,
   },
   {
@@ -182,8 +183,8 @@ export const defaultTasks = [
     category: 'Reciclagem',
     points: 10,
     description: 'Separar e reciclar embalagens de plástico',
-    imgUrl: null,
-    co2saved: 0.5,
+    imgUrl: imageService.getTaskImage('Reciclagem'),
+    co2saved: 0.2,
     isDefault: true,
   },
   {
@@ -192,8 +193,8 @@ export const defaultTasks = [
     category: 'Água',
     points: 8,
     description: 'Tomar duches rápidos para poupar água e energia',
-    imgUrl: null,
-    co2saved: 0.3,
+    imgUrl: imageService.getTaskImage('Água'),
+    co2saved: 0.1,
     isDefault: true,
   },
   {
@@ -202,8 +203,8 @@ export const defaultTasks = [
     category: 'Energia',
     points: 7,
     description: 'Desligar completamente aparelhos eletrónicos',
-    imgUrl: null,
-    co2saved: 0.2,
+    imgUrl: imageService.getTaskImage('Energia'),
+    co2saved: 0.1,
     isDefault: true,
   },
   {
@@ -212,8 +213,8 @@ export const defaultTasks = [
     category: 'Alimentação',
     points: 12,
     description: 'Fazer uma refeição sem carne',
-    imgUrl: null,
-    co2saved: 1.5,
+    imgUrl: imageService.getTaskImage('Alimentação'),
+    co2saved: 0.8,
     isDefault: true,
   },
   {
@@ -222,8 +223,8 @@ export const defaultTasks = [
     category: 'Consumo',
     points: 5,
     description: 'Levar saco próprio às compras',
-    imgUrl: null,
-    co2saved: 0.1,
+    imgUrl: imageService.getTaskImage('Consumo'),
+    co2saved: 0.2,
     isDefault: true,
   },
   {
@@ -232,8 +233,8 @@ export const defaultTasks = [
     category: 'Energia',
     points: 10,
     description: 'Lavar roupa com água fria (máx 30°C)',
-    imgUrl: null,
-    co2saved: 0.6,
+    imgUrl: imageService.getTaskImage('Energia'),
+    co2saved: 0.1,
     isDefault: true,
   },
   {
@@ -242,8 +243,8 @@ export const defaultTasks = [
     category: 'Mobilidade',
     points: 20,
     description: 'Usar bicicleta para deslocações curtas',
-    imgUrl: null,
-    co2saved: 3,
+    imgUrl: imageService.getTaskImage('Mobilidade'),
+    co2saved: 0.8,
     isDefault: true,
   },
   {
@@ -252,8 +253,8 @@ export const defaultTasks = [
     category: 'Reciclagem',
     points: 15,
     description: 'Fazer compostagem com restos de comida',
-    imgUrl: null,
-    co2saved: 1,
+    imgUrl: imageService.getTaskImage('Reciclagem'),
+    co2saved: 0.2,
     isDefault: true,
   },
   {
@@ -262,8 +263,8 @@ export const defaultTasks = [
     category: 'Energia',
     points: 12,
     description: 'Secar roupa naturalmente em vez de usar secadora',
-    imgUrl: null,
-    co2saved: 0.8,
+    imgUrl: imageService.getTaskImage('Energia'),
+    co2saved: 0.1,
     isDefault: true,
   },
   {
@@ -272,8 +273,8 @@ export const defaultTasks = [
     category: 'Consumo',
     points: 18,
     description: 'Comprar alimentos produzidos localmente',
-    imgUrl: null,
-    co2saved: 1.2,
+    imgUrl: imageService.getTaskImage('Consumo'),
+    co2saved: 0.2,
     isDefault: true,
   },
   {
@@ -282,8 +283,8 @@ export const defaultTasks = [
     category: 'Ambiente',
     points: 50,
     description: 'Plantar uma árvore ou planta',
-    imgUrl: null,
-    co2saved: 21,
+    imgUrl: imageService.getTaskImage('Ambiente'),
+    co2saved: 0.2,
     isDefault: true,
   },
   {
@@ -292,8 +293,8 @@ export const defaultTasks = [
     category: 'Consumo',
     points: 25,
     description: 'Reparar um objeto em vez de comprar novo',
-    imgUrl: null,
-    co2saved: 5,
+    imgUrl: imageService.getTaskImage('Consumo'),
+    co2saved: 0.2,
     isDefault: true,
   },
   {
@@ -302,24 +303,28 @@ export const defaultTasks = [
     category: 'Ambiente',
     points: 30,
     description: 'Participar numa ação de limpeza local',
-    imgUrl: null,
-    co2saved: 2,
+    imgUrl: imageService.getTaskImage('Ambiente'),
+    co2saved: 0.2,
     isDefault: true,
-  }
+  },
 ]
 
 // Helper functions to add icon getters dynamically
 export function enrichAppliance(appliance) {
   return {
     ...appliance,
-    get icon() { return getApplianceIcon(this.category) }
+    get icon() {
+      return getApplianceIcon(this.category)
+    },
   }
 }
 
 export function enrichTask(task) {
   return {
     ...task,
-    get icon() { return getTaskIcon(this.category) }
+    get icon() {
+      return getTaskIcon(this.category)
+    },
   }
 }
 
@@ -330,36 +335,36 @@ export const defaultBadges = [
     title: 'Early Adopter',
     icon: 'star',
     description: 'Primeiro perfil criado',
-    requirements: { type: 'profile_created', value: 1 }
+    requirements: { type: 'profile_created', value: 1 },
   },
   {
     id: 'week_warrior',
     title: 'Week Warrior',
     icon: 'local_fire_department',
     description: '7 dias de streak',
-    requirements: { type: 'streak', value: 7 }
+    requirements: { type: 'streak', value: 7 },
   },
   {
     id: 'eco_warrior',
     title: 'Eco Warrior',
     icon: 'eco',
     description: 'Poupou 10kg de CO2',
-    requirements: { type: 'co2_saved', value: 10 }
+    requirements: { type: 'co2_saved', value: 10 },
   },
   {
     id: 'level_5',
     title: 'Nível 5',
     icon: 'emoji_events',
     description: 'Alcançou o nível 5',
-    requirements: { type: 'level', value: 5 }
+    requirements: { type: 'level', value: 5 },
   },
   {
     id: 'first_reward',
     title: 'Primeira Recompensa',
     icon: 'card_giftcard',
     description: 'Resgatou a primeira recompensa',
-    requirements: { type: 'rewards_redeemed', value: 1 }
-  }
+    requirements: { type: 'rewards_redeemed', value: 1 },
+  },
 ]
 
 // Default rewards
@@ -369,43 +374,43 @@ export const defaultRewards = [
     title: 'Escolher filme na noite de cinema',
     description: 'Escolha o filme para a próxima noite de cinema em família',
     points_cost: 50,
-    imgUrl: null
+    imgUrl: imageService.getRewardImage('Escolher filme na noite de cinema'),
   },
   {
     id: '2',
     title: 'Jantar fora',
     description: 'Um jantar no restaurante da sua escolha',
     points_cost: 120,
-    imgUrl: null
+    imgUrl: imageService.getRewardImage('Jantar fora'),
   },
   {
     id: '3',
     title: 'Dia sem tarefas domésticas',
     description: 'Dispensa de todas as tarefas domésticas por um dia',
     points_cost: 80,
-    imgUrl: null
+    imgUrl: imageService.getRewardImage('Dia sem tarefas domésticas'),
   },
   {
     id: '4',
     title: 'Escolher a música no carro',
     description: 'Controle total do rádio durante uma viagem',
     points_cost: 20,
-    imgUrl: null
+    imgUrl: imageService.getRewardImage('Escolher a música no carro'),
   },
   {
     id: '5',
     title: 'Sobremesa extra',
     description: 'Uma sobremesa extra à sua escolha',
     points_cost: 30,
-    imgUrl: null
+    imgUrl: imageService.getRewardImage('Sobremesa extra'),
   },
   {
     id: '6',
     title: 'Tempo extra de jogos',
     description: '30 minutos extra de tempo de jogos',
     points_cost: 40,
-    imgUrl: null
-  }
+    imgUrl: imageService.getRewardImage('Tempo extra de jogos'),
+  },
 ]
 
 export default {
