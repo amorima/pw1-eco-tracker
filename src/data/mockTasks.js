@@ -26,10 +26,12 @@ export const mockTasks = [
     category: 'Energia',
     points: 20,
     description: 'Desligar todas as luzes quando sair de uma divisão',
-    imgUrl: taskImages['1'],
-    co2saved: 10,
+    imgUrl: null,
+    co2saved: 0.1,
     isDefault: true,
-    get icon() { return getTaskIcon(this) }
+    get icon() {
+      return getTaskIcon(this.category)
+    },
   },
   {
     id: '2',
@@ -37,10 +39,12 @@ export const mockTasks = [
     category: 'Mobilidade',
     points: 15,
     description: 'Usar transporte público em vez de carro próprio',
-    imgUrl: taskImages['2'],
-    co2saved: 7.5,
+    imgUrl: null,
+    co2saved: 0.8,
     isDefault: true,
-    get icon() { return getTaskIcon(this) }
+    get icon() {
+      return getTaskIcon(this.category)
+    },
   },
   {
     id: '3',
@@ -48,10 +52,12 @@ export const mockTasks = [
     category: 'Reciclagem',
     points: 10,
     description: 'Separar e reciclar embalagens de plástico',
-    imgUrl: taskImages['3'],
-    co2saved: 0.5,
+    imgUrl: null,
+    co2saved: 0.2,
     isDefault: true,
-    get icon() { return getTaskIcon(this) }
+    get icon() {
+      return getTaskIcon(this.category)
+    },
   },
   {
     id: '4',
@@ -59,10 +65,12 @@ export const mockTasks = [
     category: 'Água',
     points: 8,
     description: 'Tomar duches rápidos para poupar água e energia',
-    imgUrl: taskImages['4'],
-    co2saved: 0.3,
+    imgUrl: null,
+    co2saved: 0.1,
     isDefault: true,
-    get icon() { return getTaskIcon(this) }
+    get icon() {
+      return getTaskIcon(this.category)
+    },
   },
   {
     id: '5',
@@ -70,10 +78,12 @@ export const mockTasks = [
     category: 'Energia',
     points: 7,
     description: 'Desligar completamente aparelhos eletrónicos',
-    imgUrl: taskImages['5'],
-    co2saved: 0.2,
+    imgUrl: null,
+    co2saved: 0.1,
     isDefault: true,
-    get icon() { return getTaskIcon(this) }
+    get icon() {
+      return getTaskIcon(this.category)
+    },
   },
   {
     id: '6',
@@ -81,10 +91,12 @@ export const mockTasks = [
     category: 'Alimentação',
     points: 12,
     description: 'Fazer uma refeição sem carne',
-    imgUrl: taskImages['6'],
-    co2saved: 1.5,
+    imgUrl: null,
+    co2saved: 0.8,
     isDefault: true,
-    get icon() { return getTaskIcon(this) }
+    get icon() {
+      return getTaskIcon(this.category)
+    },
   },
   {
     id: '7',
@@ -92,10 +104,12 @@ export const mockTasks = [
     category: 'Consumo',
     points: 5,
     description: 'Levar saco próprio às compras',
-    imgUrl: taskImages['7'],
-    co2saved: 0.1,
+    imgUrl: null,
+    co2saved: 0.2,
     isDefault: true,
-    get icon() { return getTaskIcon(this) }
+    get icon() {
+      return getTaskIcon(this.category)
+    },
   },
   {
     id: '8',
@@ -103,10 +117,12 @@ export const mockTasks = [
     category: 'Energia',
     points: 10,
     description: 'Lavar roupa com água fria (máx 30°C)',
-    imgUrl: taskImages['8'],
-    co2saved: 0.6,
+    imgUrl: null,
+    co2saved: 0.1,
     isDefault: true,
-    get icon() { return getTaskIcon(this) }
+    get icon() {
+      return getTaskIcon(this.category)
+    },
   },
   {
     id: '9',
@@ -114,10 +130,12 @@ export const mockTasks = [
     category: 'Mobilidade',
     points: 20,
     description: 'Usar bicicleta para deslocações curtas',
-    imgUrl: taskImages['9'],
-    co2saved: 3,
+    imgUrl: null,
+    co2saved: 0.8,
     isDefault: true,
-    get icon() { return getTaskIcon(this) }
+    get icon() {
+      return getTaskIcon(this.category)
+    },
   },
   {
     id: '10',
@@ -125,10 +143,12 @@ export const mockTasks = [
     category: 'Reciclagem',
     points: 15,
     description: 'Fazer compostagem com restos de comida',
-    imgUrl: taskImages['10'],
-    co2saved: 1,
+    imgUrl: null,
+    co2saved: 0.2,
     isDefault: true,
-    get icon() { return getTaskIcon(this) }
+    get icon() {
+      return getTaskIcon(this.category)
+    },
   },
   {
     id: '11',
@@ -136,10 +156,12 @@ export const mockTasks = [
     category: 'Energia',
     points: 12,
     description: 'Secar roupa naturalmente em vez de usar secadora',
-    imgUrl: taskImages['11'],
-    co2saved: 0.8,
+    imgUrl: null,
+    co2saved: 0.1,
     isDefault: true,
-    get icon() { return getTaskIcon(this) }
+    get icon() {
+      return getTaskIcon(this.category)
+    },
   },
   {
     id: '12',
@@ -147,10 +169,12 @@ export const mockTasks = [
     category: 'Consumo',
     points: 18,
     description: 'Comprar alimentos produzidos localmente',
-    imgUrl: taskImages['12'],
-    co2saved: 1.2,
+    imgUrl: null,
+    co2saved: 0.2,
     isDefault: true,
-    get icon() { return getTaskIcon(this) }
+    get icon() {
+      return getTaskIcon(this.category)
+    },
   },
   {
     id: '13',
@@ -158,10 +182,12 @@ export const mockTasks = [
     category: 'Ambiente',
     points: 50,
     description: 'Plantar uma árvore ou planta',
-    imgUrl: taskImages['13'],
-    co2saved: 21,
+    imgUrl: null,
+    co2saved: 0.2,
     isDefault: true,
-    get icon() { return getTaskIcon(this) }
+    get icon() {
+      return getTaskIcon(this.category)
+    },
   },
   {
     id: '14',
@@ -169,10 +195,12 @@ export const mockTasks = [
     category: 'Consumo',
     points: 25,
     description: 'Reparar um objeto em vez de comprar novo',
-    imgUrl: taskImages['14'],
-    co2saved: 5,
+    imgUrl: null,
+    co2saved: 0.2,
     isDefault: true,
-    get icon() { return getTaskIcon(this) }
+    get icon() {
+      return getTaskIcon(this.category)
+    },
   },
   {
     id: '15',
@@ -180,9 +208,11 @@ export const mockTasks = [
     category: 'Ambiente',
     points: 30,
     description: 'Participar numa ação de limpeza local',
-    imgUrl: taskImages['15'],
-    co2saved: 2,
+    imgUrl: null,
+    co2saved: 0.2,
     isDefault: true,
-    get icon() { return getTaskIcon(this) }
-  }
+    get icon() {
+      return getTaskIcon(this.category)
+    },
+  },
 ]

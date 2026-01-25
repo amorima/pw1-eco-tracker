@@ -3,6 +3,17 @@ import { defineStore } from 'pinia'
 import { ensureApiKey } from '@/services/carbonApiService'
 import { getApplianceIcon, getTaskIcon } from '@/data/categoryIcons'
 
+const defaultTaskCO2 = {
+  Energia: 0.1,
+  Mobilidade: 0.8,
+  Reciclagem: 0.2,
+  Água: 0.1,
+  Alimentação: 0.8,
+  Consumo: 0.2,
+  Ambiente: 0.2,
+  Limpeza: 0.1,
+}
+
 export const useUserStore = defineStore('userStore', {
   state: () => ({
     // Current logged in user account (email/password level)
@@ -1529,6 +1540,12 @@ export const useUserStore = defineStore('userStore', {
           category: taskData.category,
           points: taskData.points,
           description: taskData.description || '',
+          imgUrl: taskData.imgUrl || taskData.image || null,
+          co2saved:
+            taskData.co2saved ||
+            taskData.co2Saved ||
+            defaultTaskCO2[taskData.category] ||
+            taskData.points * 0.05,
           imgUrl: taskData.imgUrl || null,
           co2saved: taskData.co2saved || taskData.points * 0.5,
           isDefault: false,
@@ -1567,7 +1584,13 @@ export const useUserStore = defineStore('userStore', {
         const updated = {
           ...this.availableTasks[taskIndex],
           ...updates,
-          co2saved: updates.co2saved || updates.points * 0.5,
+          co2saved:
+            updates.co2saved ||
+            updates.co2Saved ||
+            (updates.category ? defaultTaskCO2[updates.category] : null) ||
+            (updates.points && !defaultTaskCO2[this.availableTasks[taskIndex].category]
+              ? updates.points * 0.05
+              : this.availableTasks[taskIndex].co2saved),
           id: taskId,
         }
 

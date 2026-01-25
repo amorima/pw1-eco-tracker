@@ -1,19 +1,6 @@
 <template>
   <ModalComponent :isOpen="isOpen" :title="title" size="md" @close="$emit('close')">
     <div class="space-y-4">
-      <!-- Name/Title -->
-      <div class="space-y-2">
-        <label class="block text-sm font-medium text-(--text-body-sub-titles)">
-          {{ isTask ? 'Título da Tarefa *' : 'Nome do Aparelho *' }}
-        </label>
-        <input
-          v-model="formData.name"
-          type="text"
-          :placeholder="isTask ? 'Ex: Reciclar papel e cartão' : 'Ex: Frigorífico da cozinha'"
-          class="w-full px-4 py-3 bg-(--system-card) border-2 border-(--system-border) rounded-lg text-(--text-body) outline-none focus:border-(--system-ring)"
-        />
-      </div>
-
       <!-- API Type Selection (for appliances) -->
       <div v-if="!isTask" class="space-y-2">
         <label class="block text-sm font-medium text-(--text-body-sub-titles)">
@@ -21,6 +8,7 @@
         </label>
         <select
           v-model="formData.apiType"
+          @change="onTypeChange"
           class="w-full px-4 py-3 bg-(--system-card) border-2 border-(--system-border) rounded-lg text-(--text-body) outline-none focus:border-(--system-ring)"
         >
           <option value="">Escolha o tipo de aparelho</option>
@@ -39,6 +27,19 @@
         <p class="text-xs text-(--text-disabled)">
           Escolha o tipo mais próximo do seu aparelho para cálculos precisos
         </p>
+      </div>
+
+      <!-- Name/Title -->
+      <div class="space-y-2">
+        <label class="block text-sm font-medium text-(--text-body-sub-titles)">
+          {{ isTask ? 'Título da Tarefa *' : 'Nome do Aparelho *' }}
+        </label>
+        <input
+          v-model="formData.name"
+          type="text"
+          :placeholder="isTask ? 'Ex: Reciclar papel e cartão' : 'Ex: Frigorífico da cozinha'"
+          class="w-full px-4 py-3 bg-(--system-card) border-2 border-(--system-border) rounded-lg text-(--text-body) outline-none focus:border-(--system-ring)"
+        />
       </div>
 
       <!-- Power Consumption (for appliances) -->
@@ -60,7 +61,9 @@
 
       <!-- Category -->
       <div class="space-y-2">
-        <label class="block text-sm font-medium text-(--text-body-sub-titles)"> Categoria * </label>
+        <label class="block text-sm font-medium text-(--text-body-sub-titles)">
+          {{ isTask ? 'Categoria *' : 'Categoria *' }}
+        </label>
         <select
           v-model="formData.category"
           class="w-full px-4 py-3 bg-(--system-card) border-2 border-(--system-border) rounded-lg text-(--text-body) outline-none focus:border-(--system-ring)"
@@ -337,14 +340,14 @@ export default {
     },
     defaultCO2Values() {
       return {
-        Energia: 0.2,
-        Mobilidade: 2.5,
-        Reciclagem: 0.5,
-        Água: 0.3,
-        Alimentação: 1.5,
-        Consumo: 0.8,
-        Ambiente: 1.0,
-        Limpeza: 0.4,
+        Energia: 0.1,
+        Mobilidade: 0.8,
+        Reciclagem: 0.2,
+        Água: 0.1,
+        Alimentação: 0.8,
+        Consumo: 0.2,
+        Ambiente: 0.2,
+        Limpeza: 0.1,
       }
     },
     defaultPowerConsumption() {
@@ -489,6 +492,20 @@ export default {
       console.log('Saving item data:', data)
       this.$emit('save', data)
       this.$emit('close')
+    },
+    onTypeChange() {
+      const typeLabels = {
+        refrigerator: 'Frigorífico',
+        washing_machine: 'Máquina de lavar roupa',
+        dishwasher: 'Máquina de lavar loiça',
+        air_conditioner: 'Ar condicionado',
+        television: 'Televisão',
+        desktop: 'Computador de secretária',
+        laptop: 'Computador portátil',
+      }
+      if (this.formData.apiType && typeLabels[this.formData.apiType]) {
+        this.formData.name = typeLabels[this.formData.apiType]
+      }
     },
   },
 }
