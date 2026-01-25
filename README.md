@@ -1,4 +1,6 @@
-# b.green 🌱 Eco Tracker
+<p align="center">
+  <img src="src/assets/img/Logo.svg" alt="logo bgreen">
+</p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/vuejs-%2335495e.svg?style=for-the-badge&logo=vuedotjs&logoColor=%234FC08D" alt="Vue.js" />
@@ -203,6 +205,10 @@ Se tivéssemos mais tempo ou para uma versão 2.0, gostaríamos de implementar:
 - **Notificações:** Terminar de implementar o sistema de notificações.
 
 ---
+
+<p align="center">
+  <img src="src/assets/img/b.green-dash.png" alt="Dashboard Preview">
+</p>
 
 Feito com 💚 e muito código por António, Gabriel e Emanuel.
 
