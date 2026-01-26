@@ -206,7 +206,10 @@ export const useUserStore = defineStore('userStore', {
 
     // Get available rewards for household
     availableRewardsForHousehold: (state) => {
-      return state.householdRewards
+      if (!state.currentUser?.rewards) return state.householdRewards
+      return state.householdRewards.filter((reward) =>
+        state.currentUser.rewards.some((id) => String(id) === String(reward.id)),
+      )
     },
 
     // Get current profile's redeemed rewards with status
@@ -1353,6 +1356,7 @@ export const useUserStore = defineStore('userStore', {
           description: rewardData.description || '',
           points_cost: rewardData.points_cost || rewardData.points,
           imgUrl: rewardData.imgUrl || null,
+          isDefault: false,
         }
 
         const response = await fetch('http://localhost:3000/rewards', {
@@ -1363,6 +1367,19 @@ export const useUserStore = defineStore('userStore', {
 
         const created = await response.json()
         this.householdRewards.push(created)
+
+        // Add to user's rewards list
+        if (!this.currentUser.rewards) {
+          this.currentUser.rewards = []
+        }
+        if (!this.currentUser.rewards.some((id) => String(id) === String(created.id))) {
+          this.currentUser.rewards.push(created.id)
+          await fetch(`http://localhost:3000/users/${this.currentUser.id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(this.currentUser),
+          })
+        }
 
         return { success: true }
       } catch (error) {
@@ -1382,8 +1399,55 @@ export const useUserStore = defineStore('userStore', {
         )
         if (rewardIndex === -1) throw new Error('Reward not found')
 
+        const existingReward = this.householdRewards[rewardIndex]
+
+        // If it's a default reward, create a new non-default copy
+        if (existingReward.isDefault) {
+          const newReward = {
+            id: String(Date.now()),
+            title: updates.title,
+            description: updates.description || '',
+            points_cost: updates.points_cost || updates.points,
+            imgUrl: updates.imgUrl || null,
+            isDefault: false,
+          }
+
+          const response = await fetch('http://localhost:3000/rewards', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newReward),
+          })
+
+          if (!response.ok) throw new Error('Failed to create reward copy')
+
+          const created = await response.json()
+          this.householdRewards.push(created)
+
+          // Replace the default reward reference with the new one in user's list
+          if (!this.currentUser.rewards) {
+            this.currentUser.rewards = []
+          }
+          const refIndex = this.currentUser.rewards.findIndex(
+            (id) => String(id) === String(rewardId),
+          )
+          if (refIndex !== -1) {
+            this.currentUser.rewards[refIndex] = created.id
+          } else {
+            this.currentUser.rewards.push(created.id)
+          }
+
+          await fetch(`http://localhost:3000/users/${this.currentUser.id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(this.currentUser),
+          })
+
+          return { success: true }
+        }
+
+        // Non-default reward: update normally
         const updated = {
-          ...this.householdRewards[rewardIndex],
+          ...existingReward,
           title: updates.title,
           description: updates.description || '',
           points_cost: updates.points_cost || updates.points,
@@ -1413,6 +1477,27 @@ export const useUserStore = defineStore('userStore', {
       try {
         if (!rewardId) throw new Error('Invalid reward ID')
 
+        const reward = this.householdRewards.find((r) => String(r.id) === String(rewardId))
+        if (!reward) throw new Error('Reward not found')
+
+        // If it's a default reward, only remove the reference from user's list
+        if (reward.isDefault) {
+          if (this.currentUser.rewards) {
+            this.currentUser.rewards = this.currentUser.rewards.filter(
+              (id) => String(id) !== String(rewardId),
+            )
+
+            await fetch(`http://localhost:3000/users/${this.currentUser.id}`, {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(this.currentUser),
+            })
+          }
+
+          return { success: true }
+        }
+
+        // Non-default reward: delete from database
         const response = await fetch(`http://localhost:3000/rewards/${rewardId}`, {
           method: 'DELETE',
         })
@@ -1422,6 +1507,19 @@ export const useUserStore = defineStore('userStore', {
         this.householdRewards = this.householdRewards.filter(
           (r) => String(r.id) !== String(rewardId),
         )
+
+        // Also remove from user's rewards list
+        if (this.currentUser.rewards) {
+          this.currentUser.rewards = this.currentUser.rewards.filter(
+            (id) => String(id) !== String(rewardId),
+          )
+
+          await fetch(`http://localhost:3000/users/${this.currentUser.id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(this.currentUser),
+          })
+        }
 
         return { success: true }
       } catch (error) {
