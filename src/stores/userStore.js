@@ -428,6 +428,7 @@ export const useUserStore = defineStore('userStore', {
           maxProfiles: 4,
           appliances: [],
           tasks: [],
+          rewards: ['1', '2', '3', '4', '5', '6'],
           profiles: [firstProfile],
         }
 
@@ -519,6 +520,11 @@ export const useUserStore = defineStore('userStore', {
       this.currentUser.maxProfiles = setupData.maxProfiles
       this.currentUser.appliances = setupData.appliances.map(String)
       this.currentUser.tasks = setupData.activities.map(String)
+      
+      // Ensure rewards array is initialized with default rewards if not present
+      if (!this.currentUser.rewards || this.currentUser.rewards.length === 0) {
+        this.currentUser.rewards = ['1', '2', '3', '4', '5', '6']
+      }
 
       if (!this.currentUser.profiles || this.currentUser.profiles.length === 0) {
         const adminProfile = {

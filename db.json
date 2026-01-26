@@ -893,8 +893,47 @@
       "password": "me",
       "createdAt": "2026-01-26T01:16:50.507Z",
       "maxProfiles": 4,
-      "appliances": [],
-      "tasks": [],
+      "appliances": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15"
+      ],
+      "tasks": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15"
+      ],
+      "rewards": [
+        "1",
+        "1769415167072",
+        "3",
+        "4",
+        "6"
+      ],
       "profiles": [
         {
           "id": "1769390210507",
@@ -908,7 +947,7 @@
           "points": 0,
           "streak": 0,
           "settings": {
-            "pin": null,
+            "pin": "1234",
             "notification": true,
             "deviceDefault": true,
             "header_background": "bg-gradient-to-r from-green-400 to-emerald-500"
@@ -916,9 +955,16 @@
           "activity_history": [],
           "appliance_history": [],
           "rewards_history": [],
-          "badges": [],
-          "lastActivitie": null,
-          "needsQuickStart": true
+          "badges": [
+            {
+              "id_badge": "early_adopter",
+              "title": "Early Adopter",
+              "description": "Primeiro perfil criado",
+              "icon": "star",
+              "earnedAt": "2026-01-26T08:12:36.033Z"
+            }
+          ],
+          "lastActivitie": null
         }
       ]
     }
@@ -1781,6 +1827,14 @@
       "description": "",
       "points_cost": 40,
       "imgUrl": "https://res.cloudinary.com/djijtdbxk/image/upload/v1769376895/bgreen/rewards/r94l48fshfpgvqzlbe2t.jpg",
+      "isDefault": false
+    },
+    {
+      "id": "1769415167072",
+      "title": "Jantar foraa",
+      "description": "",
+      "points_cost": 120,
+      "imgUrl": null,
       "isDefault": false
     }
   ]
