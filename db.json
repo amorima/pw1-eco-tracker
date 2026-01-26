@@ -7,22 +7,30 @@
       "createdAt": "2026-01-01T10:00:00Z",
       "maxProfiles": 4,
       "appliances": [
-        "1",
-        "2",
-        "6",
-        "7",
-        "11",
-        "12",
-        "13"
+        "sofia-app-1",
+        "sofia-app-2",
+        "sofia-app-6",
+        "sofia-app-7",
+        "sofia-app-11",
+        "sofia-app-12",
+        "sofia-app-13"
       ],
       "tasks": [
-        "1",
-        "2",
-        "3",
-        "4",
-        "5",
-        "6",
-        "9"
+        "sofia-task-1",
+        "sofia-task-2",
+        "sofia-task-3",
+        "sofia-task-4",
+        "sofia-task-5",
+        "sofia-task-6",
+        "sofia-task-9"
+      ],
+      "rewards": [
+        "sofia-reward-1",
+        "sofia-reward-2",
+        "sofia-reward-3",
+        "sofia-reward-4",
+        "sofia-reward-5",
+        "sofia-reward-6"
       ],
       "profiles": [
         {
@@ -45,98 +53,98 @@
           "activity_history": [
             {
               "id": "a101",
-              "task_id": "1",
+              "task_id": "sofia-task-1",
               "completedAt": "2026-01-25T08:00:00Z",
               "pointsEarned": 20,
               "co2saved": 0.1
             },
             {
               "id": "a102",
-              "task_id": "6",
+              "task_id": "sofia-task-6",
               "completedAt": "2026-01-25T13:00:00Z",
               "pointsEarned": 12,
               "co2saved": 0.8
             },
             {
               "id": "a103",
-              "task_id": "1",
+              "task_id": "sofia-task-1",
               "completedAt": "2026-01-24T08:00:00Z",
               "pointsEarned": 20,
               "co2saved": 0.1
             },
             {
               "id": "a104",
-              "task_id": "3",
+              "task_id": "sofia-task-3",
               "completedAt": "2026-01-24T18:00:00Z",
               "pointsEarned": 10,
               "co2saved": 0.2
             },
             {
               "id": "a105",
-              "task_id": "1",
+              "task_id": "sofia-task-1",
               "completedAt": "2026-01-23T08:00:00Z",
               "pointsEarned": 20,
               "co2saved": 0.1
             },
             {
               "id": "a106",
-              "task_id": "6",
+              "task_id": "sofia-task-6",
               "completedAt": "2026-01-23T20:00:00Z",
               "pointsEarned": 12,
               "co2saved": 0.8
             },
             {
               "id": "a107",
-              "task_id": "1",
+              "task_id": "sofia-task-1",
               "completedAt": "2026-01-22T08:00:00Z",
               "pointsEarned": 20,
               "co2saved": 0.1
             },
             {
               "id": "a108",
-              "task_id": "3",
+              "task_id": "sofia-task-3",
               "completedAt": "2026-01-22T18:00:00Z",
               "pointsEarned": 10,
               "co2saved": 0.2
             },
             {
               "id": "a109",
-              "task_id": "1",
+              "task_id": "sofia-task-1",
               "completedAt": "2026-01-21T08:00:00Z",
               "pointsEarned": 20,
               "co2saved": 0.1
             },
             {
               "id": "a110",
-              "task_id": "6",
+              "task_id": "sofia-task-6",
               "completedAt": "2026-01-21T13:00:00Z",
               "pointsEarned": 12,
               "co2saved": 0.8
             },
             {
               "id": "a111",
-              "task_id": "1",
+              "task_id": "sofia-task-1",
               "completedAt": "2026-01-20T08:00:00Z",
               "pointsEarned": 20,
               "co2saved": 0.1
             },
             {
               "id": "a112",
-              "task_id": "3",
+              "task_id": "sofia-task-3",
               "completedAt": "2026-01-20T18:00:00Z",
               "pointsEarned": 10,
               "co2saved": 0.2
             },
             {
               "id": "a113",
-              "task_id": "1",
+              "task_id": "sofia-task-1",
               "completedAt": "2026-01-19T08:00:00Z",
               "pointsEarned": 20,
               "co2saved": 0.1
             },
             {
               "id": "a114",
-              "task_id": "6",
+              "task_id": "sofia-task-6",
               "completedAt": "2026-01-19T20:00:00Z",
               "pointsEarned": 12,
               "co2saved": 0.8
@@ -145,7 +153,7 @@
           "appliance_history": [
             {
               "id": "u101",
-              "appliance_id": "1",
+              "appliance_id": "sofia-app-1",
               "usedAt": "2026-01-25T00:00:00Z",
               "duration": 1440,
               "energy_consumed": 3.6,
@@ -153,7 +161,7 @@
             },
             {
               "id": "u102",
-              "appliance_id": "2",
+              "appliance_id": "sofia-app-2",
               "usedAt": "2026-01-25T10:00:00Z",
               "duration": 60,
               "energy_consumed": 2,
@@ -161,7 +169,7 @@
             },
             {
               "id": "u103",
-              "appliance_id": "1",
+              "appliance_id": "sofia-app-1",
               "usedAt": "2026-01-24T00:00:00Z",
               "duration": 1440,
               "energy_consumed": 3.6,
@@ -169,7 +177,7 @@
             },
             {
               "id": "u104",
-              "appliance_id": "1",
+              "appliance_id": "sofia-app-1",
               "usedAt": "2026-01-23T00:00:00Z",
               "duration": 1440,
               "energy_consumed": 3.6,
@@ -177,7 +185,7 @@
             },
             {
               "id": "u105",
-              "appliance_id": "2",
+              "appliance_id": "sofia-app-2",
               "usedAt": "2026-01-23T15:00:00Z",
               "duration": 60,
               "energy_consumed": 2,
@@ -185,7 +193,7 @@
             },
             {
               "id": "u106",
-              "appliance_id": "1",
+              "appliance_id": "sofia-app-1",
               "usedAt": "2026-01-22T00:00:00Z",
               "duration": 1440,
               "energy_consumed": 3.6,
@@ -193,7 +201,7 @@
             },
             {
               "id": "u107",
-              "appliance_id": "1",
+              "appliance_id": "sofia-app-1",
               "usedAt": "2026-01-21T00:00:00Z",
               "duration": 1440,
               "energy_consumed": 3.6,
@@ -201,7 +209,7 @@
             },
             {
               "id": "u108",
-              "appliance_id": "1",
+              "appliance_id": "sofia-app-1",
               "usedAt": "2026-01-20T00:00:00Z",
               "duration": 1440,
               "energy_consumed": 3.6,
@@ -209,7 +217,7 @@
             },
             {
               "id": "u109",
-              "appliance_id": "2",
+              "appliance_id": "sofia-app-2",
               "usedAt": "2026-01-20T11:00:00Z",
               "duration": 60,
               "energy_consumed": 2,
@@ -217,7 +225,7 @@
             },
             {
               "id": "u110",
-              "appliance_id": "1",
+              "appliance_id": "sofia-app-1",
               "usedAt": "2026-01-19T00:00:00Z",
               "duration": 1440,
               "energy_consumed": 3.6,
@@ -438,6 +446,14 @@
         "2",
         "3"
       ],
+      "rewards": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
       "profiles": [
         {
           "id": "demo-1",
@@ -514,6 +530,14 @@
         "2",
         "4",
         "3"
+      ],
+      "rewards": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
       ],
       "profiles": [
         {
@@ -765,6 +789,14 @@
         "14",
         "15"
       ],
+      "rewards": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
       "profiles": [
         {
           "id": "1769344487848",
@@ -853,6 +885,88 @@
           "lastActivitie": "2026-01-25T14:17:47.538Z"
         }
       ]
+    },
+    {
+      "id": "1769390210507",
+      "name": "me@me.me",
+      "email": "me@me.me",
+      "password": "me",
+      "createdAt": "2026-01-26T01:16:50.507Z",
+      "maxProfiles": 4,
+      "appliances": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15"
+      ],
+      "tasks": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15"
+      ],
+      "rewards": [
+        "1",
+        "1769415167072",
+        "3",
+        "4",
+        "6"
+      ],
+      "profiles": [
+        {
+          "id": "1769390210507",
+          "name": "me@me.me",
+          "age": null,
+          "avatarUrl": null,
+          "isAdmin": true,
+          "birthDate": null,
+          "createdAt": "2026-01-26T01:16:50.507Z",
+          "xp": 0,
+          "points": 0,
+          "streak": 0,
+          "settings": {
+            "pin": "1234",
+            "notification": true,
+            "deviceDefault": true,
+            "header_background": "bg-gradient-to-r from-green-400 to-emerald-500"
+          },
+          "activity_history": [],
+          "appliance_history": [],
+          "rewards_history": [],
+          "badges": [
+            {
+              "id_badge": "early_adopter",
+              "title": "Early Adopter",
+              "description": "Primeiro perfil criado",
+              "icon": "star",
+              "earnedAt": "2026-01-26T08:12:36.033Z"
+            }
+          ],
+          "lastActivitie": null
+        }
+      ]
     }
   ],
   "appliances": [
@@ -863,7 +977,7 @@
       "powerWatts": 150,
       "category": "Cozinha",
       "description": "Frigorífico de casa",
-      "imgUrl": "https://res.cloudinary.com/djijtdbxk/image/upload/v1769374897/bgreen/appliances/cmnepttwf6yv10ydekq6.jpg",
+      "imgUrl": null,
       "isDefault": true,
       "icon": "fa-solid fa-kitchen-set",
       "apiType": "refrigerator",
@@ -878,7 +992,7 @@
       "powerWatts": 2000,
       "category": "Lavandaria",
       "description": "Máquina de lavar roupa",
-      "imgUrl": "https://res.cloudinary.com/djijtdbxk/image/upload/v1769374963/bgreen/appliances/irnzpnatssn1jpg1hksn.jpg",
+      "imgUrl": null,
       "isDefault": true,
       "icon": "fa-solid fa-shirt",
       "apiType": "washing_machine",
@@ -938,7 +1052,7 @@
       "powerWatts": 100,
       "category": "Entretenimento",
       "description": "Televisão da sala",
-      "imgUrl": "https://res.cloudinary.com/djijtdbxk/image/upload/v1769375114/bgreen/appliances/j1tblkd98ia9z9gwm9ci.jpg",
+      "imgUrl": null,
       "isDefault": true,
       "icon": "fa-solid fa-tv",
       "apiType": "television",
@@ -953,7 +1067,7 @@
       "powerWatts": 3500,
       "category": "Climatização",
       "description": "Ar condicionado",
-      "imgUrl": "https://res.cloudinary.com/djijtdbxk/image/upload/v1769375362/bgreen/appliances/e3l21qzmqpv7u4aommqg.jpg",
+      "imgUrl": null,
       "isDefault": true,
       "icon": "fa-solid fa-temperature-low",
       "apiType": "air_conditioner",
@@ -1009,7 +1123,7 @@
       "powerWatts": 200,
       "category": "Tecnologia",
       "description": "Computador de secretária",
-      "imgUrl": "https://res.cloudinary.com/djijtdbxk/image/upload/v1769375853/bgreen/appliances/tk1sbmnydqlvsyhswpp1.jpg",
+      "imgUrl": null,
       "isDefault": true,
       "icon": "fa-solid fa-laptop",
       "apiType": "desktop",
@@ -1024,7 +1138,7 @@
       "powerWatts": 150,
       "category": "Entretenimento",
       "description": "Consola de jogos",
-      "imgUrl": "https://res.cloudinary.com/djijtdbxk/image/upload/v1769375584/bgreen/appliances/fsnqghzwosrm32ge8vir.jpg",
+      "imgUrl": null,
       "isDefault": true,
       "icon": "fa-solid fa-tv",
       "apiType": "television",
@@ -1039,7 +1153,7 @@
       "powerWatts": 5,
       "category": "Tecnologia",
       "description": "Carregador de telemóvel",
-      "imgUrl": "https://res.cloudinary.com/djijtdbxk/image/upload/v1769374907/bgreen/appliances/lyqdnwxgnu7anfwrcj1n.jpg",
+      "imgUrl": null,
       "isDefault": true,
       "icon": "fa-solid fa-laptop",
       "apiType": "laptop",
@@ -1094,6 +1208,111 @@
       "avgPowerConsumption": 150,
       "avgUsageHoursPerDay": 1,
       "co2PerKwh": 0.233
+    },
+    {
+      "id": "sofia-app-1",
+      "name": "Frigorífico",
+      "type": "refrigerator",
+      "powerWatts": 150,
+      "category": "Cozinha",
+      "description": "Frigorífico de casa",
+      "imgUrl": "https://res.cloudinary.com/djijtdbxk/image/upload/v1769374897/bgreen/appliances/cmnepttwf6yv10ydekq6.jpg",
+      "isDefault": false,
+      "icon": "fa-solid fa-kitchen-set",
+      "apiType": "refrigerator",
+      "avgPowerConsumption": 150,
+      "avgUsageHoursPerDay": 1,
+      "co2PerKwh": 0.233
+    },
+    {
+      "id": "sofia-app-2",
+      "name": "Máquina de lavar roupa",
+      "type": "washing_machine",
+      "powerWatts": 2000,
+      "category": "Lavandaria",
+      "description": "Máquina de lavar roupa",
+      "imgUrl": "https://res.cloudinary.com/djijtdbxk/image/upload/v1769374963/bgreen/appliances/irnzpnatssn1jpg1hksn.jpg",
+      "isDefault": false,
+      "icon": "fa-solid fa-shirt",
+      "apiType": "washing_machine",
+      "avgPowerConsumption": 2000,
+      "avgUsageHoursPerDay": 1,
+      "co2PerKwh": 0.233
+    },
+    {
+      "id": "sofia-app-6",
+      "name": "Televisão",
+      "type": "television",
+      "powerWatts": 100,
+      "category": "Entretenimento",
+      "description": "Televisão da sala",
+      "imgUrl": "https://res.cloudinary.com/djijtdbxk/image/upload/v1769375114/bgreen/appliances/j1tblkd98ia9z9gwm9ci.jpg",
+      "isDefault": false,
+      "icon": "fa-solid fa-tv",
+      "apiType": "television",
+      "avgUsageHoursPerDay": 1,
+      "co2PerKwh": 0.233,
+      "avgPowerConsumption": 150
+    },
+    {
+      "id": "sofia-app-7",
+      "name": "Ar condicionado",
+      "type": "air_conditioner",
+      "powerWatts": 3500,
+      "category": "Climatização",
+      "description": "Ar condicionado",
+      "imgUrl": "https://res.cloudinary.com/djijtdbxk/image/upload/v1769375362/bgreen/appliances/e3l21qzmqpv7u4aommqg.jpg",
+      "isDefault": false,
+      "icon": "fa-solid fa-temperature-low",
+      "apiType": "air_conditioner",
+      "avgUsageHoursPerDay": 1,
+      "co2PerKwh": 0.233,
+      "avgPowerConsumption": 3500
+    },
+    {
+      "id": "sofia-app-11",
+      "name": "Computador",
+      "type": "desktop",
+      "powerWatts": 200,
+      "category": "Tecnologia",
+      "description": "Computador de secretária",
+      "imgUrl": "https://res.cloudinary.com/djijtdbxk/image/upload/v1769375853/bgreen/appliances/tk1sbmnydqlvsyhswpp1.jpg",
+      "isDefault": false,
+      "icon": "fa-solid fa-laptop",
+      "apiType": "desktop",
+      "co2PerKwh": 0.233,
+      "avgPowerConsumption": 200,
+      "avgUsageHoursPerDay": 1
+    },
+    {
+      "id": "sofia-app-12",
+      "name": "Consola de jogos",
+      "type": "electricity",
+      "powerWatts": 150,
+      "category": "Entretenimento",
+      "description": "Consola de jogos",
+      "imgUrl": "https://res.cloudinary.com/djijtdbxk/image/upload/v1769375584/bgreen/appliances/fsnqghzwosrm32ge8vir.jpg",
+      "isDefault": false,
+      "icon": "fa-solid fa-tv",
+      "apiType": "television",
+      "avgPowerConsumption": 150,
+      "avgUsageHoursPerDay": 1,
+      "co2PerKwh": 0.233
+    },
+    {
+      "id": "sofia-app-13",
+      "name": "Carregador de telemóvel",
+      "type": "electricity",
+      "powerWatts": 5,
+      "category": "Tecnologia",
+      "description": "Carregador de telemóvel",
+      "imgUrl": "https://res.cloudinary.com/djijtdbxk/image/upload/v1769374907/bgreen/appliances/lyqdnwxgnu7anfwrcj1n.jpg",
+      "isDefault": false,
+      "icon": "fa-solid fa-laptop",
+      "apiType": "laptop",
+      "avgPowerConsumption": 50,
+      "avgUsageHoursPerDay": 1,
+      "co2PerKwh": 0.233
     }
   ],
   "tasks": [
@@ -1103,7 +1322,7 @@
       "category": "Energia",
       "points": 20,
       "description": "Desligar todas as luzes quando sair de uma divisão",
-      "imgUrl": "https://res.cloudinary.com/djijtdbxk/image/upload/v1769377700/bgreen/tasks/ftjhsexghphgzubhdhb8.jpg",
+      "imgUrl": null,
       "co2saved": 0.1,
       "isDefault": true,
       "icon": "fa-solid fa-bolt",
@@ -1117,7 +1336,7 @@
       "category": "Mobilidade",
       "points": 15,
       "description": "Usar transporte público em vez de carro próprio",
-      "imgUrl": "https://res.cloudinary.com/djijtdbxk/image/upload/v1769377787/bgreen/tasks/ccrkxkrevsuonkfufyel.jpg",
+      "imgUrl": null,
       "co2saved": 0.8,
       "isDefault": true,
       "icon": "fa-solid fa-bus",
@@ -1131,7 +1350,7 @@
       "category": "Reciclagem",
       "points": 10,
       "description": "Separar e reciclar embalagens de plástico",
-      "imgUrl": "https://res.cloudinary.com/djijtdbxk/image/upload/v1769378992/bgreen/tasks/mnhisvjscafdsl7pbdoc.jpg",
+      "imgUrl": null,
       "co2saved": 0.2,
       "isDefault": true,
       "icon": "fa-solid fa-recycle",
@@ -1145,7 +1364,7 @@
       "category": "Água",
       "points": 8,
       "description": "Tomar duches rápidos para poupar água e energia",
-      "imgUrl": "https://res.cloudinary.com/djijtdbxk/image/upload/v1769377578/bgreen/tasks/eattuhyhg61sglhrywnk.jpg",
+      "imgUrl": null,
       "co2saved": 0.1,
       "isDefault": true,
       "icon": "fa-solid fa-droplet",
@@ -1159,7 +1378,7 @@
       "category": "Energia",
       "points": 7,
       "description": "Desligar completamente aparelhos eletrónicos",
-      "imgUrl": "https://res.cloudinary.com/djijtdbxk/image/upload/v1769378916/bgreen/tasks/e0padbamulknfhnhczmj.jpg",
+      "imgUrl": null,
       "co2saved": 0.1,
       "isDefault": true,
       "icon": "fa-solid fa-bolt",
@@ -1173,7 +1392,7 @@
       "category": "Alimentação",
       "points": 12,
       "description": "Fazer uma refeição sem carne",
-      "imgUrl": "https://res.cloudinary.com/djijtdbxk/image/upload/v1769377258/bgreen/tasks/dyd1kvknmdcjdztdxwj5.jpg",
+      "imgUrl": null,
       "co2saved": 0.8,
       "isDefault": true,
       "icon": "fa-solid fa-utensils",
@@ -1207,7 +1426,7 @@
       "category": "Mobilidade",
       "points": 20,
       "description": "Usar bicicleta para deslocações curtas",
-      "imgUrl": "https://res.cloudinary.com/djijtdbxk/image/upload/v1769377356/bgreen/tasks/g408d3zougbvgdttgnvu.png",
+      "imgUrl": null,
       "co2saved": 0.8,
       "isDefault": true,
       "icon": "fa-solid fa-bus",
@@ -1274,6 +1493,104 @@
       "imgUrl": null,
       "co2saved": 0.2,
       "isDefault": true
+    },
+    {
+      "id": "sofia-task-1",
+      "title": "Desligar luzes ao sair de casa",
+      "category": "Energia",
+      "points": 20,
+      "description": "Desligar todas as luzes quando sair de uma divisão",
+      "imgUrl": "https://res.cloudinary.com/djijtdbxk/image/upload/v1769377700/bgreen/tasks/ftjhsexghphgzubhdhb8.jpg",
+      "co2saved": 0.1,
+      "isDefault": false,
+      "icon": "fa-solid fa-bolt",
+      "co2Saved": 0.1,
+      "frequency": "daily",
+      "difficulty": "easy"
+    },
+    {
+      "id": "sofia-task-2",
+      "title": "Usar transporte público",
+      "category": "Mobilidade",
+      "points": 15,
+      "description": "Usar transporte público em vez de carro próprio",
+      "imgUrl": "https://res.cloudinary.com/djijtdbxk/image/upload/v1769377787/bgreen/tasks/ccrkxkrevsuonkfufyel.jpg",
+      "co2saved": 0.8,
+      "isDefault": false,
+      "icon": "fa-solid fa-bus",
+      "co2Saved": 0.8,
+      "frequency": "daily",
+      "difficulty": "easy"
+    },
+    {
+      "id": "sofia-task-3",
+      "title": "Reciclar plástico",
+      "category": "Reciclagem",
+      "points": 10,
+      "description": "Separar e reciclar embalagens de plástico",
+      "imgUrl": "https://res.cloudinary.com/djijtdbxk/image/upload/v1769378992/bgreen/tasks/mnhisvjscafdsl7pbdoc.jpg",
+      "co2saved": 0.2,
+      "isDefault": false,
+      "icon": "fa-solid fa-recycle",
+      "co2Saved": 0.2,
+      "frequency": "daily",
+      "difficulty": "easy"
+    },
+    {
+      "id": "sofia-task-4",
+      "title": "Duche de 5 minutos",
+      "category": "Água",
+      "points": 8,
+      "description": "Tomar duches rápidos para poupar água e energia",
+      "imgUrl": "https://res.cloudinary.com/djijtdbxk/image/upload/v1769377578/bgreen/tasks/eattuhyhg61sglhrywnk.jpg",
+      "co2saved": 0.1,
+      "isDefault": false,
+      "icon": "fa-solid fa-droplet",
+      "co2Saved": 0.1,
+      "frequency": "daily",
+      "difficulty": "easy"
+    },
+    {
+      "id": "sofia-task-5",
+      "title": "Desligar aparelhos em standby",
+      "category": "Energia",
+      "points": 7,
+      "description": "Desligar completamente aparelhos eletrónicos",
+      "imgUrl": "https://res.cloudinary.com/djijtdbxk/image/upload/v1769378916/bgreen/tasks/e0padbamulknfhnhczmj.jpg",
+      "co2saved": 0.1,
+      "isDefault": false,
+      "icon": "fa-solid fa-bolt",
+      "co2Saved": 0.1,
+      "frequency": "daily",
+      "difficulty": "easy"
+    },
+    {
+      "id": "sofia-task-6",
+      "title": "Refeição vegetariana",
+      "category": "Alimentação",
+      "points": 12,
+      "description": "Fazer uma refeição sem carne",
+      "imgUrl": "https://res.cloudinary.com/djijtdbxk/image/upload/v1769377258/bgreen/tasks/dyd1kvknmdcjdztdxwj5.jpg",
+      "co2saved": 0.8,
+      "isDefault": false,
+      "icon": "fa-solid fa-utensils",
+      "co2Saved": 0.8,
+      "frequency": "daily",
+      "difficulty": "easy"
+    },
+    {
+      "id": "sofia-task-9",
+      "title": "Andar de bicicleta",
+      "category": "Mobilidade",
+      "points": 20,
+      "description": "Usar bicicleta para deslocações curtas",
+      "imgUrl": "https://res.cloudinary.com/djijtdbxk/image/upload/v1769377356/bgreen/tasks/g408d3zougbvgdttgnvu.png",
+      "co2saved": 0.8,
+      "isDefault": false,
+      "icon": "fa-solid fa-bus",
+      "co2Saved": 0.8,
+      "frequency": "daily",
+      "difficulty": "easy"
     }
   ],
   "badges": [
@@ -1421,42 +1738,104 @@
       "title": "Escolher filme na noite de cinema",
       "description": "",
       "points_cost": 50,
-      "imgUrl": "https://res.cloudinary.com/djijtdbxk/image/upload/v1769376994/bgreen/rewards/sm3yfkexii40kbphgvxl.jpg"
+      "imgUrl": null,
+      "isDefault": true
     },
     {
       "id": "2",
       "title": "Jantar fora",
       "description": "",
       "points_cost": 120,
-      "imgUrl": "https://res.cloudinary.com/djijtdbxk/image/upload/v1769377034/bgreen/rewards/xvb8e7emwe5qapmzhcqi.jpg"
+      "imgUrl": null,
+      "isDefault": true
     },
     {
       "id": "3",
       "title": "Dia sem tarefas domésticas",
       "description": "",
       "points_cost": 80,
-      "imgUrl": "https://res.cloudinary.com/djijtdbxk/image/upload/v1769378519/bgreen/rewards/v86gnrggkqjryapnmuvz.jpg"
+      "imgUrl": null,
+      "isDefault": true
     },
     {
       "id": "4",
       "title": "Escolher a música no carro",
       "description": "",
       "points_cost": 20,
-      "imgUrl": "https://res.cloudinary.com/djijtdbxk/image/upload/v1769376347/bgreen/rewards/f9rxr8cdsxdfuhwayb7s.png"
+      "imgUrl": null,
+      "isDefault": true
     },
     {
       "id": "5",
       "title": "Sobremesa extra",
       "description": "",
       "points_cost": 30,
-      "imgUrl": "https://res.cloudinary.com/djijtdbxk/image/upload/v1769376620/bgreen/rewards/saq3j5uaexulcw86nans.jpg"
+      "imgUrl": null,
+      "isDefault": true
     },
     {
       "id": "6",
       "title": "Tempo extra de jogos",
       "description": "",
       "points_cost": 40,
-      "imgUrl": "https://res.cloudinary.com/djijtdbxk/image/upload/v1769376895/bgreen/rewards/r94l48fshfpgvqzlbe2t.jpg"
+      "imgUrl": null,
+      "isDefault": true
+    },
+    {
+      "id": "sofia-reward-1",
+      "title": "Escolher filme na noite de cinema",
+      "description": "",
+      "points_cost": 50,
+      "imgUrl": "https://res.cloudinary.com/djijtdbxk/image/upload/v1769376994/bgreen/rewards/sm3yfkexii40kbphgvxl.jpg",
+      "isDefault": false
+    },
+    {
+      "id": "sofia-reward-2",
+      "title": "Jantar fora",
+      "description": "",
+      "points_cost": 120,
+      "imgUrl": "https://res.cloudinary.com/djijtdbxk/image/upload/v1769377034/bgreen/rewards/xvb8e7emwe5qapmzhcqi.jpg",
+      "isDefault": false
+    },
+    {
+      "id": "sofia-reward-3",
+      "title": "Dia sem tarefas domésticas",
+      "description": "",
+      "points_cost": 80,
+      "imgUrl": "https://res.cloudinary.com/djijtdbxk/image/upload/v1769378519/bgreen/rewards/v86gnrggkqjryapnmuvz.jpg",
+      "isDefault": false
+    },
+    {
+      "id": "sofia-reward-4",
+      "title": "Escolher a música no carro",
+      "description": "",
+      "points_cost": 20,
+      "imgUrl": "https://res.cloudinary.com/djijtdbxk/image/upload/v1769376347/bgreen/rewards/f9rxr8cdsxdfuhwayb7s.png",
+      "isDefault": false
+    },
+    {
+      "id": "sofia-reward-5",
+      "title": "Sobremesa extra",
+      "description": "",
+      "points_cost": 30,
+      "imgUrl": "https://res.cloudinary.com/djijtdbxk/image/upload/v1769376620/bgreen/rewards/saq3j5uaexulcw86nans.jpg",
+      "isDefault": false
+    },
+    {
+      "id": "sofia-reward-6",
+      "title": "Tempo extra de jogos",
+      "description": "",
+      "points_cost": 40,
+      "imgUrl": "https://res.cloudinary.com/djijtdbxk/image/upload/v1769376895/bgreen/rewards/r94l48fshfpgvqzlbe2t.jpg",
+      "isDefault": false
+    },
+    {
+      "id": "1769415167072",
+      "title": "Jantar foraa",
+      "description": "",
+      "points_cost": 120,
+      "imgUrl": null,
+      "isDefault": false
     }
   ]
 }

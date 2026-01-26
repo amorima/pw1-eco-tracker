@@ -823,7 +823,7 @@ export default {
       return stats
     },
     availableRewards() {
-      return this.userStore.householdRewards || []
+      return this.userStore.availableRewardsForHousehold || []
     },
     filteredAvailableRewards() {
       if (!this.rewardSearch.trim()) return this.availableRewards

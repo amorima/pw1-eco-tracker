@@ -206,7 +206,10 @@ export const useUserStore = defineStore('userStore', {
 
     // Get available rewards for household
     availableRewardsForHousehold: (state) => {
-      return state.householdRewards
+      if (!state.currentUser?.rewards) return state.householdRewards
+      return state.householdRewards.filter((reward) =>
+        state.currentUser.rewards.some((id) => String(id) === String(reward.id)),
+      )
     },
 
     // Get current profile's redeemed rewards with status
@@ -425,6 +428,7 @@ export const useUserStore = defineStore('userStore', {
           maxProfiles: 4,
           appliances: [],
           tasks: [],
+          rewards: ['1', '2', '3', '4', '5', '6'],
           profiles: [firstProfile],
         }
 
@@ -516,6 +520,11 @@ export const useUserStore = defineStore('userStore', {
       this.currentUser.maxProfiles = setupData.maxProfiles
       this.currentUser.appliances = setupData.appliances.map(String)
       this.currentUser.tasks = setupData.activities.map(String)
+      
+      // Ensure rewards array is initialized with default rewards if not present
+      if (!this.currentUser.rewards || this.currentUser.rewards.length === 0) {
+        this.currentUser.rewards = ['1', '2', '3', '4', '5', '6']
+      }
 
       if (!this.currentUser.profiles || this.currentUser.profiles.length === 0) {
         const adminProfile = {
@@ -1353,6 +1362,7 @@ export const useUserStore = defineStore('userStore', {
           description: rewardData.description || '',
           points_cost: rewardData.points_cost || rewardData.points,
           imgUrl: rewardData.imgUrl || null,
+          isDefault: false,
         }
 
         const response = await fetch('http://localhost:3000/rewards', {
@@ -1363,6 +1373,19 @@ export const useUserStore = defineStore('userStore', {
 
         const created = await response.json()
         this.householdRewards.push(created)
+
+        // Add to user's rewards list
+        if (!this.currentUser.rewards) {
+          this.currentUser.rewards = []
+        }
+        if (!this.currentUser.rewards.some((id) => String(id) === String(created.id))) {
+          this.currentUser.rewards.push(created.id)
+          await fetch(`http://localhost:3000/users/${this.currentUser.id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(this.currentUser),
+          })
+        }
 
         return { success: true }
       } catch (error) {
@@ -1382,8 +1405,55 @@ export const useUserStore = defineStore('userStore', {
         )
         if (rewardIndex === -1) throw new Error('Reward not found')
 
+        const existingReward = this.householdRewards[rewardIndex]
+
+        // If it's a default reward, create a new non-default copy
+        if (existingReward.isDefault) {
+          const newReward = {
+            id: String(Date.now()),
+            title: updates.title,
+            description: updates.description || '',
+            points_cost: updates.points_cost || updates.points,
+            imgUrl: updates.imgUrl || null,
+            isDefault: false,
+          }
+
+          const response = await fetch('http://localhost:3000/rewards', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newReward),
+          })
+
+          if (!response.ok) throw new Error('Failed to create reward copy')
+
+          const created = await response.json()
+          this.householdRewards.push(created)
+
+          // Replace the default reward reference with the new one in user's list
+          if (!this.currentUser.rewards) {
+            this.currentUser.rewards = []
+          }
+          const refIndex = this.currentUser.rewards.findIndex(
+            (id) => String(id) === String(rewardId),
+          )
+          if (refIndex !== -1) {
+            this.currentUser.rewards[refIndex] = created.id
+          } else {
+            this.currentUser.rewards.push(created.id)
+          }
+
+          await fetch(`http://localhost:3000/users/${this.currentUser.id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(this.currentUser),
+          })
+
+          return { success: true }
+        }
+
+        // Non-default reward: update normally
         const updated = {
-          ...this.householdRewards[rewardIndex],
+          ...existingReward,
           title: updates.title,
           description: updates.description || '',
           points_cost: updates.points_cost || updates.points,
@@ -1413,6 +1483,27 @@ export const useUserStore = defineStore('userStore', {
       try {
         if (!rewardId) throw new Error('Invalid reward ID')
 
+        const reward = this.householdRewards.find((r) => String(r.id) === String(rewardId))
+        if (!reward) throw new Error('Reward not found')
+
+        // If it's a default reward, only remove the reference from user's list
+        if (reward.isDefault) {
+          if (this.currentUser.rewards) {
+            this.currentUser.rewards = this.currentUser.rewards.filter(
+              (id) => String(id) !== String(rewardId),
+            )
+
+            await fetch(`http://localhost:3000/users/${this.currentUser.id}`, {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(this.currentUser),
+            })
+          }
+
+          return { success: true }
+        }
+
+        // Non-default reward: delete from database
         const response = await fetch(`http://localhost:3000/rewards/${rewardId}`, {
           method: 'DELETE',
         })
@@ -1422,6 +1513,19 @@ export const useUserStore = defineStore('userStore', {
         this.householdRewards = this.householdRewards.filter(
           (r) => String(r.id) !== String(rewardId),
         )
+
+        // Also remove from user's rewards list
+        if (this.currentUser.rewards) {
+          this.currentUser.rewards = this.currentUser.rewards.filter(
+            (id) => String(id) !== String(rewardId),
+          )
+
+          await fetch(`http://localhost:3000/users/${this.currentUser.id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(this.currentUser),
+          })
+        }
 
         return { success: true }
       } catch (error) {
@@ -1476,8 +1580,61 @@ export const useUserStore = defineStore('userStore', {
         )
         if (applianceIndex === -1) throw new Error('Appliance not found')
 
+        const existingAppliance = this.availableAppliances[applianceIndex]
+
+        // If it's a default appliance, create a new non-default one instead of editing
+        if (existingAppliance.isDefault) {
+          // Create a new appliance with the edited data
+          const newAppliance = {
+            id: String(Date.now()),
+            name: updates.name || existingAppliance.name,
+            type: updates.type || existingAppliance.type || 'electricity',
+            powerWatts: updates.powerWatts || existingAppliance.powerWatts || 100,
+            category: updates.category || existingAppliance.category,
+            description: updates.description || existingAppliance.description || '',
+            imgUrl: updates.imgUrl || existingAppliance.imgUrl || null,
+            icon: updates.icon || existingAppliance.icon,
+            apiType: updates.apiType || existingAppliance.apiType,
+            avgPowerConsumption: updates.avgPowerConsumption || existingAppliance.avgPowerConsumption,
+            avgUsageHoursPerDay: updates.avgUsageHoursPerDay || existingAppliance.avgUsageHoursPerDay,
+            co2PerKwh: updates.co2PerKwh || existingAppliance.co2PerKwh,
+            isDefault: false, // New appliance is NOT default
+          }
+
+          // Save the new appliance to the database
+          const response = await fetch('http://localhost:3000/appliances', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newAppliance),
+          })
+
+          if (!response.ok) throw new Error('Failed to create new appliance')
+
+          const created = await response.json()
+          this.availableAppliances.push(created)
+
+          // Replace the default appliance reference with the new one in user's list
+          const refIndex = this.currentUser.appliances.findIndex(
+            (id) => String(id) === String(applianceId),
+          )
+          if (refIndex !== -1) {
+            this.currentUser.appliances[refIndex] = created.id
+          } else {
+            this.currentUser.appliances.push(created.id)
+          }
+
+          await fetch(`http://localhost:3000/users/${this.currentUser.id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(this.currentUser),
+          })
+
+          return { success: true, appliance: created }
+        }
+
+        // For non-default appliances, update normally
         const updated = {
-          ...this.availableAppliances[applianceIndex],
+          ...existingAppliance,
           ...updates,
           id: applianceId,
         }
@@ -1502,6 +1659,27 @@ export const useUserStore = defineStore('userStore', {
 
     async deleteAppliance(applianceId) {
       try {
+        // Find the appliance to check if it's a default one
+        const appliance = this.availableAppliances.find(
+          (a) => String(a.id) === String(applianceId),
+        )
+
+        if (appliance?.isDefault) {
+          // For default appliances, only remove the reference from user's list
+          // Do NOT delete the actual appliance from the database
+          this.currentUser.appliances = this.currentUser.appliances.filter(
+            (id) => String(id) !== String(applianceId),
+          )
+          await fetch(`http://localhost:3000/users/${this.currentUser.id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(this.currentUser),
+          })
+
+          return { success: true }
+        }
+
+        // For non-default appliances, delete from database as well
         const response = await fetch(`http://localhost:3000/appliances/${applianceId}`, {
           method: 'DELETE',
         })
@@ -1576,16 +1754,76 @@ export const useUserStore = defineStore('userStore', {
         const taskIndex = this.availableTasks.findIndex((t) => String(t.id) === String(taskId))
         if (taskIndex === -1) throw new Error('Task not found')
 
+        const existingTask = this.availableTasks[taskIndex]
+
+        // If it's a default task, create a new non-default one instead of editing
+        if (existingTask.isDefault) {
+          // Calculate co2saved for the new task
+          const co2saved =
+            updates.co2saved ||
+            updates.co2Saved ||
+            (updates.category ? defaultTaskCO2[updates.category] : null) ||
+            defaultTaskCO2[existingTask.category] ||
+            (updates.points ? updates.points * 0.05 : existingTask.co2saved)
+
+          // Create a new task with the edited data
+          const newTask = {
+            id: String(Date.now()),
+            title: updates.title || existingTask.title,
+            category: updates.category || existingTask.category,
+            points: updates.points || existingTask.points,
+            description: updates.description || existingTask.description || '',
+            imgUrl: updates.imgUrl || updates.image || existingTask.imgUrl || null,
+            co2saved: co2saved,
+            icon: updates.icon || existingTask.icon,
+            co2Saved: co2saved,
+            frequency: updates.frequency || existingTask.frequency,
+            difficulty: updates.difficulty || existingTask.difficulty,
+            isDefault: false, // New task is NOT default
+          }
+
+          // Save the new task to the database
+          const response = await fetch('http://localhost:3000/tasks', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newTask),
+          })
+
+          if (!response.ok) throw new Error('Failed to create new task')
+
+          const created = await response.json()
+          this.availableTasks.push(created)
+
+          // Replace the default task reference with the new one in user's list
+          const refIndex = this.currentUser.tasks.findIndex(
+            (id) => String(id) === String(taskId),
+          )
+          if (refIndex !== -1) {
+            this.currentUser.tasks[refIndex] = created.id
+          } else {
+            this.currentUser.tasks.push(created.id)
+          }
+
+          await fetch(`http://localhost:3000/users/${this.currentUser.id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(this.currentUser),
+          })
+
+          return { success: true, task: created }
+        }
+
+        // For non-default tasks, update normally
         const updated = {
-          ...this.availableTasks[taskIndex],
+          ...existingTask,
           ...updates,
           co2saved:
             updates.co2saved ||
             updates.co2Saved ||
             (updates.category ? defaultTaskCO2[updates.category] : null) ||
-            (updates.points && !defaultTaskCO2[this.availableTasks[taskIndex].category]
+            (updates.points && !defaultTaskCO2[existingTask.category]
               ? updates.points * 0.05
-              : this.availableTasks[taskIndex].co2saved),
+              : existingTask.co2saved),
           id: taskId,
         }
 
@@ -1609,6 +1847,25 @@ export const useUserStore = defineStore('userStore', {
 
     async deleteTask(taskId) {
       try {
+        // Find the task to check if it's a default one
+        const task = this.availableTasks.find((t) => String(t.id) === String(taskId))
+
+        if (task?.isDefault) {
+          // For default tasks, only remove the reference from user's list
+          // Do NOT delete the actual task from the database
+          this.currentUser.tasks = this.currentUser.tasks.filter(
+            (id) => String(id) !== String(taskId),
+          )
+          await fetch(`http://localhost:3000/users/${this.currentUser.id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(this.currentUser),
+          })
+
+          return { success: true }
+        }
+
+        // For non-default tasks, delete from database as well
         const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
           method: 'DELETE',
         })

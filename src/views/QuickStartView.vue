@@ -233,16 +233,20 @@ export default {
   computed: {
     ...mapState(useUserStore, ['availableAppliances', 'availableTasks']),
     appliancesWithIcons() {
-      return this.availableAppliances.map((appliance) => ({
-        ...appliance,
-        icon: getApplianceIcon(appliance),
-      }))
+      return this.availableAppliances
+        .filter((appliance) => appliance.isDefault)
+        .map((appliance) => ({
+          ...appliance,
+          icon: getApplianceIcon(appliance),
+        }))
     },
     tasksWithIcons() {
-      return this.availableTasks.map((task) => ({
-        ...task,
-        icon: getTaskIcon(task),
-      }))
+      return this.availableTasks
+        .filter((task) => task.isDefault)
+        .map((task) => ({
+          ...task,
+          icon: getTaskIcon(task),
+        }))
     },
   },
   async mounted() {
